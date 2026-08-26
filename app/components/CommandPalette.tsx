@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./command-palette.module.css";
 
@@ -18,15 +18,15 @@ export default function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 
-  const close = () => {
+  const close = useCallback(() => {
     setOpen(false);
     setQuery("");
-  };
+  }, []);
 
-  const scrollTo = (id: string) => {
+  const scrollTo = useCallback((id: string) => {
     close();
     window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
-  };
+  }, [close]);
 
   const commands: Command[] = useMemo(
     () => [
@@ -80,7 +80,7 @@ export default function CommandPalette() {
         },
       },
     ],
-    [router],
+    [close, router, scrollTo],
   );
 
   const filtered = useMemo(() => {
@@ -114,7 +114,7 @@ export default function CommandPalette() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [close]);
 
   useEffect(() => {
     if (!open) return;
