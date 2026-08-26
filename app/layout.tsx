@@ -39,21 +39,12 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName: "Abdulrahman Hajar — Software Engineering Portfolio",
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "Abdulrahman Hajar — Software Engineering Portfolio",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Abdulrahman Hajar — Software Engineer",
     description:
       "Full-stack products, backend systems, APIs, data infrastructure, AI integrations, testing, and production delivery.",
-    images: ["/og.png"],
   },
   robots: { index: true, follow: true },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
