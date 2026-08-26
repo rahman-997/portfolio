@@ -52,6 +52,12 @@ npm run lint
 npm run build
 ```
 
+## Netlify deployment
+
+The repository includes a production `netlify.toml` and uses Next.js static export.
+Netlify builds the app with `npm run build` and publishes the generated `out/`
+directory. Node.js 22.13 is pinned for repeatable builds.
+
 ## Project structure
 
 ```text
@@ -80,4 +86,3 @@ Designed and developed by [Abdulrahman Hajjar](https://www.linkedin.com/in/abdul
 ## License
 
 Released under the [MIT License](LICENSE).
-
