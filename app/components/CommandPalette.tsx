@@ -1,15 +1,56 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./command-palette.module.css";
 
+type CommandId = "work" | "expertise" | "about" | "resume" | "github" | "linkedin";
+
 type Command = {
+  id: CommandId;
   label: string;
   description: string;
   keywords: string;
-  action: () => void;
 };
+
+const commands: readonly Command[] = [
+  {
+    id: "work",
+    label: "Selected work",
+    description: "Open the featured engineering projects.",
+    keywords: "projects work eventify bookhaven fitflow venues",
+  },
+  {
+    id: "expertise",
+    label: "Technical expertise",
+    description: "Review the full-stack, backend, data, and AI capability map.",
+    keywords: "skills expertise stack backend frontend ai data",
+  },
+  {
+    id: "about",
+    label: "About Abdulrahman",
+    description: "Read the engineering profile and current direction.",
+    keywords: "about profile education university istanbul",
+  },
+  {
+    id: "resume",
+    label: "Open résumé",
+    description: "View the recruiter-facing web résumé.",
+    keywords: "resume cv experience education skills",
+  },
+  {
+    id: "github",
+    label: "GitHub profile",
+    description: "Browse source code and engineering repositories.",
+    keywords: "github source code repositories",
+  },
+  {
+    id: "linkedin",
+    label: "LinkedIn profile",
+    description: "Connect with Abdulrahman Hajar on LinkedIn.",
+    keywords: "linkedin contact connect career",
+  },
+] as const;
 
 const focusableSelector = [
   "a[href]",
@@ -39,61 +80,32 @@ export default function CommandPalette() {
     setOpen(true);
   }, []);
 
-  const scrollTo = useCallback((id: string) => {
+  const scrollToSection = useCallback((id: string) => {
     close();
     window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
   }, [close]);
 
-  const commands: Command[] = useMemo(
-    () => [
-      {
-        label: "Selected work",
-        description: "Open the featured engineering projects.",
-        keywords: "projects work eventify bookhaven fitflow venues",
-        action: () => scrollTo("work"),
-      },
-      {
-        label: "Technical expertise",
-        description: "Review the full-stack, backend, data, and AI capability map.",
-        keywords: "skills expertise stack backend frontend ai data",
-        action: () => scrollTo("expertise"),
-      },
-      {
-        label: "About Abdulrahman",
-        description: "Read the engineering profile and current direction.",
-        keywords: "about profile education university istanbul",
-        action: () => scrollTo("about"),
-      },
-      {
-        label: "Open résumé",
-        description: "View the recruiter-facing web résumé.",
-        keywords: "resume cv experience education skills",
-        action: () => {
-          close();
-          router.push("/resume/");
-        },
-      },
-      {
-        label: "GitHub profile",
-        description: "Browse source code and engineering repositories.",
-        keywords: "github source code repositories",
-        action: () => {
-          close();
-          window.open("https://github.com/rahman-997", "_blank", "noopener,noreferrer");
-        },
-      },
-      {
-        label: "LinkedIn profile",
-        description: "Connect with Abdulrahman Hajar on LinkedIn.",
-        keywords: "linkedin contact connect career",
-        action: () => {
-          close();
-          window.open("https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/", "_blank", "noopener,noreferrer");
-        },
-      },
-    ],
-    [close, router, scrollTo],
-  );
+  const runCommand = useCallback((id: CommandId) => {
+    switch (id) {
+      case "work":
+      case "expertise":
+      case "about":
+        scrollToSection(id);
+        break;
+      case "resume":
+        close();
+        router.push("/resume/");
+        break;
+      case "github":
+        close();
+        window.open("https://github.com/rahman-997", "_blank", "noopener,noreferrer");
+        break;
+      case "linkedin":
+        close();
+        window.open("https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/", "_blank", "noopener,noreferrer");
+        break;
+    }
+  }, [close, router, scrollToSection]);
 
   const filtered = useMemo(() => {
     const value = query.trim().toLowerCase();
@@ -102,7 +114,7 @@ export default function CommandPalette() {
     return commands.filter((command) =>
       `${command.label} ${command.description} ${command.keywords}`.toLowerCase().includes(value),
     );
-  }, [commands, query]);
+  }, [query]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -140,7 +152,7 @@ export default function CommandPalette() {
     };
   }, [open]);
 
-  const trapFocus = useCallback((event: React.KeyboardEvent<HTMLElement>) => {
+  const trapFocus = useCallback((event: ReactKeyboardEvent<HTMLElement>) => {
     if (event.key !== "Tab" || !dialogRef.current) return;
 
     const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(focusableSelector)).filter(
@@ -187,7 +199,7 @@ export default function CommandPalette() {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" && filtered[0]) filtered[0].action();
+                  if (event.key === "Enter" && filtered[0]) runCommand(filtered[0].id);
                 }}
                 placeholder="Search work, skills, résumé..."
                 aria-label="Search portfolio navigation"
@@ -199,7 +211,7 @@ export default function CommandPalette() {
               <p className={styles.label}>NAVIGATE</p>
               {filtered.length > 0 ? (
                 filtered.map((command) => (
-                  <button type="button" key={command.label} onClick={command.action}>
+                  <button type="button" key={command.id} onClick={() => runCommand(command.id)}>
                     <span>
                       <strong>{command.label}</strong>
                       <small>{command.description}</small>
