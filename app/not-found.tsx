@@ -10,7 +10,7 @@ export default function NotFound() {
         <p className={styles.kicker}>PORTFOLIO NAVIGATION</p>
         <h1>This route isn&apos;t part of the system.</h1>
         <p className={styles.copy}>
-          The page may have moved, the link may be stale, or you may have reached an unfinished route. The main portfolio and project case studies are still available.
+          The page may have moved or the address may be incorrect. Return to the portfolio or jump directly to the selected engineering work.
         </p>
         <div className={styles.actions}>
           <Link className={styles.primary} href="/">Return home →</Link>
@@ -18,7 +18,7 @@ export default function NotFound() {
         </div>
         <div className={styles.status}>
           <span><b /> SYSTEM ONLINE</span>
-          <span>Abdulrahman Hajar · Engineering Portfolio</span>
+          <span>Abdulrahman Hajar · Software Engineering Portfolio</span>
         </div>
       </section>
     </main>
