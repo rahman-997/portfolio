@@ -1,10 +1,12 @@
+import Link from "next/link";
+
 export default function ResumePage() {
   return (
     <main style={{maxWidth: 860, margin: '0 auto', padding: '64px 28px', fontFamily: 'Arial, sans-serif', lineHeight: 1.6}}>
-      <p><a href="/">← Back to portfolio</a></p>
+      <p><Link href="/">← Back to portfolio</Link></p>
       <h1>Abdulrahman Hajjar</h1>
       <p><strong>Frontend Engineer</strong> · Istanbul, Türkiye</p>
-      <p><a href="/resume.html" target="_blank">Open printable résumé ↗</a></p>
+      <p><a href="/resume.html" target="_blank" rel="noreferrer">Open printable résumé ↗</a></p>
       <h2>Profile</h2>
       <p>Frontend engineer focused on React, Next.js, and TypeScript, building polished, accessible, production-ready product experiences with backend depth.</p>
       <h2>Core Skills</h2>
