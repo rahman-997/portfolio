@@ -8,19 +8,35 @@ type Command = {
   label: string;
   description: string;
   keywords: string;
-  shortcut?: string;
   action: () => void;
 };
+
+const focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
 
 export default function CommandPalette() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 
   const close = useCallback(() => {
     setOpen(false);
     setQuery("");
+    window.setTimeout(() => previousFocusRef.current?.focus(), 0);
+  }, []);
+
+  const openPalette = useCallback(() => {
+    previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setOpen(true);
   }, []);
 
   const scrollTo = useCallback((id: string) => {
@@ -34,28 +50,24 @@ export default function CommandPalette() {
         label: "Selected work",
         description: "Open the featured engineering projects.",
         keywords: "projects work eventify bookhaven fitflow venues",
-        shortcut: "W",
         action: () => scrollTo("work"),
       },
       {
         label: "Technical expertise",
         description: "Review the full-stack, backend, data, and AI capability map.",
         keywords: "skills expertise stack backend frontend ai data",
-        shortcut: "E",
         action: () => scrollTo("expertise"),
       },
       {
         label: "About Abdulrahman",
         description: "Read the engineering profile and current direction.",
         keywords: "about profile education university istanbul",
-        shortcut: "A",
         action: () => scrollTo("about"),
       },
       {
         label: "Open résumé",
         description: "View the recruiter-facing web résumé.",
         keywords: "resume cv experience education skills",
-        shortcut: "R",
         action: () => {
           close();
           router.push("/resume/");
@@ -99,22 +111,23 @@ export default function CommandPalette() {
 
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        setOpen((value) => !value);
+        if (open) close();
+        else openPalette();
         return;
       }
 
       if (!typing && event.key === "/") {
         event.preventDefault();
-        setOpen(true);
+        openPalette();
         return;
       }
 
-      if (event.key === "Escape") close();
+      if (event.key === "Escape" && open) close();
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [close]);
+  }, [close, open, openPalette]);
 
   useEffect(() => {
     if (!open) return;
@@ -127,20 +140,44 @@ export default function CommandPalette() {
     };
   }, [open]);
 
+  const trapFocus = useCallback((event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key !== "Tab" || !dialogRef.current) return;
+
+    const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+      (element) => !element.hasAttribute("disabled") && element.getAttribute("aria-hidden") !== "true",
+    );
+
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+
+    if (event.shiftKey && active === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }, []);
+
   return (
     <>
-      <button className={styles.trigger} type="button" onClick={() => setOpen(true)} aria-label="Open quick navigation">
+      <button className={styles.trigger} type="button" onClick={openPalette} aria-label="Open quick navigation">
         <span>Quick nav</span>
-        <kbd>⌘K</kbd>
+        <kbd>Ctrl/⌘ K</kbd>
       </button>
 
       {open && (
         <div className={styles.backdrop} role="presentation" onMouseDown={close}>
           <section
+            ref={dialogRef}
             className={styles.dialog}
             role="dialog"
             aria-modal="true"
             aria-label="Quick navigation"
+            onKeyDown={trapFocus}
             onMouseDown={(event) => event.stopPropagation()}
           >
             <div className={styles.searchRow}>
@@ -158,7 +195,7 @@ export default function CommandPalette() {
               <kbd>ESC</kbd>
             </div>
 
-            <div className={styles.results}>
+            <div className={styles.results} aria-live="polite">
               <p className={styles.label}>NAVIGATE</p>
               {filtered.length > 0 ? (
                 filtered.map((command) => (
@@ -167,7 +204,7 @@ export default function CommandPalette() {
                       <strong>{command.label}</strong>
                       <small>{command.description}</small>
                     </span>
-                    {command.shortcut ? <kbd>{command.shortcut}</kbd> : <span className={styles.arrow}>↗</span>}
+                    <span className={styles.arrow} aria-hidden="true">↗</span>
                   </button>
                 ))
               ) : (
