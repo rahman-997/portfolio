@@ -25,11 +25,11 @@ export default function Home() {
       <a className="skip-link" href="#content">Skip to content</a>
 
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="Abdulrahman Hajjar — home">
+        <a className="brand" href="#top" aria-label="Abdulrahman Hajar — home">
           <span className="brand-mark">AH</span>
           <span className="brand-copy">
-            Abdulrahman Hajjar
-            <small>Frontend Engineer</small>
+            Abdulrahman Hajar
+            <small>Software Engineer</small>
           </span>
         </a>
         <nav aria-label="Primary navigation">
@@ -47,13 +47,13 @@ export default function Home() {
         <section className="hero" id="top">
           <div className="hero-grid" aria-hidden="true" />
           <div className="hero-main">
-            <div className="availability"><span /> Open to frontend opportunities</div>
+            <div className="availability"><span /> Open to software engineering opportunities</div>
             <h1>
-              I build digital products that feel
-              <em> clear, fast, and complete.</em>
+              I engineer products and systems that feel
+              <em> clear, reliable, and complete.</em>
             </h1>
             <p className="hero-lede">
-              Frontend engineer focused on React, Next.js, and TypeScript — with the backend depth to ship reliable, production-ready experiences.
+              Software engineer and full-stack developer building production-ready web, backend, API, AI-assisted, mobile, and interactive systems — with TypeScript, React/Next.js, Node.js, data infrastructure, and modern deployment at the core.
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="#work">Explore my work <ArrowUpRight /></a>
@@ -70,50 +70,31 @@ export default function Home() {
             <div className="profile-portrait">
               {/* Public GitHub avatar; kept as a direct image to avoid a proxy dependency. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="https://avatars.githubusercontent.com/u/316491264?v=4" alt="Abdulrahman Hajjar" width="360" height="360" />
+              <img src="https://avatars.githubusercontent.com/u/316491264?v=4" alt="Abdulrahman Hajar" width="360" height="360" />
               <span className="portrait-code">01 / AH</span>
             </div>
             <div className="profile-bottomline">
-              <span>Specializing in</span>
-              <strong>Frontend systems &amp; product craft</strong>
+              <span>Engineering focus</span>
+              <strong>Full-stack systems &amp; product architecture</strong>
             </div>
           </aside>
         </section>
 
         <section className="signal-strip" aria-label="Core strengths">
+          <span>Full-Stack TypeScript</span>
           <span>React &amp; Next.js</span>
-          <span>TypeScript</span>
-          <span>Accessible UI</span>
+          <span>Backend &amp; APIs</span>
           <span>Production systems</span>
         </section>
 
         <section className="work-section" id="work">
           <div className="section-heading">
             <div><span className="section-number">01</span><p>Selected work</p></div>
-            <h2>Products built to work in the real world.</h2>
+            <h2>Systems built to work in the real world.</h2>
           </div>
 
-          <article className="project-card project-fitflow">
-            <div className="project-index">01</div>
-            <div className="project-copy">
-              <div className="project-tags"><span>Next.js</span><span>TypeScript</span><span>PWA</span></div>
-              <h3>FitFlow</h3>
-              <p>A premium fitness experience with personalized plans, guided workout intervals, weekly progress, accessibility, and offline support.</p>
-              <div className="project-links">
-                <Link href="/work/fitflow/">Case study <ArrowUpRight size={16} /></Link>
-                <a href="https://fitflow-gym-online.netlify.app" target="_blank" rel="noreferrer">Live product <ArrowUpRight size={16} /></a>
-                <a href="https://github.com/rahman-997/fitflow-gym" target="_blank" rel="noreferrer"><GithubMark /> Source code</a>
-              </div>
-            </div>
-            <div className="project-signal" aria-hidden="true">
-              <span>FIT</span>
-              <strong>FLOW</strong>
-              <i>Move with purpose.</i>
-            </div>
-          </article>
-
           <article className="project-card project-eventify">
-            <div className="project-index">02</div>
+            <div className="project-index">01</div>
             <div className="project-copy">
               <div className="project-tags"><span>TypeScript</span><span>PostgreSQL</span><span>Redis + BullMQ</span></div>
               <h3>Eventify</h3>
@@ -129,6 +110,25 @@ export default function Home() {
               <span>PLAN</span>
               <strong>GO.</strong>
               <i>Events, engineered.</i>
+            </div>
+          </article>
+
+          <article className="project-card project-fitflow">
+            <div className="project-index">02</div>
+            <div className="project-copy">
+              <div className="project-tags"><span>Next.js</span><span>TypeScript</span><span>PWA</span></div>
+              <h3>FitFlow</h3>
+              <p>A premium fitness experience with personalized plans, guided workout intervals, weekly progress, accessibility, and offline support.</p>
+              <div className="project-links">
+                <Link href="/work/fitflow/">Case study <ArrowUpRight size={16} /></Link>
+                <a href="https://fitflow-gym-online.netlify.app" target="_blank" rel="noreferrer">Live product <ArrowUpRight size={16} /></a>
+                <a href="https://github.com/rahman-997/fitflow-gym" target="_blank" rel="noreferrer"><GithubMark /> Source code</a>
+              </div>
+            </div>
+            <div className="project-signal" aria-hidden="true">
+              <span>FIT</span>
+              <strong>FLOW</strong>
+              <i>Move with purpose.</i>
             </div>
           </article>
 
@@ -180,47 +180,48 @@ export default function Home() {
 
         <section className="about-section" id="about">
           <div className="section-heading section-heading-light">
-            <div><span className="section-number">02</span><p>How I work</p></div>
-            <h2>Frontend craft.<br /><em>Backend depth.</em></h2>
+            <div><span className="section-number">02</span><p>How I engineer</p></div>
+            <h2>Product craft.<br /><em>System depth.</em></h2>
           </div>
 
           <div className="about-intro">
-            <p className="about-statement">I care about the whole product — from the first interaction to the systems that keep it reliable.</p>
-            <p className="about-detail">My work combines thoughtful UI, accessible interaction, strong TypeScript foundations, and production-minded architecture. The goal is simple: make complex products feel obvious to use and dependable to run.</p>
+            <p className="about-statement">I care about the complete system — from the first interaction to the architecture that keeps it reliable.</p>
+            <p className="about-detail">My work combines thoughtful UI, strong TypeScript foundations, backend and API architecture, secure data flows, testing, observability, and production delivery. I&apos;m also a Computer Engineering student at Nişantaşı University, expanding that foundation into real-time, mobile, AI-assisted, and interactive systems.</p>
           </div>
 
           <div className="principles-grid">
             <article>
               <span>01</span>
-              <h3>Design with intent</h3>
-              <p>Clear hierarchy, purposeful motion, responsive layouts, and accessible states — all working as one system.</p>
+              <h3>Design the whole system</h3>
+              <p>Clear product UX, maintainable boundaries, reliable APIs, and purposeful infrastructure should reinforce each other.</p>
             </article>
             <article>
               <span>02</span>
               <h3>Engineer for reality</h3>
-              <p>Loading, empty, error, offline, and success states are part of the product, not afterthoughts.</p>
+              <p>Loading, empty, error, offline, security, failure, recovery, and operational states are part of the product.</p>
             </article>
             <article>
               <span>03</span>
-              <h3>Ship with confidence</h3>
-              <p>Typed boundaries, pragmatic testing, security basics, and measurable quality gates before release.</p>
+              <h3>Ship with evidence</h3>
+              <p>Typed contracts, pragmatic tests, CI/CD, security controls, health checks, and observable behavior before release.</p>
             </article>
           </div>
 
           <div className="stack-section">
-            <p className="stack-label">Selected toolkit</p>
+            <p className="stack-label">Engineering toolkit</p>
             <div className="stack-groups">
-              <div><span>Frontend</span><p>React · Next.js · TypeScript · PWA · Modern CSS</p></div>
-              <div><span>Backend</span><p>Node.js · Express · PostgreSQL · MongoDB · Redis</p></div>
-              <div><span>Quality</span><p>Accessibility · Testing · CI/CD · Performance · Security</p></div>
+              <div><span>Full-stack</span><p>React · Next.js · TypeScript · Node.js · Express · REST · GraphQL</p></div>
+              <div><span>Data &amp; systems</span><p>PostgreSQL · MongoDB · Prisma · Mongoose · Redis · WebSockets</p></div>
+              <div><span>Interactive &amp; AI</span><p>Flutter · Flame · FastAPI · WebGL · Three.js · LLM / MCP workflows</p></div>
+              <div><span>Production</span><p>Docker · Testing · CI/CD · Accessibility · Security · Observability</p></div>
             </div>
           </div>
         </section>
 
         <section className="contact-section" id="contact">
           <div className="contact-kicker"><span /> Available for the right opportunity</div>
-          <h2>Let&apos;s build something<br /><em>worth using.</em></h2>
-          <p>If you&apos;re looking for a frontend engineer who can think beyond the component and own the product experience, let&apos;s talk.</p>
+          <h2>Let&apos;s engineer something<br /><em>worth using.</em></h2>
+          <p>If you&apos;re looking for a software engineer who can move across product UI, APIs, backend architecture, data, testing, and delivery, let&apos;s talk.</p>
           <div className="contact-actions">
             <a className="button button-primary button-large" href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">Start a conversation <ArrowUpRight /></a>
             <Link className="button button-secondary button-large" href="/resume/">View résumé</Link>
@@ -231,7 +232,7 @@ export default function Home() {
         <footer>
           <div className="brand">
             <span className="brand-mark">AH</span>
-            <span className="brand-copy">Abdulrahman Hajjar<small>Frontend Engineer</small></span>
+            <span className="brand-copy">Abdulrahman Hajar<small>Software Engineer · Full-Stack Developer</small></span>
           </div>
           <p>Built with care in Istanbul · 2026</p>
           <a href="#top">Back to top ↑</a>
