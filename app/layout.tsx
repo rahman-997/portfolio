@@ -7,10 +7,7 @@ const siteUrl = "https://abdulrahman-hajar-dev.netlify.app";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   applicationName: "Abdulrahman Hajar — Engineering Portfolio",
-  title: {
-    default: "Abdulrahman Hajar — Software Engineer | Full-Stack & Backend Systems",
-    template: "%s | Abdulrahman Hajar",
-  },
+  title: "Abdulrahman Hajar — Software Engineer | Full-Stack & Backend Systems",
   description:
     "Engineering portfolio of Abdulrahman Hajar, a Software Engineer and Computer Engineering student in Istanbul building full-stack products, backend APIs, data systems, production infrastructure, and AI-assisted experiences.",
   authors: [{ name: "Abdulrahman Hajar", url: "https://github.com/rahman-997" }],
