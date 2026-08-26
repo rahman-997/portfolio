@@ -34,7 +34,7 @@ The portfolio presents four connected areas of engineering:
 | **FitFlow** | Installable fitness PWA | Personalized planning, guided intervals, local-first progress, accessibility, responsive UX, offline-ready behavior |
 | **Venues API** | Focused backend service | Express 5, Zod 4, layered architecture, centralized errors, UUID resources, persistence, service/HTTP contract tests |
 
-Every featured project links to **live proof, source code, and an engineering case study**.
+Every featured project links to **live proof, source code, and an engineering case study**. Case-study pages also expose project-specific social metadata and structured software/technical-article data.
 
 ## Current visual direction
 
@@ -64,13 +64,17 @@ The portfolio includes a lightweight keyboard command palette:
 
 A branded 404 experience keeps stale links inside the portfolio instead of dropping visitors into a generic framework page.
 
+The site also includes a web app manifest with mobile theme/standalone metadata so the portfolio can be added cleanly to a device home screen without adding a heavy runtime dependency.
+
 ## Recruiter-facing content
 
 - concise Software Engineer / Full-Stack positioning
 - selected projects with architecture and reliability evidence
 - technical capability map
 - Computer Engineering education
-- web résumé and printable résumé
+- recruiter-facing web résumé
+- **direct downloadable PDF résumé** (`/Abdulrahman-Hajar-Resume.pdf`)
+- printable HTML résumé view
 - dedicated engineering case studies
 - GitHub and LinkedIn pathways
 - correct canonical URL and structured metadata
@@ -90,7 +94,8 @@ GitHub Actions · Netlify · Docker-oriented workflows
 
 ```text
 app/
-  layout.tsx                         SEO, JSON-LD, application shell
+  layout.tsx                         metadata, JSON-LD, application shell
+  manifest.ts                       installable web app metadata
   page.tsx                           editorial engineering homepage
   home.module.css                    homepage visual system
   globals.css                        global tokens and shared rules
@@ -102,16 +107,17 @@ app/
   opengraph-image.tsx                generated social preview
   twitter-image.tsx                  generated X/Twitter preview
   robots.ts                          crawler policy
-  sitemap.ts                         indexable route map
+  sitemap.ts                         prioritized indexable route map
   resume/
-    page.tsx                         recruiter-facing web résumé
+    page.tsx                         recruiter-facing résumé + PDF download
     resume.module.css                résumé design system
   work/[slug]/
-    page.tsx                         project case-study renderer
+    page.tsx                         case studies + project metadata/JSON-LD
     case-study.module.css            case-study presentation
 public/
   projects/                          project evidence imagery
   favicon.svg
+  Abdulrahman-Hajar-Resume.pdf       recruiter-ready downloadable résumé
   resume.html                        printable résumé
 scripts/
   verify-export.mjs                  export + identity regression checks
@@ -138,7 +144,7 @@ npm run verify:export
 npm run audit
 ```
 
-`verify:export` confirms required recruiter-facing routes exist in the static export and rejects stale professional-identity markers such as the previous Netlify hostname or incorrect visible surname spelling.
+`verify:export` confirms the homepage, branded 404, résumé, all four case studies, robots file, sitemap, manifest, social-preview output, and downloadable PDF are present in the static export. It also rejects stale professional-identity markers such as the previous Netlify hostname or incorrect visible surname spelling.
 
 GitHub Actions runs the complete quality gate on pushes and pull requests to `main` and uploads deployable source after successful pushes.
 
@@ -146,17 +152,24 @@ GitHub Actions runs the complete quality gate on pushes and pull requests to `ma
 
 The project uses a static Next.js export. `netlify.toml` builds with `npm run build` and publishes `out/`.
 
-Deployment configuration also applies immutable caching to framework static assets and security-focused response headers including HSTS, `nosniff`, referrer restrictions, frame restrictions, and browser permission restrictions.
+Deployment configuration applies:
+
+- immutable caching to fingerprinted framework assets
+- tuned caching to project artwork and generated social previews
+- short revalidation for the web app manifest
+- HSTS, `nosniff`, strict referrer policy, frame restrictions, DNS prefetch policy, and browser-permission restrictions
 
 ## SEO & discoverability
 
 - canonical production URL: `abdulrahman-hajar-dev.netlify.app`
 - generated Open Graph and Twitter previews
-- `Person` and `WebSite` JSON-LD
-- dynamic sitemap and robots metadata
-- descriptive page metadata
+- project-specific Open Graph/Twitter metadata on every case study
+- homepage `Person`, `WebSite`, `ProfilePage`, and selected-work `ItemList` JSON-LD
+- case-study `TechArticle`, `SoftwareSourceCode`, `SoftwareApplication`, and `BreadcrumbList` JSON-LD
+- sitemap freshness signals and explicit route priorities
+- robots metadata with canonical host and sitemap
 - indexable project case studies and résumé routes
-- identity regression checks in the export verification step
+- identity regression checks in export verification
 
 ## Accessibility
 
