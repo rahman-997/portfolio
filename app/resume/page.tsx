@@ -3,76 +3,48 @@ import Link from "next/link";
 import styles from "./resume.module.css";
 
 export const metadata: Metadata = {
-  title: "Resume — Abdulrahman Hajar",
+  title: "Resume — Abdulrahman Hajar | Software Engineer",
   description:
-    "Abdulrahman Hajar — Software Engineer and Full-Stack Developer building production-ready web, backend, AI-assisted, mobile, and interactive systems.",
+    "Resume of Abdulrahman Hajar, a Software Engineer and Computer Engineering student focused on full-stack products, backend APIs, data systems, production engineering, and AI-assisted workflows.",
   alternates: { canonical: "/resume/" },
 };
 
 const skills = [
-  "TypeScript",
-  "JavaScript",
-  "React",
-  "Next.js",
-  "HTML5",
-  "CSS3",
-  "Accessibility",
-  "PWA",
-  "Node.js",
-  "Express 5",
-  "Zod",
-  "REST APIs",
-  "GraphQL",
-  "WebSockets",
-  "gRPC",
-  "OpenAPI",
-  "PostgreSQL",
-  "Prisma",
-  "MongoDB",
-  "Mongoose",
-  "Redis",
-  "BullMQ",
-  "FastAPI",
-  "Strawberry GraphQL",
-  "Flutter",
-  "Flame Engine",
-  "WebGL",
-  "Three.js",
-  "Framer Motion",
-  "LLM Integrations",
-  "MCP Workflows",
-  "Jest",
-  "Supertest",
-  "Docker",
-  "Docker Compose",
-  "CI/CD",
-  "Security",
-  "Observability",
+  "TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Express 5",
+  "REST APIs", "GraphQL", "WebSockets", "gRPC", "OpenAPI", "Zod",
+  "PostgreSQL", "Prisma", "MongoDB", "Mongoose", "Redis", "BullMQ",
+  "Jest", "Supertest", "Docker", "Docker Compose", "GitHub Actions", "CI/CD",
+  "Security", "Observability", "Accessibility", "PWA", "FastAPI", "Flutter",
+  "WebGL", "Three.js", "LLM Integrations", "MCP Workflows",
 ];
 
 const projects = [
   {
     name: "Eventify",
+    role: "Distributed product system",
     description:
-      "Production-oriented event platform with PostgreSQL/Prisma, Redis caching and rate limits, BullMQ jobs, durable outbox workflows, metrics, health/readiness checks, secure auth, and PWA support.",
+      "Built around PostgreSQL/Prisma, Redis caching and rate limits, BullMQ background jobs, durable outbox workflows, secure authentication, metrics, health/readiness checks, request correlation, PWA delivery, and automated security gates.",
     href: "/work/eventify/",
   },
   {
     name: "BookHaven",
+    role: "Full-stack commerce",
     description:
-      "Full-stack bookstore with Next.js, Express, MongoDB, JWT auth/RBAC, cart and wishlist, reviews, concurrency-safe checkout, inventory handling, orders, admin workflows, and API tests.",
+      "Next.js + Express + MongoDB bookstore with JWT authentication, RBAC, catalog/search, cart, wishlist, reviews, checkout, orders, inventory workflows, admin operations, validation, and API tests.",
     href: "/work/bookhaven/",
   },
   {
     name: "FitFlow",
+    role: "Product-focused PWA",
     description:
-      "Next.js fitness PWA with personalized plans, guided workout intervals, weekly progress, responsive accessibility, and offline-ready behavior.",
+      "Installable Next.js fitness experience with personalized planning, guided workout intervals, weekly progress, device-local persistence, accessibility, responsive interaction design, and offline-ready behavior.",
     href: "/work/fitflow/",
   },
   {
     name: "Venues API",
+    role: "Backend service",
     description:
-      "Express 5 + Zod 4 REST API with strict validation, layered architecture, centralized predictable errors, persistence, UUIDs, and service plus HTTP contract tests.",
+      "Express 5 + TypeScript + Zod REST API demonstrating layered architecture, strict body/query/param validation, centralized errors, UUID resources, persistence boundaries, service tests, and HTTP contract tests.",
     href: "/work/venues-api/",
   },
 ] as const;
@@ -86,25 +58,26 @@ export default function ResumePage() {
           <strong>Abdulrahman Hajar</strong>
         </Link>
         <div className={styles.headerActions}>
-          <Link href="/#work">View work</Link>
+          <Link href="/#work">Selected work</Link>
           <a href="/resume.html" target="_blank" rel="noreferrer">Printable résumé ↗</a>
         </div>
       </header>
 
       <section className={styles.hero}>
         <div>
-          <p className={styles.kicker}>Resume · Software Engineering</p>
+          <p className={styles.kicker}>Software Engineering · Full-Stack · Backend Systems</p>
           <h1>Abdulrahman Hajar</h1>
           <p className={styles.lede}>
-            Software engineer and full-stack developer building production-ready product experiences and systems across frontend, backend, APIs, data, testing, deployment, AI-assisted workflows, and interactive engineering.
+            Software engineer and Computer Engineering student building complete products across frontend, backend, APIs, data, asynchronous workflows, testing, security, observability, and production deployment.
           </p>
         </div>
         <aside className={styles.snapshot} aria-label="Professional snapshot">
           <div><span>Role</span><strong>Software Engineer · Full-Stack Developer</strong></div>
           <div><span>Education</span><strong>Computer Engineering · Nişantaşı University</strong></div>
-          <div><span>Based in</span><strong>Istanbul, Türkiye</strong></div>
+          <div><span>Location</span><strong>Istanbul, Türkiye</strong></div>
+          <div><span>Focus</span><strong>Full-Stack · Backend · Systems · AI</strong></div>
           <div><span>GitHub</span><a href="https://github.com/rahman-997" target="_blank" rel="noreferrer">rahman-997 ↗</a></div>
-          <div><span>LinkedIn</span><a href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">Connect ↗</a></div>
+          <div><span>LinkedIn</span><a href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">Profile ↗</a></div>
         </aside>
       </section>
 
@@ -112,7 +85,7 @@ export default function ResumePage() {
         <section className={styles.section}>
           <div className={styles.sectionLabel}><span>01</span><h2>Profile</h2></div>
           <p className={styles.profile}>
-            I design and build complete software systems with a production mindset. My work combines full-stack TypeScript development, accessible product UI, backend and API architecture, secure data flows, real-time systems, automated testing, observability, CI/CD, and modern deployment. I also explore mobile, AI-assisted, and interactive-system architecture through Flutter, FastAPI, WebSockets, WebGL, and agentic workflows.
+            Product-minded engineer with a strong TypeScript foundation and hands-on work across UI, API architecture, persistence, caching, queues, authentication, validation, testing, health/readiness, CI/CD, and deployment. I value clear boundaries, secure data flows, predictable failure handling, and evidence-based delivery.
           </p>
         </section>
 
@@ -120,25 +93,25 @@ export default function ResumePage() {
           <div className={styles.sectionLabel}><span>02</span><h2>Education</h2></div>
           <div className={styles.projects}>
             <article className={styles.project}>
-              <h3>Computer Engineering — Nişantaşı University</h3>
-              <p>Undergraduate student in Istanbul, Türkiye, building practical engineering experience through full-stack, backend, mobile, AI, and interactive software projects.</p>
+              <div><h3>Computer Engineering</h3><small>Nişantaşı University · Istanbul</small></div>
+              <p>Undergraduate study combined with practical software engineering through production-oriented web, backend, data, mobile, AI, and interactive projects.</p>
             </article>
           </div>
         </section>
 
         <section className={styles.section}>
-          <div className={styles.sectionLabel}><span>03</span><h2>Core skills</h2></div>
+          <div className={styles.sectionLabel}><span>03</span><h2>Technical capabilities</h2></div>
           <div className={styles.skills}>
             {skills.map((skill) => <span key={skill}>{skill}</span>)}
           </div>
         </section>
 
         <section className={styles.section}>
-          <div className={styles.sectionLabel}><span>04</span><h2>Selected work</h2></div>
+          <div className={styles.sectionLabel}><span>04</span><h2>Project evidence</h2></div>
           <div className={styles.projects}>
             {projects.map((project) => (
               <article className={styles.project} key={project.name}>
-                <h3>{project.name}</h3>
+                <div><h3>{project.name}</h3><small>{project.role}</small></div>
                 <p>{project.description}</p>
                 <Link href={project.href}>Case study →</Link>
               </article>
@@ -147,22 +120,22 @@ export default function ResumePage() {
         </section>
 
         <section className={styles.section}>
-          <div className={styles.sectionLabel}><span>05</span><h2>Advanced systems work</h2></div>
+          <div className={styles.sectionLabel}><span>05</span><h2>Engineering interests</h2></div>
           <div className={styles.projects}>
             <article className={styles.project}>
-              <h3>AI Doodles</h3>
-              <p>Multimodal generative-AI system architecture for children using Flutter + Flame, real-time WebSockets, FastAPI, Strawberry GraphQL, Redis-backed similarity workflows, 3D rendering pipelines, and pose-detection concepts.</p>
+              <div><h3>Backend & system design</h3><small>Primary growth direction</small></div>
+              <p>Service architecture, data modeling, distributed workflows, queues, caching, API contracts, security, observability, failure recovery, and production operations.</p>
             </article>
             <article className={styles.project}>
-              <h3>Abdulrahman-OS-v29</h3>
-              <p>Interactive portfolio concept inspired by terminal and operating-system interfaces, featuring simulated boot flows, custom commands, glassmorphism, and animated 3D experiences.</p>
+              <div><h3>AI & interactive systems</h3><small>Extended exploration</small></div>
+              <p>LLM integrations, MCP workflows, FastAPI, real-time communication, Flutter, WebGL/Three.js, and multimodal product architecture.</p>
             </article>
           </div>
         </section>
       </div>
 
       <footer className={styles.footer}>
-        <p>Portfolio résumé · Abdulrahman Hajar · 2026</p>
+        <p>Abdulrahman Hajar · Software Engineer · Istanbul, Türkiye</p>
         <Link href="/">Back to portfolio ↑</Link>
       </footer>
     </main>
