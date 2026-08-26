@@ -38,20 +38,20 @@ Every featured project links to **live proof, source code, and an engineering ca
 
 ## Current visual direction
 
-The current redesign uses a **premium editorial engineering identity** rather than a conventional dark developer template:
+The active redesign uses a **premium dark engineering identity** with an editorial hierarchy instead of a generic neon developer template:
 
-- warm white / porcelain canvas with deep ink and slate typography
-- restrained blue/green signal accents instead of neon-heavy decoration
+- deep charcoal / near-black application canvas with high-contrast typography
+- restrained mint and blue signal accents
 - oversized editorial headlines with strong scan hierarchy
 - real project imagery and product evidence where available
-- a compact engineering-system panel for interface → API → data → delivery
-- generous whitespace and structured full-width project storytelling
-- restrained monospaced operational details
+- an engineering-system panel for interface → API → data → delivery
+- structured project storytelling with generous spacing
+- restrained monospaced operational details and terminal cues
 - responsive layouts tuned for desktop, tablet, and mobile
-- generated Open Graph / Twitter artwork synchronized with the identity
+- generated Open Graph / Twitter artwork synchronized with the engineering identity
 - no dependency on a profile portrait to make the portfolio feel complete
 
-The design intentionally keeps visual noise low so recruiters can reach **role, capabilities, projects, proof, résumé, and contact paths quickly**.
+The design intentionally keeps visual noise controlled so recruiters can reach **role, capabilities, projects, proof, résumé, and contact paths quickly**.
 
 ## Experience & interaction
 
@@ -96,9 +96,9 @@ GitHub Actions · Netlify · Docker-oriented workflows
 app/
   layout.tsx                         metadata, JSON-LD, application shell
   manifest.ts                       installable web app metadata
-  page.tsx                           editorial engineering homepage
+  page.tsx                           engineering portfolio homepage
   home.module.css                    homepage visual system
-  globals.css                        global tokens and shared rules
+  globals.css                        minimal global reset + accessibility defaults
   not-found.tsx                      branded 404 experience
   not-found.module.css               404 presentation
   components/
