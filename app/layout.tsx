@@ -50,10 +50,54 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Abdulrahman Hajar",
+  url: "https://abdulrahman-hajjar-dev.netlify.app",
+  jobTitle: "Software Engineer",
+  sameAs: [
+    "https://github.com/rahman-997",
+    "https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/",
+  ],
+  affiliation: {
+    "@type": "CollegeOrUniversity",
+    name: "Nişantaşı University",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Istanbul",
+    addressCountry: "Türkiye",
+  },
+  knowsAbout: [
+    "Software Engineering",
+    "Full-Stack Development",
+    "Backend Engineering",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Node.js",
+    "REST APIs",
+    "GraphQL",
+    "PostgreSQL",
+    "MongoDB",
+    "Redis",
+    "Docker",
+    "System Architecture",
+    "AI Integration",
+  ],
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
