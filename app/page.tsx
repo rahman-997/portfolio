@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const ArrowUpRight = ({ size = 18 }: { size?: number }) => (
   <svg
     aria-hidden="true"
@@ -96,7 +98,7 @@ export default function Home() {
               <h3>FitFlow</h3>
               <p>A premium fitness experience with personalized plans, guided workout intervals, weekly progress, accessibility, and offline support.</p>
               <div className="project-links">
-                <a href="/work/fitflow/">Case study <ArrowUpRight size={16} /></a>
+                <Link href="/work/fitflow/">Case study <ArrowUpRight size={16} /></Link>
                 <a href="https://fitflow-gym-online.netlify.app" target="_blank" rel="noreferrer">Live product <ArrowUpRight size={16} /></a>
                 <a href="https://github.com/rahman-997/fitflow-gym" target="_blank" rel="noreferrer"><GithubMark /> Source code</a>
               </div>
@@ -115,7 +117,7 @@ export default function Home() {
               <h3>Eventify</h3>
               <p>A production-oriented event platform with secure authentication, organizer tools, bookings, waitlists, background jobs, caching, and installable PWA support.</p>
               <div className="project-links">
-                <a href="/work/eventify/">Case study <ArrowUpRight size={16} /></a>
+                <Link href="/work/eventify/">Case study <ArrowUpRight size={16} /></Link>
                 <a href="https://eventify-web.onrender.com" target="_blank" rel="noreferrer">Live product <ArrowUpRight size={16} /></a>
                 <a href="https://github.com/rahman-997/eventify" target="_blank" rel="noreferrer"><GithubMark /> Source code</a>
               </div>
@@ -141,7 +143,7 @@ export default function Home() {
                 <h3>BookHaven</h3>
                 <p>A full-stack bookstore with catalog discovery, cart, wishlist, reviews, checkout, order history, and an operational admin dashboard.</p>
                 <div className="project-links">
-                  <a href="/work/bookhaven/">Case study <ArrowUpRight size={16} /></a>
+                  <Link href="/work/bookhaven/">Case study <ArrowUpRight size={16} /></Link>
                   <a href="https://bookbookhaven-free.onrender.com" target="_blank" rel="noreferrer">Live product <ArrowUpRight size={16} /></a>
                   <a href="https://github.com/rahman-997/bookbookhaven" target="_blank" rel="noreferrer"><GithubMark /> Code</a>
                 </div>
@@ -163,7 +165,7 @@ export default function Home() {
                 <h3>Venues API</h3>
                 <p>A clean, versioned REST API with strict validation, layered architecture, predictable errors, and contract-level tests.</p>
                 <div className="project-links">
-                  <a href="/work/venues-api/">Case study <ArrowUpRight size={16} /></a>
+                  <Link href="/work/venues-api/">Case study <ArrowUpRight size={16} /></Link>
                   <a href="https://venues-api-rahman.onrender.com/health" target="_blank" rel="noreferrer">Health check <ArrowUpRight size={16} /></a>
                   <a href="https://github.com/rahman-997/venues-api" target="_blank" rel="noreferrer"><GithubMark /> Code</a>
                 </div>
