@@ -2,8 +2,6 @@
 
 [![Portfolio CI](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml)
 
-![Portfolio social preview](public/og.png)
-
 A recruiter-facing engineering portfolio for **Abdulrahman Hajar** — Software Engineer, Full-Stack Developer, and Computer Engineering student at Nişantaşı University in Istanbul.
 
 The site is intentionally structured around **engineering evidence instead of a generic skills gallery**: complete products, backend architecture, data flows, async work, validation, testing, security, observability, deployment, and selected AI/interactive systems.
@@ -49,6 +47,7 @@ The current portfolio uses a restrained engineering-oriented visual system:
 - large editorial typography
 - code/terminal-inspired engineering summary
 - responsive project evidence panels
+- generated Open Graph / Twitter artwork that stays synchronized with the visual identity
 - reduced decorative noise compared with a conventional “developer portfolio”
 
 The homepage deliberately avoids relying on a profile portrait so the identity is driven by work, architecture, and engineering proof.
@@ -87,6 +86,8 @@ app/
   layout.tsx                 SEO and application shell
   page.tsx                   engineering portfolio homepage
   globals.css                primary visual system
+  opengraph-image.tsx        generated social preview
+  twitter-image.tsx          generated X/Twitter preview
   resume/
     page.tsx                 recruiter-facing web résumé
     resume.module.css        résumé design system
@@ -95,7 +96,6 @@ app/
     case-study.module.css    case-study presentation
 public/
   favicon.svg
-  og.png
   resume.html                printable résumé
 .github/workflows/
   ci.yml                     lint + production-build quality gate
