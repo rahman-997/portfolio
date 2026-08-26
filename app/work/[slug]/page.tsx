@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import styles from "./case-study.module.css";
@@ -12,6 +13,7 @@ const studies = {
     stack: ["Next.js", "React", "TypeScript", "PWA", "Modern CSS"],
     live: "https://fitflow-gym-online.netlify.app",
     runtime: null,
+    cover: null,
     source: "https://github.com/rahman-997/fitflow-gym",
     goal:
       "Make a fitness product feel immediately useful without forcing account creation: help a user choose a plan, run a focused session, and maintain weekly consistency.",
@@ -30,6 +32,7 @@ const studies = {
     stack: ["React", "TypeScript", "Express", "PostgreSQL", "Prisma", "Redis", "BullMQ"],
     live: "https://eventify-web.onrender.com",
     runtime: "https://backend2-api.onrender.com/health",
+    cover: "/projects/eventify-cover.jpg",
     source: "https://github.com/rahman-997/eventify",
     goal:
       "Keep event discovery simple for attendees while making booking state, capacity rules, waitlist promotion, and asynchronous side effects reliable under real operational constraints.",
@@ -48,6 +51,7 @@ const studies = {
     stack: ["Next.js", "React", "TypeScript", "Express", "MongoDB", "Mongoose", "Zod"],
     live: "https://bookbookhaven-free.onrender.com",
     runtime: null,
+    cover: "/projects/bookhaven-cover.jpg",
     source: "https://github.com/rahman-997/bookbookhaven",
     goal:
       "Build a complete commerce flow that is credible as both a customer product and an operational system, while remaining deployable on a zero-cost portfolio stack.",
@@ -66,6 +70,7 @@ const studies = {
     stack: ["Node.js", "Express 5", "TypeScript", "Zod 4"],
     live: "https://venues-api-rahman.onrender.com",
     runtime: "https://venues-api-rahman.onrender.com/health",
+    cover: null,
     source: "https://github.com/rahman-997/venues-api",
     goal:
       "Keep a small CRUD service intentionally understandable while still applying the engineering boundaries expected in a production-minded API.",
@@ -130,6 +135,17 @@ export default async function CaseStudyPage({ params }: PageProps) {
           <div className={styles.stack} aria-label="Technology stack">
             {study.stack.map((item) => <span key={item}>{item}</span>)}
           </div>
+          {study.cover ? (
+            <figure className={styles.cover}>
+              <Image
+                src={study.cover}
+                alt={`${study.name} product presentation across desktop and mobile screens`}
+                width={900}
+                height={472}
+                priority
+              />
+            </figure>
+          ) : null}
         </section>
 
         <section className={styles.goal}>
