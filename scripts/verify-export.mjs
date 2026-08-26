@@ -6,6 +6,7 @@ const outDir = join(root, "out");
 
 const requiredPaths = [
   "index.html",
+  "404.html",
   "resume/index.html",
   "work/eventify/index.html",
   "work/bookhaven/index.html",
@@ -13,8 +14,10 @@ const requiredPaths = [
   "work/venues-api/index.html",
   "robots.txt",
   "sitemap.xml",
+  "manifest.webmanifest",
   "opengraph-image",
   "twitter-image",
+  "Abdulrahman-Hajar-Resume.pdf",
 ];
 
 const missing = requiredPaths.filter((path) => !existsSync(join(outDir, path)));
@@ -25,7 +28,7 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
-const textExtensions = new Set([".html", ".txt", ".xml", ".json", ".js", ".css"]);
+const textExtensions = new Set([".html", ".txt", ".xml", ".json", ".webmanifest", ".js", ".css"]);
 const stalePatterns = [
   {
     label: "legacy Netlify hostname",

@@ -59,7 +59,8 @@ export default function ResumePage() {
         </Link>
         <div className={styles.headerActions}>
           <Link href="/#work">Selected work</Link>
-          <a href="/resume.html" target="_blank" rel="noreferrer">Printable résumé ↗</a>
+          <a href="/Abdulrahman-Hajar-Resume.pdf" download>Download PDF ↓</a>
+          <a href="/resume.html" target="_blank" rel="noreferrer">Print view ↗</a>
         </div>
       </header>
 

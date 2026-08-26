@@ -1,8 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import CommandPalette from "./components/CommandPalette";
 import "./globals.css";
 
 const siteUrl = "https://abdulrahman-hajar-dev.netlify.app";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#07111f",
+  colorScheme: "dark light",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -15,6 +23,12 @@ export const metadata: Metadata = {
   publisher: "Abdulrahman Hajar",
   category: "technology",
   referrer: "origin-when-cross-origin",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Abdulrahman Hajar",
+    statusBarStyle: "black-translucent",
+  },
   formatDetection: { email: false, address: false, telephone: false },
   keywords: [
     "Abdulrahman Hajar",
@@ -123,18 +137,46 @@ const websiteJsonLd = {
   inLanguage: "en",
 };
 
+const profilePageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": `${siteUrl}/#profile-page`,
+  url: siteUrl,
+  name: "Abdulrahman Hajar — Software Engineering Portfolio",
+  mainEntity: { "@id": `${siteUrl}/#person` },
+  isPartOf: { "@id": `${siteUrl}/#website` },
+  inLanguage: "en",
+};
+
+const selectedWorkJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${siteUrl}/#selected-work`,
+  name: "Selected software engineering projects",
+  itemListElement: [
+    ["Eventify", "/work/eventify/"],
+    ["BookHaven", "/work/bookhaven/"],
+    ["FitFlow", "/work/fitflow/"],
+    ["Venues API", "/work/venues-api/"],
+  ].map(([name, path], index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name,
+    url: `${siteUrl}${path}`,
+  })),
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
+        {[personJsonLd, websiteJsonLd, profilePageJsonLd, selectedWorkJsonLd].map((data, index) => (
+          <script
+            key={index}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+          />
+        ))}
         {children}
         <CommandPalette />
       </body>
