@@ -1,6 +1,5 @@
 import Link from "next/link";
 import styles from "./home.module.css";
-import previewStyles from "./project-previews.module.css";
 
 const Arrow = ({ size = 18 }: { size?: number }) => (
   <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none">
@@ -22,185 +21,190 @@ const LinkedIn = ({ size = 18 }: { size?: number }) => (
 
 const projects = [
   {
-    number: "01",
+    index: "01",
     name: "Eventify",
-    category: "Distributed product system",
-    headline: "Booking infrastructure built for real failure modes.",
-    description: "A production-oriented event platform with waitlists, background jobs, cache-aware reads, durable workflows, authentication, metrics, and operational visibility.",
+    eyebrow: "Distributed event platform",
+    headline: "Booking flows engineered for real-world failure modes.",
+    description: "Authentication, organizer tooling, bookings, waitlists, background jobs, caching, metrics, and production-minded system behavior across one connected platform.",
     stack: ["TypeScript", "Express 5", "PostgreSQL", "Prisma", "Redis", "BullMQ"],
     caseStudy: "/work/eventify/",
     live: "https://eventify-web.onrender.com",
     source: "https://github.com/rahman-997/eventify",
-    tone: "blue",
-    preview: "/projects/eventify-cover.jpg",
-    previewPosition: "center",
-    hosting: "Render free tier · first load may cold-start",
+    image: "/projects/eventify-cover.jpg",
+    className: "eventify",
   },
   {
-    number: "02",
+    index: "02",
     name: "BookHaven",
-    category: "Full-stack commerce",
-    headline: "A bookstore engineered as a complete product.",
-    description: "Discovery, authentication, role-based administration, cart and wishlist state, reviews, checkout, orders, and inventory workflows across one full stack.",
+    eyebrow: "Full-stack commerce",
+    headline: "A bookstore built as a complete product, not a demo screen.",
+    description: "Catalog discovery, authentication, roles, cart, wishlist, reviews, checkout, orders, inventory, and administration in a cohesive full-stack experience.",
     stack: ["Next.js", "React", "TypeScript", "Express", "MongoDB", "Zod"],
     caseStudy: "/work/bookhaven/",
     live: "https://bookbookhaven-free.onrender.com",
     source: "https://github.com/rahman-997/bookbookhaven",
-    tone: "orange",
-    preview: "/projects/bookhaven-cover.jpg",
-    previewPosition: "center",
-    hosting: "Render free tier · first load may cold-start",
+    image: "/projects/bookhaven-cover.jpg",
+    className: "bookhaven",
   },
   {
-    number: "03",
+    index: "03",
     name: "FitFlow",
-    category: "Product-focused PWA",
-    headline: "Fitness software with product-level interaction design.",
-    description: "An installable fitness experience with personalized planning, guided intervals, weekly progress, accessibility, local-first behavior, and offline-ready core flows.",
+    eyebrow: "Installable fitness PWA",
+    headline: "Product-focused fitness software with offline-ready flows.",
+    description: "Personalized planning, guided intervals, weekly progress, accessibility, local-first behavior, and a responsive installable experience.",
     stack: ["Next.js", "React", "TypeScript", "PWA", "Web APIs"],
     caseStudy: "/work/fitflow/",
     live: "https://fitflow-gym-online.netlify.app",
     source: "https://github.com/rahman-997/fitflow-gym",
-    tone: "lime",
-    preview: "https://raw.githubusercontent.com/rahman-997/fitflow-gym/main/public/assets/fitflow-hero.png",
-    previewPosition: "center 28%",
-    hosting: "Netlify · instant static delivery",
+    image: "https://raw.githubusercontent.com/rahman-997/fitflow-gym/main/public/assets/fitflow-hero.png",
+    className: "fitflow",
   },
   {
-    number: "04",
+    index: "04",
     name: "Venues API",
-    category: "Backend service",
-    headline: "A compact API with serious engineering discipline.",
-    description: "Strict validation, clean layering, centralized errors, UUID resources, persistence boundaries, and HTTP contract verification in a deliberately focused backend service.",
-    stack: ["Express 5", "TypeScript", "Zod 4", "Node.js", "REST"],
+    eyebrow: "Backend engineering",
+    headline: "A compact REST API with disciplined architecture.",
+    description: "Versioned routes, strict Zod validation, clean controller/service boundaries, centralized errors, UUID resources, and contract-level testing.",
+    stack: ["Node.js", "Express 5", "TypeScript", "Zod 4", "REST"],
     caseStudy: "/work/venues-api/",
     live: "https://venues-api-rahman.onrender.com/health",
     source: "https://github.com/rahman-997/venues-api",
-    tone: "ink",
-    preview: null,
-    previewPosition: "center",
-    hosting: "Render free tier · health endpoint may cold-start",
+    image: null,
+    className: "venues",
   },
 ] as const;
 
-const capabilities = [
-  ["01", "Full-stack product engineering", "Interfaces, state, APIs, persistence, deployment, and product behavior treated as one connected system."],
-  ["02", "Backend systems & reliability", "REST and GraphQL APIs, validation, auth, queues, caching, data modeling, failure handling, and production health."],
-  ["03", "AI & interactive systems", "LLM integrations, MCP workflows, real-time experiences, mobile interfaces, WebGL, and exploratory product engineering."],
+const skills = [
+  { title: "Frontend systems", text: "React, Next.js, TypeScript, responsive UI, accessibility, state, PWA behavior and performance." },
+  { title: "Backend & APIs", text: "Node.js, Express, REST, GraphQL, validation, auth, caching, background jobs and real-time patterns." },
+  { title: "Data & architecture", text: "PostgreSQL, Prisma, MongoDB, Redis, schema design, service boundaries and reliability-minded modeling." },
+  { title: "Delivery & AI", text: "Docker, CI/CD, deployment, observability basics, LLM integrations, MCP workflows and automation." },
 ] as const;
 
-const tech = ["TypeScript", "React", "Next.js", "Node.js", "Express", "PostgreSQL", "Prisma", "MongoDB", "Redis", "GraphQL", "Docker", "FastAPI", "Flutter", "MCP"];
+const toolkit = ["TypeScript", "React", "Next.js", "Node.js", "Express", "PostgreSQL", "Prisma", "MongoDB", "Redis", "GraphQL", "Docker", "FastAPI", "Flutter", "MCP"];
 
 export default function Home() {
   return (
     <div className={styles.page}>
-      <a className={styles.skip} href="#content">Skip to content</a>
+      <a className={styles.skip} href="#main">Skip to content</a>
+      <div className={styles.ambient} aria-hidden="true" />
 
       <header className={styles.header}>
         <a className={styles.brand} href="#top" aria-label="Abdulrahman Hajar — home">
           <span className={styles.brandMark}>AH</span>
-          <span className={styles.brandText}>Abdulrahman Hajar</span>
+          <span className={styles.brandCopy}>
+            <strong>Abdulrahman Hajar</strong>
+            <small>Software Engineer</small>
+          </span>
         </a>
 
         <nav className={styles.nav} aria-label="Primary navigation">
           <a href="#work">Work</a>
-          <a href="#expertise">Expertise</a>
+          <a href="#capabilities">Capabilities</a>
           <a href="#about">About</a>
-          <Link href="/resume/">Résumé</Link>
         </nav>
 
-        <a className={styles.headerCta} href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">
-          Connect <Arrow size={15} />
-        </a>
+        <Link className={styles.navCta} href="/resume/">Résumé <Arrow size={14} /></Link>
       </header>
 
-      <main id="content">
+      <main id="main">
         <section className={styles.hero} id="top">
           <div className={styles.heroCopy}>
             <div className={styles.availability}><span /> Open to software engineering opportunities</div>
-            <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK · BACKEND · AI</p>
+            <p className={styles.eyebrow}>FULL-STACK · BACKEND · PRODUCT · AI</p>
             <h1>
-              <span>ABDULRAHMAN</span>
-              <span className={styles.nameAccent}>HAJAR</span>
+              I engineer software that feels
+              <span> finished.</span>
             </h1>
-            <p className={styles.heroText}>
-              I build complete software products — from sharp interfaces to robust APIs, reliable data flows, automation, and production delivery.
+            <p className={styles.heroLead}>
+              I build complete digital products — from polished interfaces and robust APIs to data systems, automation, deployment, and the details that make software dependable in production.
             </p>
+
             <div className={styles.heroActions}>
-              <a className={styles.primaryButton} href="#work">See selected work <Arrow /></a>
-              <Link className={styles.secondaryButton} href="/resume/">View résumé</Link>
+              <a className={styles.primaryButton} href="#work">Explore selected work <Arrow /></a>
+              <a className={styles.iconButton} href="https://github.com/rahman-997" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+              <a className={styles.iconButton} href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><LinkedIn /></a>
+            </div>
+
+            <div className={styles.heroMeta}>
+              <div><span>Location</span><strong>Istanbul, Türkiye</strong></div>
+              <div><span>Education</span><strong>Computer Engineering</strong></div>
+              <div><span>Focus</span><strong>Production-minded systems</strong></div>
             </div>
           </div>
 
-          <div className={styles.heroArt} aria-label="Engineering profile card">
-            <div className={styles.artTopline}>
-              <span>ENGINEER PROFILE</span>
-              <span>ISTANBUL · TR</span>
+          <div className={styles.heroPanel} aria-label="Engineering system overview">
+            <div className={styles.panelBar}>
+              <span className={styles.windowDots}><i /><i /><i /></span>
+              <span>engineering.profile</span>
+              <span className={styles.online}><i /> online</span>
             </div>
-            <div className={styles.orbit} aria-hidden="true">
-              <span className={styles.orbitOne} />
-              <span className={styles.orbitTwo} />
-              <span className={styles.orbitCore}>AH</span>
-            </div>
-            <div className={styles.artCode}>
-              <span>01</span><p>PRODUCTS</p>
-              <span>02</span><p>APIs + DATA</p>
-              <span>03</span><p>RELIABILITY</p>
-              <span>04</span><p>AI SYSTEMS</p>
-            </div>
-            <div className={styles.artFooter}>
-              <span><i /> SYSTEM READY</span>
-              <strong>TypeScript first</strong>
+
+            <div className={styles.panelBody}>
+              <div className={styles.panelIntro}>
+                <span>BUILD MODE / 2026</span>
+                <strong>FULL-STACK<br />SYSTEMS</strong>
+              </div>
+
+              <div className={styles.systemGrid}>
+                <div><span>01</span><strong>Interface</strong><small>React · Next.js</small></div>
+                <div><span>02</span><strong>API</strong><small>Node · Express</small></div>
+                <div><span>03</span><strong>Data</strong><small>SQL · Mongo · Redis</small></div>
+                <div><span>04</span><strong>Delivery</strong><small>Docker · CI/CD</small></div>
+              </div>
+
+              <div className={styles.terminal}>
+                <p><span>$</span> profile --status</p>
+                <p><b>✓</b> frontend craftsmanship</p>
+                <p><b>✓</b> backend architecture</p>
+                <p><b>✓</b> production delivery</p>
+                <p><b>✓</b> AI-assisted workflows</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className={styles.signalStrip} aria-label="Profile highlights">
-          <div><strong>04</strong><span>Selected systems</span></div>
-          <div><strong>FULL</strong><span>Interface → infrastructure</span></div>
-          <div><strong>BUILD</strong><span>Architecture → production</span></div>
-          <div><strong>2026</strong><span>Portfolio edition</span></div>
+        <section className={styles.toolkit} aria-label="Selected technologies">
+          <span className={styles.toolkitLabel}>SELECTED TOOLKIT</span>
+          <div className={styles.toolkitTrack}>{toolkit.map((item) => <span key={item}>{item}</span>)}</div>
         </section>
 
         <section className={styles.work} id="work">
-          <div className={styles.sectionIntro}>
-            <p><span>01</span> SELECTED WORK</p>
-            <h2>Software that proves the engineering.</h2>
-            <div>Real interfaces, live systems, architecture decisions, and source code — not decorative mockups.</div>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p>01 / SELECTED WORK</p>
+              <h2>Projects with actual engineering behind them.</h2>
+            </div>
+            <p className={styles.sectionNote}>Live products, source code, architecture decisions, and case studies — not decorative portfolio mockups.</p>
           </div>
 
-          <div className={styles.projectGrid}>
-            {projects.map((project) => (
-              <article className={`${styles.projectCard} ${styles[project.tone]}`} key={project.name}>
-                <div className={`${styles.projectVisual} ${previewStyles.visual}`}>
-                  {project.preview ? (
-                    <div
-                      className={previewStyles.image}
-                      style={{ backgroundImage: `url(${project.preview})`, backgroundPosition: project.previewPosition }}
-                      aria-hidden="true"
-                    />
+          <div className={styles.projectList}>
+            {projects.map((project, projectIndex) => (
+              <article className={`${styles.project} ${styles[project.className]} ${projectIndex === 0 ? styles.featured : ""}`} key={project.name}>
+                <div className={styles.projectVisual}>
+                  {project.image ? (
+                    <div className={styles.projectImage} style={{ backgroundImage: `url(${project.image})` }} aria-hidden="true" />
                   ) : (
-                    <div className={previewStyles.apiMock} aria-hidden="true">
-                      <div className={previewStyles.apiBar}><span>GET</span><code>/v1/venues</code><b>200 OK</b></div>
-                      <pre>{`{\n  "status": "healthy",\n  "service": "venues-api",\n  "runtime": "node",\n  "validation": "zod"\n}`}</pre>
+                    <div className={styles.apiVisual} aria-hidden="true">
+                      <div><span>GET</span><code>/v1/venues</code><b>200</b></div>
+                      <pre>{`{\n  "service": "venues-api",\n  "status": "healthy",\n  "validation": "zod",\n  "architecture": "layered"\n}`}</pre>
                     </div>
                   )}
-                  <div className={previewStyles.scrim} aria-hidden="true" />
-                  <div className={`${styles.projectVisualTop} ${previewStyles.top}`}><span>{project.category}</span><span>{project.number} / 04</span></div>
-                  <div className={`${styles.projectStackMini} ${previewStyles.stackMini}`}>{project.stack.slice(0, 3).map((item) => <span key={item}>{item}</span>)}</div>
-                  <div className={previewStyles.liveProof}><span /> {project.hosting}</div>
+                  <div className={styles.visualOverlay} />
+                  <span className={styles.projectIndex}>{project.index}</span>
+                  <span className={styles.projectType}>{project.eyebrow}</span>
                 </div>
 
-                <div className={styles.projectBody}>
-                  <div className={styles.projectNumber}>{project.number}</div>
+                <div className={styles.projectContent}>
+                  <p className={styles.projectEyebrow}>{project.eyebrow}</p>
                   <h3>{project.name}</h3>
                   <h4>{project.headline}</h4>
-                  <p>{project.description}</p>
+                  <p className={styles.projectDescription}>{project.description}</p>
                   <div className={styles.stack}>{project.stack.map((item) => <span key={item}>{item}</span>)}</div>
                   <div className={styles.projectLinks}>
                     <Link href={project.caseStudy}>Case study <Arrow size={15} /></Link>
-                    <a href={project.live} target="_blank" rel="noreferrer">Live proof <Arrow size={15} /></a>
-                    <a href={project.source} target="_blank" rel="noreferrer" aria-label={`${project.name} source code`}><Github size={17} /></a>
+                    <a href={project.live} target="_blank" rel="noreferrer">Live <Arrow size={15} /></a>
+                    <a href={project.source} target="_blank" rel="noreferrer"><Github size={16} /> Source</a>
                   </div>
                 </div>
               </article>
@@ -208,61 +212,54 @@ export default function Home() {
           </div>
         </section>
 
-        <section className={styles.expertise} id="expertise">
-          <div className={styles.expertiseInner}>
-            <div className={styles.sectionIntroDark}>
-              <p><span>02</span> EXPERTISE</p>
-              <h2>One engineer.<br />The whole delivery path.</h2>
-            </div>
+        <section className={styles.capabilities} id="capabilities">
+          <div className={styles.sectionHeadingCompact}>
+            <p>02 / CAPABILITIES</p>
+            <h2>From interface to infrastructure.</h2>
+          </div>
 
-            <div className={styles.capabilityList}>
-              {capabilities.map(([number, title, text]) => (
-                <article key={number}>
-                  <span>{number}</span>
-                  <div><h3>{title}</h3><p>{text}</p></div>
-                  <Arrow size={22} />
-                </article>
-              ))}
-            </div>
-
-            <div className={styles.techRail}>
-              {tech.map((item) => <span key={item}>{item}</span>)}
-            </div>
+          <div className={styles.skillGrid}>
+            {skills.map((skill, index) => (
+              <article key={skill.title}>
+                <span>0{index + 1}</span>
+                <h3>{skill.title}</h3>
+                <p>{skill.text}</p>
+              </article>
+            ))}
           </div>
         </section>
 
         <section className={styles.about} id="about">
-          <div className={styles.aboutLabel}><span>03</span> ABOUT</div>
-          <div className={styles.aboutHeadline}>
-            <h2>Engineering beyond the assignment.</h2>
+          <div className={styles.aboutLabel}>03 / ABOUT</div>
+          <div className={styles.aboutTitle}>
+            <p>SOFTWARE ENGINEER · COMPUTER ENGINEERING STUDENT</p>
+            <h2>Strong products come from understanding the whole system.</h2>
           </div>
           <div className={styles.aboutCopy}>
-            <p>I&apos;m Abdulrahman Hajar, a Computer Engineering student at Nişantaşı University in Istanbul and a software engineer focused on building complete, production-minded systems.</p>
-            <p>My strongest work sits where product design, backend architecture, data, reliability, and delivery meet. I care about clear boundaries, useful abstractions, measurable quality, and software that behaves well outside the happy path.</p>
-            <div className={styles.aboutActions}>
-              <Link href="/resume/">Open résumé <Arrow size={15} /></Link>
-              <a href="https://github.com/rahman-997" target="_blank" rel="noreferrer"><Github size={17} /> GitHub</a>
+            <p>I&apos;m Abdulrahman Hajar, based in Istanbul and studying Computer Engineering at Nişantaşı University. I work across frontend, backend, APIs, databases, deployment, and AI-assisted product workflows.</p>
+            <p>I care about software that is clear to use, easy to reason about, resilient outside the happy path, and built with enough engineering discipline to keep improving after launch.</p>
+            <div className={styles.aboutLinks}>
+              <Link href="/resume/">View résumé <Arrow size={15} /></Link>
+              <a href="https://github.com/rahman-997" target="_blank" rel="noreferrer"><Github size={16} /> GitHub</a>
             </div>
           </div>
         </section>
 
         <section className={styles.contact}>
-          <div className={styles.contactNoise} aria-hidden="true">AH</div>
-          <p>04 · CONTACT</p>
-          <h2>Let&apos;s build something worth shipping.</h2>
-          <div className={styles.contactRow}>
-            <span>Software engineering opportunities · product builds · backend systems</span>
-            <div>
-              <a href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer"><LinkedIn size={18} /> LinkedIn <Arrow size={15} /></a>
-              <a href="https://github.com/rahman-997" target="_blank" rel="noreferrer"><Github size={18} /> GitHub <Arrow size={15} /></a>
-            </div>
+          <div className={styles.contactGlow} aria-hidden="true" />
+          <p>04 / CONTACT</p>
+          <h2>Have a role, product, or hard technical problem?</h2>
+          <p className={styles.contactLead}>I&apos;m open to software engineering opportunities and serious product collaborations.</p>
+          <div className={styles.contactActions}>
+            <a className={styles.primaryButton} href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">Connect on LinkedIn <Arrow /></a>
+            <a className={styles.secondaryButton} href="https://github.com/rahman-997" target="_blank" rel="noreferrer"><Github /> View GitHub</a>
           </div>
         </section>
       </main>
 
       <footer className={styles.footer}>
-        <div><strong>Abdulrahman Hajar</strong><span>Software Engineer · Istanbul, Türkiye</span></div>
-        <p>Designed to show the work, not decorate it.</p>
+        <div><span className={styles.brandMark}>AH</span><strong>Abdulrahman Hajar</strong></div>
+        <span>Software Engineer · Istanbul · 2026</span>
         <a href="#top">Back to top ↑</a>
       </footer>
     </div>
