@@ -35,6 +35,7 @@ export default function Home() {
         <nav aria-label="Primary navigation">
           <a href="#work">Work</a>
           <a href="#about">About</a>
+          <Link href="/resume/">Resume</Link>
           <a href="#contact">Contact</a>
         </nav>
         <a className="header-link" href="https://github.com/rahman-997" target="_blank" rel="noreferrer">
@@ -56,6 +57,7 @@ export default function Home() {
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="#work">Explore my work <ArrowUpRight /></a>
+              <Link className="button button-secondary" href="/resume/">View résumé</Link>
               <a className="button button-secondary" href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">Connect on LinkedIn</a>
             </div>
           </div>
@@ -219,6 +221,7 @@ export default function Home() {
           <p>If you&apos;re looking for a frontend engineer who can think beyond the component and own the product experience, let&apos;s talk.</p>
           <div className="contact-actions">
             <a className="button button-primary button-large" href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">Start a conversation <ArrowUpRight /></a>
+            <Link className="button button-secondary button-large" href="/resume/">View résumé</Link>
             <a className="button button-secondary button-large" href="https://github.com/rahman-997" target="_blank" rel="noreferrer"><GithubMark /> View GitHub</a>
           </div>
         </section>
