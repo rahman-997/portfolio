@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./home.module.css";
+import previewStyles from "./project-previews.module.css";
 
 const Arrow = ({ size = 18 }: { size?: number }) => (
   <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none">
@@ -31,6 +32,9 @@ const projects = [
     live: "https://eventify-web.onrender.com",
     source: "https://github.com/rahman-997/eventify",
     tone: "blue",
+    preview: "/projects/eventify-cover.jpg",
+    previewPosition: "center",
+    hosting: "Render free tier · first load may cold-start",
   },
   {
     number: "02",
@@ -43,6 +47,9 @@ const projects = [
     live: "https://bookbookhaven-free.onrender.com",
     source: "https://github.com/rahman-997/bookbookhaven",
     tone: "orange",
+    preview: "/projects/bookhaven-cover.jpg",
+    previewPosition: "center",
+    hosting: "Render free tier · first load may cold-start",
   },
   {
     number: "03",
@@ -55,6 +62,9 @@ const projects = [
     live: "https://fitflow-gym-online.netlify.app",
     source: "https://github.com/rahman-997/fitflow-gym",
     tone: "lime",
+    preview: "https://raw.githubusercontent.com/rahman-997/fitflow-gym/main/public/assets/fitflow-hero.png",
+    previewPosition: "center 28%",
+    hosting: "Netlify · instant static delivery",
   },
   {
     number: "04",
@@ -64,9 +74,12 @@ const projects = [
     description: "Strict validation, clean layering, centralized errors, UUID resources, persistence boundaries, and HTTP contract verification in a deliberately focused backend service.",
     stack: ["Express 5", "TypeScript", "Zod 4", "Node.js", "REST"],
     caseStudy: "/work/venues-api/",
-    live: "https://venues-api-rahman.onrender.com",
+    live: "https://venues-api-rahman.onrender.com/health",
     source: "https://github.com/rahman-997/venues-api",
     tone: "ink",
+    preview: null,
+    previewPosition: "center",
+    hosting: "Render free tier · health endpoint may cold-start",
   },
 ] as const;
 
@@ -153,16 +166,29 @@ export default function Home() {
           <div className={styles.sectionIntro}>
             <p><span>01</span> SELECTED WORK</p>
             <h2>Software that proves the engineering.</h2>
-            <div>Not screenshots. Not toy demos. Each project shows product behavior, architecture, technical decisions, and live proof.</div>
+            <div>Real interfaces, live systems, architecture decisions, and source code — not decorative mockups.</div>
           </div>
 
           <div className={styles.projectGrid}>
             {projects.map((project) => (
               <article className={`${styles.projectCard} ${styles[project.tone]}`} key={project.name}>
-                <div className={styles.projectVisual}>
-                  <div className={styles.projectVisualTop}><span>{project.category}</span><span>{project.number} / 04</span></div>
-                  <div className={styles.projectGlyph}>{project.name.slice(0, 2).toUpperCase()}</div>
-                  <div className={styles.projectStackMini}>{project.stack.slice(0, 3).map((item) => <span key={item}>{item}</span>)}</div>
+                <div className={`${styles.projectVisual} ${previewStyles.visual}`}>
+                  {project.preview ? (
+                    <div
+                      className={previewStyles.image}
+                      style={{ backgroundImage: `url(${project.preview})`, backgroundPosition: project.previewPosition }}
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <div className={previewStyles.apiMock} aria-hidden="true">
+                      <div className={previewStyles.apiBar}><span>GET</span><code>/v1/venues</code><b>200 OK</b></div>
+                      <pre>{`{\n  "status": "healthy",\n  "service": "venues-api",\n  "runtime": "node",\n  "validation": "zod"\n}`}</pre>
+                    </div>
+                  )}
+                  <div className={previewStyles.scrim} aria-hidden="true" />
+                  <div className={`${styles.projectVisualTop} ${previewStyles.top}`}><span>{project.category}</span><span>{project.number} / 04</span></div>
+                  <div className={`${styles.projectStackMini} ${previewStyles.stackMini}`}>{project.stack.slice(0, 3).map((item) => <span key={item}>{item}</span>)}</div>
+                  <div className={previewStyles.liveProof}><span /> {project.hosting}</div>
                 </div>
 
                 <div className={styles.projectBody}>
@@ -173,7 +199,7 @@ export default function Home() {
                   <div className={styles.stack}>{project.stack.map((item) => <span key={item}>{item}</span>)}</div>
                   <div className={styles.projectLinks}>
                     <Link href={project.caseStudy}>Case study <Arrow size={15} /></Link>
-                    <a href={project.live} target="_blank" rel="noreferrer">Live <Arrow size={15} /></a>
+                    <a href={project.live} target="_blank" rel="noreferrer">Live proof <Arrow size={15} /></a>
                     <a href={project.source} target="_blank" rel="noreferrer" aria-label={`${project.name} source code`}><Github size={17} /></a>
                   </div>
                 </div>
