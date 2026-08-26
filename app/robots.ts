@@ -2,13 +2,15 @@ import type { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
 
+const baseUrl = "https://abdulrahman-hajar-dev.netlify.app";
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://abdulrahman-hajjar-dev.netlify.app/sitemap.xml",
-    host: "https://abdulrahman-hajjar-dev.netlify.app",
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }
