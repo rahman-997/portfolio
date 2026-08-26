@@ -1,29 +1,39 @@
-# Abdulrahman Hajjar — Portfolio
+# Abdulrahman Hajjar — Engineering Portfolio
 
 ![Portfolio social preview](public/og.png)
 
-A polished personal portfolio for a frontend engineer focused on React, Next.js, TypeScript, accessible interfaces, and production-ready web products.
+A polished personal portfolio for a **Frontend Engineer with full-stack TypeScript depth**, focused on React, Next.js, accessible product experiences, typed APIs, and production-ready delivery.
 
 **Live site:** [abdulrahman-hajjar-dev.netlify.app](https://abdulrahman-hajjar-dev.netlify.app)  
 **GitHub:** [rahman-997](https://github.com/rahman-997)  
 **LinkedIn:** [Abdulrahman Hajjar](https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/)
 
-## Highlights
+## What this portfolio demonstrates
 
-- Distinctive responsive design for mobile, tablet, and desktop
-- Semantic sections and keyboard-friendly navigation
-- Accessible focus states, skip link, and reduced-motion support
+- Product-focused frontend engineering with React, Next.js, and TypeScript
+- Responsive design systems for mobile, tablet, and desktop
+- Accessible interaction states, keyboard navigation, skip links, and reduced-motion support
+- Full-stack depth across Express, PostgreSQL, MongoDB, Redis, authentication, and background jobs
 - Project case studies with live demos and source links
-- Optimized Open Graph and X sharing metadata
-- Custom favicon and branded social preview
+- Production-minded quality practices: validation, testing, CI/CD, security, observability, and health checks
+- Optimized Open Graph and social sharing metadata
 - Clean, maintainable Next.js App Router structure
 
 ## Featured work
 
 - **FitFlow** — personalized fitness plans, guided intervals, progress tracking, PWA, and offline support
-- **Eventify** — event discovery, secure authentication, bookings, waitlists, background jobs, and caching
-- **BookHaven** — full-stack bookstore with catalog, cart, wishlist, checkout, reviews, orders, and admin tools
-- **Venues API** — versioned REST API with validation, layered architecture, predictable errors, and tests
+- **Eventify** — event discovery, secure authentication, bookings, waitlists, background jobs, caching, and operational monitoring
+- **BookHaven** — full-stack bookstore with catalog, cart, wishlist, checkout, reviews, orders, inventory, and admin tools
+- **Venues API** — versioned REST API with validation, layered architecture, predictable errors, persistence, and tests
+
+## Engineering focus
+
+```text
+Frontend systems        · React · Next.js · TypeScript · PWA
+Backend depth           · Node.js · Express · PostgreSQL · MongoDB · Redis
+Product quality         · Accessibility · Performance · Testing · Security
+Production delivery     · CI/CD · Observability · Health checks · Deployment
+```
 
 ## Tech stack
 
