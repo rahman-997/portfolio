@@ -115,12 +115,13 @@ export default function Home() {
           <article className="project-card project-eventify">
             <div className="project-index">02</div>
             <div className="project-copy">
-              <div className="project-tags"><span>React</span><span>Express</span><span>PostgreSQL</span></div>
+              <div className="project-tags"><span>TypeScript</span><span>PostgreSQL</span><span>Redis + BullMQ</span></div>
               <h3>Eventify</h3>
-              <p>A production-oriented event platform with secure authentication, organizer tools, bookings, waitlists, background jobs, caching, and installable PWA support.</p>
+              <p>A production-oriented event platform with secure auth, bookings and waitlists, Redis caching and rate limits, durable background jobs, metrics, health/readiness checks, and installable PWA support.</p>
               <div className="project-links">
                 <Link href="/work/eventify/">Case study <ArrowUpRight size={16} /></Link>
                 <a href="https://eventify-web.onrender.com" target="_blank" rel="noreferrer">Live product <ArrowUpRight size={16} /></a>
+                <a href="https://backend2-api.onrender.com/health" target="_blank" rel="noreferrer">API health <ArrowUpRight size={16} /></a>
                 <a href="https://github.com/rahman-997/eventify" target="_blank" rel="noreferrer"><GithubMark /> Source code</a>
               </div>
             </div>
@@ -143,7 +144,7 @@ export default function Home() {
               <div className="mini-project-copy">
                 <div className="project-tags"><span>Next.js</span><span>MongoDB</span><span>Express</span></div>
                 <h3>BookHaven</h3>
-                <p>A full-stack bookstore with catalog discovery, cart, wishlist, reviews, checkout, order history, and an operational admin dashboard.</p>
+                <p>A full-stack bookstore with JWT auth and RBAC, catalog discovery, cart and wishlist, reviews, concurrency-safe checkout, order history, inventory handling, and an operational admin dashboard.</p>
                 <div className="project-links">
                   <Link href="/work/bookhaven/">Case study <ArrowUpRight size={16} /></Link>
                   <a href="https://bookbookhaven-free.onrender.com" target="_blank" rel="noreferrer">Live product <ArrowUpRight size={16} /></a>
@@ -163,11 +164,12 @@ export default function Home() {
                 <i>STATUS OK</i>
               </div>
               <div className="mini-project-copy">
-                <div className="project-tags"><span>Node.js</span><span>TypeScript</span><span>Zod</span></div>
+                <div className="project-tags"><span>Express 5</span><span>TypeScript</span><span>Zod 4</span></div>
                 <h3>Venues API</h3>
-                <p>A clean, versioned REST API with strict validation, layered architecture, predictable errors, and contract-level tests.</p>
+                <p>A clean, versioned REST API with strict validation, layered architecture, centralized predictable errors, persistence, UUIDs, and service plus HTTP contract tests.</p>
                 <div className="project-links">
                   <Link href="/work/venues-api/">Case study <ArrowUpRight size={16} /></Link>
+                  <a href="https://venues-api-rahman.onrender.com" target="_blank" rel="noreferrer">Live API <ArrowUpRight size={16} /></a>
                   <a href="https://venues-api-rahman.onrender.com/health" target="_blank" rel="noreferrer">Health check <ArrowUpRight size={16} /></a>
                   <a href="https://github.com/rahman-997/venues-api" target="_blank" rel="noreferrer"><GithubMark /> Code</a>
                 </div>
