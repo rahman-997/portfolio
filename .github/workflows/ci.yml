@@ -15,9 +15,9 @@ concurrency:
 
 jobs:
   quality:
-    name: Lint and build
+    name: Quality gate
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
 
     steps:
       - name: Checkout repository
@@ -35,8 +35,17 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Production build
         run: npm run build
+
+      - name: Verify static export
+        run: npm run verify:export
+
+      - name: Dependency audit
+        run: npm run audit
 
       - name: Upload deployable source
         if: github.event_name == 'push'
