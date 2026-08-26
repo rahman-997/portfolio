@@ -11,6 +11,7 @@ const studies = {
       "A premium fitness experience that turns program discovery into a usable weekly routine with personalized recommendations, guided intervals, progress tracking, accessibility, and offline support.",
     stack: ["Next.js", "React", "TypeScript", "PWA", "Modern CSS"],
     live: "https://fitflow-gym-online.netlify.app",
+    runtime: null,
     source: "https://github.com/rahman-997/fitflow-gym",
     goal:
       "Make a fitness product feel immediately useful without forcing account creation: help a user choose a plan, run a focused session, and maintain weekly consistency.",
@@ -28,6 +29,7 @@ const studies = {
       "A production-oriented event platform with authentication, organizer workflows, bookings, waitlists, background jobs, caching, observability, and an installable React PWA.",
     stack: ["React", "TypeScript", "Express", "PostgreSQL", "Prisma", "Redis", "BullMQ"],
     live: "https://eventify-web.onrender.com",
+    runtime: "https://backend2-api.onrender.com/health",
     source: "https://github.com/rahman-997/eventify",
     goal:
       "Keep event discovery simple for attendees while making booking state, capacity rules, waitlist promotion, and asynchronous side effects reliable under real operational constraints.",
@@ -45,6 +47,7 @@ const studies = {
       "A full-stack bookstore covering catalog discovery, wishlist, cart, checkout, reviews, orders, inventory, authentication, and admin operations.",
     stack: ["Next.js", "React", "TypeScript", "Express", "MongoDB", "Mongoose", "Zod"],
     live: "https://bookbookhaven-free.onrender.com",
+    runtime: null,
     source: "https://github.com/rahman-997/bookbookhaven",
     goal:
       "Build a complete commerce flow that is credible as both a customer product and an operational system, while remaining deployable on a zero-cost portfolio stack.",
@@ -61,7 +64,8 @@ const studies = {
     summary:
       "A focused Express 5 API demonstrating strict validation, layered architecture, predictable errors, UUID-based resources, persistence, and contract-level tests.",
     stack: ["Node.js", "Express 5", "TypeScript", "Zod 4"],
-    live: "https://venues-api-rahman.onrender.com/health",
+    live: "https://venues-api-rahman.onrender.com",
+    runtime: "https://venues-api-rahman.onrender.com/health",
     source: "https://github.com/rahman-997/venues-api",
     goal:
       "Keep a small CRUD service intentionally understandable while still applying the engineering boundaries expected in a production-minded API.",
@@ -120,6 +124,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           <p className={styles.summary}>{study.summary}</p>
           <div className={styles.actions}>
             <a href={study.live} target="_blank" rel="noreferrer">Open live product ↗</a>
+            {study.runtime ? <a href={study.runtime} target="_blank" rel="noreferrer">Runtime health ↗</a> : null}
             <a href={study.source} target="_blank" rel="noreferrer">View source ↗</a>
           </div>
           <div className={styles.stack} aria-label="Technology stack">
