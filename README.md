@@ -1,5 +1,7 @@
 # Abdulrahman Hajjar — Engineering Portfolio
 
+[![Portfolio CI](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml)
+
 ![Portfolio social preview](public/og.png)
 
 A polished personal portfolio for a **Frontend Engineer with full-stack TypeScript depth**, focused on React, Next.js, accessible product experiences, typed APIs, and production-ready delivery.
@@ -14,17 +16,20 @@ A polished personal portfolio for a **Frontend Engineer with full-stack TypeScri
 - Responsive design systems for mobile, tablet, and desktop
 - Accessible interaction states, keyboard navigation, skip links, and reduced-motion support
 - Full-stack depth across Express, PostgreSQL, MongoDB, Redis, authentication, and background jobs
-- Project case studies with live demos and source links
+- Dedicated project case studies with product goals, engineering decisions, quality signals, live demos, and source links
 - Production-minded quality practices: validation, testing, CI/CD, security, observability, and health checks
+- Automated GitHub Actions quality gate for linting and production builds
 - Optimized Open Graph and social sharing metadata
 - Clean, maintainable Next.js App Router structure
 
 ## Featured work
 
-- **FitFlow** — personalized fitness plans, guided intervals, progress tracking, PWA, and offline support
-- **Eventify** — event discovery, secure authentication, bookings, waitlists, background jobs, caching, and operational monitoring
-- **BookHaven** — full-stack bookstore with catalog, cart, wishlist, checkout, reviews, orders, inventory, and admin tools
-- **Venues API** — versioned REST API with validation, layered architecture, predictable errors, persistence, and tests
+| Project | Focus | Case study | Live / source |
+| --- | --- | --- | --- |
+| **FitFlow** | Fitness planning, intervals, progress, accessible PWA | [Read case study](https://abdulrahman-hajjar-dev.netlify.app/work/fitflow/) | [Live](https://fitflow-gym-online.netlify.app) · [GitHub](https://github.com/rahman-997/fitflow-gym) |
+| **Eventify** | Event discovery, bookings, waitlists, async jobs, observability | [Read case study](https://abdulrahman-hajjar-dev.netlify.app/work/eventify/) | [Live](https://eventify-web.onrender.com) · [GitHub](https://github.com/rahman-997/eventify) |
+| **BookHaven** | Full-stack bookstore, checkout, inventory, admin workflows | [Read case study](https://abdulrahman-hajjar-dev.netlify.app/work/bookhaven/) | [Live](https://bookbookhaven-free.onrender.com) · [GitHub](https://github.com/rahman-997/bookbookhaven) |
+| **Venues API** | Versioned REST API, validation, layered architecture, tests | [Read case study](https://abdulrahman-hajjar-dev.netlify.app/work/venues-api/) | [Health](https://venues-api-rahman.onrender.com/health) · [GitHub](https://github.com/rahman-997/venues-api) |
 
 ## Engineering focus
 
@@ -42,7 +47,9 @@ Production delivery     · CI/CD · Observability · Health checks · Deployment
 - TypeScript 5
 - Tailwind CSS 4
 - Modern CSS with responsive grids, fluid typography, and custom properties
+- CSS Modules for project case-study surfaces
 - ESLint and production build validation
+- GitHub Actions CI
 
 ## Local development
 
@@ -62,6 +69,8 @@ npm run lint
 npm run build
 ```
 
+Every push and pull request to `main` also runs these checks in GitHub Actions.
+
 ## Netlify deployment
 
 The repository includes a production `netlify.toml` and uses Next.js static export.
@@ -72,12 +81,17 @@ directory. Node.js 22.13 is pinned for repeatable builds.
 
 ```text
 app/
-  layout.tsx       metadata and document shell
-  page.tsx         portfolio content and project links
-  globals.css      design system and responsive layouts
+  layout.tsx                 metadata and document shell
+  page.tsx                   portfolio home and project links
+  globals.css                main design system and responsive layouts
+  work/[slug]/
+    page.tsx                 statically generated project case studies
+    case-study.module.css    isolated case-study visual system
 public/
-  favicon.svg      custom portfolio icon
-  og.png           social sharing card
+  favicon.svg                custom portfolio icon
+  og.png                     social sharing card
+.github/workflows/
+  ci.yml                     lint + production build quality gate
 ```
 
 ## Accessibility
@@ -88,6 +102,7 @@ public/
 - High-contrast action states
 - Reduced-motion preference support
 - Descriptive link and image labels
+- Responsive case-study layouts across desktop and mobile
 
 ## Author
 
