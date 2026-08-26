@@ -1,1 +1,11 @@
-# Temporary workflow removed after verified security update.
+# Verified security update helper; intentionally inert after generating and validating the lockfile.
+name: Security update helper (inactive)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Next.js 16.3.3 security update already generated and verified."
