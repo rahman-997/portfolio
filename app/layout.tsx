@@ -3,22 +3,28 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://abdulrahman-hajjar-dev.netlify.app"),
-  title: "Abdulrahman Hajjar — Frontend Engineer & Full-Stack TypeScript Developer",
+  title: "Abdulrahman Hajar — Software Engineer & Full-Stack Developer",
   description:
-    "Frontend Engineer in Istanbul building polished, accessible React and Next.js products with full-stack TypeScript depth across APIs, databases, testing, security, and production delivery.",
-  authors: [{ name: "Abdulrahman Hajjar", url: "https://github.com/rahman-997" }],
-  creator: "Abdulrahman Hajjar",
+    "Software Engineer and Full-Stack Developer in Istanbul building production-ready web, backend, AI-assisted, mobile, and interactive systems with TypeScript, React/Next.js, Node.js, Python/FastAPI, and modern infrastructure.",
+  authors: [{ name: "Abdulrahman Hajar", url: "https://github.com/rahman-997" }],
+  creator: "Abdulrahman Hajar",
   keywords: [
-    "Abdulrahman Hajjar",
-    "Frontend Engineer",
-    "Full-Stack TypeScript Developer",
+    "Abdulrahman Hajar",
+    "Software Engineer",
+    "Full-Stack Developer",
+    "Computer Engineering",
     "React Developer",
     "Next.js Developer",
     "TypeScript",
     "Node.js",
     "Express",
+    "FastAPI",
     "PostgreSQL",
     "MongoDB",
+    "Redis",
+    "Flutter",
+    "AI Integration",
+    "System Architecture",
     "Istanbul Software Engineer",
     "Web Developer Portfolio",
   ],
@@ -26,26 +32,26 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Abdulrahman Hajjar — Frontend Engineer & Full-Stack TypeScript Developer",
+    title: "Abdulrahman Hajar — Software Engineer & Full-Stack Developer",
     description:
-      "Polished React and Next.js product engineering backed by typed APIs, reliable data systems, testing, security, and production delivery.",
+      "Full-stack product engineering across React/Next.js, TypeScript, Node.js, APIs, data systems, AI-assisted workflows, testing, and production delivery.",
     type: "website",
     url: "/",
-    siteName: "Abdulrahman Hajjar — Engineering Portfolio",
+    siteName: "Abdulrahman Hajar — Engineering Portfolio",
     images: [
       {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "Abdulrahman Hajjar — Frontend Engineer and Full-Stack TypeScript Developer",
+        alt: "Abdulrahman Hajar — Software Engineer and Full-Stack Developer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdulrahman Hajjar — Frontend Engineer & Full-Stack TypeScript Developer",
+    title: "Abdulrahman Hajar — Software Engineer & Full-Stack Developer",
     description:
-      "React and Next.js product engineering with full-stack TypeScript depth and production-ready delivery.",
+      "Production-ready full-stack engineering with TypeScript, React/Next.js, Node.js, data systems, AI integrations, and modern deployment.",
     images: ["/og.png"],
   },
   robots: {
