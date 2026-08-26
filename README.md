@@ -6,7 +6,7 @@ A recruiter-facing engineering portfolio for **Abdulrahman Hajar** — Software 
 
 The site is intentionally structured around **engineering evidence instead of a generic skills gallery**: complete products, backend architecture, data flows, async work, validation, testing, security, observability, deployment, and selected AI/interactive systems.
 
-**Live:** [abdulrahman-hajjar-dev.netlify.app](https://abdulrahman-hajjar-dev.netlify.app) · **GitHub:** [rahman-997](https://github.com/rahman-997) · **LinkedIn:** [Abdulrahman Hajar](https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/)
+**Live:** [abdulrahman-hajar-dev.netlify.app](https://abdulrahman-hajar-dev.netlify.app) · **GitHub:** [rahman-997](https://github.com/rahman-997) · **LinkedIn:** [Abdulrahman Hajar](https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/)
 
 ---
 
@@ -36,6 +36,17 @@ The portfolio positions Abdulrahman around four connected engineering areas:
 
 Each project has a dedicated case study and links to live proof and source code.
 
+## Experience & interaction
+
+The portfolio includes a lightweight **keyboard command palette** with no client-side dependency overhead:
+
+- press `/` from any non-input area
+- press `⌘K` / `Ctrl+K`
+- search work, expertise, résumé, GitHub, or LinkedIn
+- press `Enter` to open the first matching destination
+
+It also includes a branded 404 experience so stale links keep visitors inside the portfolio instead of dropping into a generic framework page.
+
 ## Design system
 
 The current portfolio uses a restrained engineering-oriented visual system:
@@ -47,7 +58,7 @@ The current portfolio uses a restrained engineering-oriented visual system:
 - large editorial typography
 - code/terminal-inspired engineering summary
 - responsive project evidence panels
-- generated Open Graph / Twitter artwork that stays synchronized with the visual identity
+- generated Open Graph / Twitter artwork synchronized with the visual identity
 - reduced decorative noise compared with a conventional “developer portfolio”
 
 The homepage deliberately avoids relying on a profile portrait so the identity is driven by work, architecture, and engineering proof.
@@ -65,6 +76,7 @@ The portfolio includes:
 - printable résumé
 - dedicated project case studies
 - GitHub and LinkedIn pathways
+- search-friendly structured metadata and canonical URLs
 
 ## Tech stack
 
@@ -83,22 +95,27 @@ Netlify
 
 ```text
 app/
-  layout.tsx                 SEO and application shell
-  page.tsx                   engineering portfolio homepage
-  globals.css                primary visual system
-  opengraph-image.tsx        generated social preview
-  twitter-image.tsx          generated X/Twitter preview
+  layout.tsx                         SEO, structured data, application shell
+  page.tsx                           engineering portfolio homepage
+  globals.css                        primary visual system
+  not-found.tsx                      branded 404 experience
+  not-found.module.css               404 presentation
+  components/
+    CommandPalette.tsx               keyboard quick navigation
+    command-palette.module.css       command palette styles
+  opengraph-image.tsx                generated social preview
+  twitter-image.tsx                  generated X/Twitter preview
   resume/
-    page.tsx                 recruiter-facing web résumé
-    resume.module.css        résumé design system
+    page.tsx                         recruiter-facing web résumé
+    resume.module.css                résumé design system
   work/[slug]/
-    page.tsx                 project case-study renderer
-    case-study.module.css    case-study presentation
+    page.tsx                         project case-study renderer
+    case-study.module.css            case-study presentation
 public/
   favicon.svg
-  resume.html                printable résumé
+  resume.html                        printable résumé
 .github/workflows/
-  ci.yml                     lint + production-build quality gate
+  ci.yml                             lint + production-build quality gate
 ```
 
 ## Local development
@@ -123,11 +140,23 @@ GitHub Actions runs the quality gate on pushes and pull requests to `main`.
 
 The repository includes `netlify.toml` and uses a static Next.js export. Netlify builds with `npm run build` and publishes `out/`.
 
+The deployment configuration also applies long-lived immutable caching to Next.js static assets and standard security-focused response headers such as HSTS, `nosniff`, strict referrer policy, frame restrictions, and browser permission restrictions.
+
+## SEO & discoverability
+
+- canonical URL metadata
+- generated Open Graph and Twitter previews
+- `Person` and `WebSite` JSON-LD structured data
+- sitemap and robots metadata
+- descriptive title templates and keyword coverage
+- indexable project case studies and résumé routes
+
 ## Accessibility
 
 - semantic landmarks and heading hierarchy
 - skip-to-content navigation
 - keyboard-visible interactive states
+- keyboard command palette
 - strong contrast
 - reduced-motion support
 - responsive layouts across desktop and mobile
