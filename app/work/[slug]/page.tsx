@@ -4,6 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import styles from "./case-study.module.css";
 
+const siteUrl = "https://abdulrahman-hajar-dev.netlify.app";
+
 const studies = {
   fitflow: {
     name: "FitFlow",
@@ -96,10 +98,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const study = studies[slug as StudySlug];
   if (!study) return {};
+
+  const title = `${study.name} Case Study — Abdulrahman Hajar`;
+  const canonical = `/work/${slug}/`;
+  const image = study.cover ?? "/opengraph-image";
+
   return {
-    title: `${study.name} Case Study — Abdulrahman Hajar`,
+    title,
     description: study.summary,
-    alternates: { canonical: `/work/${slug}/` },
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description: study.summary,
+      type: "article",
+      url: canonical,
+      siteName: "Abdulrahman Hajar — Software Engineering Portfolio",
+      images: [{ url: image, alt: `${study.name} software engineering case study` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: study.summary,
+      images: [image],
+    },
   };
 }
 
@@ -108,8 +129,69 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const study = studies[slug as StudySlug];
   if (!study) notFound();
 
+  const canonicalUrl = `${siteUrl}/work/${slug}/`;
+  const caseStudyJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "@id": `${canonicalUrl}#case-study`,
+    headline: `${study.name} software engineering case study`,
+    description: study.summary,
+    url: canonicalUrl,
+    author: { "@id": `${siteUrl}/#person` },
+    isPartOf: { "@id": `${siteUrl}/#website` },
+    about: {
+      "@type": "SoftwareSourceCode",
+      name: study.name,
+      description: study.summary,
+      codeRepository: study.source,
+      runtimePlatform: "Web",
+      programmingLanguage: study.stack,
+      targetProduct: {
+        "@type": "SoftwareApplication",
+        name: study.name,
+        applicationCategory: "DeveloperApplication",
+        operatingSystem: "Web",
+        url: study.live,
+      },
+    },
+    inLanguage: "en",
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Portfolio",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Selected Work",
+        item: `${siteUrl}/#work`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: study.name,
+        item: canonicalUrl,
+      },
+    ],
+  };
+
   return (
     <main className={styles.page}>
+      {[caseStudyJsonLd, breadcrumbJsonLd].map((data, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+        />
+      ))}
+
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio">
           <span>AH</span>
