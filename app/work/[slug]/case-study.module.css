@@ -116,6 +116,23 @@
   letter-spacing: .08em;
 }
 
+.cover {
+  width: min(100%, 1100px);
+  margin: clamp(2.5rem, 5vw, 4.5rem) 0 0;
+  overflow: hidden;
+  border: 1px solid rgba(242, 239, 231, .14);
+  border-radius: clamp(18px, 2vw, 28px);
+  background: #111821;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, .35);
+}
+
+.cover img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
 .goal,
 .section,
 .next {
@@ -285,6 +302,7 @@
   .brand strong { display: none; }
   .hero { min-height: 560px; }
   .hero h1 { font-size: clamp(4rem, 22vw, 7rem); }
+  .cover { border-radius: 16px; }
   .qualityGrid { grid-template-columns: 1fr; }
   .qualityGrid div:nth-child(odd) { border-right: 0; }
 }
