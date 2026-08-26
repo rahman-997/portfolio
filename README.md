@@ -146,7 +146,7 @@ npm run audit
 
 `verify:export` confirms the homepage, branded 404, résumé, all four case studies, robots file, sitemap, manifest, social-preview output, and downloadable PDF are present in the static export. It also rejects stale professional-identity markers such as the previous Netlify hostname or incorrect visible surname spelling.
 
-GitHub Actions runs the complete quality gate on pushes and pull requests to `main` and uploads deployable source after successful pushes.
+GitHub Actions runs the complete quality gate on pushes and pull requests to `main` and uploads deployable source after successful pushes. Final release candidates are validated through pull-request CI before production deployment.
 
 ## Deployment
 
