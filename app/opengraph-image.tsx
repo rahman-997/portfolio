@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 
+export const dynamic = "force-static";
 export const alt = "Abdulrahman Hajar — Software Engineer | Full-Stack & Backend Systems";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
