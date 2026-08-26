@@ -38,11 +38,15 @@ jobs:
       - name: Production build
         run: npm run build
 
-      - name: Upload production build
+      - name: Upload deployable source
         if: github.event_name == 'push'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: portfolio-production-${{ github.sha }}
-          path: out/
+          name: portfolio-deploy-source-${{ github.sha }}
+          path: |
+            .
+            !node_modules/**
+            !.git/**
+            !.next/**
           if-no-files-found: error
           retention-days: 7
