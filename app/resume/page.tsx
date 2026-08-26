@@ -19,39 +19,45 @@ const skills = [
   "PWA",
   "Node.js",
   "Express",
+  "Zod",
   "PostgreSQL",
+  "Prisma",
   "MongoDB",
   "Redis",
+  "BullMQ",
   "REST APIs",
+  "Authentication & RBAC",
   "Testing",
   "CI/CD",
+  "Docker",
   "Performance",
   "Security",
+  "Observability",
 ];
 
 const projects = [
   {
     name: "FitFlow",
     description:
-      "Fitness PWA with personalized plans, guided workout intervals, weekly progress, accessibility, and offline support.",
+      "Next.js fitness PWA with personalized plans, guided workout intervals, weekly progress, responsive accessibility, and offline-ready behavior.",
     href: "/work/fitflow/",
   },
   {
     name: "Eventify",
     description:
-      "Production-oriented event platform with organizer tools, bookings, waitlists, background jobs, caching, observability, and PWA support.",
+      "Production-oriented event platform with PostgreSQL/Prisma, Redis caching and rate limits, BullMQ background jobs, durable outbox workflows, metrics, health/readiness checks, and PWA support.",
     href: "/work/eventify/",
   },
   {
     name: "BookHaven",
     description:
-      "Full-stack bookstore with discovery, cart, wishlist, reviews, checkout, order history, inventory, and admin tooling.",
+      "Full-stack bookstore with Next.js, Express, MongoDB, JWT auth/RBAC, cart and wishlist, reviews, concurrency-safe checkout, inventory handling, orders, admin workflows, and API tests.",
     href: "/work/bookhaven/",
   },
   {
     name: "Venues API",
     description:
-      "Versioned REST API with strict validation, layered architecture, predictable errors, and contract-level tests.",
+      "Express 5 + Zod 4 REST API with strict validation, layered architecture, centralized predictable errors, persistence, UUIDs, and service plus HTTP contract tests.",
     href: "/work/venues-api/",
   },
 ] as const;
@@ -76,7 +82,7 @@ export default function ResumePage() {
           <h1>Abdulrahman Hajjar</h1>
           <p className={styles.lede}>
             Frontend engineer focused on React, Next.js, and TypeScript, building polished, accessible,
-            production-ready product experiences with the backend depth to own reliable delivery end to end.
+            production-ready product experiences with the full-stack depth to own reliable delivery end to end.
           </p>
         </div>
         <aside className={styles.snapshot} aria-label="Professional snapshot">
@@ -92,8 +98,8 @@ export default function ResumePage() {
           <div className={styles.sectionLabel}><span>01</span><h2>Profile</h2></div>
           <p className={styles.profile}>
             I build interfaces that are clear to use and systems that are dependable to ship. My work combines
-            accessible product UI, strong TypeScript boundaries, production-minded backend integration, testing,
-            security, and CI/CD.
+            accessible product UI, strong TypeScript boundaries, production-minded backend integration, secure APIs,
+            automated testing, observability, and CI/CD.
           </p>
         </section>
 
