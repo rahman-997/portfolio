@@ -3,48 +3,45 @@ import Link from "next/link";
 import styles from "./resume.module.css";
 
 export const metadata: Metadata = {
-  title: "Resume — Abdulrahman Hajar | Software Engineer",
+  title: "Résumé — Abdulrahman Hajar | Software Engineer",
   description:
-    "Resume of Abdulrahman Hajar, a Software Engineer and Computer Engineering student focused on full-stack products, backend APIs, data systems, production engineering, and AI-assisted workflows.",
+    "Recruiter-ready résumé for Abdulrahman Hajar: Software Engineer, Full-Stack Developer, and Computer Engineering student in Istanbul.",
   alternates: { canonical: "/resume/" },
 };
 
 const skills = [
-  "TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Express 5",
-  "REST APIs", "GraphQL", "WebSockets", "gRPC", "OpenAPI", "Zod",
+  "TypeScript", "JavaScript", "React", "Next.js", "Node.js", "Express 5", "REST APIs", "Zod",
   "PostgreSQL", "Prisma", "MongoDB", "Mongoose", "Redis", "BullMQ",
-  "Jest", "Supertest", "Docker", "Docker Compose", "GitHub Actions", "CI/CD",
-  "Security", "Observability", "Accessibility", "PWA", "FastAPI", "Flutter",
-  "WebGL", "Three.js", "LLM Integrations", "MCP Workflows",
-];
+  "Jest", "Supertest", "GitHub Actions", "CI/CD", "Security", "Observability", "Accessibility", "PWA",
+] as const;
 
 const projects = [
   {
     name: "Eventify",
-    role: "Distributed product system",
+    role: "Distributed event platform",
     description:
-      "Built around PostgreSQL/Prisma, Redis caching and rate limits, BullMQ background jobs, durable outbox workflows, secure authentication, metrics, health/readiness checks, request correlation, PWA delivery, and automated security gates.",
+      "Express/TypeScript event system with PostgreSQL/Prisma, Redis, BullMQ, durable outbox workflows, authentication, bookings/waitlists, metrics, health/readiness checks, and security-focused CI.",
     href: "/work/eventify/",
   },
   {
     name: "BookHaven",
     role: "Full-stack commerce",
     description:
-      "Next.js + Express + MongoDB bookstore with JWT authentication, RBAC, catalog/search, cart, wishlist, reviews, checkout, orders, inventory workflows, admin operations, validation, and API tests.",
+      "Next.js + Express + MongoDB bookstore with JWT/RBAC, catalog, cart, wishlist, reviews, checkout, orders, inventory, admin operations, validation, and API tests.",
     href: "/work/bookhaven/",
   },
   {
     name: "FitFlow",
-    role: "Product-focused PWA",
+    role: "Installable fitness PWA",
     description:
-      "Installable Next.js fitness experience with personalized planning, guided workout intervals, weekly progress, device-local persistence, accessibility, responsive interaction design, and offline-ready behavior.",
+      "Responsive training product with personalized plans, guided intervals, weekly progress, device-local persistence, accessibility, installability, and offline-ready behavior.",
     href: "/work/fitflow/",
   },
   {
     name: "Venues API",
-    role: "Backend service",
+    role: "Backend REST service",
     description:
-      "Express 5 + TypeScript + Zod REST API demonstrating layered architecture, strict body/query/param validation, centralized errors, UUID resources, persistence boundaries, service tests, and HTTP contract tests.",
+      "Express 5 + TypeScript + Zod API with routes → controllers → services, strict input validation, centralized errors, UUID resources, persistence, and HTTP contract tests.",
     href: "/work/venues-api/",
   },
 ] as const;
@@ -54,31 +51,29 @@ export default function ResumePage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio">
-          <span>AH</span>
-          <strong>Abdulrahman Hajar</strong>
+          <span>AH</span><strong>Abdulrahman Hajar</strong>
         </Link>
         <div className={styles.headerActions}>
           <Link href="/#work">Selected work</Link>
-          <a href="/Abdulrahman-Hajar-Resume.pdf" download>Download PDF ↓</a>
           <a href="/resume.html" target="_blank" rel="noreferrer">Print view ↗</a>
+          <a href="/Abdulrahman-Hajar-Resume.pdf" download>Download PDF ↓</a>
         </div>
       </header>
 
       <section className={styles.hero}>
         <div>
-          <p className={styles.kicker}>Software Engineering · Full-Stack · Backend Systems</p>
+          <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK DEVELOPER · AI & INTERACTIVE SYSTEMS</p>
           <h1>Abdulrahman Hajar</h1>
           <p className={styles.lede}>
-            Software engineer and Computer Engineering student building complete products across frontend, backend, APIs, data, asynchronous workflows, testing, security, observability, and production deployment.
+            Software engineer and Computer Engineering student building complete products across frontend, backend, APIs, data, asynchronous workflows, testing, security, and deployment.
           </p>
         </div>
         <aside className={styles.snapshot} aria-label="Professional snapshot">
           <div><span>Role</span><strong>Software Engineer · Full-Stack Developer</strong></div>
           <div><span>Education</span><strong>Computer Engineering · Nişantaşı University</strong></div>
           <div><span>Location</span><strong>Istanbul, Türkiye</strong></div>
-          <div><span>Focus</span><strong>Full-Stack · Backend · Systems · AI</strong></div>
-          <div><span>GitHub</span><a href="https://github.com/rahman-997" target="_blank" rel="noreferrer">rahman-997 ↗</a></div>
-          <div><span>LinkedIn</span><a href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">Profile ↗</a></div>
+          <div><span>GitHub</span><a href="https://github.com/rahman-997" target="_blank" rel="noreferrer">github.com/rahman-997 ↗</a></div>
+          <div><span>LinkedIn</span><a href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">LinkedIn profile ↗</a></div>
         </aside>
       </section>
 
@@ -86,29 +81,24 @@ export default function ResumePage() {
         <section className={styles.section}>
           <div className={styles.sectionLabel}><span>01</span><h2>Profile</h2></div>
           <p className={styles.profile}>
-            Product-minded engineer with a strong TypeScript foundation and hands-on work across UI, API architecture, persistence, caching, queues, authentication, validation, testing, health/readiness, CI/CD, and deployment. I value clear boundaries, secure data flows, predictable failure handling, and evidence-based delivery.
+            Product-minded engineer with hands-on work across TypeScript interfaces, backend APIs, relational and document data, caching, queues, authentication, validation, automated tests, runtime health, security checks, CI/CD, and production deployment.
           </p>
         </section>
 
         <section className={styles.section}>
           <div className={styles.sectionLabel}><span>02</span><h2>Education</h2></div>
-          <div className={styles.projects}>
-            <article className={styles.project}>
-              <div><h3>Computer Engineering</h3><small>Nişantaşı University · Istanbul</small></div>
-              <p>Undergraduate study combined with practical software engineering through production-oriented web, backend, data, mobile, AI, and interactive projects.</p>
-            </article>
+          <div className={styles.education}>
+            <div><h3>Computer Engineering</h3><p>Nişantaşı University · Istanbul, Türkiye</p></div>
           </div>
         </section>
 
         <section className={styles.section}>
           <div className={styles.sectionLabel}><span>03</span><h2>Technical capabilities</h2></div>
-          <div className={styles.skills}>
-            {skills.map((skill) => <span key={skill}>{skill}</span>)}
-          </div>
+          <div className={styles.skills}>{skills.map((skill) => <span key={skill}>{skill}</span>)}</div>
         </section>
 
         <section className={styles.section}>
-          <div className={styles.sectionLabel}><span>04</span><h2>Project evidence</h2></div>
+          <div className={styles.sectionLabel}><span>04</span><h2>Selected engineering work</h2></div>
           <div className={styles.projects}>
             {projects.map((project) => (
               <article className={styles.project} key={project.name}>
@@ -117,20 +107,6 @@ export default function ResumePage() {
                 <Link href={project.href}>Case study →</Link>
               </article>
             ))}
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <div className={styles.sectionLabel}><span>05</span><h2>Engineering interests</h2></div>
-          <div className={styles.projects}>
-            <article className={styles.project}>
-              <div><h3>Backend & system design</h3><small>Primary growth direction</small></div>
-              <p>Service architecture, data modeling, distributed workflows, queues, caching, API contracts, security, observability, failure recovery, and production operations.</p>
-            </article>
-            <article className={styles.project}>
-              <div><h3>AI & interactive systems</h3><small>Extended exploration</small></div>
-              <p>LLM integrations, MCP workflows, FastAPI, real-time communication, Flutter, WebGL/Three.js, and multimodal product architecture.</p>
-            </article>
           </div>
         </section>
       </div>

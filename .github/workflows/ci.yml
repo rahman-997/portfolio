@@ -2,7 +2,6 @@ name: Portfolio CI
 
 on:
   push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -10,8 +9,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: portfolio-ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: portfolio-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   quality:
@@ -41,14 +40,14 @@ jobs:
       - name: Production build
         run: npm run build
 
-      - name: Verify static export
+      - name: Verify static export, identity, links, and résumé PDF
         run: npm run verify:export
 
       - name: Dependency audit
         run: npm run audit
 
       - name: Upload deployable source
-        if: github.event_name == 'push'
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: portfolio-deploy-source-${{ github.sha }}

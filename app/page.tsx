@@ -23,76 +23,102 @@ const projects = [
   {
     index: "01",
     name: "Eventify",
-    eyebrow: "Distributed event platform",
-    headline: "Booking flows engineered for real-world failure modes.",
-    description: "Authentication, organizer tooling, bookings, waitlists, background jobs, caching, metrics, and production-minded system behavior across one connected platform.",
+    label: "Distributed event platform",
+    thesis: "Reliable booking flows beyond the happy path.",
+    summary:
+      "A full-stack event system combining secure authentication, organizer workflows, bookings, waitlists, PostgreSQL durability, Redis coordination, BullMQ workers, observability, and operational health checks.",
     stack: ["TypeScript", "Express 5", "PostgreSQL", "Prisma", "Redis", "BullMQ"],
+    proof: ["Transactional booking state", "PostgreSQL outbox", "Worker + queue coordination", "Health, readiness & metrics"],
     caseStudy: "/work/eventify/",
     live: "https://eventify-web.onrender.com",
     source: "https://github.com/rahman-997/eventify",
     image: "/projects/eventify-cover.jpg",
-    className: "eventify",
+    visual: "product",
   },
   {
     index: "02",
     name: "BookHaven",
-    eyebrow: "Full-stack commerce",
-    headline: "A bookstore built as a complete product, not a demo screen.",
-    description: "Catalog discovery, authentication, roles, cart, wishlist, reviews, checkout, orders, inventory, and administration in a cohesive full-stack experience.",
+    label: "Full-stack commerce system",
+    thesis: "A bookstore designed as both a product and an operating system.",
+    summary:
+      "A complete commerce flow covering discovery, authentication, role-based access, cart, wishlist, reviews, checkout, orders, inventory, and administration across Next.js and Express.",
     stack: ["Next.js", "React", "TypeScript", "Express", "MongoDB", "Zod"],
+    proof: ["Customer + admin flows", "JWT + RBAC", "Validated API boundary", "Order & inventory behavior"],
     caseStudy: "/work/bookhaven/",
     live: "https://bookbookhaven-free.onrender.com",
     source: "https://github.com/rahman-997/bookbookhaven",
     image: "/projects/bookhaven-cover.jpg",
-    className: "bookhaven",
+    visual: "product",
   },
   {
     index: "03",
     name: "FitFlow",
-    eyebrow: "Installable fitness PWA",
-    headline: "Product-focused fitness software with offline-ready flows.",
-    description: "Personalized planning, guided intervals, weekly progress, accessibility, local-first behavior, and a responsive installable experience.",
-    stack: ["Next.js", "React", "TypeScript", "PWA", "Web APIs"],
+    label: "Installable fitness PWA",
+    thesis: "A local-first training experience built for everyday use.",
+    summary:
+      "A responsive fitness product with personalized plans, guided intervals, weekly progress, local persistence, accessibility, installability, and offline-ready behavior.",
+    stack: ["React", "TypeScript", "PWA", "Web APIs", "Modern CSS"],
+    proof: ["Local-first progress", "Installable experience", "Reduced-motion support", "Responsive workout flows"],
     caseStudy: "/work/fitflow/",
     live: "https://fitflow-gym-online.netlify.app",
     source: "https://github.com/rahman-997/fitflow-gym",
-    image: "/projects/fitflow-cover.svg",
-    className: "fitflow",
+    image: null,
+    visual: "pwa",
   },
   {
     index: "04",
     name: "Venues API",
-    eyebrow: "Backend engineering",
-    headline: "A compact REST API with disciplined architecture.",
-    description: "Versioned routes, strict Zod validation, clean controller/service boundaries, centralized errors, UUID resources, and contract-level testing.",
+    label: "Backend engineering · REST",
+    thesis: "Small surface area. Strict engineering boundaries.",
+    summary:
+      "An Express 5 REST service with TypeScript, Zod 4 validation, layered route/controller/service boundaries, centralized errors, UUID resources, persistence, and contract-level tests.",
     stack: ["Node.js", "Express 5", "TypeScript", "Zod 4", "REST"],
+    proof: ["Layered architecture", "Centralized error handling", "Validated inputs", "HTTP contract tests"],
     caseStudy: "/work/venues-api/",
     live: "https://venues-api-rahman.onrender.com/health",
     source: "https://github.com/rahman-997/venues-api",
     image: null,
-    className: "venues",
+    visual: "api",
   },
 ] as const;
 
-const skills = [
-  { title: "Frontend systems", text: "React, Next.js, TypeScript, responsive UI, accessibility, state, PWA behavior and performance." },
-  { title: "Backend & APIs", text: "Node.js, Express, REST, GraphQL, validation, auth, caching, background jobs and real-time patterns." },
-  { title: "Data & architecture", text: "PostgreSQL, Prisma, MongoDB, Redis, schema design, service boundaries and reliability-minded modeling." },
-  { title: "Delivery & AI", text: "Docker, CI/CD, deployment, observability basics, LLM integrations, MCP workflows and automation." },
+const layers = [
+  ["01", "Interface", "React · Next.js · responsive UI · accessibility"],
+  ["02", "Application", "Node.js · Express · validation · auth · domain logic"],
+  ["03", "Data", "PostgreSQL · Prisma · MongoDB · Redis · persistence boundaries"],
+  ["04", "Async", "Queues · workers · outbox patterns · background processing"],
+  ["05", "Delivery", "Testing · security checks · CI/CD · deployment · runtime health"],
 ] as const;
 
-const toolkit = ["TypeScript", "React", "Next.js", "Node.js", "Express", "PostgreSQL", "Prisma", "MongoDB", "Redis", "GraphQL", "Docker", "FastAPI", "Flutter", "MCP"];
+const technologies = [
+  "TypeScript",
+  "React",
+  "Next.js",
+  "Node.js",
+  "Express",
+  "PostgreSQL",
+  "Prisma",
+  "MongoDB",
+  "Redis",
+  "BullMQ",
+  "Zod",
+  "REST",
+  "PWA",
+  "GitHub Actions",
+  "Docker",
+  "Netlify",
+  "Render",
+] as const;
 
 export default function Home() {
   return (
     <div className={styles.page}>
       <a className={styles.skip} href="#main">Skip to content</a>
-      <div className={styles.ambient} aria-hidden="true" />
 
       <header className={styles.header}>
-        <a className={styles.brand} href="#top" aria-label="Abdulrahman Hajar — home">
-          <span className={styles.brandMark}>AH</span>
-          <span className={styles.brandCopy}>
+        <a className={styles.identity} href="#top" aria-label="Abdulrahman Hajar — home">
+          <span className={styles.monogram}>AH</span>
+          <span>
             <strong>Abdulrahman Hajar</strong>
             <small>Software Engineer</small>
           </span>
@@ -100,111 +126,132 @@ export default function Home() {
 
         <nav className={styles.nav} aria-label="Primary navigation">
           <a href="#work">Work</a>
-          <a href="#capabilities">Capabilities</a>
+          <a href="#systems">Systems</a>
           <a href="#about">About</a>
+          <Link href="/resume/">Résumé</Link>
         </nav>
 
-        <Link className={styles.navCta} href="/resume/">Résumé <Arrow size={14} /></Link>
+        <a className={styles.headerAction} href="https://github.com/rahman-997" target="_blank" rel="noreferrer">
+          GitHub <Arrow size={14} />
+        </a>
       </header>
 
       <main id="main">
         <section className={styles.hero} id="top">
+          <div className={styles.heroGrid} aria-hidden="true" />
           <div className={styles.heroCopy}>
-            <div className={styles.availability}><span /> Open to software engineering opportunities</div>
-            <p className={styles.eyebrow}>FULL-STACK · BACKEND · PRODUCT · AI</p>
+            <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK DEVELOPER · AI & INTERACTIVE SYSTEMS</p>
             <h1>
-              I engineer software that feels
-              <span> finished.</span>
+              I build software as
+              <span>systems, not screens.</span>
             </h1>
             <p className={styles.heroLead}>
-              I build complete digital products — from polished interfaces and robust APIs to data systems, automation, deployment, and the details that make software dependable in production.
+              From product interface to API boundaries, data, background work, testing, security, and deployment — I build the whole path that makes software usable and dependable.
             </p>
-
             <div className={styles.heroActions}>
-              <a className={styles.primaryButton} href="#work">Explore selected work <Arrow /></a>
-              <a className={styles.iconButton} href="https://github.com/rahman-997" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
-              <a className={styles.iconButton} href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><LinkedIn /></a>
-            </div>
-
-            <div className={styles.heroMeta}>
-              <div><span>Location</span><strong>Istanbul, Türkiye</strong></div>
-              <div><span>Education</span><strong>Computer Engineering</strong></div>
-              <div><span>Focus</span><strong>Production-minded systems</strong></div>
+              <a className={styles.primaryAction} href="#work">Explore selected work <Arrow /></a>
+              <Link className={styles.secondaryAction} href="/resume/">View résumé</Link>
             </div>
           </div>
 
-          <div className={styles.heroPanel} aria-label="Engineering system overview">
-            <div className={styles.panelBar}>
-              <span className={styles.windowDots}><i /><i /><i /></span>
-              <span>engineering.profile</span>
-              <span className={styles.online}><i /> online</span>
+          <aside className={styles.heroProof} aria-label="Profile proof points">
+            <div className={styles.proofHeader}>
+              <span>ENGINEERING PROFILE</span>
+              <span className={styles.status}><i /> Istanbul, Türkiye</span>
             </div>
-
-            <div className={styles.panelBody}>
-              <div className={styles.panelIntro}>
-                <span>BUILD MODE / 2026</span>
-                <strong>FULL-STACK<br />SYSTEMS</strong>
-              </div>
-
-              <div className={styles.systemGrid}>
-                <div><span>01</span><strong>Interface</strong><small>React · Next.js</small></div>
-                <div><span>02</span><strong>API</strong><small>Node · Express</small></div>
-                <div><span>03</span><strong>Data</strong><small>SQL · Mongo · Redis</small></div>
-                <div><span>04</span><strong>Delivery</strong><small>Docker · CI/CD</small></div>
-              </div>
-
-              <div className={styles.terminal}>
-                <p><span>$</span> profile --status</p>
-                <p><b>✓</b> frontend craftsmanship</p>
-                <p><b>✓</b> backend architecture</p>
-                <p><b>✓</b> production delivery</p>
-                <p><b>✓</b> AI-assisted workflows</p>
+            <div className={styles.proofBody}>
+              <p>Current focus</p>
+              <strong>Full-stack products with production-minded backend depth.</strong>
+              <div className={styles.proofRows}>
+                <div><span>Frontend</span><b>React · Next.js · TypeScript</b></div>
+                <div><span>Backend</span><b>Node.js · Express · REST</b></div>
+                <div><span>Data</span><b>PostgreSQL · MongoDB · Redis</b></div>
+                <div><span>Systems</span><b>Queues · CI/CD · reliability</b></div>
               </div>
             </div>
-          </div>
+            <div className={styles.proofFooter}>
+              <span>Computer Engineering</span>
+              <strong>Nişantaşı University</strong>
+            </div>
+          </aside>
         </section>
 
-        <section className={styles.toolkit} aria-label="Selected technologies">
-          <span className={styles.toolkitLabel}>SELECTED TOOLKIT</span>
-          <div className={styles.toolkitTrack}>{toolkit.map((item) => <span key={item}>{item}</span>)}</div>
+        <section className={styles.signalStrip} aria-label="Portfolio evidence">
+          <span>4 featured systems</span>
+          <span>Live deployments</span>
+          <span>Source available</span>
+          <span>Architecture case studies</span>
+          <span>Recruiter-ready résumé</span>
         </section>
 
         <section className={styles.work} id="work">
-          <div className={styles.sectionHeading}>
+          <div className={styles.sectionIntro}>
+            <p>01 / SELECTED WORK</p>
             <div>
-              <p>01 / SELECTED WORK</p>
-              <h2>Projects with actual engineering behind them.</h2>
+              <h2>Proof, not portfolio decoration.</h2>
+              <p>Each project is presented through the engineering decisions behind it: system boundaries, failure modes, data, delivery, and the live implementation.</p>
             </div>
-            <p className={styles.sectionNote}>Live products, source code, architecture decisions, and case studies — not decorative portfolio mockups.</p>
           </div>
 
-          <div className={styles.projectList}>
-            {projects.map((project, projectIndex) => (
-              <article className={`${styles.project} ${styles[project.className]} ${projectIndex === 0 ? styles.featured : ""}`} key={project.name}>
-                <div className={styles.projectVisual}>
-                  {project.image ? (
-                    <div className={styles.projectImage} style={{ backgroundImage: `url(${project.image})` }} aria-hidden="true" />
-                  ) : (
-                    <div className={styles.apiVisual} aria-hidden="true">
-                      <div><span>GET</span><code>/v1/venues</code><b>200</b></div>
-                      <pre>{`{\n  "service": "venues-api",\n  "status": "healthy",\n  "validation": "zod",\n  "architecture": "layered"\n}`}</pre>
-                    </div>
-                  )}
-                  <div className={styles.visualOverlay} />
-                  <span className={styles.projectIndex}>{project.index}</span>
-                  <span className={styles.projectType}>{project.eyebrow}</span>
+          <div className={styles.projectStack}>
+            {projects.map((project) => (
+              <article className={styles.project} key={project.name}>
+                <div className={styles.projectRail}>
+                  <span>{project.index}</span>
+                  <small>{project.label}</small>
                 </div>
 
-                <div className={styles.projectContent}>
-                  <p className={styles.projectEyebrow}>{project.eyebrow}</p>
+                <div className={styles.projectNarrative}>
                   <h3>{project.name}</h3>
-                  <h4>{project.headline}</h4>
-                  <p className={styles.projectDescription}>{project.description}</p>
-                  <div className={styles.stack}>{project.stack.map((item) => <span key={item}>{item}</span>)}</div>
+                  <h4>{project.thesis}</h4>
+                  <p>{project.summary}</p>
+                  <div className={styles.projectProof}>
+                    {project.proof.map((item) => <span key={item}>{item}</span>)}
+                  </div>
                   <div className={styles.projectLinks}>
-                    <Link href={project.caseStudy}>Case study <Arrow size={15} /></Link>
-                    <a href={project.live} target="_blank" rel="noreferrer">Live <Arrow size={15} /></a>
+                    <Link href={project.caseStudy}>Read case study <Arrow size={15} /></Link>
+                    <a href={project.live} target="_blank" rel="noreferrer">Live system <Arrow size={15} /></a>
                     <a href={project.source} target="_blank" rel="noreferrer"><Github size={16} /> Source</a>
+                  </div>
+                </div>
+
+                <div className={styles.projectEvidence}>
+                  {project.image ? (
+                    <div className={styles.productFrame}>
+                      <div className={styles.browserBar}><i /><i /><i /><span>{project.name.toLowerCase()}.system</span></div>
+                      <div className={styles.productImage} style={{ backgroundImage: `url(${project.image})` }} aria-hidden="true" />
+                    </div>
+                  ) : project.visual === "api" ? (
+                    <div className={styles.apiFrame} aria-label="Venues API request flow illustration">
+                      <div><span>REQUEST</span><code>GET /v1/venues</code></div>
+                      <i>↓</i>
+                      <div><span>VALIDATE</span><code>Zod schema</code></div>
+                      <i>↓</i>
+                      <div><span>CONTROLLER</span><code>HTTP boundary</code></div>
+                      <i>↓</i>
+                      <div><span>SERVICE</span><code>business logic</code></div>
+                      <i>↓</i>
+                      <div><span>RESPONSE</span><code>200 · JSON</code></div>
+                    </div>
+                  ) : (
+                    <div className={styles.pwaFrame} aria-label="FitFlow local-first product flow illustration">
+                      <div className={styles.phoneShell}>
+                        <span className={styles.phoneTop} />
+                        <p>WEEKLY TRAINING</p>
+                        <strong>3 sessions</strong>
+                        <div className={styles.progress}><span /></div>
+                        <small>Progress saved locally</small>
+                      </div>
+                      <div className={styles.pwaNotes}>
+                        <span>INSTALLABLE</span>
+                        <span>OFFLINE-READY</span>
+                        <span>ACCESSIBLE</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className={styles.stackLine}>
+                    {project.stack.map((item) => <span key={item}>{item}</span>)}
                   </div>
                 </div>
               </article>
@@ -212,54 +259,107 @@ export default function Home() {
           </div>
         </section>
 
-        <section className={styles.capabilities} id="capabilities">
-          <div className={styles.sectionHeadingCompact}>
-            <p>02 / CAPABILITIES</p>
-            <h2>From interface to infrastructure.</h2>
+        <section className={styles.systems} id="systems">
+          <div className={styles.sectionIntro}>
+            <p>02 / SYSTEM THINKING</p>
+            <div>
+              <h2>I follow the request all the way through.</h2>
+              <p>Interface quality matters, but so do ownership, validation, persistence, asynchronous work, failure handling, verification, and the path to production.</p>
+            </div>
           </div>
 
-          <div className={styles.skillGrid}>
-            {skills.map((skill, index) => (
-              <article key={skill.title}>
-                <span>0{index + 1}</span>
-                <h3>{skill.title}</h3>
-                <p>{skill.text}</p>
-              </article>
-            ))}
+          <div className={styles.architecture}>
+            <div className={styles.architectureIntro}>
+              <span>REFERENCE FLOW</span>
+              <h3>Product → API → Data → Async → Delivery</h3>
+              <p>A compact map of the layers I consider when shaping a system.</p>
+            </div>
+            <div className={styles.layerList}>
+              {layers.map(([number, title, text]) => (
+                <div className={styles.layer} key={number}>
+                  <span>{number}</span>
+                  <strong>{title}</strong>
+                  <p>{text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.engineeringGrid}>
+            <article>
+              <span>BOUNDARIES</span>
+              <h3>Make responsibilities obvious.</h3>
+              <p>Separate transport, validation, business rules, persistence, and background work so behavior stays reviewable and changeable.</p>
+            </article>
+            <article>
+              <span>FAILURE MODES</span>
+              <h3>Design beyond success paths.</h3>
+              <p>Consider retries, duplicate work, stale state, dependency failure, authorization, partial completion, and degraded runtime behavior.</p>
+            </article>
+            <article>
+              <span>VERIFICATION</span>
+              <h3>Turn confidence into checks.</h3>
+              <p>Typechecking, linting, tests, build verification, security checks, runtime probes, and live QA are part of delivery — not afterthoughts.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className={styles.stackSection} id="stack">
+          <div className={styles.stackHeading}>
+            <p>03 / TECHNOLOGY</p>
+            <h2>Tools chosen around the system.</h2>
+          </div>
+          <div className={styles.techCloud}>
+            {technologies.map((item, index) => <span key={item}><i>{String(index + 1).padStart(2, "0")}</i>{item}</span>)}
           </div>
         </section>
 
         <section className={styles.about} id="about">
-          <div className={styles.aboutLabel}>03 / ABOUT</div>
-          <div className={styles.aboutTitle}>
-            <p>SOFTWARE ENGINEER · COMPUTER ENGINEERING STUDENT</p>
-            <h2>Strong products come from understanding the whole system.</h2>
+          <div className={styles.aboutHeading}>
+            <p>04 / ABOUT</p>
+            <h2>Engineering breadth with product judgment.</h2>
           </div>
           <div className={styles.aboutCopy}>
-            <p>I&apos;m Abdulrahman Hajar, based in Istanbul and studying Computer Engineering at Nişantaşı University. I work across frontend, backend, APIs, databases, deployment, and AI-assisted product workflows.</p>
-            <p>I care about software that is clear to use, easy to reason about, resilient outside the happy path, and built with enough engineering discipline to keep improving after launch.</p>
-            <div className={styles.aboutLinks}>
-              <Link href="/resume/">View résumé <Arrow size={15} /></Link>
-              <a href="https://github.com/rahman-997" target="_blank" rel="noreferrer"><Github size={16} /> GitHub</a>
+            <p className={styles.aboutLead}>I&apos;m Abdulrahman Hajar, a Software Engineer and Computer Engineering student at Nişantaşı University in Istanbul.</p>
+            <p>I work across frontend, backend, APIs, databases, asynchronous workflows, testing, security, deployment, AI integrations, and interactive systems. The goal is not to collect technologies — it is to understand enough of the system to make better engineering decisions.</p>
+            <div className={styles.education}>
+              <span>EDUCATION</span>
+              <div>
+                <strong>Computer Engineering</strong>
+                <p>Nişantaşı University · Istanbul, Türkiye</p>
+              </div>
             </div>
           </div>
         </section>
 
+        <section className={styles.resumeCallout}>
+          <div>
+            <span>RÉSUMÉ</span>
+            <h2>A concise recruiter view of the same engineering story.</h2>
+          </div>
+          <div className={styles.resumeActions}>
+            <Link className={styles.primaryAction} href="/resume/">View web résumé <Arrow /></Link>
+            <a className={styles.secondaryAction} href="/Abdulrahman-Hajar-Resume.pdf" download>Download PDF</a>
+          </div>
+        </section>
+
         <section className={styles.contact}>
-          <div className={styles.contactGlow} aria-hidden="true" />
-          <p>04 / CONTACT</p>
-          <h2>Have a role, product, or hard technical problem?</h2>
-          <p className={styles.contactLead}>I&apos;m open to software engineering opportunities and serious product collaborations.</p>
-          <div className={styles.contactActions}>
-            <a className={styles.primaryButton} href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer">Connect on LinkedIn <Arrow /></a>
-            <a className={styles.secondaryButton} href="https://github.com/rahman-997" target="_blank" rel="noreferrer"><Github /> View GitHub</a>
+          <p>05 / CONTACT</p>
+          <h2>Looking for evidence? Start with the work.</h2>
+          <p>Review the live systems, inspect the source, or connect with me for software engineering opportunities and serious product work.</p>
+          <div className={styles.contactLinks}>
+            <a href="https://github.com/rahman-997" target="_blank" rel="noreferrer"><Github /> GitHub <Arrow size={14} /></a>
+            <a href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer"><LinkedIn /> LinkedIn <Arrow size={14} /></a>
+            <Link href="/resume/">Résumé <Arrow size={14} /></Link>
           </div>
         </section>
       </main>
 
       <footer className={styles.footer}>
-        <div><span className={styles.brandMark}>AH</span><strong>Abdulrahman Hajar</strong></div>
-        <span>Software Engineer · Istanbul · 2026</span>
+        <div>
+          <span className={styles.monogram}>AH</span>
+          <span><strong>Abdulrahman Hajar</strong><small>Software Engineer · Istanbul, Türkiye</small></span>
+        </div>
         <a href="#top">Back to top ↑</a>
       </footer>
     </div>
