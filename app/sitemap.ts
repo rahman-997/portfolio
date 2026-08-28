@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
 
-const baseUrl = "https://abdulrahman-hajar-dev.netlify.app";
-const lastModified = new Date("2026-08-26T00:00:00.000Z");
+const baseUrl = "https://abdulrahman-hajar-portfolio.onrender.com";
+const lastModified = new Date("2026-08-28T00:00:00.000Z");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
