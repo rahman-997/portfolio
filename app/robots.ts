@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
 
-const baseUrl = "https://abdulrahman-hajar-dev.netlify.app";
+const baseUrl = "https://abdulrahman-hajar-portfolio.onrender.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {
