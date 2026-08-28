@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
+import { PROJECTS } from "./data";
 
 export const dynamic = "force-static";
 
 const baseUrl = "https://abdulrahman-hajar-dev.netlify.app";
-const lastModified = new Date("2026-08-26T00:00:00.000Z");
+const lastModified = new Date("2026-08-28T00:00:00.000Z");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -19,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.9,
     },
-    ...["eventify", "bookhaven", "fitflow", "venues-api"].map((slug) => ({
+    ...PROJECTS.map(({ slug }) => ({
       url: `${baseUrl}/work/${slug}/`,
       lastModified,
       changeFrequency: "monthly" as const,
