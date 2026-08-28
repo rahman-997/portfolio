@@ -10,8 +10,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: portfolio-ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: portfolio-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   quality:
@@ -41,7 +41,7 @@ jobs:
       - name: Production build
         run: npm run build
 
-      - name: Verify static export
+      - name: Verify static export, identity, links, and résumé PDF
         run: npm run verify:export
 
       - name: Dependency audit
