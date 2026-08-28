@@ -2,141 +2,61 @@
 
 [![Portfolio CI](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml)
 
-A recruiter-facing engineering portfolio for **Abdulrahman Hajar** — Software Engineer, Full-Stack Developer, and Computer Engineering student at Nişantaşı University in Istanbul.
-
-The portfolio is built around **engineering evidence, not a generic skills wall**: complete products, API design, data systems, background work, validation, testing, security, deployment, operational behavior, and selected AI/interactive engineering.
+Recruiter-facing portfolio for **Abdulrahman Hajar** — Software Engineer, Full-Stack Developer, and Computer Engineering student at Nişantaşı University in Istanbul, Türkiye.
 
 **Live:** [abdulrahman-hajar-dev.netlify.app](https://abdulrahman-hajar-dev.netlify.app) · **GitHub:** [rahman-997](https://github.com/rahman-997) · **LinkedIn:** [Abdulrahman Hajar](https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/)
 
----
+## What this portfolio proves
 
-## Positioning
+The site is organized around engineering evidence rather than a generic skills wall:
 
-```text
-Build the interface.
-Engineer the system.
-Ship the whole product.
-```
+- product interfaces built with React, Next.js and TypeScript
+- backend APIs, validation, authentication and explicit service boundaries
+- PostgreSQL/Prisma, MongoDB and Redis data concerns
+- asynchronous work with queues/workers where the project requires it
+- testing, security checks, CI/CD, health/readiness and deployment verification
+- accessibility, responsive behavior and static-export performance
+- AI and interactive systems as an extended engineering focus
 
-The portfolio presents four connected areas of engineering:
+## Selected work
 
-1. **Product engineering** — React, Next.js, TypeScript, responsive UX, accessibility, state, and PWA behavior.
-2. **Backend & APIs** — Node.js, Express, REST, GraphQL, WebSockets, validation, authentication, and service boundaries.
-3. **Data & reliability** — PostgreSQL, Prisma, MongoDB, Redis, queues, caching, health/readiness, metrics, and failure handling.
-4. **AI & interactive systems** — FastAPI, LLM integrations, MCP workflows, Flutter, WebGL, Three.js, and real-time interfaces.
-
-## Selected systems
-
-| Project | Engineering focus | Evidence |
+| Project | Engineering focus | Proof |
 | --- | --- | --- |
-| **Eventify** | Distributed product system | PostgreSQL/Prisma, Redis, BullMQ, durable async work, auth, bookings/waitlists, metrics, readiness, CI/security gates |
-| **BookHaven** | Full-stack commerce | Next.js + Express + MongoDB, auth/RBAC, cart/wishlist, checkout, orders, inventory, admin workflows |
-| **FitFlow** | Installable fitness PWA | Personalized planning, guided intervals, local-first progress, accessibility, responsive UX, offline-ready behavior |
-| **Venues API** | Focused backend service | Express 5, Zod 4, layered architecture, centralized errors, UUID resources, persistence, service/HTTP contract tests |
+| **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, health/readiness, metrics, CI/security |
+| **BookHaven** | Full-stack commerce | Next.js + Express + MongoDB, authentication/RBAC, catalog, cart, wishlist, checkout, orders, inventory/admin |
+| **FitFlow** | Installable fitness PWA | Personalized plans, guided intervals, local-first progress, accessibility, responsive UX, offline readiness |
+| **Venues API** | Backend REST service | Express 5, TypeScript, Zod, layered architecture, centralized errors, UUID resources, persistence and tests |
 
-Every featured project links to **live proof, source code, and an engineering case study**. Case-study pages also expose project-specific social metadata and structured software/technical-article data.
+Every featured project links to a **live deployment, public source repository, and engineering case study**.
 
-## Current visual direction
-
-The active redesign uses a **premium dark engineering identity** with an editorial hierarchy instead of a generic neon developer template:
-
-- deep charcoal / near-black application canvas with high-contrast typography
-- restrained mint and blue signal accents
-- oversized editorial headlines with strong scan hierarchy
-- real project imagery and product evidence where available
-- an engineering-system panel for interface → API → data → delivery
-- structured project storytelling with generous spacing
-- restrained monospaced operational details and terminal cues
-- responsive layouts tuned for desktop, tablet, and mobile
-- generated Open Graph / Twitter artwork synchronized with the engineering identity
-- no dependency on a profile portrait to make the portfolio feel complete
-
-The design intentionally keeps visual noise controlled so recruiters can reach **role, capabilities, projects, proof, résumé, and contact paths quickly**.
-
-## Experience & interaction
-
-The portfolio includes a lightweight keyboard command palette:
-
-- press `/` outside an input
-- press `⌘K` / `Ctrl+K`
-- search work, capabilities, résumé, GitHub, or LinkedIn
-- press `Enter` to open the first matching destination
-
-A branded 404 experience keeps stale links inside the portfolio instead of dropping visitors into a generic framework page.
-
-The site also includes a web app manifest with mobile theme/standalone metadata so the portfolio can be added cleanly to a device home screen without adding a heavy runtime dependency.
-
-## Recruiter-facing content
-
-- concise Software Engineer / Full-Stack positioning
-- selected projects with architecture and reliability evidence
-- technical capability map
-- Computer Engineering education
-- recruiter-facing web résumé
-- **direct downloadable PDF résumé** (`/Abdulrahman-Hajar-Resume.pdf`)
-- printable HTML résumé view
-- dedicated engineering case studies
-- GitHub and LinkedIn pathways
-- correct canonical URL and structured metadata
-- indexable résumé and case-study routes
-
-## Stack
-
-```text
-Next.js 16 · React 19 · TypeScript 5
-Node.js · Express · REST · GraphQL
-PostgreSQL · Prisma · MongoDB · Redis
-CSS Modules · Responsive CSS · Accessibility
-GitHub Actions · Netlify · Docker-oriented workflows
-```
-
-## Structure
+## Architecture
 
 ```text
 app/
-  layout.tsx                         metadata, JSON-LD, application shell
-  manifest.ts                       installable web app metadata
-  page.tsx                           engineering portfolio homepage
-  home.module.css                    homepage visual system
-  globals.css                        minimal global reset + accessibility defaults
-  not-found.tsx                      branded 404 experience
-  not-found.module.css               404 presentation
-  components/
-    CommandPalette.tsx               keyboard quick navigation
-    command-palette.module.css       command palette styles
-  opengraph-image.tsx                generated social preview
-  twitter-image.tsx                  generated X/Twitter preview
-  robots.ts                          crawler policy
-  sitemap.ts                         prioritized indexable route map
-  resume/
-    page.tsx                         recruiter-facing résumé + PDF download
-    resume.module.css                résumé design system
-  work/[slug]/
-    page.tsx                         case studies + project metadata/JSON-LD
-    case-study.module.css            case-study presentation
+  data.ts                           verified project/capability source of truth
+  layout.tsx                       metadata + JSON-LD + server-rendered shell
+  page.tsx                         engineering-storytelling homepage
+  home.module.css                  responsive homepage design system
+  resume/                          recruiter-facing web résumé
+  work/[slug]/                     static engineering case studies
+  opengraph-image.tsx              social preview artwork
+  robots.ts / sitemap.ts           crawler and route metadata
 public/
-  projects/                          project evidence imagery
-  favicon.svg
-  Abdulrahman-Hajar-Resume.pdf       recruiter-ready downloadable résumé
-  resume.html                        printable résumé
+  projects/                        project imagery
+  Abdulrahman-Hajar-Resume.pdf     downloadable résumé
+  resume.html                      printable résumé
 scripts/
-  verify-export.mjs                  export + identity regression checks
+  verify-export.mjs                export + identity regression checks
 .github/workflows/
-  ci.yml                             lint + typecheck + build + export + audit gate
+  ci.yml                           install + lint + typecheck + build + export + audit
 ```
 
-## Local development
-
-```bash
-git clone https://github.com/rahman-997/portfolio.git
-cd portfolio
-npm install
-npm run dev
-```
+The site intentionally keeps its primary experience server-rendered and CSS-driven. No client-side navigation widget or animation library is required for the core portfolio.
 
 ## Quality gate
 
 ```bash
+npm ci
 npm run lint
 npm run typecheck
 npm run build
@@ -144,48 +64,27 @@ npm run verify:export
 npm run audit
 ```
 
-`verify:export` confirms the homepage, branded 404, résumé, all four case studies, robots file, sitemap, manifest, social-preview output, and downloadable PDF are present in the static export. It also rejects stale professional-identity markers such as the previous Netlify hostname or incorrect visible surname spelling.
+`verify:export` requires the homepage, branded 404, résumé, all four case studies, robots file, sitemap, manifest, social-preview output, and downloadable PDF. It also fails on stale professional-identity markers such as the previous Netlify hostname or the incorrect visible surname spelling.
 
-GitHub Actions runs the complete quality gate on pushes and pull requests to `main` and uploads deployable source after successful pushes.
+GitHub Actions runs the same quality gate on branch pushes and pull requests, with concurrency grouped by branch/PR so superseded runs are cancelled without obscuring the final HEAD result.
 
 ## Deployment
 
-The project uses a static Next.js export. `netlify.toml` builds with `npm run build` and publishes `out/`.
+The project uses a static Next.js export. `netlify.toml` runs the production build and publishes `out/`, with security headers and cache policies for framework assets, project artwork, the manifest, and social-preview output.
 
-Deployment configuration applies:
+## SEO & accessibility
 
-- immutable caching to fingerprinted framework assets
-- tuned caching to project artwork and generated social previews
-- short revalidation for the web app manifest
-- HSTS, `nosniff`, strict referrer policy, frame restrictions, DNS prefetch policy, and browser-permission restrictions
-
-## SEO & discoverability
-
-- canonical production URL: `abdulrahman-hajar-dev.netlify.app`
-- generated Open Graph and Twitter previews
-- project-specific Open Graph/Twitter metadata on every case study
-- homepage `Person`, `WebSite`, `ProfilePage`, and selected-work `ItemList` JSON-LD
-- case-study `TechArticle`, `SoftwareSourceCode`, `SoftwareApplication`, and `BreadcrumbList` JSON-LD
-- sitemap freshness signals and explicit route priorities
-- robots metadata with canonical host and sitemap
-- indexable project case studies and résumé routes
-- identity regression checks in export verification
-
-## Accessibility
-
+- canonical production URL and route-specific metadata
+- Open Graph and Twitter/X preview output
+- `Person`, `WebSite`, `ProfilePage`, `ItemList`, `TechArticle`, `SoftwareSourceCode`, `SoftwareApplication`, and breadcrumb structured data
+- `robots.txt` and `sitemap.xml`
 - semantic landmarks and heading hierarchy
-- skip-to-content navigation
-- visible keyboard focus states
-- keyboard command palette
-- strong contrast
-- reduced-motion support
-- responsive layouts across common viewport sizes
-- descriptive external navigation
+- skip navigation and visible keyboard focus
+- strong contrast and reduced-motion support
+- responsive layouts for desktop, tablet and mobile
 
 ## Author
 
-Designed and developed by **[Abdulrahman Hajar](https://github.com/rahman-997)** — Software Engineer and Full-Stack Developer in Istanbul, Türkiye.
-
-## License
+**Abdulrahman Hajar** · Software Engineer · Full-Stack Developer · Istanbul, Türkiye
 
 Released under the [MIT License](LICENSE).
