@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "./not-found.module.css";
+
+export const metadata: Metadata = {
+  title: "404 — Page Not Found | Abdulrahman Hajar",
+  description: "The requested portfolio route could not be found. Return to Abdulrahman Hajar's software engineering portfolio or selected work.",
+  alternates: { canonical: "/404/" },
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (
