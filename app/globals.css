@@ -38,6 +38,18 @@ a {
   text-decoration: none;
 }
 
+/* Keep the main navigation and evidence paths comfortably targetable by touch
+   and keyboard without forcing button styling onto ordinary inline text. */
+header a,
+nav a,
+article a,
+footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
 button,
 input,
 textarea,
