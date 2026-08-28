@@ -1,315 +1,98 @@
 %PDF-1.4
-% Resume
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
-<< /Type /Catalog /Pages 2 0 R >>
+<<
+/F1 2 0 R /F2 3 0 R
+>>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+<<
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+>>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 7 0 R /Annots [8 0 R 9 0 R 10 0 R] >>
+<<
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+>>
 endobj
 4 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding 6 0 R >>
+<<
+/A <<
+/S /URI /Type /Action /URI (https://abdulrahman-hajar-dev.netlify.app)
+>> /Border [ 0 0 0 ] /Rect [ 424 795.8898 482 807.8898 ] /Subtype /Link /Type /Annot
+>>
 endobj
 5 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding 6 0 R >>
+<<
+/A <<
+/S /URI /Type /Action /URI (https://github.com/rahman-997)
+>> /Border [ 0 0 0 ] /Rect [ 424 781.8898 482 793.8898 ] /Subtype /Link /Type /Annot
+>>
 endobj
 6 0 obj
-<< /Type /Encoding /BaseEncoding /WinAnsiEncoding /Differences [253 /dotlessi 254 /scedilla] >>
+<<
+/A <<
+/S /URI /Type /Action /URI (https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/)
+>> /Border [ 0 0 0 ] /Rect [ 424 767.8898 482 779.8898 ] /Subtype /Link /Type /Annot
+>>
 endobj
 7 0 obj
-<< /Length 5416 >>
-stream
-BT
-/F2 25.00 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 793.00 Tm
-(Abdulrahman Hajar) Tj
-ET
-BT
-/F2 9.20 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 774.00 Tm
-(Software Engineer | Full-Stack Developer | AI & Interactive Systems) Tj
-ET
-BT
-/F1 8.40 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 759.00 Tm
-(Computer Engineering | Ni\376anta\376\375 University | Istanbul, T\374rkiye) Tj
-ET
-BT
-/F2 8.20 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 425.00 793.00 Tm
-(Portfolio) Tj
-ET
-BT
-/F2 8.20 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 425.00 779.00 Tm
-(GitHub) Tj
-ET
-BT
-/F2 8.20 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 425.00 765.00 Tm
-(LinkedIn) Tj
-ET
-1.30 w 0.060 0.080 0.070 RG 42.00 747.00 m 553.28 747.00 l S
-BT
-/F2 7.40 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 42.00 728.00 Tm
-(PROFILE) Tj
-ET
-0.45 w 0.840 0.870 0.850 RG 134.00 730.00 m 553.28 730.00 l S
-BT
-/F1 9.10 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 708.00 Tm
-(Product-minded software engineer with hands-on work across TypeScript interfaces, backend APIs, relational) Tj
-ET
-BT
-/F1 9.10 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 695.50 Tm
-(and document data, caching, queues, authentication, validation, automated tests, runtime health, security) Tj
-ET
-BT
-/F1 9.10 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 683.00 Tm
-(checks, CI/CD, and production deployment.) Tj
-ET
-BT
-/F2 7.40 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 42.00 660.00 Tm
-(EDUCATION) Tj
-ET
-0.45 w 0.840 0.870 0.850 RG 134.00 662.00 m 553.28 662.00 l S
-BT
-/F2 9.80 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 641.00 Tm
-(Computer Engineering) Tj
-ET
-BT
-/F1 8.70 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 177.00 641.00 Tm
-(Ni\376anta\376\375 University | Istanbul, T\374rkiye) Tj
-ET
-BT
-/F2 7.40 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 42.00 612.00 Tm
-(TECHNICAL CAPABILITIES) Tj
-ET
-0.45 w 0.840 0.870 0.850 RG 134.00 614.00 m 553.28 614.00 l S
-BT
-/F2 8.20 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 592.00 Tm
-(Core) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 135.00 592.00 Tm
-(TypeScript | JavaScript | React | Next.js | Node.js | Express 5 | REST APIs | Zod) Tj
-ET
-BT
-/F2 8.20 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 576.00 Tm
-(Data & async) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 135.00 576.00 Tm
-(PostgreSQL | Prisma | MongoDB | Mongoose | Redis | BullMQ) Tj
-ET
-BT
-/F2 8.20 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 560.00 Tm
-(Quality & delivery) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 135.00 560.00 Tm
-(Jest | Supertest | GitHub Actions | CI/CD | Security | Observability | Accessibility | PWA) Tj
-ET
-BT
-/F2 7.40 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 42.00 528.00 Tm
-(SELECTED ENGINEERING WORK) Tj
-ET
-0.45 w 0.840 0.870 0.850 RG 134.00 530.00 m 553.28 530.00 l S
-BT
-/F2 10.20 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 505.00 Tm
-(Eventify) Tj
-ET
-BT
-/F2 6.80 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 137.00 505.00 Tm
-(DISTRIBUTED EVENT PLATFORM) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 492.00 Tm
-(Express/TypeScript system with PostgreSQL/Prisma, Redis, BullMQ, durable outbox workflows, authentication,) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 481.00 Tm
-(bookings/waitlists, metrics, health/readiness checks, and security-focused CI.) Tj
-ET
-0.35 w 0.840 0.870 0.850 RG 42.00 473.00 m 553.28 473.00 l S
-BT
-/F2 10.20 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 459.00 Tm
-(BookHaven) Tj
-ET
-BT
-/F2 6.80 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 137.00 459.00 Tm
-(FULL-STACK COMMERCE) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 446.00 Tm
-(Next.js + Express + MongoDB bookstore with JWT/RBAC, catalog, cart, wishlist, reviews, checkout, orders,) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 435.00 Tm
-(inventory, admin operations, validation, and API tests.) Tj
-ET
-0.35 w 0.840 0.870 0.850 RG 42.00 427.00 m 553.28 427.00 l S
-BT
-/F2 10.20 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 413.00 Tm
-(FitFlow) Tj
-ET
-BT
-/F2 6.80 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 137.00 413.00 Tm
-(INSTALLABLE FITNESS PWA) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 400.00 Tm
-(Responsive training product with personalized plans, guided intervals, weekly progress, device-local) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 389.00 Tm
-(persistence, accessibility, installability, and offline-ready behavior.) Tj
-ET
-0.35 w 0.840 0.870 0.850 RG 42.00 381.00 m 553.28 381.00 l S
-BT
-/F2 10.20 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 367.00 Tm
-(Venues API) Tj
-ET
-BT
-/F2 6.80 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 137.00 367.00 Tm
-(BACKEND REST SERVICE) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 354.00 Tm
-(Express 5 + TypeScript + Zod API with routes -> controllers -> services, strict validation, centralized errors,) Tj
-ET
-BT
-/F1 8.00 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 343.00 Tm
-(UUID resources, persistence, and HTTP contract tests.) Tj
-ET
-0.35 w 0.840 0.870 0.850 RG 42.00 335.00 m 553.28 335.00 l S
-BT
-/F2 7.40 Tf
-0.070 0.340 0.180 rg
-1 0 0 1 42.00 258.00 Tm
-(EVIDENCE) Tj
-ET
-0.45 w 0.840 0.870 0.850 RG 134.00 260.00 m 553.28 260.00 l S
-BT
-/F1 8.10 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 239.00 Tm
-(Portfolio: abdulrahman-hajar-dev.netlify.app) Tj
-ET
-BT
-/F1 8.10 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 225.00 Tm
-(GitHub: github.com/rahman-997) Tj
-ET
-BT
-/F1 8.10 Tf
-0.060 0.080 0.070 rg
-1 0 0 1 42.00 211.00 Tm
-(LinkedIn: linkedin.com/in/abdulrahman-hajjar-5430281a1/) Tj
-ET
-0.45 w 0.840 0.870 0.850 RG 42.00 188.00 m 553.28 188.00 l S
-BT
-/F1 7.20 Tf
-0.340 0.400 0.370 rg
-1 0 0 1 42.00 172.00 Tm
-(Abdulrahman Hajar | Software Engineer | Istanbul, T\374rkiye) Tj
-ET
-endstream
+<<
+/Annots [ 4 0 R 5 0 R 6 0 R ] /Contents 11 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 10 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
+>>
 endobj
 8 0 obj
-<< /Type /Annot /Subtype /Link /Rect [425 789 474 801] /Border [0 0 0] /A << /S /URI /URI (https://abdulrahman-hajar-dev.netlify.app) >> >>
+<<
+/PageMode /UseNone /Pages 10 0 R /Type /Catalog
+>>
 endobj
 9 0 obj
-<< /Type /Annot /Subtype /Link /Rect [425 775 466 787] /Border [0 0 0] /A << /S /URI /URI (https://github.com/rahman-997) >> >>
+<<
+/Author (Abdulrahman Hajar) /CreationDate (D:20260828105257+00'00') /Creator (anonymous) /Keywords () /ModDate (D:20260828105257+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (Software Engineer | Full-Stack & Backend Systems) /Title (Abdulrahman Hajar - Software Engineer Resume) /Trapped /False
+>>
 endobj
 10 0 obj
-<< /Type /Annot /Subtype /Link /Rect [425 761 476 773] /Border [0 0 0] /A << /S /URI /URI (https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/) >> >>
+<<
+/Count 1 /Kids [ 7 0 R ] /Type /Pages
+>>
+endobj
+11 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2220
+>>
+stream
+Gatm=>BALj&q801kbh?l:I(QlP4GhW>\%%F`WY@uC27/\0u1^o_\nGMZ]uWI4VF))E-@5%.TP'H](GBZYIc//[.0bkr_:rD]bjp3-C>Re$SWU=JTqH/r1T?Z?o^hsq1cYJ)sr[I3A)09^bJP*YJ+S[2Me2U`S>mtZ+p`P_tO7\D[jI*BCd;^A@3a%glW[Hqubq#&HAG<ns,rbkT'3tIbP@JE#dW>4YSF03S3;a,4DIDb_9<kPjpdLq"@S$/X(CtXNn"nK&bI</:4,_-p.HX?rS"!NOEnN.Qf:L;ne>H6r4/q--I\On.T\s1i5u68Y4j!ki%5-F-pid8_5uZmRFtF@tJW`a=uAIF`3?."DnMT46X%71ro;@f*O'se$4qqo_Ef38@2iE%a10:El<!]8WklSbh+]d3KmY]8%BnuX@O9As4d5en\hk8ZgFq?1:d?k)E,6Ua@cEV0&gYc?/)SG[r[e10\qN>X'A'Zqc@AE4A/?4Gk,ee%7ArHho.7"iM3Y)?<lAX,bUEW>8h50L^Vs"[rO,`=K)qlmh4T&Xp0VpC1[f:0+urCZYWD"ORI0UpGeQU/=ij6,abp&8d_'Q'umT?j7s0C,S</b+l7,#1_FOKJRt53"\ECaJCtECh/SZ</tqV0:3?Uip4B/0fgep_W,BnE@SJWbF!=0X&sB?CTa(EtcpF-h$G"%./1Fq@^b\R8I(.+BHqbl@7abQ$_kOpof+_8MUiP"9S0iqd3)*F1H,9g_;6)p[gH4:SnW&_L92TDunrIZd^/Z3mk7mJGnD*8A>/S0d^DfZRUFQr4l(%4SK1t$D-&\'gk?:rB`sM`([p7(1]?>qO%?['MGH1%YPZ:(g/8Z'@@K13Zot*TTGK8NG1lUEBS6h[5b<A_O?D]%6XQI2R8Sq[-OuSATM=Ke/+#gArMX@!a?)+$an<lD&_iG*MM7S`2X#,:(1,n36>-5ZnNM&gKY'M^j`[+@<qGr^&lK]!_%i^t2&6Jnko/CanDi>*:j(S;i3=>(,agYDNCP5HiN-R%BJketJ`e*;fJr=uI/bu'K?h'YP+e(8&L*!c2pKqq1S^+)PM-MOpE\d(7(^X!]in&c1Nl,8KOn!C/D<m1:Y3Rm,4*i\72H7b44]">B5,i;rTNd^Ej`AQ5lKLJ),;Njk(!esB<m=Qp"YXMDhrF1])PcA.R1*FK<Md=af]X6b&[Yq*]Z7e]rNU)W8M7&\E0D%MWO>i>F7#"=[t_f)+,9q(8%6ko$n'Hd(;<",^0F6IY3hjDgHh^!S(TEp_UTCB2>*1rX);Bd#$9kN_lLYK[I\;CMn3u(@Lu8o8^r)<6h;lL`@r?Vj-thGr?WG.'b2eXb+@F+]/n;2H>I<V>'58__W2&aN7+a$Uerj:@n.LJQkt@u;@:'u1]@_7>WaT9rc4\5RrSF\<BG-4&11=Vp0DG`"\UJUNUQVf_.hHVqc>Xs/O9]O];cA-)`lMYmCU$n!di$/]>8r,]Es1u],s9X^N0UqK<,7_3hCCd<Y$F"7hCIK@dle+c/WcqSAsCa([+*=hhRDE=DMq<>)0Gff,kN'qW"8Q.CA.K)i=uYT>/FK8[$lMNP6Ye?`JgA%D816'UZ+[VpC;Oi0>`\4>q_J3Atdb**:YPj[-B+Eu^'f@mqeSR@all[<h,,7i7D(5,uV^X"ia=k8;sslG/eCf(./J%IW,B&Z0?"7L63VYhL+OE"g3cE&t[38cMiX9l7n<d!UJ&`a/bC+=pH$mr$j]Y_?3#eQBrmK+tO]M#tZ%?ts^7k?J,q8mWoo9"4*1V1L0P+6"lGc'0S8OfE=B$>Gf&`0fC/..lKROJ_kr=0&ZEmg(ba=JSK09gs;2R*cXoAmAT!3'0)QX9Vl;LpMN3)u)lY*8&g8W#'P'8ru*JKVLgj!_gMR\#<V>Zh;'(3-0Js%o#6f!McHA&p==*$N4lA',$m._:')QUjf>@PEeWg\Z1\\jQIdR+qm&>;B`QE\&ZO&JFo3"6Bn[EJe>!F/rmu[HJ>]cO=RG7"5(6,c$#Y!W9n0hSD`(\G"<L"M[&.=J*di>m9D?oq://]!b#+aord0dQ<&_NLYn_S*"Uho.s9e,7-63ZMETHuCQQg'dQ,DGXY;W4Y(i`JYXH,>1F(lEf$9@"n7ks="kmSE+.[n5Zs9l;<6_`"0<n?iE3ZoT^.HQ">>eX6cLT8EH&ua^oI>?<mI9D#)oQd)e"j>M0i:m3ogecVkO]'Er"i5.J#W~>endstream
 endobj
 xref
-0 11
+0 12
 0000000000 65535 f 
-0000000018 00000 n 
-0000000067 00000 n 
-0000000124 00000 n 
-0000000295 00000 n 
-0000000381 00000 n 
-0000000472 00000 n 
-0000000583 00000 n 
-0000006051 00000 n 
-0000006206 00000 n 
-0000006349 00000 n 
+0000000061 00000 n 
+0000000102 00000 n 
+0000000209 00000 n 
+0000000321 00000 n 
+0000000504 00000 n 
+0000000675 00000 n 
+0000000874 00000 n 
+0000001109 00000 n 
+0000001178 00000 n 
+0000001520 00000 n 
+0000001580 00000 n 
 trailer
-<< /Size 11 /Root 1 0 R >>
+<<
+/ID 
+[<0bbe22539b4fc93a5154de6f4e5c357a><0bbe22539b4fc93a5154de6f4e5c357a>]
+% ReportLab generated PDF document -- digest (opensource)
+
+/Info 9 0 R
+/Root 8 0 R
+/Size 12
+>>
 startxref
-6521
+3892
 %%EOF

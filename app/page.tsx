@@ -28,7 +28,7 @@ const projects = [
     summary:
       "A full-stack event system combining secure authentication, organizer workflows, bookings, waitlists, PostgreSQL durability, Redis coordination, BullMQ workers, observability, and operational health checks.",
     stack: ["TypeScript", "Express 5", "PostgreSQL", "Prisma", "Redis", "BullMQ"],
-    proof: ["Transactional booking state", "PostgreSQL outbox", "Worker + queue coordination", "Health, readiness & metrics"],
+    proof: ["Transactional booking state", "PostgreSQL outbox", "Worker + queue coordination", "Health, readiness & metrics", "Render free tier · wake-up may be required"],
     caseStudy: "/work/eventify/",
     live: "https://eventify-web.onrender.com",
     source: "https://github.com/rahman-997/eventify",
@@ -43,7 +43,7 @@ const projects = [
     summary:
       "A complete commerce flow covering discovery, authentication, role-based access, cart, wishlist, reviews, checkout, orders, inventory, and administration across Next.js and Express.",
     stack: ["Next.js", "React", "TypeScript", "Express", "MongoDB", "Zod"],
-    proof: ["Customer + admin flows", "JWT + RBAC", "Validated API boundary", "Order & inventory behavior"],
+    proof: ["Customer + admin flows", "JWT + RBAC", "Validated API boundary", "Order & inventory behavior", "Render free tier · wake-up may be required"],
     caseStudy: "/work/bookhaven/",
     live: "https://bookbookhaven-free.onrender.com",
     source: "https://github.com/rahman-997/bookbookhaven",
@@ -57,12 +57,12 @@ const projects = [
     thesis: "A local-first training experience built for everyday use.",
     summary:
       "A responsive fitness product with personalized plans, guided intervals, weekly progress, local persistence, accessibility, installability, and offline-ready behavior.",
-    stack: ["React", "TypeScript", "PWA", "Web APIs", "Modern CSS"],
-    proof: ["Local-first progress", "Installable experience", "Reduced-motion support", "Responsive workout flows"],
+    stack: ["Next.js", "React", "TypeScript", "PWA", "Web APIs", "Modern CSS"],
+    proof: ["Local-first progress", "Installable experience", "Reduced-motion support", "Responsive workout flows", "Static Netlify delivery"],
     caseStudy: "/work/fitflow/",
     live: "https://fitflow-gym-online.netlify.app",
     source: "https://github.com/rahman-997/fitflow-gym",
-    image: null,
+    image: "/projects/fitflow-cover.svg",
     visual: "pwa",
   },
   {
@@ -73,7 +73,7 @@ const projects = [
     summary:
       "An Express 5 REST service with TypeScript, Zod 4 validation, layered route/controller/service boundaries, centralized errors, UUID resources, persistence, and contract-level tests.",
     stack: ["Node.js", "Express 5", "TypeScript", "Zod 4", "REST"],
-    proof: ["Layered architecture", "Centralized error handling", "Validated inputs", "HTTP contract tests"],
+    proof: ["Layered architecture", "Centralized error handling", "Validated inputs", "HTTP contract tests", "Render free tier · wake-up may be required"],
     caseStudy: "/work/venues-api/",
     live: "https://venues-api-rahman.onrender.com/health",
     source: "https://github.com/rahman-997/venues-api",
@@ -92,6 +92,7 @@ const layers = [
 
 const technologies = [
   "TypeScript",
+  "JavaScript",
   "React",
   "Next.js",
   "Node.js",
@@ -100,14 +101,18 @@ const technologies = [
   "Prisma",
   "MongoDB",
   "Redis",
-  "BullMQ",
   "Zod",
   "REST",
-  "PWA",
-  "GitHub Actions",
+  "GraphQL",
+  "WebSockets",
+  "gRPC",
+  "OpenAPI",
   "Docker",
-  "Netlify",
-  "Render",
+  "GitHub Actions",
+  "CI/CD",
+  "AI / LLM / MCP",
+  "FastAPI",
+  "Flutter",
 ] as const;
 
 export default function Home() {
@@ -140,13 +145,13 @@ export default function Home() {
         <section className={styles.hero} id="top">
           <div className={styles.heroGrid} aria-hidden="true" />
           <div className={styles.heroCopy}>
-            <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK DEVELOPER · AI & INTERACTIVE SYSTEMS</p>
+            <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK & BACKEND SYSTEMS · AI</p>
             <h1>
               I build software as
               <span>systems, not screens.</span>
             </h1>
             <p className={styles.heroLead}>
-              From product interface to API boundaries, data, background work, testing, security, and deployment — I build the whole path that makes software usable and dependable.
+              I build complete production software systems — from product interfaces and API boundaries to databases, asynchronous work, testing, security, reliability, and deployment.
             </p>
             <div className={styles.heroActions}>
               <a className={styles.primaryAction} href="#work">Explore selected work <Arrow /></a>
@@ -161,10 +166,10 @@ export default function Home() {
             </div>
             <div className={styles.proofBody}>
               <p>Current focus</p>
-              <strong>Full-stack products with production-minded backend depth.</strong>
+              <strong>Full-stack products with production-minded backend systems depth.</strong>
               <div className={styles.proofRows}>
-                <div><span>Frontend</span><b>React · Next.js · TypeScript</b></div>
-                <div><span>Backend</span><b>Node.js · Express · REST</b></div>
+                <div><span>Product</span><b>React · Next.js · TypeScript</b></div>
+                <div><span>Backend</span><b>Node.js · Express · APIs</b></div>
                 <div><span>Data</span><b>PostgreSQL · MongoDB · Redis</b></div>
                 <div><span>Systems</span><b>Queues · CI/CD · reliability</b></div>
               </div>
@@ -317,11 +322,11 @@ export default function Home() {
         <section className={styles.about} id="about">
           <div className={styles.aboutHeading}>
             <p>04 / ABOUT</p>
-            <h2>Engineering breadth with product judgment.</h2>
+            <h2>Engineering breadth with backend systems depth.</h2>
           </div>
           <div className={styles.aboutCopy}>
             <p className={styles.aboutLead}>I&apos;m Abdulrahman Hajar, a Software Engineer and Computer Engineering student at Nişantaşı University in Istanbul.</p>
-            <p>I work across frontend, backend, APIs, databases, asynchronous workflows, testing, security, deployment, AI integrations, and interactive systems. The goal is not to collect technologies — it is to understand enough of the system to make better engineering decisions.</p>
+            <p>I work across product interfaces, backend architecture, APIs, databases, asynchronous workflows, testing, security, deployment, reliability, AI/LLM integrations, and interactive systems. The goal is not to collect technologies — it is to understand enough of the complete system to make better engineering decisions and ship dependable software.</p>
             <div className={styles.education}>
               <span>EDUCATION</span>
               <div>
@@ -358,7 +363,7 @@ export default function Home() {
       <footer className={styles.footer}>
         <div>
           <span className={styles.monogram}>AH</span>
-          <span><strong>Abdulrahman Hajar</strong><small>Software Engineer · Istanbul, Türkiye</small></span>
+          <span><strong>Abdulrahman Hajar</strong><small>Software Engineer · Full-Stack & Backend Systems</small></span>
         </div>
         <a href="#top">Back to top ↑</a>
       </footer>
