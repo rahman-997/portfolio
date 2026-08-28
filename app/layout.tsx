@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const siteUrl = "https://abdulrahman-hajar-dev.netlify.app";
+const siteUrl = "https://abdulrahman-hajar-portfolio.onrender.com";
 
 export const viewport: Viewport = {
   width: "device-width",
