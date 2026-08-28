@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import CommandPalette from "./components/CommandPalette";
 import "./globals.css";
 
 const siteUrl = "https://abdulrahman-hajar-dev.netlify.app";
@@ -8,16 +7,19 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#07111f",
-  colorScheme: "dark light",
+  themeColor: "#07090c",
+  colorScheme: "dark",
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  applicationName: "Abdulrahman Hajar — Engineering Portfolio",
-  title: "Abdulrahman Hajar — Software Engineer | Full-Stack & Backend Systems",
+  applicationName: "Abdulrahman Hajar — Software Engineering Portfolio",
+  title: {
+    default: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer",
+    template: "%s | Abdulrahman Hajar",
+  },
   description:
-    "Engineering portfolio of Abdulrahman Hajar, a Software Engineer and Computer Engineering student in Istanbul building full-stack products, backend APIs, data systems, production infrastructure, and AI-assisted experiences.",
+    "Software engineering portfolio of Abdulrahman Hajar: full-stack products, backend APIs, data systems, asynchronous workflows, testing, security, deployment, AI and interactive systems.",
   authors: [{ name: "Abdulrahman Hajar", url: "https://github.com/rahman-997" }],
   creator: "Abdulrahman Hajar",
   publisher: "Abdulrahman Hajar",
@@ -42,32 +44,32 @@ export const metadata: Metadata = {
     "Node.js",
     "Express",
     "REST API",
-    "GraphQL",
     "PostgreSQL",
     "Prisma",
     "MongoDB",
     "Redis",
-    "Docker",
+    "BullMQ",
     "CI/CD",
-    "System Architecture",
-    "AI Integration",
+    "AI integrations",
     "Istanbul Software Engineer",
   ],
   alternates: { canonical: "/" },
   openGraph: {
     title: "Abdulrahman Hajar — Software Engineer",
     description:
-      "Full-stack and backend engineering across TypeScript, React/Next.js, Node.js, APIs, data, asynchronous systems, testing, security, and production delivery.",
+      "Full-stack products and backend systems with architecture, source code, live deployments and technical case studies.",
     type: "website",
     url: "/",
     siteName: "Abdulrahman Hajar — Software Engineering Portfolio",
     locale: "en_US",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Abdulrahman Hajar — Software Engineer" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Abdulrahman Hajar — Software Engineer",
     description:
-      "Full-stack products, backend systems, APIs, data infrastructure, AI integrations, testing, and production delivery.",
+      "Full-stack products, backend systems, APIs, data, async workflows, testing, security and deployment.",
+    images: ["/twitter-image"],
   },
   robots: {
     index: true,
@@ -92,7 +94,7 @@ const personJsonLd = {
   image: `${siteUrl}/opengraph-image`,
   jobTitle: "Software Engineer",
   description:
-    "Software Engineer and Computer Engineering student focused on full-stack products, backend systems, data, reliability, and AI-assisted experiences.",
+    "Software Engineer, Full-Stack Developer, and Computer Engineering student focused on product engineering, backend systems, AI and interactive systems.",
   sameAs: [
     "https://github.com/rahman-997",
     "https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/",
@@ -115,12 +117,11 @@ const personJsonLd = {
     "Next.js",
     "Node.js",
     "REST APIs",
-    "GraphQL",
     "PostgreSQL",
     "MongoDB",
     "Redis",
-    "Docker",
-    "System Architecture",
+    "Asynchronous Workflows",
+    "CI/CD",
     "AI Integration",
   ],
 };
@@ -130,9 +131,9 @@ const websiteJsonLd = {
   "@type": "WebSite",
   "@id": `${siteUrl}/#website`,
   url: siteUrl,
-  name: "Abdulrahman Hajar — Engineering Portfolio",
+  name: "Abdulrahman Hajar — Software Engineering Portfolio",
   description:
-    "Selected software engineering work, technical capabilities, case studies, and résumé for Abdulrahman Hajar.",
+    "Selected software engineering work, technical case studies, capabilities, and résumé for Abdulrahman Hajar.",
   author: { "@id": `${siteUrl}/#person` },
   inLanguage: "en",
 };
@@ -178,7 +179,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           />
         ))}
         {children}
-        <CommandPalette />
       </body>
     </html>
   );
