@@ -56,7 +56,7 @@ const projects = [
     caseStudy: "/work/fitflow/",
     live: "https://fitflow-gym-online.netlify.app",
     source: "https://github.com/rahman-997/fitflow-gym",
-    image: "https://raw.githubusercontent.com/rahman-997/fitflow-gym/main/public/assets/fitflow-hero.png",
+    image: "/projects/fitflow-cover.svg",
     className: "fitflow",
   },
   {
