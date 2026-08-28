@@ -101,7 +101,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `${study.name} Case Study — Abdulrahman Hajar`;
   const canonical = `/work/${slug}/`;
-  const image = study.cover ?? "/opengraph-image";
+  const image = study.cover?.endsWith(".svg") ? "/opengraph-image" : study.cover ?? "/opengraph-image";
 
   return {
     title,
