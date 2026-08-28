@@ -15,7 +15,7 @@ const studies = {
     stack: ["Next.js", "React", "TypeScript", "PWA", "Modern CSS"],
     live: "https://fitflow-gym-online.netlify.app",
     runtime: null,
-    cover: null,
+    cover: "/projects/fitflow-cover.svg",
     source: "https://github.com/rahman-997/fitflow-gym",
     goal:
       "Make the core fitness journey useful without account friction: choose a plan, run a focused session, preserve progress, and return with context intact.",
@@ -101,7 +101,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `${study.name} Case Study — Abdulrahman Hajar`;
   const canonical = `/work/${slug}/`;
-  const image = study.cover ?? "/opengraph-image";
+  const image = study.cover?.endsWith(".svg") ? "/opengraph-image" : study.cover ?? "/opengraph-image";
 
   return {
     title,
