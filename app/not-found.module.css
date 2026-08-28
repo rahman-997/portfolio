@@ -3,6 +3,7 @@
   --ink: #111214;
   --muted: #6c6b66;
   --orange: #ff5b36;
+  --orange-text: #b83b20;
   --blue: #3154ff;
   --lime: #d8ff43;
   min-height: 100vh;
@@ -81,7 +82,7 @@
   position: relative;
   z-index: 2;
   margin: 36px 0 11px;
-  color: var(--orange);
+  color: var(--orange-text);
   font-size: 10px;
   font-weight: 900;
   letter-spacing: .18em;
@@ -163,7 +164,7 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  color: #357c4d;
+  color: #2e6f43;
 }
 
 .status b {
