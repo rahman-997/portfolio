@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import styles from "./case-study.module.css";
 
-const siteUrl = "https://abdulrahman-hajar-dev.netlify.app";
+const siteUrl = "https://abdulrahman-hajar-portfolio.onrender.com";
 
 const studies = {
   eventify: {
