@@ -2,9 +2,9 @@
 
 [![Portfolio CI](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml)
 
-A recruiter-facing engineering portfolio for **Abdulrahman Hajar** — Software Engineer, Full-Stack Developer, and Computer Engineering student at Nişantaşı University in Istanbul, Türkiye.
+A recruiter-facing engineering portfolio for **Abdulrahman Hajar** — **Software Engineer focused on Full-Stack & Backend Systems**, and Computer Engineering student at Nişantaşı University in Istanbul, Türkiye.
 
-The portfolio is built around **engineering evidence, not a generic skills wall**: complete products, API design, data systems, background work, validation, testing, security, deployment, operational behavior, and selected interactive engineering.
+The portfolio is built around **engineering evidence, not a generic skills wall**: complete products, backend architecture, API design, data systems, background work, validation, testing, security, reliability, deployment, AI integrations, and selected interactive engineering.
 
 **Live:** [abdulrahman-hajar-dev.netlify.app](https://abdulrahman-hajar-dev.netlify.app) · **GitHub:** [rahman-997](https://github.com/rahman-997) · **LinkedIn:** [Abdulrahman Hajar](https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/)
 
@@ -14,27 +14,29 @@ The portfolio is built around **engineering evidence, not a generic skills wall*
 
 ```text
 Build the interface.
-Engineer the system.
-Ship the whole product.
+Engineer the backend.
+Own the data and failure modes.
+Ship the complete system.
 ```
 
 The portfolio presents the engineering layers demonstrated by the selected work:
 
 1. **Product engineering** — React, Next.js, TypeScript, responsive UX, accessibility, and PWA behavior.
-2. **Backend & APIs** — Node.js, Express, REST, validation, authentication, and layered service boundaries.
-3. **Data & reliability** — PostgreSQL, Prisma, MongoDB, Redis, queues, background workers, health/readiness, metrics, and failure handling.
-4. **Delivery** — testing, security checks, CI/CD, static export verification, and production deployment.
+2. **Backend systems & APIs** — Node.js, Express, REST, validation, authentication, authorization, contracts, and layered service boundaries.
+3. **Data & reliability** — PostgreSQL, Prisma, MongoDB, Redis, queues, background workers, health/readiness, metrics, concurrency, and failure handling.
+4. **Delivery** — testing, security checks, CI/CD, static export verification, production deployment, and operational evidence.
+5. **Extended engineering toolkit** — GraphQL, WebSockets, gRPC, OpenAPI, Docker, AI/LLM/MCP, FastAPI, and Flutter.
 
 ## Selected systems
 
 | Project | Engineering focus | Evidence |
 | --- | --- | --- |
-| **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, background work, health/readiness, metrics, CI/security |
+| **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, durable background work, health/readiness, metrics, CI/security |
 | **BookHaven** | Full-stack commerce | Next.js + Express + MongoDB, authentication/RBAC, catalog, cart/wishlist, reviews, checkout, orders, inventory/admin |
 | **FitFlow** | Installable fitness PWA | Personalized plans, guided intervals, local-first progress, accessibility, responsive UX, offline readiness |
 | **Venues API** | Focused backend service | Express 5, TypeScript, Zod 4, layered architecture, centralized errors, UUID resources, persistence, tests |
 
-Every featured project links to **live proof, source code, and an engineering case study**.
+Every featured project links to **live proof, source code, and an engineering case study**. Render-hosted demos explicitly disclose free-tier wake-up behavior so cold starts are not mistaken for broken software.
 
 ## Visual direction
 
@@ -42,7 +44,7 @@ The active design uses a restrained dark engineering identity rather than a gene
 
 - deep charcoal application canvas with high-contrast typography
 - restrained signal accents and strong editorial hierarchy
-- real project evidence where useful
+- first-party project evidence where useful
 - architecture/system visualization instead of decorative skill cards
 - generous whitespace and deliberate scan paths
 - responsive layouts for desktop, tablet, and mobile
@@ -50,7 +52,7 @@ The active design uses a restrained dark engineering identity rather than a gene
 
 ## Recruiter-facing content
 
-- clear Software Engineer / Full-Stack positioning
+- clear **Software Engineer · Full-Stack & Backend Systems** positioning
 - selected projects with architecture and reliability evidence
 - engineering capability map
 - Computer Engineering education
@@ -65,11 +67,12 @@ The active design uses a restrained dark engineering identity rather than a gene
 ## Stack
 
 ```text
-Next.js 16 · React 19 · TypeScript 5
-Node.js · Express · REST · Zod
+Next.js 16 · React 19 · TypeScript 5 · JavaScript
+Node.js · Express · REST · GraphQL · WebSockets · gRPC · OpenAPI · Zod
 PostgreSQL · Prisma · MongoDB · Redis · BullMQ
+Docker · GitHub Actions · CI/CD · Netlify · Render
+AI / LLM / MCP · FastAPI · Flutter
 CSS Modules · Responsive CSS · Accessibility
-GitHub Actions · Netlify
 ```
 
 ## Structure
@@ -129,9 +132,9 @@ GitHub Actions runs the complete quality gate on pushes and pull requests and pr
 
 ## Deployment
 
-The project uses a static Next.js export. `netlify.toml` builds with `npm run build` and publishes `out/`.
+The project uses a portable static Next.js export. `netlify.toml` builds with `npm run build` and publishes `out/`.
 
-The deployment configuration includes caching for static assets and security-oriented response headers.
+The deployment configuration includes long-lived caching for immutable static assets and security-oriented response headers. Because the output is static, the portfolio is not tied to one hosting vendor and can be moved to another static host without changing the application architecture.
 
 ## SEO & accessibility
 
@@ -139,7 +142,7 @@ The portfolio includes canonical metadata, Open Graph/Twitter previews, sitemap 
 
 ## Author
 
-Designed and developed by **[Abdulrahman Hajar](https://github.com/rahman-997)** — Software Engineer and Full-Stack Developer in Istanbul, Türkiye.
+Designed and developed by **[Abdulrahman Hajar](https://github.com/rahman-997)** — Software Engineer focused on **Full-Stack & Backend Systems** in Istanbul, Türkiye.
 
 ## License
 
