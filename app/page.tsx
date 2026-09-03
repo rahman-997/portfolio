@@ -83,7 +83,7 @@ export default function Home() {
         <section className={styles.hero} id="top">
           <div className={styles.heroGrid} aria-hidden="true" />
           <div className={styles.heroCopy}>
-            <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK & BACKEND SYSTEMS · AI</p>
+            <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK DEVELOPER · AI & INTERACTIVE SYSTEMS</p>
             <h1>
               I build software as
               <span>systems, not screens.</span>
@@ -301,7 +301,7 @@ export default function Home() {
       <footer className={styles.footer}>
         <div>
           <span className={styles.monogram}>AH</span>
-          <span><strong>Abdulrahman Hajar</strong><small>Software Engineer · Full-Stack & Backend Systems</small></span>
+          <span><strong>Abdulrahman Hajar</strong><small>Software Engineer · Full-Stack Developer · AI & Interactive Systems</small></span>
         </div>
         <a href="#top">Back to top ↑</a>
       </footer>
