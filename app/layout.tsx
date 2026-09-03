@@ -19,9 +19,9 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: "Abdulrahman Hajar — Software Engineering Portfolio",
-  title: "Abdulrahman Hajar — Software Engineer | Full-Stack & Backend Systems",
+  title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
   description:
-    "Software engineering portfolio of Abdulrahman Hajar: full-stack products, backend systems, APIs, databases, asynchronous workflows, testing, security, reliability, deployment, and AI integrations.",
+    "Software engineering portfolio of Abdulrahman Hajar: full-stack products, backend systems, APIs, databases, asynchronous workflows, testing, security, reliability, deployment, AI integrations, and interactive systems.",
   authors: [{ name: "Abdulrahman Hajar", url: SITE_URL }],
   creator: "Abdulrahman Hajar",
   publisher: "Abdulrahman Hajar",
@@ -32,9 +32,11 @@ export const metadata: Metadata = {
   keywords: [
     "Abdulrahman Hajar",
     "Software Engineer",
+    "Full-Stack Developer",
     "Full-Stack Engineer",
     "Backend Systems Engineer",
     "Backend Engineering",
+    "Interactive Systems",
     "Computer Engineering",
     "TypeScript",
     "JavaScript",
@@ -66,9 +68,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Abdulrahman Hajar — Software Engineer | Full-Stack & Backend Systems",
+    title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
     description:
-      "Production-minded full-stack and backend systems across TypeScript, React/Next.js, Node.js, APIs, databases, asynchronous work, testing, security, reliability, and deployment.",
+      "Production-minded full-stack software, backend systems, AI integrations, and interactive engineering across TypeScript, React/Next.js, Node.js, APIs, databases, reliability, and delivery.",
     type: "website",
     url: "/",
     siteName: "Abdulrahman Hajar — Software Engineering Portfolio",
@@ -77,9 +79,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdulrahman Hajar — Software Engineer | Full-Stack & Backend Systems",
+    title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
     description:
-      "Full-stack products, backend systems, APIs, databases, reliability, CI/CD, AI integrations, and production delivery.",
+      "Full-stack products, backend systems, APIs, data, AI integrations, interactive systems, reliability, CI/CD, and production delivery.",
     images: ["/twitter-image"],
   },
   robots: {
@@ -103,9 +105,9 @@ const personJsonLd = {
   name: "Abdulrahman Hajar",
   url: SITE_URL,
   image: `${SITE_URL}/opengraph-image`,
-  jobTitle: "Software Engineer — Full-Stack & Backend Systems",
+  jobTitle: "Software Engineer · Full-Stack Developer · AI & Interactive Systems",
   description:
-    "Software Engineer and Computer Engineering student focused on full-stack products, backend systems, APIs, databases, reliability, AI integrations, and production delivery.",
+    "Software Engineer and Computer Engineering student building full-stack products, backend systems, APIs, data systems, AI integrations, interactive systems, and production delivery.",
   sameAs: [
     PROFILE_LINKS.github,
     PROFILE_LINKS.linkedin,
@@ -124,6 +126,7 @@ const personJsonLd = {
     "Full-Stack Engineering",
     "Backend Systems",
     "Backend Engineering",
+    "Interactive Systems",
     "TypeScript",
     "JavaScript",
     "React",
