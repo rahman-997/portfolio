@@ -13,8 +13,10 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), browsing-topics=()"
-    X-Frame-Options = "SAMEORIGIN"
+    X-Frame-Options = "DENY"
     X-DNS-Prefetch-Control = "on"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "same-origin"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
 
 [[headers]]
@@ -27,7 +29,7 @@
   for = "/projects/*"
 
   [headers.values]
-    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
 
 [[headers]]
   for = "/favicon.svg"
@@ -39,7 +41,7 @@
   for = "/manifest.webmanifest"
 
   [headers.values]
-    Cache-Control = "public, max-age=3600, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/opengraph-image*"
