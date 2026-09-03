@@ -26,3 +26,6 @@ The portfolio is a static export and intentionally has no authentication, accoun
 ## Security baseline
 
 The portfolio runs linting, TypeScript checks, production builds, static-export verification, identity/link checks, résumé validation, and dependency auditing in CI. Security fixes should include a regression check whenever practical.
+## Production response policy
+
+The primary Render static site and Netlify fallback are expected to enforce equivalent baseline response protections: `nosniff`, clickjacking denial, strict referrer behavior, restricted browser permissions, COOP/CORP isolation, HSTS, and bounded cache policies. The repository keeps these rules in `render.yaml` and `netlify.toml`, and production smoke checks verify the live Render response after deployment.
