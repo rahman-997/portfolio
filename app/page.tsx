@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PROFILE_LINKS, PROJECT_LIST } from "./portfolio-data";
 import styles from "./home.module.css";
 
 const Arrow = ({ size = 18 }: { size?: number }) => (
@@ -18,69 +19,6 @@ const LinkedIn = ({ size = 18 }: { size?: number }) => (
     <path d="M5.4 7.3H1.8V22h3.6V7.3ZM3.6 2C2.4 2 1.4 3 1.4 4.2s1 2.2 2.2 2.2 2.2-1 2.2-2.2S4.8 2 3.6 2ZM22.6 13.6c0-4.4-2.3-6.5-5.4-6.5-2.5 0-3.6 1.4-4.2 2.3V7.3H9.4V22H13v-7.3c0-1.9.4-3.8 2.8-3.8 2.3 0 2.4 2.2 2.4 4V22h3.6v-8.4h.8Z" />
   </svg>
 );
-
-const projects = [
-  {
-    index: "01",
-    name: "Eventify",
-    label: "Distributed event platform",
-    thesis: "Reliable booking flows beyond the happy path.",
-    summary:
-      "A full-stack event system combining secure authentication, organizer workflows, bookings, waitlists, PostgreSQL durability, Redis coordination, BullMQ workers, observability, and operational health checks.",
-    stack: ["TypeScript", "Express 5", "PostgreSQL", "Prisma", "Redis", "BullMQ"],
-    proof: ["Transactional booking state", "PostgreSQL outbox", "Worker + queue coordination", "Health, readiness & metrics", "Render free tier · wake-up may be required"],
-    caseStudy: "/work/eventify/",
-    live: "https://eventify-web.onrender.com",
-    source: "https://github.com/rahman-997/eventify",
-    image: "/projects/eventify-cover.jpg",
-    visual: "product",
-  },
-  {
-    index: "02",
-    name: "BookHaven",
-    label: "Full-stack commerce system",
-    thesis: "A bookstore designed as both a product and an operating system.",
-    summary:
-      "A complete commerce flow covering discovery, authentication, role-based access, cart, wishlist, reviews, checkout, orders, inventory, and administration across Next.js and Express.",
-    stack: ["Next.js", "React", "TypeScript", "Express", "MongoDB", "Zod"],
-    proof: ["Customer + admin flows", "JWT + RBAC", "Validated API boundary", "Order & inventory behavior", "Render free tier · wake-up may be required"],
-    caseStudy: "/work/bookhaven/",
-    live: "https://bookbookhaven-free.onrender.com",
-    source: "https://github.com/rahman-997/bookbookhaven",
-    image: "/projects/bookhaven-cover.jpg",
-    visual: "product",
-  },
-  {
-    index: "03",
-    name: "FitFlow",
-    label: "Installable fitness PWA",
-    thesis: "A local-first training experience built for everyday use.",
-    summary:
-      "A responsive fitness product with personalized plans, guided intervals, weekly progress, local persistence, accessibility, installability, and offline-ready behavior.",
-    stack: ["Next.js", "React", "TypeScript", "PWA", "Web APIs", "Modern CSS"],
-    proof: ["Local-first progress", "Installable experience", "Reduced-motion support", "Responsive workout flows", "Static Netlify delivery"],
-    caseStudy: "/work/fitflow/",
-    live: "https://fitflow-gym-online.netlify.app",
-    source: "https://github.com/rahman-997/fitflow-gym",
-    image: "/projects/fitflow-cover.svg",
-    visual: "pwa",
-  },
-  {
-    index: "04",
-    name: "Venues API",
-    label: "Backend engineering · REST",
-    thesis: "Small surface area. Strict engineering boundaries.",
-    summary:
-      "An Express 5 REST service with TypeScript, Zod 4 validation, layered route/controller/service boundaries, centralized errors, UUID resources, persistence, and contract-level tests.",
-    stack: ["Node.js", "Express 5", "TypeScript", "Zod 4", "REST"],
-    proof: ["Layered architecture", "Centralized error handling", "Validated inputs", "HTTP contract tests", "Render free tier · wake-up may be required"],
-    caseStudy: "/work/venues-api/",
-    live: "https://venues-api-rahman.onrender.com/health",
-    source: "https://github.com/rahman-997/venues-api",
-    image: null,
-    visual: "api",
-  },
-] as const;
 
 const layers = [
   ["01", "Interface", "React · Next.js · responsive UI · accessibility"],
@@ -136,7 +74,7 @@ export default function Home() {
           <Link href="/resume/">Résumé</Link>
         </nav>
 
-        <a className={styles.headerAction} href="https://github.com/rahman-997" target="_blank" rel="noreferrer">
+        <a className={styles.headerAction} href={PROFILE_LINKS.github} target="_blank" rel="noreferrer">
           GitHub <Arrow size={14} />
         </a>
       </header>
@@ -182,7 +120,7 @@ export default function Home() {
         </section>
 
         <section className={styles.signalStrip} aria-label="Portfolio evidence">
-          <span>4 featured systems</span>
+          <span>{PROJECT_LIST.length} featured systems</span>
           <span>Live deployments</span>
           <span>Source available</span>
           <span>Architecture case studies</span>
@@ -199,7 +137,7 @@ export default function Home() {
           </div>
 
           <div className={styles.projectStack}>
-            {projects.map((project) => (
+            {PROJECT_LIST.map((project) => (
               <article className={styles.project} key={project.name}>
                 <div className={styles.projectRail}>
                   <span>{project.index}</span>
@@ -214,20 +152,20 @@ export default function Home() {
                     {project.proof.map((item) => <span key={item}>{item}</span>)}
                   </div>
                   <div className={styles.projectLinks}>
-                    <Link href={project.caseStudy}>Read case study <Arrow size={15} /></Link>
+                    <Link href={`/work/${project.slug}/`}>Read case study <Arrow size={15} /></Link>
                     <a href={project.live} target="_blank" rel="noreferrer">Live system <Arrow size={15} /></a>
                     <a href={project.source} target="_blank" rel="noreferrer"><Github size={16} /> Source</a>
                   </div>
                 </div>
 
                 <div className={styles.projectEvidence}>
-                  {project.image ? (
+                  {project.cover ? (
                     <div className={styles.productFrame}>
                       <div className={styles.browserBar}><i /><i /><i /><span>{project.name.toLowerCase()}.system</span></div>
-                      <div className={styles.productImage} style={{ backgroundImage: `url(${project.image})` }} aria-hidden="true" />
+                      <div className={styles.productImage} style={{ backgroundImage: `url(${project.cover})` }} aria-hidden="true" />
                     </div>
                   ) : project.visual === "api" ? (
-                    <div className={styles.apiFrame} aria-label="Venues API request flow illustration">
+                    <div className={styles.apiFrame} role="img" aria-label="Venues API request flow illustration">
                       <div><span>REQUEST</span><code>GET /v1/venues</code></div>
                       <i>↓</i>
                       <div><span>VALIDATE</span><code>Zod schema</code></div>
@@ -239,7 +177,7 @@ export default function Home() {
                       <div><span>RESPONSE</span><code>200 · JSON</code></div>
                     </div>
                   ) : (
-                    <div className={styles.pwaFrame} aria-label="FitFlow local-first product flow illustration">
+                    <div className={styles.pwaFrame} role="img" aria-label="FitFlow local-first product flow illustration">
                       <div className={styles.phoneShell}>
                         <span className={styles.phoneTop} />
                         <p>WEEKLY TRAINING</p>
@@ -353,8 +291,8 @@ export default function Home() {
           <h2>Looking for evidence? Start with the work.</h2>
           <p>Review the live systems, inspect the source, or connect with me for software engineering opportunities and serious product work.</p>
           <div className={styles.contactLinks}>
-            <a href="https://github.com/rahman-997" target="_blank" rel="noreferrer"><Github /> GitHub <Arrow size={14} /></a>
-            <a href="https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/" target="_blank" rel="noreferrer"><LinkedIn /> LinkedIn <Arrow size={14} /></a>
+            <a href={PROFILE_LINKS.github} target="_blank" rel="noreferrer"><Github /> GitHub <Arrow size={14} /></a>
+            <a href={PROFILE_LINKS.linkedin} target="_blank" rel="noreferrer"><LinkedIn /> LinkedIn <Arrow size={14} /></a>
             <Link href="/resume/">Résumé <Arrow size={14} /></Link>
           </div>
         </section>
