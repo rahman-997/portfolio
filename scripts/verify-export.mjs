@@ -36,6 +36,7 @@ const textExtensions = new Set([".html", ".txt", ".xml", ".json", ".webmanifest"
 const forbiddenOutput = [
   ["legacy Netlify hostname", "abdulrahman-hajjar-dev.netlify.app"],
   ["legacy Netlify hostname", "abdulrahman-hajar-dev.netlify.app"],
+  ["legacy FitFlow hostname", "fitflow-gym-online.netlify.app"],
   ["legacy visible name", "Abdulrahman Hajjar"],
   ["generation disclosure", "AI generated"],
   ["generation disclosure", "ChatGPT"],
@@ -121,6 +122,9 @@ if (!fitflowHtml.includes("/projects/fitflow-cover.svg")) {
 }
 if (fitflowHtml.includes(`<meta property="og:image" content="${canonicalHost}/projects/fitflow-cover.svg"`)) {
   throw new Error("FitFlow social metadata must use the PNG OpenGraph fallback instead of SVG");
+}
+if (!fitflowHtml.includes("https://fitflow-gym.onrender.com")) {
+  throw new Error("FitFlow case study must point to the canonical Render production URL");
 }
 
 const manifest = JSON.parse(readFileSync(join(outDir, "manifest.webmanifest"), "utf8"));
