@@ -1,6 +1,7 @@
 {
   "name": "abdulrahman-portfolio",
   "version": "1.0.0",
+  "description": "Software engineering portfolio for Abdulrahman Hajar showcasing full-stack systems, backend architecture, reliability, and production delivery.",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -28,5 +29,20 @@
     "eslint-config-next": "16.3.3",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3"
-  }
+  },
+  "author": "Abdulrahman Hajar",
+  "license": "MIT",
+  "homepage": "https://abdulrahman-hajar-portfolio.onrender.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rahman-997/portfolio.git"
+  },
+  "keywords": [
+    "portfolio",
+    "software-engineering",
+    "full-stack",
+    "nextjs",
+    "react",
+    "typescript"
+  ]
 }
