@@ -25,7 +25,7 @@ The portfolio presents the engineering layers demonstrated by the selected work:
 2. **Backend systems & APIs** — Node.js, Express, REST, validation, authentication, authorization, contracts, and layered service boundaries.
 3. **Data & reliability** — PostgreSQL, Prisma, MongoDB, Redis, queues, background workers, health/readiness, metrics, concurrency, transactions, compensation, and failure handling.
 4. **Delivery** — testing, security checks, CI/CD, static export verification, runtime/container pinning, production deployment, and operational evidence.
-5. **AI & interactive systems** — AI/LLM/MCP integrations, GraphQL, WebSockets, gRPC, OpenAPI, FastAPI, Flutter, and interactive product engineering.
+5. **Extended engineering toolkit** — GraphQL, WebSockets, gRPC, OpenAPI, Docker, AI/LLM/MCP, FastAPI, and Flutter.
 
 ## Selected systems
 
@@ -33,10 +33,10 @@ The portfolio presents the engineering layers demonstrated by the selected work:
 | --- | --- | --- |
 | **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, durable background work, health/readiness, metrics, CI/security |
 | **BookHaven** | Full-stack commerce | Next.js + Express + MongoDB, HttpOnly BFF sessions, optimistic concurrency, conditional inventory, adaptive transactions with compensation fallback, paginated catalog/reviews/orders, admin operations, ISBN validation, dynamic SEO, Node 24.20.0 pinning, digest-pinned Node/Mongo containers, Compose validation, Dependabot supply-chain coverage |
-| **FitFlow** | Installable fitness PWA | Personalized plans, guided intervals, local-first progress, accessibility, responsive UX, offline readiness |
+| **FitFlow** | Installable fitness PWA | Personalized plans, guided intervals, local-first progress, accessibility, responsive UX, offline readiness, Render static delivery |
 | **Venues API** | Focused backend service | Express 5, TypeScript, Zod 4, layered architecture, centralized errors, UUID resources, persistence, contract tests, live health proof |
 
-Every featured project links to **live proof, source code, and an engineering case study**. Render-hosted demos explicitly disclose free-tier wake-up behavior so cold starts are not mistaken for broken software.
+Every featured project links to **live proof, source code, and an engineering case study**. Render-hosted demos explicitly disclose free-tier wake-up behavior where applicable so cold starts are not mistaken for broken software.
 
 ## Visual direction
 
@@ -127,7 +127,7 @@ npm run verify:export
 npm run audit
 ```
 
-`verify:export` checks the exported homepage, branded 404, résumé, case studies, crawler files, canonical-host contract, project assets, social-preview fallbacks, manifest theme consistency, internal links, identity markers, downloadable résumé PDF, and hosting header/cache rules.
+`verify:export` checks the exported homepage, branded 404, résumé, case studies, crawler files, canonical-host contract, project assets, social-preview fallbacks, manifest theme consistency, internal links, identity markers, downloadable résumé PDF, hosting header/cache rules, and guards against stale legacy production hostnames.
 
 GitHub Actions runs the complete quality gate on pushes and pull requests and provides the final CI proof for `main`. Project/profile metadata is centralized in `app/portfolio-data.ts` so homepage cards, case studies, résumé links, sitemap routes, and structured data cannot silently drift apart.
 
