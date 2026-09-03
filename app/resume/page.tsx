@@ -6,7 +6,7 @@ import styles from "./resume.module.css";
 export const metadata: Metadata = {
   title: "Résumé — Abdulrahman Hajar | Software Engineer",
   description:
-    "Recruiter-ready résumé for Abdulrahman Hajar: Software Engineer focused on full-stack products and backend systems, and Computer Engineering student in Istanbul.",
+    "Recruiter-ready résumé for Abdulrahman Hajar: Software Engineer, Full-Stack Developer, and builder of AI & interactive systems; Computer Engineering student in Istanbul.",
   alternates: { canonical: "/resume/" },
 };
 
@@ -33,14 +33,14 @@ export default function ResumePage() {
 
       <section className={styles.hero}>
         <div>
-          <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK & BACKEND SYSTEMS · AI</p>
+          <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK DEVELOPER · AI & INTERACTIVE SYSTEMS</p>
           <h1>Abdulrahman Hajar</h1>
           <p className={styles.lede}>
-            Software engineer and Computer Engineering student building complete production software systems across frontend, backend, APIs, data, asynchronous workflows, testing, security, reliability, and deployment.
+            Software engineer and Computer Engineering student building complete production software systems across frontend, backend, APIs, data, asynchronous workflows, testing, security, reliability, AI integrations, interactive systems, and deployment.
           </p>
         </div>
         <aside className={styles.snapshot} aria-label="Professional snapshot">
-          <div><span>Role</span><strong>Software Engineer · Full-Stack & Backend Systems</strong></div>
+          <div><span>Role</span><strong>Software Engineer · Full-Stack Developer · AI & Interactive Systems</strong></div>
           <div><span>Education</span><strong>Computer Engineering · Nişantaşı University</strong></div>
           <div><span>Location</span><strong>Istanbul, Türkiye</strong></div>
           <div><span>GitHub</span><a href={PROFILE_LINKS.github} target="_blank" rel="noreferrer">github.com/rahman-997 ↗</a></div>
@@ -52,7 +52,7 @@ export default function ResumePage() {
         <section className={styles.section}>
           <div className={styles.sectionLabel}><span>01</span><h2>Profile</h2></div>
           <p className={styles.profile}>
-            Product-minded engineer with hands-on work across TypeScript interfaces, backend APIs, relational and document data, caching, queues, authentication, validation, automated tests, runtime health, security checks, CI/CD, and production deployment. I focus on clear boundaries, reliable failure handling, maintainable systems, and evidence-backed delivery.
+            Product-minded engineer with hands-on work across TypeScript interfaces, backend APIs, relational and document data, caching, queues, authentication, validation, automated tests, runtime health, security checks, CI/CD, AI/LLM integrations, interactive systems, and production deployment. I focus on clear boundaries, reliable failure handling, maintainable systems, and evidence-backed delivery.
           </p>
         </section>
 
@@ -83,7 +83,7 @@ export default function ResumePage() {
       </div>
 
       <footer className={styles.footer}>
-        <p>Abdulrahman Hajar · Software Engineer · Full-Stack & Backend Systems · Istanbul, Türkiye</p>
+        <p>Abdulrahman Hajar · Software Engineer · Full-Stack Developer · AI & Interactive Systems · Istanbul, Türkiye</p>
         <Link href="/">Back to portfolio ↑</Link>
       </footer>
     </main>
