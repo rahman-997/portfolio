@@ -2,7 +2,7 @@
 
 [![Portfolio CI](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml)
 
-A recruiter-facing engineering portfolio for **Abdulrahman Hajar** — **Software Engineer focused on Full-Stack & Backend Systems**, and Computer Engineering student at Nişantaşı University in Istanbul, Türkiye.
+A recruiter-facing engineering portfolio for **Abdulrahman Hajar** — **Software Engineer · Full-Stack Developer · AI & Interactive Systems**, and Computer Engineering student at Nişantaşı University in Istanbul, Türkiye.
 
 The portfolio is built around **engineering evidence, not a generic skills wall**: complete products, backend architecture, API design, data systems, background work, validation, testing, security, reliability, deployment, AI integrations, and selected interactive engineering.
 
@@ -25,7 +25,7 @@ The portfolio presents the engineering layers demonstrated by the selected work:
 2. **Backend systems & APIs** — Node.js, Express, REST, validation, authentication, authorization, contracts, and layered service boundaries.
 3. **Data & reliability** — PostgreSQL, Prisma, MongoDB, Redis, queues, background workers, health/readiness, metrics, concurrency, transactions, compensation, and failure handling.
 4. **Delivery** — testing, security checks, CI/CD, static export verification, runtime/container pinning, production deployment, and operational evidence.
-5. **Extended engineering toolkit** — GraphQL, WebSockets, gRPC, OpenAPI, Docker, AI/LLM/MCP, FastAPI, and Flutter.
+5. **AI & interactive systems** — AI/LLM/MCP integrations, GraphQL, WebSockets, gRPC, OpenAPI, FastAPI, Flutter, and interactive product engineering.
 
 ## Selected systems
 
@@ -52,7 +52,7 @@ The active design uses a restrained dark engineering identity rather than a gene
 
 ## Recruiter-facing content
 
-- clear **Software Engineer · Full-Stack & Backend Systems** positioning
+- clear **Software Engineer · Full-Stack Developer · AI & Interactive Systems** positioning
 - selected projects with architecture and reliability evidence
 - engineering capability map
 - Computer Engineering education
@@ -143,7 +143,7 @@ The portfolio includes canonical metadata, Open Graph/Twitter previews, sitemap 
 
 ## Author
 
-Designed and developed by **[Abdulrahman Hajar](https://github.com/rahman-997)** — Software Engineer focused on **Full-Stack & Backend Systems** in Istanbul, Türkiye.
+Designed and developed by **[Abdulrahman Hajar](https://github.com/rahman-997)** — **Software Engineer · Full-Stack Developer · AI & Interactive Systems** in Istanbul, Türkiye.
 
 ## License
 
