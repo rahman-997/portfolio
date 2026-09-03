@@ -100,6 +100,46 @@ if (pdf.length < 4000) {
   process.exit(1);
 }
 
+const netlifyConfig = readFileSync(join(root, "netlify.toml"), "utf8");
+
+function headerBlock(route) {
+  const escapedRoute = route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = netlifyConfig.match(new RegExp(`\\[\\[headers\\]\\]\\s*\\n\\s*for = "${escapedRoute}"([\\s\\S]*?)(?=\\n\\[\\[headers\\]\\]|$)`));
+  if (!match) throw new Error(`Netlify config is missing required header block: ${route}`);
+  return match[1];
+}
+
+const globalHeaders = headerBlock("/*");
+for (const requiredHeader of [
+  'X-Content-Type-Options = "nosniff"',
+  'X-Frame-Options = "DENY"',
+  'Cross-Origin-Opener-Policy = "same-origin"',
+  'Cross-Origin-Resource-Policy = "same-origin"',
+  'Strict-Transport-Security = "max-age=31536000; includeSubDomains"',
+]) {
+  if (!globalHeaders.includes(requiredHeader)) {
+    throw new Error(`Netlify global security headers are missing: ${requiredHeader}`);
+  }
+}
+
+const nextStaticHeaders = headerBlock("/_next/static/*");
+if (!nextStaticHeaders.includes('Cache-Control = "public, max-age=31536000, immutable"')) {
+  throw new Error("Content-hashed Next.js assets must remain immutable-cached");
+}
+
+const projectAssetHeaders = headerBlock("/projects/*");
+if (projectAssetHeaders.includes("immutable")) {
+  throw new Error("Stable-name portfolio project assets must remain refreshable across deployments");
+}
+if (!projectAssetHeaders.includes("max-age=3600")) {
+  throw new Error("Portfolio project asset cache policy must stay bounded to a one-hour fresh window");
+}
+
+const manifestHeaders = headerBlock("/manifest.webmanifest");
+if (!manifestHeaders.includes("max-age=0") || !manifestHeaders.includes("must-revalidate")) {
+  throw new Error("PWA manifest must revalidate across portfolio deployments");
+}
+
 console.log(
-  `Export verification passed: ${requiredPaths.length} required outputs, public-identity scan, internal-link checks, and résumé PDF sanity checks.`,
+  `Export verification passed: ${requiredPaths.length} required outputs, public-identity scan, internal-link checks, résumé PDF sanity checks, and Netlify header/cache contract.`,
 );
