@@ -1,5 +1,5 @@
 export const SITE_URL = "https://abdulrahman-hajar-portfolio.onrender.com";
-export const PORTFOLIO_UPDATED_AT = "2026-09-03T12:15:00.000Z";
+export const PORTFOLIO_UPDATED_AT = "2026-09-03T14:12:35.000Z";
 export const THEME_COLOR = "#07100f";
 
 export const PROFILE_LINKS = {
@@ -152,9 +152,9 @@ export const PROJECTS = {
       "Installable experience",
       "Reduced-motion support",
       "Responsive workout flows",
-      "Static Netlify delivery",
+      "Static Render delivery",
     ],
-    live: "https://fitflow-gym-online.netlify.app",
+    live: "https://fitflow-gym.onrender.com",
     runtime: null,
     source: "https://github.com/rahman-997/fitflow-gym",
     cover: "/projects/fitflow-cover.svg",
