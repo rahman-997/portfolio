@@ -101,12 +101,18 @@ if (pdf.length < 4000) {
 }
 
 const netlifyConfig = readFileSync(join(root, "netlify.toml"), "utf8");
+const netlifyHeaderBlocks = netlifyConfig
+  .split("\n[[headers]]")
+  .slice(1)
+  .map((block) => `[[headers]]${block}`);
 
 function headerBlock(route) {
-  const escapedRoute = route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const match = netlifyConfig.match(new RegExp(`\\[\\[headers\\]\\]\\s*\\n\\s*for = "${escapedRoute}"([\\s\\S]*?)(?=\\n\\[\\[headers\\]\\]|$)`));
-  if (!match) throw new Error(`Netlify config is missing required header block: ${route}`);
-  return match[1];
+  const marker = `for = "${route}"`;
+  const block = netlifyHeaderBlocks.find((section) =>
+    section.split("\n").some((line) => line.trim() === marker),
+  );
+  if (!block) throw new Error(`Netlify config is missing required header block: ${route}`);
+  return block;
 }
 
 const globalHeaders = headerBlock("/*");
