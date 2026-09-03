@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { THEME_COLOR } from "./portfolio-data";
 
 export const dynamic = "force-static";
 
@@ -11,8 +12,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     scope: "/",
     display: "standalone",
-    background_color: "#07111f",
-    theme_color: "#07111f",
+    background_color: THEME_COLOR,
+    theme_color: THEME_COLOR,
     orientation: "any",
     categories: ["developer", "portfolio", "technology"],
     icons: [

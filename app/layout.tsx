@@ -1,23 +1,28 @@
 import type { Metadata, Viewport } from "next";
+import {
+  PORTFOLIO_UPDATED_AT,
+  PROFILE_LINKS,
+  PROJECT_LIST,
+  SITE_URL,
+  THEME_COLOR,
+} from "./portfolio-data";
 import "./globals.css";
-
-const siteUrl = "https://abdulrahman-hajar-portfolio.onrender.com";
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#07100f",
+  themeColor: THEME_COLOR,
   colorScheme: "dark",
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   applicationName: "Abdulrahman Hajar — Software Engineering Portfolio",
   title: "Abdulrahman Hajar — Software Engineer | Full-Stack & Backend Systems",
   description:
     "Software engineering portfolio of Abdulrahman Hajar: full-stack products, backend systems, APIs, databases, asynchronous workflows, testing, security, reliability, deployment, and AI integrations.",
-  authors: [{ name: "Abdulrahman Hajar", url: "https://github.com/rahman-997" }],
+  authors: [{ name: "Abdulrahman Hajar", url: SITE_URL }],
   creator: "Abdulrahman Hajar",
   publisher: "Abdulrahman Hajar",
   category: "technology",
@@ -94,16 +99,16 @@ export const metadata: Metadata = {
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  "@id": `${siteUrl}/#person`,
+  "@id": `${SITE_URL}/#person`,
   name: "Abdulrahman Hajar",
-  url: siteUrl,
-  image: `${siteUrl}/opengraph-image`,
+  url: SITE_URL,
+  image: `${SITE_URL}/opengraph-image`,
   jobTitle: "Software Engineer — Full-Stack & Backend Systems",
   description:
     "Software Engineer and Computer Engineering student focused on full-stack products, backend systems, APIs, databases, reliability, AI integrations, and production delivery.",
   sameAs: [
-    "https://github.com/rahman-997",
-    "https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/",
+    PROFILE_LINKS.github,
+    PROFILE_LINKS.linkedin,
   ],
   affiliation: {
     "@type": "CollegeOrUniversity",
@@ -150,40 +155,43 @@ const personJsonLd = {
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "@id": `${siteUrl}/#website`,
-  url: siteUrl,
+  "@id": `${SITE_URL}/#website`,
+  url: SITE_URL,
   name: "Abdulrahman Hajar — Software Engineering Portfolio",
   description: "Selected software engineering work, case studies, technical capabilities, and résumé for Abdulrahman Hajar.",
-  author: { "@id": `${siteUrl}/#person` },
+  author: { "@id": `${SITE_URL}/#person` },
+  dateModified: PORTFOLIO_UPDATED_AT,
   inLanguage: "en",
 };
 
 const profilePageJsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
-  "@id": `${siteUrl}/#profile-page`,
-  url: siteUrl,
+  "@id": `${SITE_URL}/#profile-page`,
+  url: SITE_URL,
   name: "Abdulrahman Hajar — Software Engineering Portfolio",
-  mainEntity: { "@id": `${siteUrl}/#person` },
-  isPartOf: { "@id": `${siteUrl}/#website` },
+  mainEntity: { "@id": `${SITE_URL}/#person` },
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  dateModified: PORTFOLIO_UPDATED_AT,
   inLanguage: "en",
 };
 
 const selectedWorkJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  "@id": `${siteUrl}/#selected-work`,
+  "@id": `${SITE_URL}/#selected-work`,
   name: "Selected software engineering projects",
-  itemListElement: [
-    ["Eventify", "/work/eventify/"],
-    ["BookHaven", "/work/bookhaven/"],
-    ["FitFlow", "/work/fitflow/"],
-    ["Venues API", "/work/venues-api/"],
-  ].map(([name, path], index) => ({
+  itemListElement: PROJECT_LIST.map((project, index) => ({
     "@type": "ListItem",
     position: index + 1,
-    name,
-    url: `${siteUrl}${path}`,
+    item: {
+      "@type": "SoftwareSourceCode",
+      name: project.name,
+      description: project.summary,
+      codeRepository: project.source,
+      programmingLanguage: project.languages,
+      url: `${SITE_URL}/work/${project.slug}/`,
+    },
   })),
 };
 

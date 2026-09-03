@@ -34,7 +34,7 @@ The portfolio presents the engineering layers demonstrated by the selected work:
 | **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, durable background work, health/readiness, metrics, CI/security |
 | **BookHaven** | Full-stack commerce | Next.js + Express + MongoDB, HttpOnly BFF sessions, optimistic concurrency, conditional inventory, adaptive transactions with compensation fallback, paginated catalog/reviews/orders, admin operations, ISBN validation, dynamic SEO, Node 24.20.0 pinning, digest-pinned Node/Mongo containers, Compose validation, Dependabot supply-chain coverage |
 | **FitFlow** | Installable fitness PWA | Personalized plans, guided intervals, local-first progress, accessibility, responsive UX, offline readiness |
-| **Venues API** | Focused backend service | Express 5, TypeScript, Zod 4, layered architecture, centralized errors, UUID resources, persistence, tests |
+| **Venues API** | Focused backend service | Express 5, TypeScript, Zod 4, layered architecture, centralized errors, UUID resources, persistence, contract tests, live health proof |
 
 Every featured project links to **live proof, source code, and an engineering case study**. Render-hosted demos explicitly disclose free-tier wake-up behavior so cold starts are not mistaken for broken software.
 
@@ -79,6 +79,7 @@ CSS Modules · Responsive CSS · Accessibility
 
 ```text
 app/
+  portfolio-data.ts                 canonical profile + project data source
   layout.tsx                         metadata, JSON-LD, application shell
   manifest.ts                       web app metadata
   page.tsx                           engineering portfolio homepage
@@ -126,9 +127,9 @@ npm run verify:export
 npm run audit
 ```
 
-`verify:export` checks the exported homepage, branded 404, résumé, case studies, crawler files, manifest, social-preview output, links, identity markers, and downloadable résumé PDF.
+`verify:export` checks the exported homepage, branded 404, résumé, case studies, crawler files, canonical-host contract, project assets, social-preview fallbacks, manifest theme consistency, internal links, identity markers, downloadable résumé PDF, and hosting header/cache rules.
 
-GitHub Actions runs the complete quality gate on pushes and pull requests and provides the final CI proof for `main`.
+GitHub Actions runs the complete quality gate on pushes and pull requests and provides the final CI proof for `main`. Project/profile metadata is centralized in `app/portfolio-data.ts` so homepage cards, case studies, résumé links, sitemap routes, and structured data cannot silently drift apart.
 
 ## Deployment
 
