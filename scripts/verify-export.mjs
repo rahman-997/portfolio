@@ -219,7 +219,7 @@ if (!projectAssetHeaders.includes("max-age=3600")) {
 
 const manifestHeaders = headerBlock("/manifest.webmanifest");
 if (!manifestHeaders.includes("max-age=0") || !manifestHeaders.includes("must-revalidate")) {
-  throw new Error,"PWA manifest must revalidate across portfolio deployments");
+  throw new Error("PWA manifest must revalidate across portfolio deployments");
 }
 
 const renderConfig = readFileSync(join(root, "render.yaml"), "utf8");
