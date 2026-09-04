@@ -13,7 +13,8 @@
     "lint": "eslint . --ignore-pattern .next --ignore-pattern out",
     "typecheck": "tsc --noEmit",
     "verify:export": "node scripts/verify-export.mjs && node scripts/verify-resume-seo.mjs",
-    "audit": "npm audit --audit-level=high"
+    "audit": "npm audit --audit-level=high",
+    "verify:production": "node scripts/verify-production.mjs"
   },
   "dependencies": {
     "next": "16.3.3",

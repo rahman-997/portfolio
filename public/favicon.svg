@@ -1,7 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AH">
-  <rect width="64" height="64" rx="15" fill="#F3F0E8"/>
-  <circle cx="53" cy="11" r="8" fill="#FF5B36"/>
-  <path d="M8 45 19.2 19h6.5L37 45h-6.4l-2.1-5.5H18.1L15.8 45H8Zm12.2-10.7h6.3l-3.1-8.4-3.2 8.4Z" fill="#111214"/>
-  <path d="M37 19h5.8v9.4h9.1V19h5.8v26h-5.8V34h-9.1v11H37V19Z" fill="#3154FF"/>
-  <rect x="5" y="53" width="54" height="5" rx="2.5" fill="#D8FF43"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Abdulrahman Hajar AH mark">
+  <defs>
+    <linearGradient id="bg" x1="6" y1="4" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10231d"/>
+      <stop offset="1" stop-color="#07100f"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="11" y1="50" x2="55" y2="12" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A8FFBE"/>
+      <stop offset="1" stop-color="#78DFFF"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#bg)" stroke="#2A4038" stroke-width="2"/>
+  <circle cx="51" cy="13" r="5" fill="#A8FFBE" opacity=".92"/>
+  <path d="M10 45 21.2 18h6.5L39 45h-6.3l-2.2-5.8H18.2L15.8 45H10Zm10.3-11.1h8.1l-4-10.7-4.1 10.7Z" fill="#F3F7F4"/>
+  <path d="M37 18h6v9.8h9V18h6v27h-6V33.5h-9V45h-6V18Z" fill="url(#accent)"/>
+  <rect x="10" y="51" width="44" height="3" rx="1.5" fill="url(#accent)" opacity=".95"/>
 </svg>

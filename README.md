@@ -131,6 +131,16 @@ npm run audit
 
 GitHub Actions runs the complete quality gate on pushes and pull requests and provides the final CI proof for `main`. Project/profile metadata is centralized in `app/portfolio-data.ts` so homepage cards, case studies, résumé links, sitemap routes, and structured data cannot silently drift apart.
 
+## Production integrity
+
+The portfolio treats deployment as a verifiable artifact, not just a successful build:
+
+- `render.yaml` documents the primary Render static-site contract, including security and cache headers.
+- `netlify.toml` remains the equivalent fallback-host contract.
+- generated HTML exposes the non-secret Git commit SHA as `data-deploy-commit`, allowing CI to prove which revision is actually live.
+- `.github/workflows/production-smoke.yml` verifies the production site after successful `main` CI and once daily.
+- the PWA identity includes SVG, 192 px, 512 px, maskable, and Apple touch icons.
+
 ## Deployment
 
 The project uses a portable static Next.js export. `netlify.toml` remains available for Netlify, while the active public mirror is deployed from `main` as a Render Static Site publishing `out/`.
