@@ -14,7 +14,7 @@
     "lint": "eslint . --ignore-pattern .next --ignore-pattern out",
     "typecheck": "tsc --noEmit",
     "verify:export": "node scripts/verify-export.mjs && node scripts/verify-toolchain.mjs && node scripts/verify-resume-seo.mjs",
-    "audit": "npm audit --audit-level=high",
+    "audit": "node scripts/audit-dependencies.mjs",
     "verify:production": "node scripts/verify-production.mjs"
   },
   "dependencies": {
