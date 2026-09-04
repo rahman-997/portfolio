@@ -47,7 +47,12 @@ jobs:
         run: npm run verify:export
 
       - name: Dependency audit
-        run: npm run audit
+        run: |
+          npm run audit || {
+            echo "Initial dependency audit failed; retrying once in case the npm registry is transiently unavailable."
+            sleep 20
+            npm run audit
+          }
 
       - name: Upload deployable source
         if: github.ref == 'refs/heads/main'
