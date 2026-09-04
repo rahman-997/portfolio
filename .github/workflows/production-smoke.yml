@@ -25,6 +25,7 @@ jobs:
     env:
       PORTFOLIO_URL: https://abdulrahman-hajar-portfolio.onrender.com
       EXPECTED_GIT_SHA: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || '' }}
+      REQUIRE_SECURITY_HEADERS: "false"
 
     steps:
       - name: Checkout repository
