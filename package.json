@@ -4,7 +4,7 @@
   "description": "Software engineering portfolio for Abdulrahman Hajar showcasing full-stack systems, backend architecture, reliability, and production delivery.",
   "private": true,
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=22.13.0 <23"
   },
   "scripts": {
     "dev": "next dev",
