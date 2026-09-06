@@ -1,0 +1,72 @@
+name: Netlify Production Deploy
+
+on:
+  workflow_run:
+    workflows: ["Portfolio CI"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: netlify-production
+  cancel-in-progress: true
+
+env:
+  NETLIFY_SITE_ID: 0ff3c9c1-3912-4b49-b182-fd38194dd02e
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN || secrets.NETLIFY_TOKEN || secrets.NETLIFY_ACCESS_TOKEN }}
+
+jobs:
+  deploy:
+    name: Deploy verified build to Netlify
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Validate Netlify credentials
+        shell: bash
+        run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ]; then
+            echo "::error::No Netlify token secret found. Add NETLIFY_AUTH_TOKEN (preferred), NETLIFY_TOKEN, or NETLIFY_ACCESS_TOKEN to this repository."
+            exit 1
+          fi
+
+      - name: Download verified CI artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: portfolio-deploy-source-${{ github.event.workflow_run.head_sha }}
+          path: .
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify deploy payload
+        shell: bash
+        run: |
+          test -f out/index.html
+          test -f netlify.toml
+          echo "Deploying commit ${{ github.event.workflow_run.head_sha }}"
+
+      - name: Deploy production
+        shell: bash
+        env:
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          npm exec --yes --package=netlify-cli@27.5.0 -- \
+            netlify deploy \
+              --dir=out \
+              --prod \
+              --site="$NETLIFY_SITE_ID" \
+              --auth="$NETLIFY_AUTH_TOKEN" \
+              --message="GitHub ${HEAD_SHA}"
+
+      - name: Record deployment
+        shell: bash
+        run: |
+          {
+            echo "### Netlify production deploy"
+            echo "- Commit: \`${{ github.event.workflow_run.head_sha }}\`"
+            echo "- Site: https://abdulrahman-hajar-dev.netlify.app/"
+          } >> "$GITHUB_STEP_SUMMARY"
