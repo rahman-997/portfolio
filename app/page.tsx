@@ -69,7 +69,7 @@ export default function Home() {
 
         <nav className={styles.nav} aria-label="Primary navigation">
           <a href="#work">Work</a>
-          <a href="#systems">Systems</a>
+          <Link href="/services/">Services</Link>
           <a href="#about">About</a>
           <Link href="/resume/">Résumé</Link>
         </nav>
