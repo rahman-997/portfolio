@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PROFILE_LINKS, PROJECT_LIST } from "./portfolio-data";
 import styles from "./home.module.css";
+import AIAtlas from "./ai-atlas";
 
 const Arrow = ({ size = 18 }: { size?: number }) => (
   <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none">
@@ -69,6 +70,7 @@ export default function Home() {
 
         <nav className={styles.nav} aria-label="Primary navigation">
           <a href="#work">Work</a>
+          <a href="#ai-lab">AI Lab</a>
           <a href="#systems">Systems</a>
           <a href="#about">About</a>
           <Link href="/resume/">Résumé</Link>
@@ -126,6 +128,8 @@ export default function Home() {
           <span>Architecture case studies</span>
           <span>Recruiter-ready résumé</span>
         </section>
+
+        <AIAtlas />
 
         <section className={styles.work} id="work">
           <div className={styles.sectionIntro}>
