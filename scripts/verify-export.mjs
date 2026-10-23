@@ -105,6 +105,19 @@ if (!homeHtml.includes(`<link rel="canonical" href="${canonicalHost}/"`)) {
   throw new Error("Homepage canonical URL must use the primary Render portfolio hostname");
 }
 
+// Guard against accidentally dropping the interactive atlas from the homepage.
+for (const marker of [
+  'id="ai-lab"',
+  "AH / SYSTEMS ATLAS",
+  "DISCIPLINE INSPECTOR",
+  "Explore Interface",
+  "Neural portrait",
+]) {
+  if (!homeHtml.includes(marker)) {
+    throw new Error("Interactive systems atlas is missing from the static homepage: " + marker);
+  }
+}
+
 const robotsText = readFileSync(join(outDir, "robots.txt"), "utf8");
 for (const expected of [
   `Host: ${canonicalHost}`,
