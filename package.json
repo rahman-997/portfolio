@@ -9,7 +9,7 @@
   "packageManager": "npm@11.19.1",
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "next build --webpack && node scripts/localize-static-html.mjs",
     "start": "next start",
     "lint": "eslint . --ignore-pattern .next --ignore-pattern out",
     "typecheck": "tsc --noEmit",
