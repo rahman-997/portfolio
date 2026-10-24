@@ -96,6 +96,7 @@ export default function Home() {
             <div className={styles.heroActions}>
               <a className={styles.primaryAction} href="#work">Explore selected work <Arrow /></a>
               <Link className={styles.secondaryAction} href="/resume/">View résumé</Link>
+              <a className={styles.secondaryAction} href="#ai-lab">Explore AI Lab <Arrow size={16} /></a>
             </div>
           </div>
 
