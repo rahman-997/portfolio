@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PROFILE_LINKS, PROJECT_LIST } from "./portfolio-data";
 import HoloInterface from "./components/HoloInterface";
+import LanguageLinks from "./components/LanguageLinks";
 import styles from "./home.module.css";
 
 const Arrow = ({ size = 18 }: { size?: number }) => (
@@ -75,9 +76,12 @@ export default function Home() {
           <Link href="/resume/">Résumé</Link>
         </nav>
 
-        <a className={styles.headerAction} href={PROFILE_LINKS.github} target="_blank" rel="noreferrer">
-          GitHub <Arrow size={14} />
-        </a>
+        <div className={styles.headerUtility}>
+          <LanguageLinks locale="en"/>
+          <a className={styles.headerAction} href={PROFILE_LINKS.github} target="_blank" rel="noreferrer">
+            GitHub <Arrow size={14} />
+          </a>
+        </div>
       </header>
 
       <main id="main">

@@ -23,3 +23,7 @@
 .projectVisualLegend>div{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
 .projectVisualLegend em{font-style:normal;border:1px solid rgba(132,230,189,.3);border-radius:6px;padding:7px 9px;font-size:.58rem;letter-spacing:.04em;color:#c5f4e0;background:rgba(5,32,29,.54)}
 @media(max-width:760px){.projectVisualLegend{padding:20px}.projectVisualLegend>strong{font-size:2.65rem}.projectVisualLegend em{font-size:.54rem}}
+
+/* Portfolio V3 responsive language navigation */
+.headerUtility{justify-self:end;display:flex;align-items:center;gap:9px;min-width:0}
+@media(max-width:760px){.headerUtility .headerAction{display:none}.headerUtility{gap:4px}}

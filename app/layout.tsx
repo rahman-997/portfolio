@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     "Flutter",
     "Istanbul Software Engineer",
   ],
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", languages: { en: "/", ar: "/ar/", tr: "/tr/" } },
   openGraph: {
     title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
     description:

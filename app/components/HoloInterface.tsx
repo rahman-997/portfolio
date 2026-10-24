@@ -18,7 +18,13 @@ function getMotionPreference() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 /** GPU scene with real XYZ points, perspective and depth. No camera permissions. */
-export default function HoloInterface() {
+const texts = {
+ en:{neural:"NEURAL",systems:"SYSTEMS",signal:"SIGNAL",reset:"Reset 3D view",pulse:"Pulse visual effect",pause:"Pause 3D motion",play:"Play 3D motion",fallback:"Static portrait · 3D graphics unavailable on this device",scene:"Interactive 3D engineering visualization",readout:"Human × Machine"},
+ ar:{neural:"عصبي",systems:"أنظمة",signal:"إشارة",reset:"إعادة عرض المجسّم",pulse:"تأثير ضوئي",pause:"إيقاف حركة المجسّم",play:"تشغيل حركة المجسّم",fallback:"عرض ثابت · الرسوم ثلاثية الأبعاد غير مدعومة على هذا الجهاز",scene:"عرض هندسي ثلاثي الأبعاد تفاعلي",readout:"الإنسان × التقنية"},
+ tr:{neural:"SİNİR AĞI",systems:"SİSTEM",signal:"SİNYAL",reset:"3B görünümü sıfırla",pulse:"Işık efekti",pause:"3B hareketi durdur",play:"3B hareketi başlat",fallback:"Sabit görsel · Bu cihazda 3B desteklenmiyor",scene:"Etkileşimli 3B mühendislik görselleştirmesi",readout:"İnsan × Teknoloji"}
+} as const;
+export default function HoloInterface({ locale="en" }:{locale?:"en"|"ar"|"tr"}) {
+  const word=texts[locale];
   const canvas = useRef<HTMLCanvasElement>(null);
   const scene = useRef<HoloController | null>(null);
   const [mode, setMode] = useState<HoloMode>("neural");
@@ -43,7 +49,7 @@ export default function HoloInterface() {
     scene.current?.setPaused(!playing);
   }, [playing]);
   return (
-    <div className={styles.shell} aria-label="Interactive 3D engineering visualization">
+    <div className={styles.shell} aria-label={word.scene}>
       <div className={styles.glow} aria-hidden="true" />
       <div className={styles.top}>
         <span className={styles.identity}><i aria-hidden="true" /> AH / INTERACTIVE LAB</span>
@@ -51,11 +57,11 @@ export default function HoloInterface() {
       </div>
       <div className={styles.stage}>
         <canvas ref={canvas} className={styles.canvas} tabIndex={fallback ? -1 : 0} role="img"
-          aria-label={fallback ? "Static point-cloud portrait. Interactive 3D is unavailable on this device." : "3D point-cloud sculpture. Drag to rotate, scroll to zoom, arrow keys rotate and Home resets."} />
+          aria-label={fallback ? word.fallback : word.scene} />
         <div className={styles.reticle} aria-hidden="true" />
         <div className={styles.readout} aria-hidden="true">
           <span>SYS.02 / DEPTH FIELD</span>
-          <strong>Human × Machine</strong>
+          <strong>{word.readout}</strong>
           <small>22K XYZ POINTS · LIVE SHADER</small>
         </div>
         <div className={styles.side} aria-hidden="true">
@@ -66,7 +72,7 @@ export default function HoloInterface() {
         <div className={styles.hint} aria-hidden="true">DRAG · ZOOM · ARROWS <span>◈</span></div>
       </div>
       {fallback ? (
-        <div className={styles.controls} role="status"><p className={styles.fallbackNote}>Static portrait · 3D graphics unavailable on this device</p></div>
+        <div className={styles.controls} role="status"><p className={styles.fallbackNote}>{word.fallback}</p></div>
       ) : (
       <div className={styles.controls}>
         <div className={styles.modes} role="group" aria-label="3D scene modes">
@@ -75,15 +81,15 @@ export default function HoloInterface() {
               className={mode === item.id ? styles.active : styles.mode}
               aria-pressed={mode === item.id}
               onClick={() => { setMode(item.id); scene.current?.setMode(item.id); }}>
-              {item.name}
+              {word[item.id]}
             </button>
           ))}
         </div>
         <div className={styles.actions}>
-          <button type="button" title="Reset 3D view" aria-label="Reset 3D view" onClick={() => scene.current?.resetView()}>↺<span>RESET</span></button>
-          <button type="button" title="Pulse visual effect" aria-label="Pulse visual effect" onClick={() => scene.current?.pulse()}>◎<span>PULSE</span></button>
-          <button type="button" title={playing ? "Pause 3D motion" : "Play 3D motion"} aria-pressed={!playing}
-            aria-label={playing ? "Pause 3D motion" : "Play 3D motion"}
+          <button type="button" title={word.reset} aria-label={word.reset} onClick={() => scene.current?.resetView()}>↺<span>RESET</span></button>
+          <button type="button" title={word.pulse} aria-label={word.pulse} onClick={() => scene.current?.pulse()}>◎<span>PULSE</span></button>
+          <button type="button" title={playing ? word.pause : word.play} aria-pressed={!playing}
+            aria-label={playing ? word.pause : word.play}
             onClick={() => setMotionOverride(!playing)}>
             {playing ? "Ⅱ" : "▷"}<span>{playing ? "PAUSE" : "PLAY"}</span>
           </button>

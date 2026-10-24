@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import LanguageLinks from "../components/LanguageLinks";
 import { PROFILE_LINKS, PROJECT_LIST } from "../portfolio-data";
 import styles from "./resume.module.css";
 
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
   title: "Résumé — Abdulrahman Hajar | Software Engineer",
   description:
     "Recruiter-ready résumé for Abdulrahman Hajar: Software Engineer, Full-Stack Developer, and builder of AI & interactive systems; Computer Engineering student in Istanbul.",
-  alternates: { canonical: "/resume/" },
+  alternates: { canonical: "/resume/", languages: { en: "/resume/", ar: "/ar/resume/", tr: "/tr/resume/" } },
 };
 
 const skills = [
@@ -28,6 +29,7 @@ export default function ResumePage() {
           <Link href="/#work">Selected work</Link>
           <a href="/resume.html" target="_blank" rel="noreferrer">Print view ↗</a>
           <a href="/Abdulrahman-Hajar-Resume.pdf" download>Download PDF ↓</a>
+          <LanguageLinks locale="en" page="resume"/>
         </div>
       </header>
 

@@ -49,6 +49,9 @@ jobs:
       - name: Verify static export, identity, links, and résumé PDF
         run: npm run verify:export
 
+      - name: Verify Arabic Turkish RTL static pages
+        run: node scripts/verify-i18n.mjs
+
       - name: Dependency audit (all severities, fail closed)
         run: npm run audit
 
