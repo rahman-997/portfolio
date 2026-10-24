@@ -10,7 +10,7 @@ on:
       - scripts/verify-holo-browser.mjs
       - scripts/verify-i18n-browser.mjs
       - app/i18n.ts
-      - app/[locale]/**
+      - 'app/**'
       - app/components/LanguageLinks.tsx
       - app/components/LanguageLinks.module.css
       - app/components/HoloInterface.tsx
