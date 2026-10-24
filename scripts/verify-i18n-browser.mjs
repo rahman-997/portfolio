@@ -55,6 +55,35 @@ for(const [locale,width,height] of cases){
  }catch(e){failures++;report.failure=String(e);try{await page.screenshot({path:folder+"/"+locale+"-"+width+"-FAILED.png",fullPage:false});}catch{}}
  finally{reports.push(report);await page.close();}
 }
+// Non-JavaScript verification: the document must be correctly localized in the
+// first HTML response, not after React hydration or a client effect.
+const staticContext=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:700},deviceScaleFactor:1});
+for(const locale of ["ar","tr"]){
+ for(const route of ["/","/resume/","/work/eventify/"]){
+  const page=await staticContext.newPage(),report={locale,route,mode:"javascript-disabled",tests:{}};
+  try{
+   const response=await page.goto(origin+"/"+locale+route,{waitUntil:"load",timeout:30000});
+   assert.equal(response?.status(),200,"localized route available without JavaScript");
+   const raw=await response.text();
+   const tag=raw.match(/<html\b[^>]*>/i)?.[0]??"";
+   assert.ok(tag.includes('lang="'+locale+'"'),"raw SSR root lang "+locale+route);
+   assert.ok(tag.includes('dir="'+(locale==="ar"?"rtl":"ltr")+'"'),"raw SSR root dir "+locale+route);
+   assert.equal(await page.locator("html").getAttribute("lang"),locale);
+   assert.equal(await page.locator("html").getAttribute("dir"),locale==="ar"?"rtl":"ltr");
+   assert.ok(await page.locator("h1").isVisible(),"SSR content visible without JavaScript");
+   assert.ok((await page.locator("h1").textContent())?.trim(),"SSR page has heading");
+   const dimensions=await page.evaluate(()=>({
+     viewport:document.documentElement.clientWidth,body:document.documentElement.scrollWidth
+   }));
+   assert.ok(dimensions.body<=dimensions.viewport+1,"No sideways scrolling without JavaScript on "+route);
+   report.tests.raw_html_before_javascript="pass";
+   report.tests.no_script_layout="pass";report.dimensions=dimensions;
+   if(route==="/")await page.screenshot({path:folder+"/"+locale+"-no-js-320.png",fullPage:false});
+  }catch(e){failures++;report.failure=String(e);}
+  finally{reports.push(report);await page.close();}
+ }
+}
+await staticContext.close();
 await browser.close();
 const result={status:failures?"failed":"passed",failures,reports};
 await writeFile(folder+"/report.json",JSON.stringify(result,null,2));
