@@ -22,6 +22,7 @@ export default function HoloInterface() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const scene = useRef<HoloController | null>(null);
   const [mode, setMode] = useState<HoloMode>("neural");
+  const [fallback, setFallback] = useState(false);
   const reducedMotion = useSyncExternalStore(subscribe, getMotionPreference, () => false);
   const [motionOverride, setMotionOverride] = useState<boolean | null>(null);
   const playing = motionOverride ?? !reducedMotion;
@@ -30,10 +31,12 @@ export default function HoloInterface() {
     try {
       const controller = createHolo3D(canvas.current);
       scene.current = controller;
+      setFallback(controller.kind === "static");
       return () => { controller.destroy(); scene.current = null; };
     } catch (error) {
       // Static styling and text stay visible if WebGL cannot initialize.
       console.warn("Holo3D unavailable:", error);
+      setFallback(true);
     }
   }, []);
   useEffect(() => {
@@ -44,11 +47,11 @@ export default function HoloInterface() {
       <div className={styles.glow} aria-hidden="true" />
       <div className={styles.top}>
         <span className={styles.identity}><i aria-hidden="true" /> AH / INTERACTIVE LAB</span>
-        <span>GPU RENDER <b>WEBGL2 · 3D</b></span>
+        <span>VISUAL MODE <b>{fallback ? "STATIC · 2D" : "WEBGL2 · 3D"}</b></span>
       </div>
       <div className={styles.stage}>
-        <canvas ref={canvas} className={styles.canvas} tabIndex={0}
-          aria-label="3D point-cloud sculpture. Drag to rotate, scroll to zoom, arrow keys rotate and Home resets." />
+        <canvas ref={canvas} className={styles.canvas} tabIndex={fallback ? -1 : 0} role="img"
+          aria-label={fallback ? "Static point-cloud portrait. Interactive 3D is unavailable on this device." : "3D point-cloud sculpture. Drag to rotate, scroll to zoom, arrow keys rotate and Home resets."} />
         <div className={styles.reticle} aria-hidden="true" />
         <div className={styles.readout} aria-hidden="true">
           <span>SYS.02 / DEPTH FIELD</span>
@@ -62,6 +65,9 @@ export default function HoloInterface() {
         </div>
         <div className={styles.hint} aria-hidden="true">DRAG · ZOOM · ARROWS <span>◈</span></div>
       </div>
+      {fallback ? (
+        <div className={styles.controls} role="status"><p className={styles.fallbackNote}>Static portrait · 3D graphics unavailable on this device</p></div>
+      ) : (
       <div className={styles.controls}>
         <div className={styles.modes} role="group" aria-label="3D scene modes">
           {modes.map(item => (
@@ -83,6 +89,7 @@ export default function HoloInterface() {
           </button>
         </div>
       </div>
+      )}
       <p className={styles.sr}>This artwork uses real three-dimensional GPU geometry. The mode buttons change its colors and motion. The pause button respects reduced motion preferences.</p>
     </div>
   );
