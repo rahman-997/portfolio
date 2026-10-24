@@ -1,0 +1,52 @@
+name: Temporary dependency security remediation
+
+on:
+  push:
+    branches:
+      - feature/interactive-hologram-v2
+    paths:
+      - .github/workflows/portfolio-security-remediation.yml
+
+permissions:
+  contents: read
+
+jobs:
+  patch-lockfile:
+    if: github.ref == 'refs/heads/feature/interactive-hologram-v2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout dedicated development branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: feature/interactive-hologram-v2
+      - name: Use pinned Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Use repo package manager
+        run: npm install --global npm@11.19.1
+      - name: Pin patched Next.js and compatible lint configuration
+        run: npm install --save-exact --ignore-scripts --no-audit --no-fund next@16.4.3 eslint-config-next@16.4.2
+      - name: Upgrade vulnerable transitive packages
+        run: npm audit fix --ignore-scripts --no-fund
+      - name: Confirm zero known vulnerabilities of all severities
+        run: npm audit --audit-level=low
+      - name: Verify reproducible clean install
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Commit only dependency manifests to the development branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo 'No changes needed'
+            exit 0
+          fi
+          git commit -m 'fix(security): update vulnerable npm dependency graph'
+          git push origin HEAD:refs/heads/feature/interactive-hologram-v2
