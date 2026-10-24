@@ -1,6 +1,7 @@
 /** AH Portfolio V2: GPU WebGL2 3D point-cloud sculpture. No third-party packages. */
 export type HoloMode = "neural" | "systems" | "signal";
 export type HoloController = {
+  kind: "webgl2" | "static";
   setMode: (mode: HoloMode) => void;
   setPaused: (paused: boolean) => void;
   pulse: () => void;
@@ -81,16 +82,26 @@ const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,n));
 export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
   const context=canvas.getContext("webgl2",{alpha:true,antialias:true,powerPreference:"low-power"});
   if(!context){
-    const context2d=canvas.getContext("2d");
-    if(context2d){
-      canvas.width=Math.max(1,canvas.clientWidth);canvas.height=Math.max(1,canvas.clientHeight);
-      context2d.strokeStyle="#44d7ff";context2d.lineWidth=2;
-      context2d.beginPath();context2d.ellipse(canvas.width/2,canvas.height*.37,canvas.width*.15,canvas.height*.20,0,0,Math.PI*2);
-      context2d.moveTo(canvas.width*.26,canvas.height*.88);
-      context2d.quadraticCurveTo(canvas.width*.5,canvas.height*.51,canvas.width*.74,canvas.height*.88);
-      context2d.stroke();
+    const ctx=canvas.getContext("2d");
+    if(ctx){
+      const ratio=Math.min(window.devicePixelRatio||1,1.4);
+      const width=Math.max(1,Math.round(canvas.clientWidth*ratio));
+      const height=Math.max(1,Math.round(canvas.clientHeight*ratio));
+      canvas.width=width;canvas.height=height;
+      const vertices=makeBust();
+      // One static perspective projection gives unsupported GPUs a useful artwork.
+      const yaw=-.17,cy=Math.cos(yaw),sy=Math.sin(yaw);
+      for(let i=0;i<vertices.length;i+=12){
+        const x=vertices[i],y=vertices[i+1],z=vertices[i+2];
+        const rx=cy*x+sy*z,rz=-sy*x+cy*z;
+        const factor=2.08/(4.15-rz);
+        const px=width/2+rx*factor*height/2;
+        const py=height/2-(y+.14)*factor*height/2;
+        ctx.fillStyle=x>0?"rgba(255,161,92,.7)":"rgba(63,214,255,.75)";
+        ctx.fillRect(px,py,Math.max(1,ratio),Math.max(1,ratio));
+      }
     }
-    return {setMode(){},setPaused(){},pulse(){},resetView(){},destroy(){}};
+    return {kind:"static",setMode(){},setPaused(){},pulse(){},resetView(){},destroy(){}};
   }
   const gl=context;
   const vs=compile(gl,gl.VERTEX_SHADER,vertex),fs=compile(gl,gl.FRAGMENT_SHADER,fragment);
@@ -108,12 +119,17 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
   gl.bindVertexArray(null);
   const uni=(name:string)=>gl.getUniformLocation(program,name);
   const loc={time:uni("uTime"),yaw:uni("uYaw"),pitch:uni("uPitch"),zoom:uni("uZoom"),mode:uni("uMode"),pulse:uni("uPulse"),aspect:uni("uAspect"),scale:uni("uScale")};
-  let yaw=-.17,pitch=.05,zoom=4.15,mode:HoloMode="neural",paused=false,visible=true,disposed=false,raf=0,elapsed=0,pulseAt=0,dragging=false,px=0,py=0,lastTime=performance.now();
+  const coarse=window.matchMedia("(pointer: coarse)").matches;
+  const minFrameTime=1000/(coarse?30:60);
+  let yaw=-.17,pitch=.05,zoom=4.15,mode:HoloMode="neural",paused=false,visible=true,disposed=false,raf=0,elapsed=0,pulseAt=0,dragging=false,px=0,py=0,lastTime=performance.now(),lastDraw=0;
   function render(now:number){
-    if(disposed)return;
-    if(!paused&&visible){elapsed+=Math.min(.05,(now-lastTime)/1000);yaw+=.00011*Math.min(50,now-lastTime);}
-    lastTime=now;
-    const ratio=Math.min(devicePixelRatio||1,1.75);
+    raf=0;
+    if(disposed||!visible||document.visibilityState==="hidden")return;
+    // Cap mobile GPU work at 30 FPS and a smaller raster without changing geometry.
+    if(now-lastDraw<minFrameTime){raf=requestAnimationFrame(render);return;}
+    if(!paused){elapsed+=Math.min(.05,(now-lastTime)/1000);yaw+=.00011*Math.min(50,now-lastTime);}
+    lastTime=now;lastDraw=now;
+    const ratio=Math.min(window.devicePixelRatio||1,coarse?1.4:1.75);
     const w=Math.max(1,Math.min(1800,Math.round(canvas.clientWidth*ratio))),h=Math.max(1,Math.min(1600,Math.round(canvas.clientHeight*ratio)));
     if(w!==canvas.width||h!==canvas.height){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h);}
     gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
@@ -126,7 +142,7 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
     gl.drawArrays(gl.POINTS,0,count);gl.bindVertexArray(null);
     if((!paused&&visible)||now-pulseAt<950)raf=requestAnimationFrame(render);else raf=0;
   }
-  function wake(){if(disposed)return;if(!raf){lastTime=performance.now();raf=requestAnimationFrame(render);}}
+  function wake(){if(disposed||!visible||document.visibilityState==="hidden")return;if(!raf){lastTime=performance.now();raf=requestAnimationFrame(render);}}
   function down(e:PointerEvent){dragging=true;px=e.clientX;py=e.clientY;canvas.setPointerCapture(e.pointerId);}
   function move(e:PointerEvent){if(!dragging)return;yaw+=(e.clientX-px)*.009;pitch=clamp(pitch+(e.clientY-py)*.006,-.55,.55);px=e.clientX;py=e.clientY;wake();}
   function up(){dragging=false;}
@@ -137,14 +153,15 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
     else if(e.key==="ArrowUp")pitch=clamp(pitch-.1,-.55,.55);else pitch=clamp(pitch+.1,-.55,.55);
     wake();
   }
-  function docVisibility(){visible=document.visibilityState==="visible";if(visible)wake();}
+  function docVisibility(){if(document.visibilityState==="visible")wake();}
   canvas.addEventListener("pointerdown",down);canvas.addEventListener("pointermove",move);canvas.addEventListener("pointerup",up);
   canvas.addEventListener("pointercancel",up);canvas.addEventListener("wheel",wheel,{passive:false});canvas.addEventListener("keydown",keys);
   document.addEventListener("visibilitychange",docVisibility);
-  const intersection=new IntersectionObserver(([e])=>{visible=e.isIntersecting&&document.visibilityState==="visible";if(visible)wake();},{threshold:.02});
+  const intersection=new IntersectionObserver(([e])=>{visible=e.isIntersecting;if(visible)wake();},{threshold:.02});
   intersection.observe(canvas);
   const resize=new ResizeObserver(wake);resize.observe(canvas);wake();
   return {
+    kind:"webgl2",
     setMode(next){mode=next;wake();},setPaused(next){paused=next;wake();},pulse(){pulseAt=performance.now();wake();},
     resetView(){yaw=-.17;pitch=.05;zoom=4.15;wake();},
     destroy(){disposed=true;cancelAnimationFrame(raf);intersection.disconnect();resize.disconnect();canvas.removeEventListener("pointerdown",down);canvas.removeEventListener("pointermove",move);canvas.removeEventListener("pointerup",up);canvas.removeEventListener("pointercancel",up);canvas.removeEventListener("wheel",wheel);canvas.removeEventListener("keydown",keys);document.removeEventListener("visibilitychange",docVisibility);gl.deleteBuffer(buffer);gl.deleteVertexArray(vao);gl.deleteProgram(program);}
