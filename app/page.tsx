@@ -170,6 +170,12 @@ export default function Home() {
                     <div className={styles.productFrame}>
                       <div className={styles.browserBar}><i /><i /><i /><span>{project.name.toLowerCase()}.system</span></div>
                       <div className={styles.productImage} style={{ backgroundImage: `url(${project.cover})` }} aria-hidden="true" />
+                      <div className={styles.projectVisualLegend}>
+                        <span>ENGINEERING SYSTEM / {project.index}</span>
+                        <strong>{project.name}</strong>
+                        <small>{project.label}</small>
+                        <div>{project.stack.slice(0, 3).map((item) => <em key={item}>{item}</em>)}</div>
+                      </div>
                     </div>
                   ) : project.visual === "api" ? (
                     <div className={styles.apiFrame} role="img" aria-label="Venues API request flow illustration">
