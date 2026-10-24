@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import type { KeyboardEvent } from "react";
+import type { CSSProperties, KeyboardEvent } from "react";
 import Link from "next/link";
 import styles from "./ai-atlas.module.css";
 
@@ -176,7 +176,7 @@ export default function AIAtlas() {
                     ref={(node) => { nodeRefs.current[index] = node; }}
                     onKeyDown={(event) => handleNodeKeyDown(event, index)}
                     type="button"
-                    style={{ left: area.x + "%", top: area.y + "%" }}
+                    style={{ "--node-x": `${area.x}%`, "--node-y": `${area.y}%` } as CSSProperties}
                     className={[styles.node, activeId === area.id ? styles.selected : ""].filter(Boolean).join(" ")}
                     aria-pressed={activeId === area.id}
                     aria-label={"Explore " + area.name}
