@@ -5,6 +5,7 @@ import LanguageLinks from "../../components/LanguageLinks";
 import { PROFILE_LINKS, PROJECT_LIST } from "../../portfolio-data";
 import { alternateLinks, isTranslationLocale, localePath, translation } from "../../i18n";
 import styles from "../../resume/resume.module.css";
+import local from "../locale.module.css";
 
 type Props={params:Promise<{locale:string}>};
 export const dynamicParams=false;
@@ -20,7 +21,7 @@ export default async function LocalizedResume({params}:Props){
  const {locale}=await params;if(!isTranslationLocale(locale))notFound();
  const t=translation(locale);
  return (
-  <main className={styles.page} lang={locale} dir={locale==="ar"?"rtl":"ltr"} style={{fontFamily:locale==="ar"?'Tahoma, "Noto Sans Arabic", system-ui, sans-serif':undefined}}>
+  <main className={styles.page+" "+local.localized} lang={locale} dir={locale==="ar"?"rtl":"ltr"} style={{fontFamily:locale==="ar"?'Tahoma, "Noto Sans Arabic", system-ui, sans-serif':undefined}}>
    <header className={styles.header}>
     <Link className={styles.brand} href={localePath(locale)}><span>AH</span><strong>{t.name}</strong></Link>
     <div className={styles.headerActions}>
