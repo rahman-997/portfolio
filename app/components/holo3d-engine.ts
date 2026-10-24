@@ -20,7 +20,7 @@ const vertex = [
 " float cy=cos(uYaw),sy=sin(uYaw),cp=cos(uPitch),sp=sin(uPitch);",
 " p=vec3(cy*p.x+sy*p.z,p.y,-sy*p.x+cy*p.z);",
 " p=vec3(p.x,cp*p.y-sp*p.z,sp*p.y+cp*p.z);",
-" p.y+=.14; float depth=uZoom-p.z; float perspective=3.0/depth;",
+" p.y+=.14; float depth=uZoom-p.z; float perspective=2.08/depth;",
 " gl_Position=vec4(p.x*perspective/uAspect,p.y*perspective,(depth-2.0)/8.0,1.0);",
 " gl_PointSize=clamp(uScale*perspective*(.7+aSeed*.58)*(1.0+uPulse*.5),1.,8.5);",
 " vHeat=clamp((aPos.x+.45)*.8+aSeed*.24+(uMode>1.5?wave*.18:0.),0.,1.);",
