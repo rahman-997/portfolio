@@ -15,3 +15,8 @@
 @media(max-width:760px){.shell{min-height:450px;aspect-ratio:.95;border-radius:18px}.top{height:50px;padding:0 12px;font-size:9px}.stage{inset:50px 0 58px}.controls{height:58px;padding:0 7px}.modes button,.actions button{font-size:8px;padding:0 6px;min-height:33px}.actions button span{display:none}.readout{left:13px;top:18px}.side{right:13px;top:18px}.side small{display:none}}
 @media(max-width:380px){.top>span:last-child{display:none}.modes button,.actions button{padding:0 5px}.shell{min-height:410px}}
 @media(prefers-reduced-motion:reduce){.modes button,.actions button{transition:none}}
+
+/* V2 Visual QA mobile declutter */
+
+/* V2 Visual QA mobile declutter: leave head/face of real 3D artwork visible. */
+@media(max-width:760px){.readout{top:14px}.readout strong,.readout small,.side{display:none}}
