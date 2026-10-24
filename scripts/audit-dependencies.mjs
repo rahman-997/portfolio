@@ -21,7 +21,7 @@ const transientPatterns = [
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-  const result = spawnSync(npm, ["audit", "--audit-level=high"], {
+  const result = spawnSync(npm, ["audit", "--audit-level=low"], {
     encoding: "utf8",
     timeout: 60000,
     env: {

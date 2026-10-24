@@ -1,0 +1,74 @@
+name: Holo3D Browser QA (development only)
+
+on:
+  push:
+    branches:
+      - feature/interactive-hologram-v2
+    paths:
+      - .github/workflows/holo-browser-qa.yml
+      - scripts/verify-holo-browser.mjs
+      - app/components/HoloInterface.tsx
+      - app/components/HoloInterface.module.css
+      - app/components/holo3d-engine.ts
+      - app/home.module.css
+      - app/page.tsx
+
+concurrency:
+  group: holo-browser-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  browser-check:
+    if: github.ref == 'refs/heads/feature/interactive-hologram-v2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout development branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up pinned Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Use project npm
+        run: npm install --global npm@11.19.1
+      - name: Install and build source
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          test -f out/index.html
+      - name: Install ephemeral Playwright (no lockfile mutation)
+        run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund playwright@1.56.1
+      - name: Check Chrome availability
+        shell: bash
+        run: |
+          if command -v google-chrome >/dev/null 2>&1; then
+            google-chrome --version
+          elif command -v chromium >/dev/null 2>&1; then
+            chromium --version
+          else
+            npx playwright install chromium
+          fi
+      - name: Run 4 responsive GPU and accessibility scenarios
+        shell: bash
+        run: |
+          set -euo pipefail
+          nohup python3 -m http.server 4173 --bind 127.0.0.1 --directory out > /tmp/holo-local-server.log 2>&1 &
+          for i in {1..25}; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent --show-error http://127.0.0.1:4173/ > /dev/null
+          CHROME_PATH="$(command -v google-chrome || command -v chromium || true)"
+          QA_CHROME_PATH="$CHROME_PATH" node scripts/verify-holo-browser.mjs
+      - name: Upload Chrome screenshots and QA report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: holo3d-browser-qa-evidence
+          path: artifacts/holo-browser/
+          if-no-files-found: warn
+          retention-days: 7

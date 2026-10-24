@@ -1,0 +1,107 @@
+/** Portfolio V2 browser QA. Only opens local ephemeral CI server. */
+import assert from "node:assert/strict";
+import { mkdir, writeFile } from "node:fs/promises";
+import { chromium } from "playwright";
+
+const origin="http://127.0.0.1:4173", output="artifacts/holo-browser";
+const models=[["desktop",1440,900,1],["tablet",820,1180,1],["mobile",390,844,2],["small-mobile",360,740,2]];
+await mkdir(output,{recursive:true});
+const browser=await chromium.launch({headless:true,...(process.env.QA_CHROME_PATH?{executablePath:process.env.QA_CHROME_PATH}:{}),args:["--enable-webgl","--enable-unsafe-swiftshader","--use-angle=swiftshader","--disable-dev-shm-usage"]});
+const reports=[]; let failures=0;
+for(const [name,width,height,dpr] of models){
+ const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:dpr,isMobile:name.includes("mobile"),hasTouch:name.includes("mobile")});
+ const exceptions=[],messages=[];
+ page.on("pageerror",e=>exceptions.push(String(e)));
+ page.on("console",m=>{if(m.type()==="error"||m.type()==="warning")messages.push(m.text());});
+ const item={viewport:name,dimensions:[width,height],tests:{},warnings:messages};
+ try {
+  const response=await page.goto(origin,{waitUntil:"networkidle",timeout:30000});
+  assert.equal(response?.status(),200,"home HTTP 200");
+  await page.waitForSelector("canvas",{timeout:10000});await page.waitForTimeout(850);
+  const metrics=await page.evaluate(()=>{
+   const c=document.querySelector("canvas"),g=c?.getContext("webgl2");
+   return {webgl2:!!g,canvasWidth:c?.width||0,canvasHeight:c?.height||0,viewportWidth:innerWidth,documentWidth:document.documentElement.scrollWidth,error:g?.getError()??null,hero:!!document.querySelector("h1"),work:!!document.querySelector("#work"),resume:!!document.querySelector('a[href="/resume/"]'),projects:document.querySelectorAll("article").length};
+  });
+  item.metrics=metrics;
+  assert.equal(metrics.webgl2,true,"WebGL2 context should initialize");
+  assert.equal(metrics.error,0,"no WebGL errors");
+  assert.ok(metrics.canvasWidth>250&&metrics.canvasHeight>200,"canvas dimensions");
+  if(name.includes("mobile"))assert.ok(metrics.canvasWidth<=width*1.45,"mobile GPU raster should be capped");
+  assert.ok(metrics.documentWidth<=metrics.viewportWidth+1,"no horizontal overflow");
+  assert.ok(metrics.hero&&metrics.work&&metrics.resume&&metrics.projects>=4,"original portfolio preserved");
+  item.tests.layout_and_gpu="pass";
+  await page.screenshot({path:output+"/"+name+".png",fullPage:true,animations:"disabled"});
+
+  const label=page.locator('[class*="projectVisualLegend"]').first();
+  assert.ok(await label.count(),"project artwork label exists");
+  assert.equal(await label.isVisible(),true,"project labels are displayed");
+  assert.ok((await label.innerText()).includes("Eventify"),"actual project identity is visible");
+  await label.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(350);
+  const legendInfo=await label.evaluate(el=>({
+    rect:{top:Math.round(el.getBoundingClientRect().top),bottom:Math.round(el.getBoundingClientRect().bottom)},
+    opacity:getComputedStyle(el).opacity,
+    display:getComputedStyle(el).display,
+    background:getComputedStyle(el).backgroundImage
+  }));
+  item.projectLabel=legendInfo;
+  assert.equal(legendInfo.display,"flex","project legend must stack labels vertically");
+  assert.notEqual(legendInfo.background,"none","project label needs contrast gradient");
+
+  assert.ok(legendInfo.rect.top>=-4&&legendInfo.rect.top<height,"project evidence is in viewport");
+  await page.screenshot({path:output+"/"+name+"-project.png",animations:"disabled"});
+  item.tests.project_readability="pass";
+
+  const signal=page.getByRole("button",{name:"SIGNAL",exact:true});await signal.click();assert.equal(await signal.getAttribute("aria-pressed"),"true");
+  const systems=page.getByRole("button",{name:"SYSTEMS",exact:true});await systems.click();assert.equal(await systems.getAttribute("aria-pressed"),"true");
+  await page.getByRole("button",{name:"Pause 3D motion"}).click();
+  assert.equal(await page.getByRole("button",{name:"Play 3D motion"}).getAttribute("aria-pressed"),"true");
+  await page.getByRole("button",{name:"Reset 3D view"}).click();
+  await page.getByRole("button",{name:"Pulse visual effect"}).click();
+  await page.locator("canvas").focus();await page.keyboard.press("ArrowRight");await page.keyboard.press("Home");
+  item.tests.controls_and_keyboard="pass";
+  await page.emulateMedia({reducedMotion:"reduce"});await page.reload({waitUntil:"networkidle"});await page.waitForTimeout(400);
+  assert.equal(await page.getByRole("button",{name:"Play 3D motion"}).getAttribute("aria-pressed"),"true","reduced motion pauses by default");
+  item.tests.reduced_motion="pass";
+  assert.deepEqual(exceptions,[],"no JS exceptions");
+  assert.ok(!messages.some(m=>/Shader failed|Link failed|Holo3D unavailable|WebGL INVALID/i.test(m)),"no shader errors");
+  item.tests.javascript="pass";
+ }catch(error){failures++;item.failure=String(error);try{await page.screenshot({path:output+"/"+name+"-FAILED.png",fullPage:true,timeout:5000});}catch{}}
+ finally{reports.push(item);await page.close();}
+}
+// Force a device with no WebGL2, validating useful accessible static artwork.
+const fallbackPage=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});
+await fallbackPage.addInitScript(()=>{
+  const getContext=HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.getContext=function(type,...args){
+    if(type==="webgl2")return null;
+    return getContext.call(this,type,...args);
+  };
+});
+const fallbackReport={viewport:"no-webgl2",tests:{}};
+try {
+  await fallbackPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+  const label=fallbackPage.getByText("STATIC · 2D");
+  await label.waitFor({state:"visible",timeout:10000});
+  assert.equal(await fallbackPage.getByRole("button",{name:"SIGNAL",exact:true}).count(),0,"3D-only controls hidden in fallback");
+  assert.equal(await fallbackPage.getByRole("status").count(),1,"fallback state accessible");
+  const data=await fallbackPage.locator("canvas").evaluate(canvas=>{
+    const ctx=canvas.getContext("2d");
+    const image=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+    let nonEmpty=0;
+    for(let i=3;i<image.length;i+=128){if(image[i]>0)nonEmpty++;}
+    return {mode:!!ctx,pixels:nonEmpty,tabIndex:canvas.tabIndex};
+  });
+  assert.equal(data.mode,true,"2D canvas initialized");
+  assert.ok(data.pixels>30,"static artwork should contain visible particles");
+  assert.equal(data.tabIndex,-1,"non-interactive artwork removed from tab sequence");
+  fallbackReport.tests.static_fallback="pass";
+  fallbackReport.metrics=data;
+  await fallbackPage.screenshot({path:output+"/no-webgl2.png",fullPage:false});
+} catch(error){failures++;fallbackReport.failure=String(error);}
+finally {reports.push(fallbackReport);await fallbackPage.close();}
+await browser.close();
+const result={status:failures?"failed":"passed",failures,reports};
+await writeFile(output+"/report.json",JSON.stringify(result,null,2));
+console.log(JSON.stringify(result,null,2));
+if(failures)process.exitCode=1;
