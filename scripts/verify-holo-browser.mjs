@@ -26,6 +26,7 @@ for(const [name,width,height,dpr] of models){
   assert.equal(metrics.webgl2,true,"WebGL2 context should initialize");
   assert.equal(metrics.error,0,"no WebGL errors");
   assert.ok(metrics.canvasWidth>250&&metrics.canvasHeight>200,"canvas dimensions");
+  if(name.includes("mobile"))assert.ok(metrics.canvasWidth<=width*1.45,"mobile GPU raster should be capped");
   assert.ok(metrics.documentWidth<=metrics.viewportWidth+1,"no horizontal overflow");
   assert.ok(metrics.hero&&metrics.work&&metrics.resume&&metrics.projects>=4,"original portfolio preserved");
   item.tests.layout_and_gpu="pass";
@@ -68,6 +69,37 @@ for(const [name,width,height,dpr] of models){
  }catch(error){failures++;item.failure=String(error);try{await page.screenshot({path:output+"/"+name+"-FAILED.png",fullPage:true,timeout:5000});}catch{}}
  finally{reports.push(item);await page.close();}
 }
+// Force a device with no WebGL2, validating useful accessible static artwork.
+const fallbackPage=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});
+await fallbackPage.addInitScript(()=>{
+  const getContext=HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.getContext=function(type,...args){
+    if(type==="webgl2")return null;
+    return getContext.call(this,type,...args);
+  };
+});
+const fallbackReport={viewport:"no-webgl2",tests:{}};
+try {
+  await fallbackPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+  const label=fallbackPage.getByText("STATIC · 2D");
+  await label.waitFor({state:"visible",timeout:10000});
+  assert.equal(await fallbackPage.getByRole("button",{name:"SIGNAL",exact:true}).count(),0,"3D-only controls hidden in fallback");
+  assert.equal(await fallbackPage.getByRole("status").count(),1,"fallback state accessible");
+  const data=await fallbackPage.locator("canvas").evaluate(canvas=>{
+    const ctx=canvas.getContext("2d");
+    const image=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+    let nonEmpty=0;
+    for(let i=3;i<image.length;i+=128){if(image[i]>0)nonEmpty++;}
+    return {mode:!!ctx,pixels:nonEmpty,tabIndex:canvas.tabIndex};
+  });
+  assert.equal(data.mode,true,"2D canvas initialized");
+  assert.ok(data.pixels>30,"static artwork should contain visible particles");
+  assert.equal(data.tabIndex,-1,"non-interactive artwork removed from tab sequence");
+  fallbackReport.tests.static_fallback="pass";
+  fallbackReport.metrics=data;
+  await fallbackPage.screenshot({path:output+"/no-webgl2.png",fullPage:false});
+} catch(error){failures++;fallbackReport.failure=String(error);}
+finally {reports.push(fallbackReport);await fallbackPage.close();}
 await browser.close();
 const result={status:failures?"failed":"passed",failures,reports};
 await writeFile(output+"/report.json",JSON.stringify(result,null,2));
