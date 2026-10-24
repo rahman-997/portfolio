@@ -37,7 +37,7 @@ for(const [locale,width,height] of cases){
   await page.getByRole("link",{name:locale==="ar"?"السيرة الذاتية":"Özgeçmiş"}).first().click();
   await page.waitForURL("**/"+locale+"/resume/**");
   assert.ok(await page.locator("h1").count());
-  assert.ok((await page.locator("body").innerText()).includes(locale==="ar"?"الملف المهني":"Profesyonel profil"));
+  assert.ok((await page.locator("body").textContent())?.includes(locale==="ar"?"الملف المهني":"Profesyonel profil"),"localized resume profile heading present in HTML (independent of CSS uppercase)");
   assert.ok((await page.locator('a[href$="Resume.pdf"]').count())>=1);
   report.checks.resume="pass";
   await page.goto(origin+"/"+locale+"/work/eventify/",{waitUntil:"networkidle"});
