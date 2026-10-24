@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import LanguageLinks from "../../components/LanguageLinks";
 import { notFound } from "next/navigation";
 import {
   PORTFOLIO_UPDATED_AT,
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: study.summary,
     authors: [{ name: "Abdulrahman Hajar", url: SITE_URL }],
     keywords: [...study.stack, "software engineering case study"],
-    alternates: { canonical },
+    alternates: { canonical, languages: { en: canonical, ar: "/ar/work/"+slug+"/", tr: "/tr/work/"+slug+"/" } },
     openGraph: {
       title,
       description: study.summary,
@@ -95,6 +96,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio"><span>AH</span><strong>Abdulrahman Hajar</strong></Link>
         <Link className={styles.back} href="/#work">← Selected work</Link>
+        <LanguageLinks locale="en" page="work" slug={slug}/>
       </header>
 
       <article className={styles.article}>
