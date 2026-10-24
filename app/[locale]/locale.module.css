@@ -17,3 +17,15 @@
  .localized h1{hyphens:auto}
 }
 @media(prefers-reduced-motion:reduce){.localized :is(a,button){transition:none}}
+
+/* Keep mixed-script project names intact inside Arabic/Turkish layouts. */
+.localized h3[dir="ltr"]{
+  font-size:clamp(1.95rem,3.7vw,3.85rem);
+  line-height:1.04;
+  letter-spacing:-.045em;
+  white-space:nowrap;
+  overflow-wrap:normal;
+  word-break:normal;
+  text-align:start;
+}
+@media(max-width:640px){.localized h3[dir="ltr"]{font-size:clamp(1.95rem,7vw,3.5rem)}}
