@@ -140,7 +140,7 @@ export default function AIAtlas() {
         </div>
 
         <div className={styles.workspace}>
-          <div className={styles.visual}>
+          <div className={`${styles.visual} ${view === "network" ? styles.visualNetwork : ""}`}>
             {view === "network" ? (
               <div className={styles.network} role="group" aria-label="Select an engineering discipline; use the arrow keys to move between nodes">
                 <svg className={styles.wires} viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
