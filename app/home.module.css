@@ -12,3 +12,14 @@
 .heroProofDetails .heroProof{margin-top:10px;max-width:none}
 @media(min-width:1081px){.hero{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(20px,3vw,50px)}.hero h1{font-size:clamp(4.3rem,7vw,8.1rem)}}
 @media(max-width:1080px){.heroVisual{max-width:760px}}
+
+
+/* V2 visual QA: render meaningful project labels over dark project evidence assets. */
+.productFrame{isolation:isolate}
+.productVisualLegend{position:absolute;z-index:2;inset:auto 0 0;padding:clamp(22px,3vw,38px);display:flex;flex-direction:column;align-items:flex-start;gap:7px;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(4,16,19,.82) 12%,rgba(4,16,19,.98) 100%)}
+.projectVisualLegend>span{font-size:.58rem;color:#8ae2bc;letter-spacing:.13em;font-weight:750}
+.projectVisualLegend>strong{font-size:clamp(2.25rem,4vw,4rem);line-height:1;letter-spacing:-.06em;color:#effcf6}
+.projectVisualLegend>small{font-size:.8rem;color:#bdccc6}
+.projectVisualLegend>div{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.projectVisualLegend em{font-style:normal;border:1px solid rgba(132,230,189,.3);border-radius:6px;padding:7px 9px;font-size:.58rem;letter-spacing:.04em;color:#c5f4e0;background:rgba(5,32,29,.54)}
+@media(max-width:760px){.projectVisualLegend{padding:20px}.projectVisualLegend>strong{font-size:2.65rem}.projectVisualLegend em{font-size:.54rem}}
