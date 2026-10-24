@@ -32,6 +32,17 @@ for(const [locale,width,height] of cases){
   assert.ok(state.contentWidth<=state.viewportWidth+1,"no sideways page overflow");
   assert.ok(state.heading?.includes(locale==="ar"?"أبني":"Yalnızca"),"localized headline");
   assert.ok(state.hasCanvas&&state.projectLinks>=4,"V2 hologram and case studies preserved");
+  // Latin product/project names must remain intact inside Arabic/Turkish card grids.
+  const book=page.locator('h3[dir="ltr"]').filter({hasText:"BookHaven"}).first();
+  assert.equal(await book.count(),1,"BookHaven evidence card still visible");
+  const titleSize=await book.evaluate(el=>({
+    actualHeight:el.getBoundingClientRect().height,
+    lineHeight:parseFloat(getComputedStyle(el).lineHeight),
+    width:el.getBoundingClientRect().width,
+    text:el.textContent
+  }));
+  assert.ok(titleSize.actualHeight<=titleSize.lineHeight*1.3,"BookHaven should fit on one line at "+width+"px");
+  report.checks.latin_project_names="pass";
   report.checks.home_and_rtl="pass";report.home=state;
   await page.screenshot({path:folder+"/"+locale+"-"+width+"-home.png",fullPage:true});
   await page.getByRole("link",{name:locale==="ar"?"السيرة الذاتية":"Özgeçmiş"}).first().click();
