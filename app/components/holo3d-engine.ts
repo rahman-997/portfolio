@@ -33,7 +33,7 @@ const fragment = [
 "in float vHeat,vAlpha; uniform float uMode; out vec4 color;",
 "void main(){",
 " float d=length(gl_PointCoord-vec2(.5));",
-" float a=smoothstep(.50,.12,d)*vAlpha;",
+" float a=(1.0-smoothstep(.12,.50,d))*vAlpha;",
 " vec3 blue=vec3(.10,.36,.92),ice=vec3(.12,.77,1.0),amber=vec3(1.,.57,.22);",
 " vec3 cold=mix(blue,ice,.76);",
 " vec3 c=mix(cold,amber,smoothstep(.45,.88,vHeat));",
