@@ -210,7 +210,7 @@ const deployCommit = process.env.RENDER_GIT_COMMIT ?? process.env.GITHUB_SHA ?? 
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <body data-deploy-commit={deployCommit}>
         {[personJsonLd, websiteJsonLd, profilePageJsonLd, selectedWorkJsonLd].map((data, index) => (
           <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
