@@ -52,6 +52,9 @@ jobs:
       - name: Verify Arabic Turkish RTL static pages
         run: node scripts/verify-i18n.mjs
 
+      - name: Test Windows/Android static preview server
+        run: node scripts/verify-preview-static.mjs
+
       - name: Dependency audit (all severities, fail closed)
         run: npm run audit
 
