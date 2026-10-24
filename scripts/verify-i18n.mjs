@@ -10,14 +10,14 @@ const read=(route)=>{
  return fs.readFileSync(file,"utf8");
 };
 const rootTag = (html) => {
- const tag = html.match(/<html\\b[^>]*>/i)?.[0];
- assert.ok(tag, "Missing HTML root element");
+ const tag=html.match(/<html\b[^>]*>/i)?.[0];
+ assert.ok(tag,"Missing HTML root element");
  return tag;
 };
 const assertRoot = (html, lang, dir, route) => {
  const tag=rootTag(html);
- assert.match(tag,new RegExp('\\\\blang=["\\']'+lang+'["\\']'),"Incorrect SSR HTML lang for "+route);
- assert.match(tag,new RegExp('\\\\bdir=["\\']'+dir+'["\\']'),"Incorrect SSR HTML dir for "+route);
+ assert.ok(tag.includes('lang="'+lang+'"'),"Incorrect SSR HTML lang for "+route+": "+tag);
+ assert.ok(tag.includes('dir="'+dir+'"'),"Incorrect SSR HTML dir for "+route+": "+tag);
 };
 const en=read("");
 assertRoot(en,"en","ltr","/");
