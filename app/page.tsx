@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PROFILE_LINKS, PROJECT_LIST } from "./portfolio-data";
+import HoloInterface from "./components/HoloInterface";
 import styles from "./home.module.css";
 
 const Arrow = ({ size = 18 }: { size?: number }) => (
@@ -97,6 +98,10 @@ export default function Home() {
             </div>
           </div>
 
+          <div className={styles.heroVisual}>
+            <HoloInterface />
+            <details className={styles.heroProofDetails}>
+              <summary>Engineering profile &amp; capabilities <span aria-hidden="true">+</span></summary>
           <aside className={styles.heroProof} aria-label="Profile proof points">
             <div className={styles.proofHeader}>
               <span>ENGINEERING PROFILE</span>
@@ -117,6 +122,8 @@ export default function Home() {
               <strong>Nişantaşı University</strong>
             </div>
           </aside>
+            </details>
+          </div>
         </section>
 
         <section className={styles.signalStrip} aria-label="Portfolio evidence">
