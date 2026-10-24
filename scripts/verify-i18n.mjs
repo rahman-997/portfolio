@@ -33,4 +33,4 @@ for(const locale of ["ar","tr"]){
   assert.ok(doc.includes('href="/'+locale+'/"'),"Case study back link "+locale+" "+slug);
  }
 }
-console.log("V3 i18n passed: 15 static pages (5 English legacy + 10 localized), RTL, content, links, 4 project studies per language, V2 preserved.");
+console.log("V3 i18n passed: 18 static pages (6 English legacy + 12 localized), RTL, content, links, 4 project studies per language, V2 preserved.");
