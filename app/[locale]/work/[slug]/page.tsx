@@ -6,6 +6,7 @@ import LanguageLinks from "../../../components/LanguageLinks";
 import { PROFILE_LINKS, PROJECT_SLUGS, SITE_URL, type ProjectSlug } from "../../../portfolio-data";
 import { alternateLinks, isTranslationLocale, localePath, localizedProject, translation } from "../../../i18n";
 import styles from "../../../work/[slug]/case-study.module.css";
+import local from "../../locale.module.css";
 
 type Props = {params: Promise<{locale:string;slug:string}>};
 export const dynamicParams = false;
@@ -34,7 +35,7 @@ export default async function LocalizedStudy({params}:Props){
   const schema={"@context":"https://schema.org","@type":"TechArticle","@id":canonical+"#case-study",headline:study.name+" · "+t.caseStudy,description:study.summary,url:canonical,
     inLanguage:locale,author:{"@id":SITE_URL+"/#person"},about:{"@type":"SoftwareSourceCode",name:study.name,codeRepository:study.source}};
   return (
-    <main className={styles.page} lang={locale} dir={locale==="ar"?"rtl":"ltr"} style={{fontFamily:locale==="ar"?'Tahoma, "Noto Sans Arabic", system-ui, sans-serif':undefined}}>
+    <main className={styles.page+" "+local.localized} lang={locale} dir={locale==="ar"?"rtl":"ltr"} style={{fontFamily:locale==="ar"?'Tahoma, "Noto Sans Arabic", system-ui, sans-serif':undefined}}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema)}}/>
       <header className={styles.header}>
         <Link className={styles.brand} href={localePath(locale)} aria-label={t.nav.home}><span>AH</span><strong>{t.name}</strong></Link>
