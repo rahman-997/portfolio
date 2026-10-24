@@ -30,6 +30,24 @@ for(const [name,width,height,dpr] of models){
   assert.ok(metrics.hero&&metrics.work&&metrics.resume&&metrics.projects>=4,"original portfolio preserved");
   item.tests.layout_and_gpu="pass";
   await page.screenshot({path:output+"/"+name+".png",fullPage:true,animations:"disabled"});
+
+  const label=page.locator('[class*="projectVisualLegend"]').first();
+  assert.ok(await label.count(),"project artwork label exists");
+  assert.equal(await label.isVisible(),true,"project labels are displayed");
+  assert.ok((await label.innerText()).includes("Eventify"),"actual project identity is visible");
+  await label.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(350);
+  const legendInfo=await label.evaluate(el=>({
+    rect:{top:Math.round(el.getBoundingClientRect().top),bottom:Math.round(el.getBoundingClientRect().bottom)},
+    opacity:getComputedStyle(el).opacity,
+    display:getComputedStyle(el).display,
+    background:getComputedStyle(el).backgroundImage
+  }));
+  item.projectLabel=legendInfo;
+  assert.ok(legendInfo.rect.top>=-4&&legendInfo.rect.top<height,"project evidence is in viewport");
+  await page.screenshot({path:output+"/"+name+"-project.png",animations:"disabled"});
+  item.tests.project_readability="pass";
+
   const signal=page.getByRole("button",{name:"SIGNAL",exact:true});await signal.click();assert.equal(await signal.getAttribute("aria-pressed"),"true");
   const systems=page.getByRole("button",{name:"SYSTEMS",exact:true});await systems.click();assert.equal(await systems.getAttribute("aria-pressed"),"true");
   await page.getByRole("button",{name:"Pause 3D motion"}).click();
