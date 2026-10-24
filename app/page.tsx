@@ -170,7 +170,7 @@ export default function Home() {
                     <div className={styles.productFrame}>
                       <div className={styles.browserBar}><i /><i /><i /><span>{project.name.toLowerCase()}.system</span></div>
                       <div className={styles.productImage} style={{ backgroundImage: `url(${project.cover})` }} aria-hidden="true" />
-                      <div className={styles.projectVisualLegend} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", position: "absolute", left: 0, right: 0, bottom: 0, background: "linear-gradient(180deg, rgba(4,16,19,0.1), rgba(4,16,19,0.95) 26%, #041013 100%)" }}>
+                      <div className={styles.projectVisualLegend} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 2, padding: "clamp(22px, 3vw, 38px)", gap: 7, pointerEvents: "none", background: "linear-gradient(180deg, rgba(4,16,19,0.1), rgba(4,16,19,0.95) 26%, #041013 100%)" }}>
                         <span>ENGINEERING SYSTEM / {project.index}</span>
                         <strong>{project.name}</strong>
                         <small>{project.label}</small>
