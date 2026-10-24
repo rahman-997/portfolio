@@ -44,6 +44,9 @@ for(const [name,width,height,dpr] of models){
     background:getComputedStyle(el).backgroundImage
   }));
   item.projectLabel=legendInfo;
+  assert.equal(legendInfo.display,"flex","project legend must stack labels vertically");
+  assert.notEqual(legendInfo.background,"none","project label needs contrast gradient");
+
   assert.ok(legendInfo.rect.top>=-4&&legendInfo.rect.top<height,"project evidence is in viewport");
   await page.screenshot({path:output+"/"+name+"-project.png",animations:"disabled"});
   item.tests.project_readability="pass";
