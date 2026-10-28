@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent } from "react";
 import Link from "next/link";
 import styles from "./ai-atlas.module.css";
+import type { Locale } from "./experience/locale";
+import { atlasCopy } from "./experience/atlas-locale";
 
 type Area = {
   id: string;
@@ -76,7 +78,8 @@ const journey = [
   { id: "quality", label: "05 / VERIFY", title: "Prove behavior", detail: "Check failure cases, integration contracts and observability." },
 ] as const;
 
-export default function AIAtlas() {
+export default function AIAtlas({locale="en"}:{locale?:Locale}) {
+  const t=atlasCopy[locale];
   const [activeId, setActiveId] = useState("architecture");
   const [view, setView] = useState<"network" | "portrait" | "flow">("network");
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -103,20 +106,19 @@ export default function AIAtlas() {
     <section className={styles.section} id="ai-lab" aria-labelledby="ai-lab-heading">
       <div className={styles.heading}>
         <div>
-          <p className={styles.eyebrow}>INTERACTIVE FEATURE / ENGINEERING ATLAS</p>
-          <h2 id="ai-lab-heading">Every system is a network of decisions.</h2>
+          <p className={styles.eyebrow}>{t.eyebrow}</p>
+          <h2 id="ai-lab-heading">{t.title}</h2>
         </div>
         <p className={styles.lead}>
-          An interactive map of the disciplines behind my work. Explore a node
-          to inspect the engineering choices and related project evidence.
+          {t.lead}
         </p>
       </div>
 
       <div className={styles.atlasFacts} aria-label="Atlas summary">
-        <span><strong>08</strong> disciplines</span>
-        <span><strong>03</strong> exploration modes</span>
-        <span><strong>04</strong> documented systems</span>
-        <span className={styles.factStatement}>REAL ENGINEERING. NO ARTIFICIAL METRICS.</span>
+        <span><strong>08</strong> {t.disciplines}</span>
+        <span><strong>03</strong> {t.modesLabel}</span>
+        <span><strong>04</strong> {t.systems}</span>
+        <span className={styles.factStatement}>{t.fact}</span>
       </div>
 
       <div className={styles.console}>
@@ -124,17 +126,17 @@ export default function AIAtlas() {
           <div className={styles.consoleIdentity}>
             <span className={styles.pulseDot} aria-hidden="true" />
             <span>AH / SYSTEMS ATLAS</span>
-            <span className={styles.visualTag}>INTERACTIVE VISUALIZATION</span>
+            <span className={styles.visualTag}>{t.visualTag}</span>
           </div>
-          <div className={styles.switcher} role="group" aria-label="Visualization mode">
+          <div className={styles.switcher} role="group" aria-label={t.modeGroup}>
             <button type="button" aria-pressed={view === "network"} className={view === "network" ? styles.modeActive : ""} onClick={() => setView("network")}>
-              Network
+              {t.modeNetwork}
             </button>
             <button type="button" aria-pressed={view === "portrait"} className={view === "portrait" ? styles.modeActive : ""} onClick={() => setView("portrait")}>
-              Neural portrait
+              {t.modePortrait}
             </button>
             <button type="button" aria-pressed={view === "flow"} className={view === "flow" ? styles.modeActive : ""} onClick={() => setView("flow")}>
-              System flow
+              {t.modeFlow}
             </button>
           </div>
         </div>
@@ -142,7 +144,7 @@ export default function AIAtlas() {
         <div className={styles.workspace}>
           <div className={`${styles.visual} ${view === "network" ? styles.visualNetwork : ""}`}>
             {view === "network" ? (
-              <div className={styles.network} role="group" aria-label="Select an engineering discipline; use the arrow keys to move between nodes">
+              <div className={styles.network} role="group" aria-label={t.nodeGroup}>
                 <svg className={styles.wires} viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
                     <linearGradient id="atlas-wire" x1="0" y1="0" x2="1" y2="0">
@@ -179,17 +181,17 @@ export default function AIAtlas() {
                     style={{ "--node-x": `${area.x}%`, "--node-y": `${area.y}%` } as CSSProperties}
                     className={[styles.node, activeId === area.id ? styles.selected : ""].filter(Boolean).join(" ")}
                     aria-pressed={activeId === area.id}
-                    aria-label={"Explore " + area.name}
+                    aria-label={t.explore + " " + t.nodes[area.id].name}
                     onClick={() => setActiveId(area.id)}
                   >
                     <span className={styles.nodeIndex}>{area.short}</span>
-                    <span className={styles.nodeName}>{area.name}</span>
+                    <span className={styles.nodeName}>{t.nodes[area.id].name}</span>
                   </button>
                 ))}
-                <span className={styles.mapCorner}>SELECT A NODE · ARROW KEYS TO NAVIGATE</span>
+                <span className={styles.mapCorner}>{t.nodeHint}</span>
               </div>
             ) : view === "portrait" ? (
-              <div className={styles.portraitView} role="img" aria-label="Abstract cyan and gold digital head made from contour lines; decorative visualization only">
+              <div className={styles.portraitView} role="img" aria-label={t.portraitAlt}>
                 <svg viewBox="0 0 520 500" className={styles.portraitSvg} aria-hidden="true">
                   <defs>
                     <linearGradient id="portrait-contour" x1="0" y1="0" x2="0" y2="1">
@@ -227,16 +229,16 @@ export default function AIAtlas() {
                   </g>
                 </svg>
                 <div className={styles.portraitCaption}>
-                  <strong>Human intelligence remains in control.</strong>
-                  <span>Conceptual motion study. No camera, biometric recognition, or live AI service.</span>
+                  <strong>{t.portraitTitle}</strong>
+                  <span>{t.portraitDetail}</span>
                 </div>
               </div>
             ) : (
               <div className={styles.flowView} aria-label="Illustrative five-stage engineering flow">
                 <div className={styles.flowHeading}>
-                  <span>REFERENCE ARCHITECTURE / EVENTIFY INSPIRED</span>
-                  <strong>From request to reliable outcome.</strong>
-                  <p>An illustrative path, not a connection to a running production service.</p>
+                  <span>{t.flowHeading}</span>
+                  <strong>{t.flowTitle}</strong>
+                  <p>{t.flowSummary}</p>
                 </div>
                 <div className={styles.flowSteps}>
                   {journey.map((step, index) => (
@@ -247,45 +249,45 @@ export default function AIAtlas() {
                       aria-pressed={activeId === step.id}
                       onClick={() => setActiveId(step.id)}
                     >
-                      <span className={styles.flowNumber}>{step.label}</span>
-                      <span className={styles.flowTitle}>{step.title}</span>
-                      <span className={styles.flowDetail}>{step.detail}</span>
+                      <span className={styles.flowNumber}>{t.stages[index].label}</span>
+                      <span className={styles.flowTitle}>{t.stages[index].title}</span>
+                      <span className={styles.flowDetail}>{t.stages[index].detail}</span>
                       <span className={styles.flowArrow} aria-hidden="true">{index === journey.length - 1 ? "✓" : "↳"}</span>
                     </button>
                   ))}
                 </div>
-                <span className={styles.flowFootnote}>SELECT A STAGE TO EXPLORE ITS ENGINEERING ROLE</span>
+                <span className={styles.flowFootnote}>{t.flowFootnote}</span>
               </div>
             )}
           </div>
 
           <aside className={styles.inspector} aria-labelledby="atlas-inspector-title">
             <div className={styles.inspectorTop}>
-              <span>DISCIPLINE INSPECTOR</span>
+              <span>{t.inspector}</span>
               <span className={styles.inspectorCount}>{String(activeIndex + 1).padStart(2, "0")} / {String(areas.length).padStart(2, "0")}</span>
             </div>
             <div className={styles.inspectorContent} aria-live="polite" aria-atomic="true">
-              <span className={styles.inspectorKicker}>ENGINEERING FOCUS</span>
-              <h3 id="atlas-inspector-title">{active.name}</h3>
-              <p>{active.summary}</p>
-              <div className={styles.tagSet} aria-label="Related skills">
+              <span className={styles.inspectorKicker}>{t.focus}</span>
+              <h3 id="atlas-inspector-title">{t.nodes[active.id].name}</h3>
+              <p>{t.nodes[active.id].summary}</p>
+              <div className={styles.tagSet} aria-label={t.related}>
                 {active.stack.map((item) => <span key={item}>{item}</span>)}
               </div>
             </div>
-            <div className={styles.inspectorNavigation} aria-label="Browse disciplines">
-              <button type="button" onClick={() => selectAdjacent(-1)} aria-label="Previous discipline">← <span>Previous</span></button>
+            <div className={styles.inspectorNavigation} aria-label={t.browse}>
+              <button type="button" onClick={() => selectAdjacent(-1)} aria-label={t.previous+" "+t.disciplines}>← <span>{t.previous}</span></button>
               <span>{String(activeIndex + 1).padStart(2, "0")} OF {String(areas.length).padStart(2, "0")}</span>
-              <button type="button" onClick={() => selectAdjacent(1)} aria-label="Next discipline"><span>Next</span> →</button>
+              <button type="button" onClick={() => selectAdjacent(1)} aria-label={t.next+" "+t.disciplines}><span>{t.next}</span> →</button>
             </div>
             <Link className={styles.inspectorLink} href={active.href}>
-              {active.proof} <span aria-hidden="true">↗</span>
+              {t.nodes[active.id].proof} <span aria-hidden="true">↗</span>
             </Link>
           </aside>
         </div>
 
         <div className={styles.statusBar}>
-          <span>DESIGNED FOR EXPLORATION, NOT A LIVE AGENT CONTROL PANEL</span>
-          <span>LOCAL INTERACTIONS · NO TRACKING · REDUCED MOTION READY</span>
+          <span>{t.statusOne}</span>
+          <span>{t.statusTwo}</span>
         </div>
       </div>
     </section>
