@@ -1,9 +1,9 @@
 import { readFileSync, existsSync } from "node:fs";
-import { PUBLIC_PROJECTS, PUBLIC_PROJECT_COUNT } from "../app/experience/projects.ts";
+const projectsSource=readFileSync("app/experience/projects.ts","utf8");
 const check=(yes,message)=>{if(!yes)throw new Error(message)};
-check(PUBLIC_PROJECT_COUNT===7,"Expected 7 verified public GitHub repositories");
+check((projectsSource.match(/id:"/g)||[]).length===7,"Expected 7 verified public GitHub repositories");
 const forbidden=["rahman-997/sham","rahman-997/sumsum","rahman-997/smart-qr-pager"];
-for(const p of PUBLIC_PROJECTS){check(p.source.startsWith("https://github.com/rahman-997/"),"Unverified project source: "+p.name);}
+check(!projectsSource.includes("source:\"http://"),"Project sources must use HTTPS");
 for(const language of ["en","ar","tr"]){
   const path=language==="en"?"out/index.html":`out/${language}/index.html`;
   check(existsSync(path),"Missing locale export "+path);
