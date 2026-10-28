@@ -63,7 +63,7 @@ with sync_playwright() as pw:
                     check(page.get_by_label("Illustrative five-stage engineering flow").count() == 1,
                           f"{name}: atlas mode switch broken")
                     page.get_by_role("button", name=COPY[locale]["network"], exact=True).click()
-                    check(page.locator("#ai-lab [role='group'] button[aria-pressed]").count() == 8,
+                    check(page.locator("#ai-lab [role='group'] button[aria-label][aria-pressed]").count() == 8,
                           f"{name}: Atlas network lost nodes")
                     page.get_by_role("button", name=COPY[locale]["portrait"], exact=True).click()
                     check(page.locator("#ai-lab [role='img']").count() == 1,
