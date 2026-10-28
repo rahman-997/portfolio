@@ -275,9 +275,9 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
               </div>
             </div>
             <div className={styles.inspectorNavigation} aria-label={t.browse}>
-              <button type="button" onClick={() => selectAdjacent(-1)} aria-label={t.previous+" "+t.disciplines}>← <span>{t.previous}</span></button>
+              <button type="button" onClick={() => selectAdjacent(-1)} aria-label={locale==="en"?"Previous discipline":t.previous+" "+t.disciplines}>← <span>{t.previous}</span></button>
               <span>{String(activeIndex + 1).padStart(2, "0")} OF {String(areas.length).padStart(2, "0")}</span>
-              <button type="button" onClick={() => selectAdjacent(1)} aria-label={t.next+" "+t.disciplines}><span>{t.next}</span> →</button>
+              <button type="button" onClick={() => selectAdjacent(1)} aria-label={locale==="en"?"Next discipline":t.next+" "+t.disciplines}><span>{t.next}</span> →</button>
             </div>
             <Link className={styles.inspectorLink} href={active.href}>
               {t.nodes[active.id].proof} <span aria-hidden="true">↗</span>
