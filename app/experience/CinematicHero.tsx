@@ -72,7 +72,7 @@ export default function CinematicHero({locale}:{locale:Locale}){
       <div className={styles.visual} role="img" aria-label={t.descriptor}>
         <div className={styles.visualHalo} aria-hidden="true"/>
         <div className={styles.orbitFrame} aria-hidden="true"/>
-        <Image src="/art/cinematic-core.svg" alt="" className={styles.coreArt} width={1200} height={1200} priority/>
+        <Image src="/art/cinematic-core.svg" alt="" className={styles.coreArt} width={1200} height={1200} priority unoptimized/>
         <div className={styles.artLabel} aria-hidden="true"><span>{t.artTop}</span><span>01 — 07</span></div>
         <div className={styles.artBottom} aria-hidden="true"><i/>{t.artBottom}</div>
       </div>
