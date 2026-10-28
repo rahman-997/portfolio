@@ -42,5 +42,8 @@ jobs:
       - name: Use npm 11.19.1
         run: npm install --global npm@11.19.1
 
+      - name: Validate AI Atlas production contract tests
+        run: node --test scripts/tests/atlas-production-contract.test.mjs
+
       - name: Verify deployed portfolio
         run: npm run verify:production
