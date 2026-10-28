@@ -81,8 +81,10 @@ function compile(gl:WebGL2RenderingContext,type:number,src:string){
   return s;
 }
 const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,n));
-export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
-  const context=canvas.getContext("webgl2",{alpha:true,antialias:true,powerPreference:"low-power"});
+export function createHolo3D(canvas:HTMLCanvasElement, options:{forceStatic?:boolean;onContextLost?:()=>void}={}):HoloController{
+  // A WebGL canvas cannot acquire a 2D context after a GPU loss. The React
+  // component replaces it with a fresh canvas and requests a 2D-only renderer.
+  const context=options.forceStatic?null:canvas.getContext("webgl2",{alpha:true,antialias:true,powerPreference:"low-power"});
   if(!context){
     const ctx=canvas.getContext("2d");
     if(ctx){
@@ -123,10 +125,10 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
   const loc={time:uni("uTime"),yaw:uni("uYaw"),pitch:uni("uPitch"),zoom:uni("uZoom"),mode:uni("uMode"),pulse:uni("uPulse"),aspect:uni("uAspect"),scale:uni("uScale")};
   const coarse=window.matchMedia("(pointer: coarse)").matches;
   const minFrameTime=1000/(coarse?30:60);
-  let yaw=-.17,pitch=.05,zoom=4.15,mode:HoloMode="neural",paused=false,visible=true,disposed=false,raf=0,elapsed=0,pulseAt=0,dragging=false,px=0,py=0,lastTime=performance.now(),lastDraw=0;
+  let yaw=-.17,pitch=.05,zoom=4.15,mode:HoloMode="neural",paused=false,visible=true,disposed=false,contextLost=false,raf=0,elapsed=0,pulseAt=0,dragging=false,px=0,py=0,lastTime=performance.now(),lastDraw=0;
   function render(now:number){
     raf=0;
-    if(disposed||!visible||document.visibilityState==="hidden")return;
+    if(disposed||contextLost||!visible||document.visibilityState==="hidden")return;
     // Cap mobile GPU work at 30 FPS and a smaller raster without changing geometry.
     if(now-lastDraw<minFrameTime){raf=requestAnimationFrame(render);return;}
     if(!paused){elapsed+=Math.min(.05,(now-lastTime)/1000);yaw+=.00011*Math.min(50,now-lastTime);}
@@ -144,7 +146,7 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
     gl.drawArrays(gl.POINTS,0,count);gl.bindVertexArray(null);
     if((!paused&&visible)||now-pulseAt<950)raf=requestAnimationFrame(render);else raf=0;
   }
-  function wake(){if(disposed||!visible||document.visibilityState==="hidden")return;if(!raf){lastTime=performance.now();raf=requestAnimationFrame(render);}}
+  function wake(){if(disposed||contextLost||!visible||document.visibilityState==="hidden")return;if(!raf){lastTime=performance.now();raf=requestAnimationFrame(render);}}
   // Track real touch pointers, not browser zoom. One finger can still pan the
   // document vertically (CSS touch-action:pan-y); two fingers adjust the 3D
   // camera only. Pointer cancellation resets every affected gesture cleanly.
@@ -208,10 +210,19 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
     else if(e.key==="ArrowUp")pitch=clamp(pitch-.1,-.55,.55);else pitch=clamp(pitch+.1,-.55,.55);
     wake();
   }
+  function webglLost(event:Event){
+    // Avoid repeated recovery requests; stop drawing into an invalid context.
+    event.preventDefault();
+    if(disposed||contextLost)return;
+    contextLost=true;
+    cancelAnimationFrame(raf);raf=0;
+    options.onContextLost?.();
+  }
   function docVisibility(){if(document.visibilityState==="visible")wake();}
   canvas.addEventListener("pointerdown",down);canvas.addEventListener("pointermove",move);canvas.addEventListener("pointerup",up);
   canvas.addEventListener("pointercancel",up);canvas.addEventListener("wheel",wheel,{passive:false});canvas.addEventListener("keydown",keys);
   document.addEventListener("visibilitychange",docVisibility);
+  canvas.addEventListener("webglcontextlost",webglLost);
   const intersection=new IntersectionObserver(([e])=>{visible=e.isIntersecting;if(visible)wake();},{threshold:.02});
   intersection.observe(canvas);
   const resize=new ResizeObserver(wake);resize.observe(canvas);wake();
@@ -220,6 +231,6 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
     setMode(next){mode=next;wake();},setPaused(next){paused=next;wake();},pulse(){pulseAt=performance.now();wake();},
     resetView(){yaw=-.17;pitch=.05;zoom=4.15;wake();},
     zoomIn(){adjustZoom(-.28);},zoomOut(){adjustZoom(.28);},
-    destroy(){disposed=true;touches.clear();cancelAnimationFrame(raf);intersection.disconnect();resize.disconnect();canvas.removeEventListener("pointerdown",down);canvas.removeEventListener("pointermove",move);canvas.removeEventListener("pointerup",up);canvas.removeEventListener("pointercancel",up);canvas.removeEventListener("wheel",wheel);canvas.removeEventListener("keydown",keys);document.removeEventListener("visibilitychange",docVisibility);gl.deleteBuffer(buffer);gl.deleteVertexArray(vao);gl.deleteProgram(program);}
+    destroy(){disposed=true;touches.clear();cancelAnimationFrame(raf);intersection.disconnect();resize.disconnect();canvas.removeEventListener("pointerdown",down);canvas.removeEventListener("pointermove",move);canvas.removeEventListener("pointerup",up);canvas.removeEventListener("pointercancel",up);canvas.removeEventListener("wheel",wheel);canvas.removeEventListener("keydown",keys);canvas.removeEventListener("webglcontextlost",webglLost);document.removeEventListener("visibilitychange",docVisibility);gl.deleteBuffer(buffer);gl.deleteVertexArray(vao);gl.deleteProgram(program);}
   };
 }
