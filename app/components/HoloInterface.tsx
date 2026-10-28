@@ -29,13 +29,22 @@ export default function HoloInterface({ locale="en" }:{locale?:"en"|"ar"|"tr"}) 
   const scene = useRef<HoloController | null>(null);
   const [mode, setMode] = useState<HoloMode>("neural");
   const [fallback, setFallback] = useState(false);
+  // Changing this key creates a fresh canvas, necessary because a lost
+  // WebGL canvas cannot be reused for the 2D fallback context.
+  const [recoverAsStatic, setRecoverAsStatic] = useState(false);
   const reducedMotion = useSyncExternalStore(subscribe, getMotionPreference, () => false);
   const [motionOverride, setMotionOverride] = useState<boolean | null>(null);
   const playing = motionOverride ?? !reducedMotion;
   useEffect(() => {
     if (!canvas.current) return;
     try {
-      const controller = createHolo3D(canvas.current);
+      const controller = createHolo3D(canvas.current, {
+        forceStatic: recoverAsStatic,
+        onContextLost: () => {
+          setFallback(true);
+          setRecoverAsStatic(true);
+        },
+      });
       scene.current = controller;
       setFallback(controller.kind === "static");
       return () => { controller.destroy(); scene.current = null; };
@@ -43,8 +52,9 @@ export default function HoloInterface({ locale="en" }:{locale?:"en"|"ar"|"tr"}) 
       // Static styling and text stay visible if WebGL cannot initialize.
       console.warn("Holo3D unavailable:", error);
       setFallback(true);
+      setRecoverAsStatic(true);
     }
-  }, []);
+  }, [recoverAsStatic]);
   useEffect(() => {
     scene.current?.setPaused(!playing);
   }, [playing]);
@@ -56,7 +66,7 @@ export default function HoloInterface({ locale="en" }:{locale?:"en"|"ar"|"tr"}) 
         <span>VISUAL MODE <b>{fallback ? "STATIC · 2D" : "WEBGL2 · 3D"}</b></span>
       </div>
       <div className={styles.stage}>
-        <canvas ref={canvas} className={styles.canvas} tabIndex={fallback ? -1 : 0} role={fallback ? "img" : "group"}
+        <canvas key={recoverAsStatic ? "recovered-2d" : "gpu"} ref={canvas} className={styles.canvas} tabIndex={fallback ? -1 : 0} role={fallback ? "img" : "group"}
           aria-label={fallback ? word.fallback : `${word.scene}. ${word.instructions}`} />
         <div className={styles.reticle} aria-hidden="true" />
         <div className={styles.readout} aria-hidden="true">
