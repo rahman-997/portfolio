@@ -13,7 +13,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: THEME_COLOR,
-  colorScheme: "dark",
+  colorScheme: "light dark",
 };
 
 export const metadata: Metadata = {
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     "Flutter",
     "Istanbul Software Engineer",
   ],
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", languages: { en: "/", ar: "/ar/", tr: "/tr/" } },
   openGraph: {
     title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
     description:
@@ -210,7 +210,7 @@ const deployCommit = process.env.RENDER_GIT_COMMIT ?? process.env.GITHUB_SHA ?? 
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body data-deploy-commit={deployCommit}>
         {[personJsonLd, websiteJsonLd, profilePageJsonLd, selectedWorkJsonLd].map((data, index) => (
           <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
