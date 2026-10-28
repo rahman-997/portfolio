@@ -174,6 +174,58 @@ try{
  touchReport.tests.touch_zoom_and_scroll="pass";
 }catch(e){failures++;touchReport.failure=String(e);}
 finally{reports.push(touchReport);await touchPage.close();}
+// V3.3: native two-finger pinch should zoom the actual GPU camera on touch
+// devices without taking away ordinary single-finger vertical page swipes.
+const pinchPage=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});
+const pinchReport={viewport:"touch-pinch-to-zoom",tests:{}};
+const pinchErrors=[];pinchPage.on("pageerror",e=>pinchErrors.push(String(e)));
+try{
+ await pinchPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ const canvas=pinchPage.locator("canvas");
+ await canvas.scrollIntoViewIfNeeded();
+ await pinchPage.waitForTimeout(250);
+ const sample=()=>canvas.evaluate(c=>{
+   const gl=c.getContext("webgl2"),program=gl?.getParameter(gl.CURRENT_PROGRAM);
+   const loc=program&&gl.getUniformLocation(program,"uZoom");
+   return loc?gl.getUniform(program,loc):null;
+ });
+ const initial=await sample();
+ assert.equal(typeof initial,"number","GPU zoom available for touch test");
+ const bounds=await canvas.boundingBox();
+ assert.ok(bounds,"Canvas has nonzero touch bounds");
+ const x=bounds.x+bounds.width/2,y=bounds.y+bounds.height/2;
+ const cdp=await pinchPage.context().newCDPSession(pinchPage);
+ const fingers=(span)=>[{x:x-span,y,id:11},{x:x+span,y,id:22}];
+ await cdp.send("Input.dispatchTouchEvent",{type:"touchStart",touchPoints:fingers(28)});
+ for(const span of [38,55,75,90]){
+   await cdp.send("Input.dispatchTouchEvent",{type:"touchMove",touchPoints:fingers(span)});
+   await pinchPage.waitForTimeout(35);
+ }
+ await cdp.send("Input.dispatchTouchEvent",{type:"touchEnd",touchPoints:[]});
+ await pinchPage.waitForTimeout(180);
+ const pinched=await sample();
+ assert.ok(pinched<initial-.20,
+   "Pinch spread should zoom the real GPU bust, not the document: "+initial+" -> "+pinched);
+ pinchReport.tests.two_finger_gpu_zoom="pass";
+ await pinchPage.getByRole("button",{name:"Reset 3D view"}).click();
+ await pinchPage.waitForTimeout(120);
+ const reset=await sample();
+ assert.ok(Math.abs(reset-4.15)<.03,"Reset returns zoom to baseline after pinch");
+ pinchReport.tests.reset_after_pinch="pass";
+ const after=await pinchPage.evaluate(()=>({
+   overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
+   viewportScale:window.visualViewport?.scale??1,
+   touchAction:getComputedStyle(document.querySelector("canvas")).touchAction,
+ }));
+ assert.ok(after.overflow<=1,"Pinch must not cause horizontal overflow");
+ assert.ok(Math.abs(after.viewportScale-1)<.01,"Pinch should not unexpectedly zoom the whole page");
+ assert.ok(after.touchAction.includes("pan-y"),"Single-finger vertical page swipe remains enabled");
+ assert.deepEqual(pinchErrors,[],"No uncaught errors during touch gestures");
+ pinchReport.tests.viewport_and_accessibility="pass";
+ pinchReport.metrics={before:initial,pinched,reset,...after};
+ await pinchPage.screenshot({path:output+"/mobile-pinch.png",animations:"disabled"});
+}catch(e){failures++;pinchReport.failure=String(e);}
+finally{reports.push(pinchReport);await pinchPage.close();}
 await browser.close();
 const result={status:failures?"failed":"passed",failures,reports};
 await writeFile(output+"/report.json",JSON.stringify(result,null,2));
