@@ -49,7 +49,25 @@ with sync_playwright() as playwright:
             atlas = page.locator("#ai-lab")
             check(atlas.count() == 1, f"{name}: missing Atlas section")
             atlas.scroll_into_view_if_needed()
+            # The keyboard-only skip link must be completely hidden until focused.
+            skip = page.locator('a[href="#main"]').first
+            check(skip.evaluate("(el) => getComputedStyle(el).visibility") == "hidden",
+                  f"{name}: skip link overlays the page when it is not focused")
             page.get_by_role("button", name="Neural portrait").wait_for(state="visible")
+            # Check rendered text bounds, not only button boxes: small screens may
+            # have non-overlapping buttons whose labels run into each other.
+            tabs = page.get_by_role("group", name="Visualization mode").locator("button")
+            for i in range(tabs.count()):
+                label = tabs.nth(i).evaluate("""(el) => {
+                    const node = document.createRange();
+                    node.selectNodeContents(el);
+                    const t = node.getBoundingClientRect();
+                    const b = el.getBoundingClientRect();
+                    return {textLeft:t.left,textRight:t.right,left:b.left,right:b.right};
+                }""")
+                check(label["textLeft"] >= label["left"] - 1 and
+                      label["textRight"] <= label["right"] + 1,
+                      f"{name}: mode {i} text spills out of its button")
             atlas.screenshot(path=str(OUTPUT / f"{name}-network.png"), animations="disabled")
             if name == "desktop":
                 page.screenshot(path=str(OUTPUT / "desktop-full-page.png"), full_page=True,
