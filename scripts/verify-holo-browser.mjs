@@ -244,6 +244,41 @@ try{
  await pinchPage.screenshot({path:output+"/mobile-pinch.png",animations:"disabled"});
 }catch(e){failures++;pinchReport.failure=String(e);}
 finally{reports.push(pinchReport);await pinchPage.close();}
+// V3.4 GPU reliability: WebGL context loss must switch to a visible painted
+// 2D portrait with accessible status, not leave an empty black GPU canvas.
+const contextLossPage=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:2});
+const contextLossReport={viewport:"webgl-context-loss",tests:{}};
+const lossErrors=[];contextLossPage.on("pageerror",e=>lossErrors.push(String(e)));
+try{
+ await contextLossPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ const canvas=contextLossPage.locator("canvas").first();
+ await canvas.waitFor({state:"visible",timeout:10000});
+ const extension=await canvas.evaluate(el=>{
+   const gl=el.getContext("webgl2");
+   const ext=gl?.getExtension("WEBGL_lose_context");
+   if(!ext)return false;
+   ext.loseContext();return true;
+ });
+ assert.ok(extension,"Chrome GPU simulator exposes WEBGL_lose_context extension");
+ await contextLossPage.getByText("STATIC · 2D").waitFor({state:"visible",timeout:6500});
+ const picture=await contextLossPage.locator("canvas").evaluate(el=>{
+   const context=el.getContext("2d");
+   if(!context)return {painted:0,kind:"not-2d"};
+   const {width,height}=el;
+   const pixels=context.getImageData(0,0,width,height).data;
+   let painted=0;
+   for(let i=3;i<pixels.length;i+=128)if(pixels[i]>0)painted++;
+   return {painted,kind:"2d",width,height};
+ });
+ assert.ok(picture.painted>30,"Context loss must still display an actual painted portrait");
+ assert.equal(await contextLossPage.getByRole("status").count(),1,"Context loss announced as fallback");
+ assert.equal(await contextLossPage.getByRole("button",{name:"Zoom in"}).count(),0,"Unavailable GPU interactions hidden");
+ assert.deepEqual(lossErrors,[],"No uncaught JS error during context loss");
+ contextLossReport.tests.graceful_gpu_context_loss="pass";
+ contextLossReport.metrics=picture;
+ await contextLossPage.screenshot({path:output+"/context-lost-fallback.png",animations:"disabled"});
+}catch(e){failures++;contextLossReport.failure=String(e);}
+finally{reports.push(contextLossReport);await contextLossPage.close();}
 await browser.close();
 const result={status:failures?"failed":"passed",failures,reports};
 await writeFile(output+"/report.json",JSON.stringify(result,null,2));
