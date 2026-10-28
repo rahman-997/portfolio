@@ -51,8 +51,15 @@ with sync_playwright() as playwright:
             atlas.scroll_into_view_if_needed()
             # The keyboard-only skip link must be completely hidden until focused.
             skip = page.locator('a[href="#main"]').first
-            check(skip.evaluate("(el) => getComputedStyle(el).visibility") == "hidden",
+            check("inset(50%" in skip.evaluate("(el) => getComputedStyle(el).clipPath"),
                   f"{name}: skip link overlays the page when it is not focused")
+            page.keyboard.press("Tab")
+            check(skip.evaluate("(el) => el === document.activeElement"),
+                  f"{name}: skip link is not first in keyboard tab order")
+            check(skip.evaluate("(el) => getComputedStyle(el).clipPath") == "none",
+                  f"{name}: focused skip link remains visually clipped")
+            skip.evaluate("(el) => el.blur()")
+            atlas.scroll_into_view_if_needed()
             page.get_by_role("button", name="Neural portrait").wait_for(state="visible")
             # Check rendered text bounds, not only button boxes: small screens may
             # have non-overlapping buttons whose labels run into each other.
