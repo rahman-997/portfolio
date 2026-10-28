@@ -96,7 +96,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
 
       <section className={styles.contact}>
         <span className={styles.contactStar} aria-hidden="true">✳</span>
-        <p>LET'S BUILD / AH</p>
+        <p>LET&apos;S BUILD / AH</p>
         <h2>{t.endTitle}</h2>
         <p className={styles.contactLead}>{t.endText}</p>
         <div className={styles.actions}>
