@@ -52,6 +52,9 @@ jobs:
       - name: Verify Arabic Turkish RTL static pages
         run: node scripts/verify-i18n.mjs
 
+      - name: Verify V3.8 additional sections in exported locales
+        run: node scripts/verify-portfolio-sections.mjs
+
       - name: Test Windows/Android static preview server
         run: node scripts/verify-preview-static.mjs
 
