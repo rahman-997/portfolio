@@ -33,5 +33,30 @@ for(const {locale,directory,heading} of cases){
    "Three keyboard-accessible no-JS FAQ entries expected in "+locale);
  assert.ok(sections.questions.includes('href="/Abdulrahman-Hajar-Resume.pdf"'),
    "FAQ should link to existing English résumé PDF in "+locale);
- console.log(locale+": 3 localized sections, 4 steps, 4 project paths, 3 FAQ entries and all links verified");
+ const newSections=Object.fromEntries(["decisions","collaborate"].map(id=>{
+  const re=new RegExp('<section\\b[^>]*\\bid="'+id+'"[^>]*>([\\s\\S]*?)<\\/section>','i');
+  const match=html.match(re);
+  assert.ok(match,"Missing new section #"+id+" in "+locale);
+  assert.ok(html.includes('href="#'+id+'"'),"New section #"+id+" has no in-page route in "+locale);
+  return [id,match[1]];
+ }));
+ assert.ok(newSections.decisions.includes(
+   locale==="ar"?"قرارات هندسية ومفاضلات":locale==="tr"?"Mühendislik kararları ve ödünleşimler":"Engineering decisions and trade-offs"
+ ),"Decision heading translated in "+locale);
+ assert.ok(newSections.collaborate.includes(
+   locale==="ar"?"مجالات التعاون":locale==="tr"?"Birlikte çalışma alanları":"Ways to collaborate"
+ ),"Collaboration heading translated in "+locale);
+ assert.equal((newSections.decisions.match(/data-decision-project="/g)??[]).length,4,
+   "Decision journal covers 4 existing projects in "+locale);
+ for(const slug of ["eventify","bookhaven","fitflow","venues-api"]){
+   assert.ok(newSections.decisions.includes('href="'+prefix+'work/'+slug+'/"'),
+    "Decision journal must link to localized "+slug+" case study in "+locale);
+ }
+ assert.equal((newSections.collaborate.match(/data-collab-area="/g)??[]).length,3,
+   "Three collaboration paths in "+locale);
+ assert.ok(newSections.collaborate.includes('href="'+prefix+'resume/"'),
+   "Collaboration includes localized résumé in "+locale);
+ assert.ok(newSections.collaborate.includes("https://www.linkedin.com/in/"),
+   "Collaboration links to existing LinkedIn profile in "+locale);
+ console.log(locale+": 5 localized sections, 4 steps, 4 project paths, 3 FAQ entries, 4 decisions, 3 collaboration areas verified");
 }
