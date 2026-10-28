@@ -19,9 +19,9 @@ function getMotionPreference() {
 }
 /** GPU scene with real XYZ points, perspective and depth. No camera permissions. */
 const texts = {
- en:{neural:"NEURAL",systems:"SYSTEMS",signal:"SIGNAL",reset:"Reset 3D view",pulse:"Pulse visual effect",pause:"Pause 3D motion",play:"Play 3D motion",fallback:"Static portrait · 3D graphics unavailable on this device",scene:"Interactive 3D engineering visualization",readout:"Human × Machine"},
- ar:{neural:"عصبي",systems:"أنظمة",signal:"إشارة",reset:"إعادة عرض المجسّم",pulse:"تأثير ضوئي",pause:"إيقاف حركة المجسّم",play:"تشغيل حركة المجسّم",fallback:"عرض ثابت · الرسوم ثلاثية الأبعاد غير مدعومة على هذا الجهاز",scene:"عرض هندسي ثلاثي الأبعاد تفاعلي",readout:"الإنسان × التقنية"},
- tr:{neural:"SİNİR AĞI",systems:"SİSTEM",signal:"SİNYAL",reset:"3B görünümü sıfırla",pulse:"Işık efekti",pause:"3B hareketi durdur",play:"3B hareketi başlat",fallback:"Sabit görsel · Bu cihazda 3B desteklenmiyor",scene:"Etkileşimli 3B mühendislik görselleştirmesi",readout:"İnsan × Teknoloji"}
+ en:{neural:"NEURAL",systems:"SYSTEMS",signal:"SIGNAL",reset:"Reset 3D view",pulse:"Pulse visual effect",pause:"Pause 3D motion",play:"Play 3D motion",fallback:"Static portrait · 3D graphics unavailable on this device",scene:"Interactive 3D engineering visualization",readout:"Human × Machine",zoomIn:"Zoom in",zoomOut:"Zoom out",zoomGroup:"3D camera zoom",hint:"DRAG · ALT+WHEEL · +/−",instructions:"Drag to rotate. Use the Zoom in and Zoom out buttons, plus and minus keys, or Alt plus the mouse wheel. Regular scrolling moves the page."},
+ ar:{neural:"عصبي",systems:"أنظمة",signal:"إشارة",reset:"إعادة عرض المجسّم",pulse:"تأثير ضوئي",pause:"إيقاف حركة المجسّم",play:"تشغيل حركة المجسّم",fallback:"عرض ثابت · الرسوم ثلاثية الأبعاد غير مدعومة على هذا الجهاز",scene:"عرض هندسي ثلاثي الأبعاد تفاعلي",readout:"الإنسان × التقنية",zoomIn:"تقريب المجسّم",zoomOut:"إبعاد المجسّم",zoomGroup:"تقريب العرض ثلاثي الأبعاد",hint:"اسحب للدوران · +/− للتقريب",instructions:"اسحب لتدوير المجسّم، واستخدم زرّي التقريب والإبعاد أو مفتاحي الجمع والطرح. التمرير العادي يحرك الصفحة."},
+ tr:{neural:"SİNİR AĞI",systems:"SİSTEM",signal:"SİNYAL",reset:"3B görünümü sıfırla",pulse:"Işık efekti",pause:"3B hareketi durdur",play:"3B hareketi başlat",fallback:"Sabit görsel · Bu cihazda 3B desteklenmiyor",scene:"Etkileşimli 3B mühendislik görselleştirmesi",readout:"İnsan × Teknoloji",zoomIn:"Yakınlaştır",zoomOut:"Uzaklaştır",zoomGroup:"3B kamera yakınlaştırma",hint:"SÜRÜKLE · ALT+TEKERLEK · +/−",instructions:"Döndürmek için sürükleyin. Yakınlaştırma düğmelerini, artı-eksi tuşlarını veya Alt+fare tekerleğini kullanın. Normal kaydırma sayfayı hareket ettirir."}
 } as const;
 export default function HoloInterface({ locale="en" }:{locale?:"en"|"ar"|"tr"}) {
   const word=texts[locale];
@@ -56,8 +56,8 @@ export default function HoloInterface({ locale="en" }:{locale?:"en"|"ar"|"tr"}) 
         <span>VISUAL MODE <b>{fallback ? "STATIC · 2D" : "WEBGL2 · 3D"}</b></span>
       </div>
       <div className={styles.stage}>
-        <canvas ref={canvas} className={styles.canvas} tabIndex={fallback ? -1 : 0} role="img"
-          aria-label={fallback ? word.fallback : word.scene} />
+        <canvas ref={canvas} className={styles.canvas} tabIndex={fallback ? -1 : 0} role={fallback ? "img" : "group"}
+          aria-label={fallback ? word.fallback : `${word.scene}. ${word.instructions}`} />
         <div className={styles.reticle} aria-hidden="true" />
         <div className={styles.readout} aria-hidden="true">
           <span>SYS.02 / DEPTH FIELD</span>
@@ -69,13 +69,17 @@ export default function HoloInterface({ locale="en" }:{locale?:"en"|"ar"|"tr"}) 
           <small>REAL 3D GEOMETRY</small>
           <small>PERSPECTIVE + DEPTH</small>
         </div>
-        <div className={styles.hint} aria-hidden="true">DRAG · ZOOM · ARROWS <span>◈</span></div>
+        <div className={styles.hint} aria-hidden="true">{word.hint} <span>◈</span></div>
+        {!fallback && <div className={styles.zoomActions} role="group" aria-label={word.zoomGroup}>
+          <button type="button" aria-label={word.zoomIn} title={word.zoomIn} onClick={() => scene.current?.zoomIn()}>+</button>
+          <button type="button" aria-label={word.zoomOut} title={word.zoomOut} onClick={() => scene.current?.zoomOut()}>−</button>
+        </div>}
       </div>
       {fallback ? (
         <div className={styles.controls} role="status"><p className={styles.fallbackNote}>{word.fallback}</p></div>
       ) : (
       <div className={styles.controls}>
-        <div className={styles.modes} role="group" aria-label="3D scene modes">
+        <div className={styles.modes} role="group" aria-label={word.zoomGroup === "3D camera zoom" ? "3D scene modes" : word.scene}>
           {modes.map(item => (
             <button type="button" key={item.id}
               className={mode === item.id ? styles.active : styles.mode}
@@ -96,7 +100,7 @@ export default function HoloInterface({ locale="en" }:{locale?:"en"|"ar"|"tr"}) 
         </div>
       </div>
       )}
-      <p className={styles.sr}>This artwork uses real three-dimensional GPU geometry. The mode buttons change its colors and motion. The pause button respects reduced motion preferences.</p>
+      <p className={styles.sr}>{word.instructions}</p>
     </div>
   );
 }
