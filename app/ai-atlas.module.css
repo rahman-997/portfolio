@@ -889,3 +889,21 @@
 @media (prefers-reduced-motion: reduce) {
   .signalParticle { display: none; }
 }
+
+/* Compact devices: allow actual tab text to wrap within each control. */
+@media (max-width: 430px) {
+  .switcher button {
+    white-space: normal;
+    line-height: 1.25;
+    min-height: 52px;
+    overflow-wrap: normal;
+    text-wrap: balance;
+  }
+  .portraitCaption {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.45rem .75rem 1rem;
+    background: linear-gradient(0deg, rgba(7,21,33,.96), rgba(7,21,33,0));
+  }
+}
