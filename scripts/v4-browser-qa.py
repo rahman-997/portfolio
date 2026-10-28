@@ -52,8 +52,12 @@ with sync_playwright() as pw:
                     check(page.locator("#ai-lab").count() == 1, f"{name}: Atlas missing")
                     check(page.locator("#work").get_by_role("link", name="Source code" if locale == "en" else "الكود المصدري" if locale == "ar" else "Kaynak kod").count() == 7,
                           f"{name}: project source links missing")
-                    for bad in ("rahman-997/sham", "rahman-997/sumsum", "rahman-997/smart-qr-pager"):
-                        check(bad not in page.content(), f"{name}: private repo accidentally public")
+                    allowed_public = {"eventify","bookbookhaven","fitflow-gym","venues-api","mizan-finance","portfolio","free-claude-code"}
+                    repository_links = page.locator('a[href^="https://github.com/rahman-997/"]').evaluate_all(
+                        "(links) => links.map(a => a.getAttribute('href')).filter(Boolean)")
+                    for link in repository_links:
+                        repo_id = link.split("https://github.com/rahman-997/", 1)[1].split("/", 1)[0]
+                        check(repo_id in allowed_public, f"{name}: unexpected GitHub repository link")
                     for count,kind in [(1,"backend"),(2,"tools"),(7,"all")]:
                         page.get_by_role("button", name=COPY[locale][kind], exact=True).click()
                         check(work.locator("article").count() == count,
