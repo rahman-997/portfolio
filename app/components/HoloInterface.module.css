@@ -29,3 +29,20 @@
 .zoomActions button:focus-visible{outline:2px solid #86eaff;outline-offset:3px}
 @media(max-width:760px){.zoomActions{right:9px;gap:8px}.zoomActions button{width:42px;height:44px}.hint{max-width:calc(100% - 22px);font-size:8px}}
 @media(prefers-reduced-motion:reduce){.zoomActions button{transition:none}}
+
+/* V3.6: accessible action sizes and two-row controls for narrow touch screens.
+ * Keep the viewport usable while ensuring every control has >=44px hit area. */
+.modes button,.actions button{min-height:44px;min-width:44px}
+@media(max-width:760px){
+ .modes button,.actions button{min-height:44px;min-width:44px}
+}
+@media(max-width:450px){
+ .shell{min-height:450px}
+ .stage{inset:50px 0 108px}
+ .controls{
+  height:108px;display:flex;flex-direction:column;align-items:stretch;
+  justify-content:center;gap:3px;padding:4px 12px
+ }
+ .modes,.actions{width:100%;justify-content:space-between;gap:6px;min-height:44px}
+ .modes button,.actions button{flex:1;min-width:44px;min-height:44px;padding-inline:6px}
+}
