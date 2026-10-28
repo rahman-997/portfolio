@@ -15,7 +15,7 @@ export const alternateLinks = (page: "home" | "resume" | "work", slug?: string) 
 });
 
 const ar = {
-  nav: {work:"المشاريع", systems:"هندسة الأنظمة", about:"عني", resume:"السيرة الذاتية", contact:"تواصل", home:"الرئيسية", back:"العودة للمشاريع", skip:"الانتقال للمحتوى", lang:"اختيار اللغة"},
+  nav: {work:"المشاريع", systems:"هندسة الأنظمة", process:"طريقة عملي", about:"عني", resume:"السيرة الذاتية", contact:"تواصل", home:"الرئيسية", back:"العودة للمشاريع", skip:"الانتقال للمحتوى", lang:"اختيار اللغة"},
   job:"مهندس برمجيات · مطوّر Full-Stack · أنظمة الذكاء الاصطناعي والتفاعل",
   name:"عبدالرحمن حجار", role:"مهندس برمجيات", location:"إسطنبول، تركيا",
   headline1:"أبني البرمجيات", headline2:"كأنظمة متكاملة، لا كواجهات فقط.",
@@ -32,7 +32,7 @@ const ar = {
   techTitle:"03 / التقنيات", techHeadline:"أختار الأدوات بحسب متطلبات النظام.",
   aboutTitle:"04 / نبذة", aboutHeadline:"خبرة واسعة في الواجهة والخلفية، مع عمق في الأنظمة.", aboutLead:"أنا عبدالرحمن حجار، مهندس برمجيات أدرس هندسة الكمبيوتر في جامعة نيشانتاشي بإسطنبول.", aboutText:"أعمل على واجهات المنتجات والخدمات الخلفية وواجهات API وقواعد البيانات والمزامنة والاختبارات والنشر والذكاء الاصطناعي. الهدف هو بناء تطبيقات واضحة في بنيتها وقابلة للصيانة والعمل تحت الظروف الواقعية.",
   resumePromo:"نظرة مختصرة على خبرتي ومشاريعي للمهتمين بالتوظيف.",
-  contactTitle:"05 / تواصل", contactHeadline:"تريد التأكد من جودة عملي؟ ابدأ بالمشاريع.", contactText:"جرّب الأنظمة، وتفحّص المصدر، أو تواصل معي بشأن فرص هندسة البرمجيات والمشاريع الجادة.", top:"العودة للأعلى",
+  contactTitle:"08 / تواصل", contactHeadline:"تريد التأكد من جودة عملي؟ ابدأ بالمشاريع.", contactText:"جرّب الأنظمة، وتفحّص المصدر، أو تواصل معي بشأن فرص هندسة البرمجيات والمشاريع الجادة.", top:"العودة للأعلى",
   profileSection:"الملف المهني", profileText:"أصمّم وأبني تطبيقات TypeScript متكاملة تشمل واجهات React وواجهات API وقواعد البيانات وإدارة الصلاحيات والتخزين المؤقت والمهام الخلفية والاختبارات وCI/CD. أركّز على الحدود الواضحة بين المكونات والتعامل السليم مع الأعطال.",
   educationSection:"التعليم", skillsSection:"المهارات التقنية", selectedSection:"أبرز المشاريع الهندسية",
   caseHeadings:["المشكلة","الحل","البنية المعمارية","قرارات هندسية","الموثوقية","أدلة التنفيذ"],
@@ -67,7 +67,7 @@ const ar = {
 } as const;
 
 const tr = {
-  nav:{work:"Projeler",systems:"Sistemler",about:"Hakkımda",resume:"Özgeçmiş",contact:"İletişim",home:"Ana sayfa",back:"Projelere dön",skip:"İçeriğe geç",lang:"Dil seçimi"},
+  nav:{work:"Projeler",systems:"Sistemler",process:"Çalışma sürecim",about:"Hakkımda",resume:"Özgeçmiş",contact:"İletişim",home:"Ana sayfa",back:"Projelere dön",skip:"İçeriğe geç",lang:"Dil seçimi"},
   job:"Yazılım Mühendisi · Full-Stack Geliştirici · Yapay Zekâ ve Etkileşimli Sistemler",
   name:"Abdulrahman Hajar",role:"Yazılım Mühendisi",location:"İstanbul, Türkiye",
   headline1:"Yalnızca ekran değil,",headline2:"uçtan uca sistemler geliştiriyorum.",
@@ -84,7 +84,7 @@ const tr = {
   techTitle:"03 / TEKNOLOJİ",techHeadline:"Araçları sistemin ihtiyacına göre seçerim.",
   aboutTitle:"04 / HAKKIMDA",aboutHeadline:"Arka uç derinliğiyle birleşen geniş mühendislik deneyimi.",aboutLead:"Ben Abdulrahman Hajar. İstanbul'da Nişantaşı Üniversitesinde Bilgisayar Mühendisliği eğitimi alıyor, yazılım sistemleri geliştiriyorum.",aboutText:"Arayüzler, API'ler, veritabanları, asenkron iş akışları, test, güvenlik, dağıtım ve yapay zekâ entegrasyonları üzerinde çalışıyorum. Amacım yalnızca teknoloji kullanmak değil, sürdürülebilir ve güvenilir ürünler sunmak.",
   resumePromo:"Mühendislik çalışmalarımın işe alım odaklı kısa özeti.",
-  contactTitle:"05 / İLETİŞİM",contactHeadline:"İşimin kanıtını mı arıyorsunuz? Projelerle başlayın.",contactText:"Canlı sistemleri deneyin, kaynak kodlarını inceleyin veya yazılım mühendisliği fırsatları için iletişime geçin.",top:"Başa dön",
+  contactTitle:"08 / İLETİŞİM",contactHeadline:"İşimin kanıtını mı arıyorsunuz? Projelerle başlayın.",contactText:"Canlı sistemleri deneyin, kaynak kodlarını inceleyin veya yazılım mühendisliği fırsatları için iletişime geçin.",top:"Başa dön",
   profileSection:"Profesyonel profil",profileText:"TypeScript ve React arayüzleri, API'ler, ilişkisel ve doküman veritabanları, kimlik doğrulama, önbellek, kuyruklar, otomatik test, CI/CD, güvenlik kontrolleri ve dağıtım alanlarında çalışıyorum. Anlaşılır mimariye ve güvenilir hata yönetimine odaklanıyorum.",
   educationSection:"Eğitim",skillsSection:"Teknik yetkinlikler",selectedSection:"Öne çıkan mühendislik projeleri",
   caseHeadings:["Problem","Çözüm","Mimari","Mühendislik kararları","Güvenilirlik","Doğrulama kanıtları"],
