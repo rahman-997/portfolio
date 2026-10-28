@@ -140,6 +140,14 @@ for(const locale of ["en","ar","tr"]){
         scrollWidth:heading?.scrollWidth??0,clientWidth:heading?.clientWidth??0},
       project:projectName?{text:projectName.textContent,scrollWidth:projectName.scrollWidth,clientWidth:projectName.clientWidth}:null,
       links:linkRects,
+      layoutDebug:{
+        scrollX:window.scrollX,
+        direction:document.documentElement.dir,
+        body:(()=>{const r=document.body.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width}})(),
+        main:(()=>{const r=document.querySelector("main")?.getBoundingClientRect();return {left:r?.left,right:r?.right,width:r?.width}})(),
+        hero:(()=>{const r=document.querySelector("h1")?.closest("section")?.getBoundingClientRect();return {left:r?.left,right:r?.right,width:r?.width}})(),
+        h1Style:(()=>{const el=document.querySelector("h1");return {size:el?getComputedStyle(el).fontSize:"",direction:el?getComputedStyle(el).direction:""}})()
+      },
       headerLinks:[...document.querySelectorAll("header a")].map(el=>{
         const rect=el.getBoundingClientRect();
         return {text:el.textContent?.trim(),x:rect.x,right:rect.right,y:rect.y,bottom:rect.bottom,
@@ -147,6 +155,7 @@ for(const locale of ["en","ar","tr"]){
       }).filter(el=>el.width>0&&el.height>0)
     };
    });
+   report.metrics=state;
    assert.ok(state.heading.text.trim(),"Heading exists after text enlargement");
    assert.ok(state.heading.left>=-1&&state.heading.right<=state.viewport+1,"H1 bounding box fits 360px viewport");
    assert.ok(state.heading.scrollWidth<=state.heading.clientWidth+1,
