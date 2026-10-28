@@ -137,7 +137,7 @@
   .hero h1{font-size:clamp(3.2rem,6vw,6rem)}
 }
 @media(max-width:760px){
-  .header{padding:1rem 18px}
+  .header{position:relative;top:auto;padding:1rem 18px}
   .brandText small{display:none}
   .brandText strong{font-size:.72rem}
   .monogram{width:43px;height:43px}
