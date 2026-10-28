@@ -28,6 +28,15 @@ for(const [locale,width,height] of cases){
   }));
   assert.equal(state.documentLang,locale,"HTML language");
   assert.equal(state.documentDir,locale==="ar"?"rtl":"ltr","HTML direction");
+  const languageChoices=page.locator("nav a[lang]");
+  assert.equal(await languageChoices.count(),3,"All three language links remain available");
+  for(const link of await languageChoices.all()){
+   const bounds=await link.boundingBox();
+   const label=await link.getAttribute("aria-label");
+   assert.ok(bounds&&bounds.width>=43.5&&bounds.height>=43.5,
+     "Language switcher requires 44px touch targets: "+label+" "+JSON.stringify(bounds));
+  }
+  report.checks.language_switcher_touch_targets="pass";
   assert.equal(state.wrappedLang,locale,"SSR language on page wrapper");
   assert.ok(state.contentWidth<=state.viewportWidth+1,"no sideways page overflow");
   assert.ok(state.heading?.includes(locale==="ar"?"أبني":"Yalnızca"),"localized headline");
