@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import HoloInterface from "../components/HoloInterface";
 import PortfolioSections from "../components/PortfolioSections";
+import PortfolioNextSections from "../components/PortfolioNextSections";
 import LanguageLinks from "../components/LanguageLinks";
 import { PROFILE_LINKS, PROJECT_LIST } from "../portfolio-data";
 import { alternateLinks, isTranslationLocale, localePath, translation } from "../i18n";
@@ -123,6 +124,7 @@ export default async function LocalizedHome({params}:Props){
           </div>
         </section>
         <PortfolioSections locale={locale} />
+        <PortfolioNextSections locale={locale} />
         <section className={home.resumeCallout}><div><span>{t.nav.resume}</span><h2>{t.resumePromo}</h2></div>
           <div className={home.resumeActions}><Link className={home.primaryAction} href={localePath(locale,"resume")}>{t.viewResume} ↗</Link>
             <a className={home.secondaryAction} href="/Abdulrahman-Hajar-Resume.pdf" download>{t.download} <small>EN</small></a></div>
