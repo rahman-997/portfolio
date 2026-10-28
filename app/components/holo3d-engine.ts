@@ -145,9 +145,55 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
     if((!paused&&visible)||now-pulseAt<950)raf=requestAnimationFrame(render);else raf=0;
   }
   function wake(){if(disposed||!visible||document.visibilityState==="hidden")return;if(!raf){lastTime=performance.now();raf=requestAnimationFrame(render);}}
-  function down(e:PointerEvent){dragging=true;px=e.clientX;py=e.clientY;canvas.setPointerCapture(e.pointerId);}
-  function move(e:PointerEvent){if(!dragging)return;yaw+=(e.clientX-px)*.009;pitch=clamp(pitch+(e.clientY-py)*.006,-.55,.55);px=e.clientX;py=e.clientY;wake();}
-  function up(){dragging=false;}
+  // Track real touch pointers, not browser zoom. One finger can still pan the
+  // document vertically (CSS touch-action:pan-y); two fingers adjust the 3D
+  // camera only. Pointer cancellation resets every affected gesture cleanly.
+  const touches=new Map<number,{x:number;y:number}>();
+  let pinchDistance:number|null=null;
+  function currentPinchDistance(){
+    if(touches.size<2)return null;
+    const [a,b]=Array.from(touches.values());
+    return Math.hypot(a.x-b.x,a.y-b.y);
+  }
+  function down(e:PointerEvent){
+    if(e.pointerType==="touch"){
+      touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(touches.size>=2){
+        dragging=false;
+        pinchDistance=currentPinchDistance();
+      }else{
+        dragging=true;px=e.clientX;py=e.clientY;
+      }
+    }else{
+      dragging=true;px=e.clientX;py=e.clientY;
+    }
+    canvas.setPointerCapture(e.pointerId);
+  }
+  function move(e:PointerEvent){
+    if(e.pointerType==="touch"){
+      if(!touches.has(e.pointerId))return;
+      touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(touches.size>=2){
+        const next=currentPinchDistance();
+        if(pinchDistance!==null&&next!==null)adjustZoom((pinchDistance-next)*.012);
+        pinchDistance=next;
+        return;
+      }
+    }
+    if(!dragging)return;
+    yaw+=(e.clientX-px)*.009;
+    pitch=clamp(pitch+(e.clientY-py)*.006,-.55,.55);
+    px=e.clientX;py=e.clientY;wake();
+  }
+  function up(e:PointerEvent){
+    if(e.pointerType!=="touch"){dragging=false;return;}
+    touches.delete(e.pointerId);
+    pinchDistance=null;
+    if(touches.size===1){
+      const remaining=touches.values().next().value;
+      dragging=true;px=remaining!.x;py=remaining!.y;
+    }else dragging=false;
+  }
   function adjustZoom(delta:number){zoom=clamp(zoom+delta,3.3,6.5);wake();}
   // Keep normal document scrolling available while the cursor is above the artwork.
   // Alt+Wheel is an explicit camera gesture; the on-screen buttons serve touch users.
@@ -174,6 +220,6 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
     setMode(next){mode=next;wake();},setPaused(next){paused=next;wake();},pulse(){pulseAt=performance.now();wake();},
     resetView(){yaw=-.17;pitch=.05;zoom=4.15;wake();},
     zoomIn(){adjustZoom(-.28);},zoomOut(){adjustZoom(.28);},
-    destroy(){disposed=true;cancelAnimationFrame(raf);intersection.disconnect();resize.disconnect();canvas.removeEventListener("pointerdown",down);canvas.removeEventListener("pointermove",move);canvas.removeEventListener("pointerup",up);canvas.removeEventListener("pointercancel",up);canvas.removeEventListener("wheel",wheel);canvas.removeEventListener("keydown",keys);document.removeEventListener("visibilitychange",docVisibility);gl.deleteBuffer(buffer);gl.deleteVertexArray(vao);gl.deleteProgram(program);}
+    destroy(){disposed=true;touches.clear();cancelAnimationFrame(raf);intersection.disconnect();resize.disconnect();canvas.removeEventListener("pointerdown",down);canvas.removeEventListener("pointermove",move);canvas.removeEventListener("pointerup",up);canvas.removeEventListener("pointercancel",up);canvas.removeEventListener("wheel",wheel);canvas.removeEventListener("keydown",keys);document.removeEventListener("visibilitychange",docVisibility);gl.deleteBuffer(buffer);gl.deleteVertexArray(vao);gl.deleteProgram(program);}
   };
 }
