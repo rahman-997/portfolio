@@ -9,6 +9,10 @@ on:
       - "app/home.module.css"
       - "app/page.tsx"
       - "scripts/atlas-browser-qa.py"
+      - "scripts/v4-browser-qa.py"
+      - "app/experience/**"
+      - "app/ar/page.tsx"
+      - "app/tr/page.tsx"
       - ".github/workflows/atlas-browser-qa.yml"
       - "package.json"
       - "package-lock.json"
@@ -61,6 +65,9 @@ jobs:
 
       - name: Browser acceptance and screenshots
         run: python3 scripts/atlas-browser-qa.py
+
+      - name: Browser QA for 3 languages and both themes
+        run: python3 scripts/v4-browser-qa.py
 
       - name: Upload browser evidence
         if: always()
