@@ -63,7 +63,7 @@ export function CollaborateSection({locale}:Props){
       {t.cards.map((card,index)=><article className={styles.collabCard}
         data-collaboration-card={index+1} key={card.title}>
         <span className={styles.collabIcon} aria-hidden="true">{card.icon}</span>
-        <div><span className={styles.mono}>{String(index+1).padStart(2,"0")} / CAPABILITY</span>
+        <div><span className={styles.mono}>{String(index+1).padStart(2,"0")} / {locale==="ar"?"مجال":locale==="tr"?"YETKİNLİK":"CAPABILITY"}</span>
           <h3>{card.title}</h3><p>{card.detail}</p></div>
         <ul className={styles.collabTags}>{card.tags.map(tag=><li key={tag}>{tag}</li>)}</ul>
       </article>)}
