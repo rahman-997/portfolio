@@ -29,3 +29,6 @@
   text-align:start;
 }
 @media(max-width:640px){.localized h3[dir="ltr"]{font-size:clamp(1.95rem,7vw,3.5rem)}}
+
+/* V3.7: preserve Arabic résumé heading at 200% user font enlargement. */
+@media(max-width:760px){.localized:lang(ar) h1{font-size:min(2.55rem,12vw);overflow-wrap:anywhere}}
