@@ -88,22 +88,37 @@ export function createHolo3D(canvas:HTMLCanvasElement, options:{forceStatic?:boo
   if(!context){
     const ctx=canvas.getContext("2d");
     if(ctx){
-      const ratio=Math.min(window.devicePixelRatio||1,1.4);
-      const width=Math.max(1,Math.round(canvas.clientWidth*ratio));
-      const height=Math.max(1,Math.round(canvas.clientHeight*ratio));
-      canvas.width=width;canvas.height=height;
+      // Cache geometry once; repaint only if the actual CSS size or DPR changes.
+      // Unlike the WebGL renderer, 2D mode does not run a perpetual frame loop.
       const vertices=makeBust();
-      // One static perspective projection gives unsupported GPUs a useful artwork.
       const yaw=-.17,cy=Math.cos(yaw),sy=Math.sin(yaw);
-      for(let i=0;i<vertices.length;i+=12){
-        const x=vertices[i],y=vertices[i+1],z=vertices[i+2];
-        const rx=cy*x+sy*z,rz=-sy*x+cy*z;
-        const factor=2.08/(4.15-rz);
-        const px=width/2+rx*factor*height/2;
-        const py=height/2-(y+.14)*factor*height/2;
-        ctx.fillStyle=x>0?"rgba(255,161,92,.7)":"rgba(63,214,255,.75)";
-        ctx.fillRect(px,py,Math.max(1,ratio),Math.max(1,ratio));
+      let disposed=false;
+      let lastRatio=0;
+      function paint(){
+        if(disposed)return;
+        const ratio=Math.min(window.devicePixelRatio||1,1.4);
+        const width=Math.max(1,Math.round(canvas.clientWidth*ratio));
+        const height=Math.max(1,Math.round(canvas.clientHeight*ratio));
+        if(canvas.width===width&&canvas.height===height&&lastRatio===ratio)return;
+        canvas.width=width;canvas.height=height;
+        lastRatio=ratio;
+        for(let i=0;i<vertices.length;i+=12){
+          const x=vertices[i],y=vertices[i+1],z=vertices[i+2];
+          const rx=cy*x+sy*z,rz=-sy*x+cy*z;
+          const factor=2.08/(4.15-rz);
+          const px=width/2+rx*factor*height/2;
+          const py=height/2-(y+.14)*factor*height/2;
+          ctx!.fillStyle=x>0?"rgba(255,161,92,.7)":"rgba(63,214,255,.75)";
+          ctx!.fillRect(px,py,Math.max(1,ratio),Math.max(1,ratio));
+        }
       }
+      const resize=new ResizeObserver(paint);
+      resize.observe(canvas);
+      paint();
+      return {
+        kind:"static",setMode(){},setPaused(){},pulse(){},resetView(){},zoomIn(){},zoomOut(){},
+        destroy(){disposed=true;resize.disconnect();}
+      };
     }
     return {kind:"static",setMode(){},setPaused(){},pulse(){},resetView(){},zoomIn(){},zoomOut(){},destroy(){}};
   }
