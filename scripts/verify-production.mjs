@@ -50,6 +50,8 @@ await waitForExpectedDeploy();
 
 const requiredPaths = [
   "/",
+  "/ar/",
+  "/tr/",
   "/resume/",
   "/work/eventify/",
   "/work/bookhaven/",
@@ -86,6 +88,28 @@ for (const expected of [
   if (!homeHtml.includes(expected)) throw new Error(`Homepage production contract missing: ${expected}`);
 }
 
+// Guard new trilingual homepage sections on the deployed site, not only in build output.
+for (const [path, lang, dir] of [["/", "en", "ltr"], ["/ar/", "ar", "rtl"], ["/tr/", "tr", "ltr"]]) {
+  const html = path === "/" ? homeHtml : await (await request(path)).text();
+  if (!html.includes(`<html lang="${lang}"`)) {
+    throw new Error(`Deployed ${path} has the wrong document language ${lang}`);
+  }
+  if (lang !== "en" && !new RegExp(`<html[^>]*dir="${dir}"`).test(html)) {
+    throw new Error(`Deployed ${path} has the wrong text direction ${dir}`);
+  }
+  for (const id of ["highlights", "process", "collaborate", "faq"]) {
+    if (!html.includes(`id="${id}"`)) {
+      throw new Error(`Deployed ${path} is missing section #${id}`);
+    }
+  }
+  for (const slug of ["eventify", "bookhaven", "fitflow", "venues-api"]) {
+    if (!html.includes(`/work/${slug}/`)) {
+      throw new Error(`Deployed ${path} is missing case study evidence ${slug}`);
+    }
+  }
+}
+console.log("Production V5 verified: 4 sections and evidence links in EN/AR/TR.");
+
 const atlasContract = assertAtlasProductionContract(homeHtml);
 console.log(`Production AI Atlas verified: ${atlasContract.nodeCount} disciplines, ${atlasContract.verifiedModes} modes`);
 
@@ -110,7 +134,7 @@ if (!robots.includes(`Host: ${baseUrl}`) || !robots.includes(`Sitemap: ${baseUrl
 }
 
 const sitemap = await (await request("/sitemap.xml")).text();
-for (const path of ["/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/work/fitflow/", "/work/venues-api/"]) {
+for (const path of ["/", "/ar/", "/tr/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/work/fitflow/", "/work/venues-api/"]) {
   if (!sitemap.includes(`<loc>${baseUrl}${path}</loc>`)) throw new Error(`Production sitemap missing ${path}`);
 }
 
