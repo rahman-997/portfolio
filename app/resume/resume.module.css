@@ -13,3 +13,6 @@
  .hero>div:first-child{min-width:0}
  .hero h1{max-width:100%;font-size:min(4rem,12.5vw);line-height:1.1;overflow-wrap:anywhere}
 }
+
+/* V3.7: the legacy first-child rule must not hide EN inside the language nav. */
+@media(max-width:760px){.headerActions nav a:first-child{display:inline-flex}}
