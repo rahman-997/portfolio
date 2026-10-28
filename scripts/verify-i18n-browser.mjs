@@ -82,11 +82,31 @@ for(const [locale,width,height] of cases){
   assert.ok(await faq.getAttribute("open")===null,"Native FAQ collapses");
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),
     "New sections must not introduce sideways scrolling");
+  // V3.9: the two additional evidence sections are truly localized,
+  // contain the existing case-study URLs, and keep readable touch targets.
+  for(const id of ["decisions","collaborate"]){
+    const section=page.locator("section#"+id);
+    assert.equal(await section.count(),1,"V3.9 section "+id+" exists for "+locale);
+    assert.ok(await section.getByRole("heading",{level:2}).isVisible(),"V3.9 visible heading "+id);
+    assert.ok(await page.locator('a[href="#'+id+'"]').count()>=1,"V3.9 in-page link "+id);
+  }
+  assert.equal(await page.locator('[data-decision-project]').count(),4,"Four real decision entries");
+  assert.equal(await page.locator('[data-collab-area]').count(),3,"Three collaboration lanes");
+  for(const slug of ["eventify","bookhaven","fitflow","venues-api"]){
+    assert.equal(await page.locator('#decisions a[href="/'+locale+'/work/'+slug+'/"]').count(),1,
+      "Decision log links to localized "+slug);
+  }
+  const collabResume=page.locator('#collaborate a[href="/'+locale+'/resume/"]');
+  assert.equal(await collabResume.count(),1,"Collaboration has localized résumé link");
+  assert.ok(await collabResume.isVisible(),"Collaboration résumé CTA is usable");
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),
+    "Five sections have zero sideways scroll at "+width);
+  report.checks.decisions_and_collaboration="pass";
   report.checks.process_explore_faq="pass";
   // Capture each new section directly; fullPage screenshots of very tall
   // WebGL pages can repeat composited viewport tiles in headless Chromium.
   if(locale==="ar" && (width===390||width===1440)){
-    for(const id of ["process","explore","questions"]){
+    for(const id of ["process","explore","questions","decisions","collaborate"]){
       await page.locator("section#"+id).screenshot({
         path:folder+"/ar-"+width+"-"+id+"-section.png",
         animations:"disabled",timeout:30000
@@ -138,8 +158,8 @@ for(const locale of ["ar","tr"]){
    }));
    assert.ok(dimensions.body<=dimensions.viewport+1,"No sideways scrolling without JavaScript on "+route);
    if(route==="/"){
-     assert.equal(await page.locator('section[data-portfolio-section]').count(),3,
-       "All three extra sections must render without JavaScript");
+     assert.equal(await page.locator('section[data-portfolio-section]').count(),5,
+       "All five extra sections must render without JavaScript");
      const details=page.locator('#questions details').first();
      await details.locator("summary").click();
      assert.ok(await details.getAttribute("open")!==null,"FAQ works without JavaScript");
@@ -230,7 +250,7 @@ for(const locale of ["en","ar","tr"]){
        "Language links must not overlap at 200% text: "+JSON.stringify([a,b]));
    }
    if(route==="/"){
-     assert.equal(await page.locator('section[data-portfolio-section]').count(),3,
+     assert.equal(await page.locator('section[data-portfolio-section]').count(),5,
        "All added portfolio sections survive 200% enlarged text in "+locale);
      const newSections=await page.locator('section[data-portfolio-section]').evaluateAll(els=>
        els.map(el=>{const r=el.getBoundingClientRect();return {id:el.id,left:r.left,right:r.right};}));
