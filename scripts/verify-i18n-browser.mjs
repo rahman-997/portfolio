@@ -111,6 +111,61 @@ for(const locale of ["ar","tr"]){
  }
 }
 await staticContext.close();
+
+// V3.7: 200% root text enlargement (font-size accessibility setting).
+// Test both text-bearing home and resume routes without relying on a hidden
+// overflow-x clip to mask unreadable headings or unreachable navigation.
+for(const locale of ["en","ar","tr"]){
+ for(const route of ["/","/resume/"]){
+  const page=await browser.newPage({viewport:{width:360,height:740},deviceScaleFactor:1,isMobile:true,hasTouch:true});
+  const report={locale,route,mode:"200-percent-text",tests:{}};
+  try{
+   const prefix=locale==="en"?"":"/"+locale;
+   await page.goto(origin+prefix+route,{waitUntil:"networkidle",timeout:30000});
+   await page.addStyleTag({content:"html { font-size: 200% !important; }"});
+   await page.evaluate(()=>document.fonts.ready);
+   const state=await page.evaluate(()=>{
+    const width=document.documentElement.clientWidth;
+    const heading=document.querySelector("h1");
+    const links=[...document.querySelectorAll('nav a[lang]')].filter(el=>getComputedStyle(el).display!=="none");
+    const r=heading?.getBoundingClientRect();
+    const linkRects=links.map(el=>{
+      const rect=el.getBoundingClientRect();
+      return {text:el.textContent,x:rect.x,right:rect.right,y:rect.y,bottom:rect.bottom};
+    });
+    const projectName=document.querySelector('h3[dir="ltr"]');
+    return {
+      viewport:width,scrollWidth:document.documentElement.scrollWidth,
+      heading:{text:heading?.textContent??"",left:r?.left??0,right:r?.right??0,
+        scrollWidth:heading?.scrollWidth??0,clientWidth:heading?.clientWidth??0},
+      project:projectName?{text:projectName.textContent,scrollWidth:projectName.scrollWidth,clientWidth:projectName.clientWidth}:null,
+      links:linkRects
+    };
+   });
+   assert.ok(state.heading.text.trim(),"Heading exists after text enlargement");
+   assert.ok(state.heading.left>=-1&&state.heading.right<=state.viewport+1,"H1 bounding box fits 360px viewport");
+   assert.ok(state.heading.scrollWidth<=state.heading.clientWidth+1,
+     "H1 text is not clipped at 200% text: "+JSON.stringify(state.heading));
+   assert.ok(state.scrollWidth<=state.viewport+1,"No sideways scroll with enlarged text");
+   if(route==="/"&&state.project){
+     assert.ok(state.project.scrollWidth<=state.project.clientWidth+1,
+       "Project name stays fully readable at 200% root text size: "+JSON.stringify(state.project));
+   }
+   assert.equal(state.links.length,3,"All three language links present");
+   for(const link of state.links){
+     assert.ok(link.x>=-1&&link.right<=state.viewport+1,"Language choice remains reachable: "+JSON.stringify(link));
+   }
+   for(let i=0;i<state.links.length;i++)for(let j=i+1;j<state.links.length;j++){
+     const a=state.links[i],b=state.links[j];
+     assert.ok(a.right<=b.x+1||b.right<=a.x+1||a.bottom<=b.y+1||b.bottom<=a.y+1,
+       "Language links must not overlap at 200% text: "+JSON.stringify([a,b]));
+   }
+   report.tests.readable_enlarged_text="pass";report.metrics=state;
+   await page.screenshot({path:folder+"/"+locale+"-"+(route==="/resume/"?"resume":"home")+"-text-200.png",animations:"disabled"});
+  }catch(e){failures++;report.failure=String(e);try{await page.screenshot({path:folder+"/"+locale+"-"+(route==="/resume/"?"resume":"home")+"-text-200-FAILED.png",animations:"disabled"});}catch{}}
+  finally{reports.push(report);await page.close();}
+ }
+}
 await browser.close();
 const result={status:failures?"failed":"passed",failures,reports};
 await writeFile(folder+"/report.json",JSON.stringify(result,null,2));
