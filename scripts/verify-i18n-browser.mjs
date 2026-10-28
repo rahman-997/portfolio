@@ -43,6 +43,13 @@ for(const [locale,width,height] of cases){
   }));
   assert.ok(titleSize.actualHeight<=titleSize.lineHeight*1.3,"BookHaven should fit on one line at "+width+"px");
   report.checks.latin_project_names="pass";
+  const inLabel=locale==="ar"?"تقريب المجسّم":"Yakınlaştır";
+  const outLabel=locale==="ar"?"إبعاد المجسّم":"Uzaklaştır";
+  const zoomIn=page.getByRole("button",{name:inLabel,exact:true});
+  const zoomOut=page.getByRole("button",{name:outLabel,exact:true});
+  assert.ok(await zoomIn.isVisible()&&await zoomOut.isVisible(),"Localized on-screen zoom controls accessible");
+  await zoomIn.click();await zoomOut.click();
+  report.checks.localized_touch_camera_controls="pass";
   report.checks.home_and_rtl="pass";report.home=state;
   await page.screenshot({path:folder+"/"+locale+"-"+width+"-home.png",fullPage:true});
   await page.getByRole("link",{name:locale==="ar"?"السيرة الذاتية":"Özgeçmiş"}).first().click();
