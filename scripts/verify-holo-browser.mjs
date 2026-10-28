@@ -97,6 +97,28 @@ try {
   assert.equal(data.tabIndex,-1,"non-interactive artwork removed from tab sequence");
   fallbackReport.tests.static_fallback="pass";
   fallbackReport.metrics=data;
+  // A phone orientation change must redraw the static portrait at its NEW
+  // raster dimensions. An unchanged initial bitmap becomes blurry or distorted.
+  const initialSize=await fallbackPage.locator("canvas").evaluate(el=>({
+    raster:el.width,css:el.clientWidth,ratio:Math.min(devicePixelRatio||1,1.4)
+  }));
+  await fallbackPage.setViewportSize({width:560,height:390});
+  await fallbackPage.waitForTimeout(400);
+  const oriented=await fallbackPage.locator("canvas").evaluate(el=>({
+    raster:el.width,css:el.clientWidth,
+    painted:(()=>{
+      const pixels=el.getContext("2d").getImageData(0,0,el.width,el.height).data;
+      let count=0;for(let i=3;i<pixels.length;i+=128)if(pixels[i]>0)count++;
+      return count;
+    })()
+  }));
+  assert.ok(oriented.css>initialSize.css+80,"Orientation changes actual canvas CSS width");
+  assert.ok(Math.abs(oriented.raster-Math.round(oriented.css*initialSize.ratio))<=1,
+    "Static 2D raster must track changed CSS width rather than stretching its original frame");
+  assert.ok(oriented.painted>30,"Repainted 2D fallback stays visible after rotation");
+  fallbackReport.tests.static_fallback_orientation_resize="pass";
+  fallbackReport.resize={initial:initialSize,after:oriented};
+  await fallbackPage.screenshot({path:output+"/no-webgl2-rotated.png",fullPage:false});
   await fallbackPage.screenshot({path:output+"/no-webgl2.png",fullPage:false});
 } catch(error){failures++;fallbackReport.failure=String(error);}
 finally {reports.push(fallbackReport);await fallbackPage.close();}
@@ -276,6 +298,16 @@ try{
  assert.deepEqual(lossErrors,[],"No uncaught JS error during context loss");
  contextLossReport.tests.graceful_gpu_context_loss="pass";
  contextLossReport.metrics=picture;
+ // The GPU-loss fallback uses the same responsive renderer as unsupported GPUs.
+ await contextLossPage.setViewportSize({width:560,height:390});
+ await contextLossPage.waitForTimeout(400);
+ const recoveryResize=await contextLossPage.locator("canvas").evaluate(el=>({
+   width:el.width,css:el.clientWidth,ratio:Math.min(devicePixelRatio||1,1.4)
+ }));
+ assert.ok(recoveryResize.css>picture.width/picture.height*0,"Context-loss canvas still available");
+ assert.ok(Math.abs(recoveryResize.width-Math.round(recoveryResize.css*recoveryResize.ratio))<=1,
+   "Recovered 2D artwork must track orientation changes");
+ contextLossReport.tests.recovered_canvas_orientation_resize="pass";
  await contextLossPage.screenshot({path:output+"/context-lost-fallback.png",animations:"disabled"});
 }catch(e){failures++;contextLossReport.failure=String(e);}
 finally{reports.push(contextLossReport);await contextLossPage.close();}
