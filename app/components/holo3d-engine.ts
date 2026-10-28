@@ -6,6 +6,8 @@ export type HoloController = {
   setPaused: (paused: boolean) => void;
   pulse: () => void;
   resetView: () => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
   destroy: () => void;
 };
 const vertex = [
@@ -101,7 +103,7 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
         ctx.fillRect(px,py,Math.max(1,ratio),Math.max(1,ratio));
       }
     }
-    return {kind:"static",setMode(){},setPaused(){},pulse(){},resetView(){},destroy(){}};
+    return {kind:"static",setMode(){},setPaused(){},pulse(){},resetView(){},zoomIn(){},zoomOut(){},destroy(){}};
   }
   const gl=context;
   const vs=compile(gl,gl.VERTEX_SHADER,vertex),fs=compile(gl,gl.FRAGMENT_SHADER,fragment);
@@ -146,9 +148,16 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
   function down(e:PointerEvent){dragging=true;px=e.clientX;py=e.clientY;canvas.setPointerCapture(e.pointerId);}
   function move(e:PointerEvent){if(!dragging)return;yaw+=(e.clientX-px)*.009;pitch=clamp(pitch+(e.clientY-py)*.006,-.55,.55);px=e.clientX;py=e.clientY;wake();}
   function up(){dragging=false;}
-  function wheel(e:WheelEvent){e.preventDefault();zoom=clamp(zoom+e.deltaY*.0035,3.3,6.5);wake();}
-  function keys(e:KeyboardEvent){if(!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Home"].includes(e.key))return;e.preventDefault();
+  function adjustZoom(delta:number){zoom=clamp(zoom+delta,3.3,6.5);wake();}
+  // Keep normal document scrolling available while the cursor is above the artwork.
+  // Alt+Wheel is an explicit camera gesture; the on-screen buttons serve touch users.
+  function wheel(e:WheelEvent){if(!e.altKey)return;e.preventDefault();adjustZoom(e.deltaY*.0035);}
+  function keys(e:KeyboardEvent){
+    if(!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Home","+","=","-","_"].includes(e.key))return;
+    e.preventDefault();
     if(e.key==="Home"){yaw=-.17;pitch=.05;zoom=4.15;}
+    else if(e.key==="+"||e.key==="="){adjustZoom(-.28);return;}
+    else if(e.key==="-"||e.key==="_"){adjustZoom(.28);return;}
     else if(e.key==="ArrowLeft")yaw-=.12;else if(e.key==="ArrowRight")yaw+=.12;
     else if(e.key==="ArrowUp")pitch=clamp(pitch-.1,-.55,.55);else pitch=clamp(pitch+.1,-.55,.55);
     wake();
@@ -164,6 +173,7 @@ export function createHolo3D(canvas:HTMLCanvasElement):HoloController{
     kind:"webgl2",
     setMode(next){mode=next;wake();},setPaused(next){paused=next;wake();},pulse(){pulseAt=performance.now();wake();},
     resetView(){yaw=-.17;pitch=.05;zoom=4.15;wake();},
+    zoomIn(){adjustZoom(-.28);},zoomOut(){adjustZoom(.28);},
     destroy(){disposed=true;cancelAnimationFrame(raf);intersection.disconnect();resize.disconnect();canvas.removeEventListener("pointerdown",down);canvas.removeEventListener("pointermove",move);canvas.removeEventListener("pointerup",up);canvas.removeEventListener("pointercancel",up);canvas.removeEventListener("wheel",wheel);canvas.removeEventListener("keydown",keys);document.removeEventListener("visibilitychange",docVisibility);gl.deleteBuffer(buffer);gl.deleteVertexArray(vao);gl.deleteProgram(program);}
   };
 }
