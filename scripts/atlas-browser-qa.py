@@ -28,6 +28,43 @@ def overlaps(a, b, tolerance=2):
             a["y"] < b["y"] + b["height"] - tolerance and
             a["y"] + a["height"] > b["y"] + tolerance)
 
+def audit_atlas(page, viewport, mode):
+    """Run WCAG checks in the actual rendered browser, not just in source markup."""
+    result = page.evaluate("""async () => {
+        const root = document.querySelector('#ai-lab');
+        const result = await window.axe.run(root, {
+          runOnly: {type: 'tag', values: ['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']},
+          rules: {'region': {enabled: false}},
+        });
+        return result.violations.map(v => ({
+          id: v.id,
+          impact: v.impact,
+          description: v.help,
+          nodes: v.nodes.map(n => ({
+            target: n.target,
+            summary: n.failureSummary,
+          })),
+        }));
+    }""")
+    if result:
+        (OUTPUT / f"{viewport}-{mode}-accessibility.json").write_text(
+            json.dumps(result, indent=2))
+    check(not result, f"{viewport}/{mode}: axe WCAG violations: {json.dumps(result)[:4500]}")
+
+def assert_accessibility_names(page, viewport):
+    session = page.context.new_cdp_session(page)
+    tree = session.send("Accessibility.getFullAXTree")["nodes"]
+    session.detach()
+    available = {
+        node.get("name", {}).get("value", "")
+        for node in tree
+        if not node.get("ignored") and node.get("name")
+    }
+    for expected in ("Explore Architecture", "Explore Interface", "Network",
+                     "Neural portrait", "System flow", "Previous discipline",
+                     "Next discipline"):
+        check(expected in available, f"{viewport}: missing accessible name: {expected}")
+
 def assert_in_visual(node, visual, label):
     check(node["x"] >= visual["x"] - 2, f"{label}: clips left")
     check(node["x"] + node["width"] <= visual["x"] + visual["width"] + 2, f"{label}: clips right")
@@ -61,6 +98,9 @@ with sync_playwright() as playwright:
             skip.evaluate("(el) => el.blur()")
             atlas.scroll_into_view_if_needed()
             page.get_by_role("button", name="Neural portrait").wait_for(state="visible")
+            page.add_script_tag(path="node_modules/axe-core/axe.min.js")
+            audit_atlas(page, name, "network")
+            assert_accessibility_names(page, name)
             # Check rendered text bounds, not only button boxes: small screens may
             # have non-overlapping buttons whose labels run into each other.
             tabs = page.get_by_role("group", name="Visualization mode").locator("button")
@@ -118,11 +158,13 @@ with sync_playwright() as playwright:
             page.get_by_role("button", name="03 / PERSIST").click()
             check(page.get_by_role("heading", name="Data", exact=True).count() == 1,
                   f"{name}: flow click did not select Data")
+            audit_atlas(page, name, "flow")
             atlas.screenshot(path=str(OUTPUT / f"{name}-flow.png"), animations="disabled")
 
             page.get_by_role("button", name="Neural portrait").click()
             check(page.get_by_role("img", name="Abstract cyan and gold digital head made from contour lines; decorative visualization only").count() == 1,
                   f"{name}: missing digital portrait")
+            audit_atlas(page, name, "portrait")
             atlas.screenshot(path=str(OUTPUT / f"{name}-portrait.png"), animations="disabled")
             page.get_by_role("button", name="Network").click()
             check(nodes.count() == 8, f"{name}: failed to return to network")
