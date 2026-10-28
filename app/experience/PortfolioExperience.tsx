@@ -1,12 +1,14 @@
 import AIAtlas from "../ai-atlas";
 import CinematicHero from "./CinematicHero";
 import FeaturedSystems from "./FeaturedSystems";
+import BlueprintLab from "./BlueprintLab";
+import MissionPaths from "./MissionPaths";
+import shell from "./shell.module.css";
 import { PROFILE_LINKS } from "../portfolio-data";
 import { PUBLIC_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
 import ExperienceControls from "./ExperienceControls";
 import { EvidenceSection, ProcessSection, CollaborateSection, FaqSection } from "./PortfolioExtraSections";
-import { extraSections } from "./extra-sections";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
 import styles from "./experience.module.css";
@@ -15,8 +17,7 @@ const stack = ["React", "Next.js", "TypeScript", "Node.js", "Express", "PostgreS
 
 export default function PortfolioExperience({locale}:{locale:Locale}) {
   const t=TEXT[locale];
-  const more=extraSections[locale];
-  return <div className={styles.page} lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
+  return <div className={`${styles.page} ${shell.shell}`} lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
     <a className={styles.skip} href="#main">{t.skip}</a>
     <header className={styles.header}>
       <a className={styles.brand} href="#top" aria-label="Abdulrahman Hajar">
@@ -25,9 +26,9 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
       </a>
       <nav className={styles.nav} aria-label={locale==="ar"?"التنقل الرئيسي":locale==="tr"?"Ana gezinme":"Primary navigation"}>
         <a href="#work">{t.navWork}</a>
-        <a href="#highlights">{more.navHighlights}</a>
+        <a href="#blueprint-lab">{locale==="ar"?"مختبر الأنظمة":locale==="tr"?"Mimari Lab":"Blueprint Lab"}</a>
         <a href="#ai-lab">{t.navAtlas}</a>
-        <a href="#process">{more.navProcess}</a>
+
         <a href="#about">{t.navAbout}</a>
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
       </nav>
@@ -37,6 +38,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
     <main id="main">
       <CinematicHero locale={locale}/>
       <FeaturedSystems locale={locale}/>
+      <MissionPaths locale={locale}/>
 
       <section className={styles.metrics} aria-label={t.projectEyebrow}>
         <div><strong>{String(PUBLIC_PROJECT_COUNT).padStart(2,"0")}</strong><span>{t.metricProjects}</span></div>
@@ -53,6 +55,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <ProjectExplorer locale={locale}/>
       </section>
 
+      <BlueprintLab locale={locale}/>
       <EvidenceSection locale={locale}/>
 
       <div className={styles.atlasSection}>
@@ -84,7 +87,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
       <CollaborateSection locale={locale}/>
       <FaqSection locale={locale}/>
 
-      <section className={styles.contact}>
+      <section id="contact" className={styles.contact}>
         <span className={styles.contactStar} aria-hidden="true">✳</span>
         <p>{locale==="ar"?"لنصنع شيئاً / AH":locale==="tr"?"BİRLİKTE ÜRETELİM / AH":"LET'S BUILD / AH"}</p>
         <h2>{t.endTitle}</h2>
