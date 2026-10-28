@@ -18,6 +18,6 @@ for(const language of ["en","ar","tr"]){
   }
   for(const id of forbidden)check(!html.includes(id),"Private repository was exposed: "+id);
   for(const locale of ["/ar/","/tr/"])check(html.includes(locale),"Missing language navigation "+locale+" in "+path);
-  check(html.includes('aria-label="')&&html.includes("Visualization mode"),"Accessibility controls missing");
+  check(html.includes('aria-label="')&&html.includes(language==="ar"?"وضع العرض":language==="tr"?"Görselleştirme modu":"Visualization mode"),"Accessibility controls missing");
 }
 console.log("V4 static exports verified: 3 languages, RTL, Atlas, 7 public sources, no private repos");
