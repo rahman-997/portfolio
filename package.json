@@ -9,11 +9,11 @@
   "packageManager": "npm@11.19.1",
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "next build --webpack && node scripts/localize-static.mjs",
     "start": "next start",
     "lint": "eslint . --ignore-pattern .next --ignore-pattern out",
     "typecheck": "tsc --noEmit",
-    "verify:export": "node scripts/verify-export.mjs && node scripts/verify-toolchain.mjs && node scripts/verify-resume-seo.mjs",
+    "verify:export": "node scripts/verify-export.mjs && node scripts/verify-toolchain.mjs && node scripts/verify-resume-seo.mjs && node scripts/verify-v4.mjs",
     "audit": "node scripts/audit-dependencies.mjs",
     "verify:production": "node scripts/verify-production.mjs"
   },
