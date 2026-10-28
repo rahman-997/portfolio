@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PROFILE_LINKS, PROJECT_LIST } from "./portfolio-data";
 import HoloInterface from "./components/HoloInterface";
+import PortfolioSections from "./components/PortfolioSections";
 import LanguageLinks from "./components/LanguageLinks";
 import styles from "./home.module.css";
 
@@ -72,6 +73,7 @@ export default function Home() {
         <nav className={styles.nav} aria-label="Primary navigation">
           <a href="#work">Work</a>
           <a href="#systems">Systems</a>
+          <a href="#process">Process</a>
           <a href="#about">About</a>
           <Link href="/resume/">Résumé</Link>
         </nav>
@@ -292,6 +294,8 @@ export default function Home() {
           </div>
         </section>
 
+        <PortfolioSections locale="en" />
+
         <section className={styles.resumeCallout}>
           <div>
             <span>RÉSUMÉ</span>
@@ -304,7 +308,7 @@ export default function Home() {
         </section>
 
         <section className={styles.contact}>
-          <p>05 / CONTACT</p>
+          <p>08 / CONTACT</p>
           <h2>Looking for evidence? Start with the work.</h2>
           <p>Review the live systems, inspect the source, or connect with me for software engineering opportunities and serious product work.</p>
           <div className={styles.contactLinks}>
