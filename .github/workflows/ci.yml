@@ -40,6 +40,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Test live Atlas contract logic
+        run: node --test scripts/tests/atlas-production-contract.test.mjs
+
       - name: Production build
         run: npm run build
 
