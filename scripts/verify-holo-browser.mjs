@@ -100,6 +100,80 @@ try {
   await fallbackPage.screenshot({path:output+"/no-webgl2.png",fullPage:false});
 } catch(error){failures++;fallbackReport.failure=String(error);}
 finally {reports.push(fallbackReport);await fallbackPage.close();}
+// V3.2 usability: normal wheel must scroll the page; zoom is explicit and
+// accessible on mouse, keyboard, and touch. Query the actual GPU zoom uniform.
+const gesturePage=await browser.newPage({viewport:{width:1280,height:800},deviceScaleFactor:1});
+const gestureReport={viewport:"wheel-zoom-accessibility",tests:{}};
+try {
+ await gesturePage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ const canvas=gesturePage.locator("canvas");
+ await canvas.scrollIntoViewIfNeeded();
+ const sampleZoom=()=>canvas.evaluate(c=>{
+   const gl=c.getContext("webgl2"),program=gl?.getParameter(gl.CURRENT_PROGRAM);
+   const location=program&&gl.getUniformLocation(program,"uZoom");
+   return location?gl.getUniform(program,location):null;
+ });
+ const rect=await canvas.boundingBox();
+ assert.ok(rect,"3D canvas visible");
+ await gesturePage.mouse.move(rect.x+rect.width/2,rect.y+rect.height/2);
+ const beforeScroll=await gesturePage.evaluate(()=>scrollY);
+ await gesturePage.mouse.wheel(0,320);
+ await gesturePage.waitForTimeout(280);
+ const afterScroll=await gesturePage.evaluate(()=>scrollY);
+ assert.ok(afterScroll>beforeScroll+25,"Ordinary wheel over 3D canvas should scroll the document");
+ gestureReport.tests.natural_page_scroll="pass";
+ await canvas.scrollIntoViewIfNeeded();
+ const z0=await sampleZoom();
+ assert.ok(typeof z0==="number","Actual GPU zoom uniform readable");
+ await gesturePage.getByRole("button",{name:"Zoom in",exact:true}).click();
+ await gesturePage.waitForTimeout(160);
+ const z1=await sampleZoom();
+ assert.ok(z1<z0-.1,"Zoom in button changes the GPU camera");
+ await gesturePage.getByRole("button",{name:"Zoom out",exact:true}).click();
+ await gesturePage.waitForTimeout(160);
+ const z2=await sampleZoom();
+ assert.ok(z2>z1+.1,"Zoom out button changes GPU zoom");
+ gestureReport.tests.touch_friendly_zoom_buttons="pass";
+ await canvas.focus();
+ await gesturePage.keyboard.press("+");
+ await gesturePage.waitForTimeout(160);
+ const z3=await sampleZoom();
+ assert.ok(z3<z2-.1,"Plus keyboard shortcut zooms in");
+ await gesturePage.keyboard.press("-");
+ await gesturePage.waitForTimeout(160);
+ const z4=await sampleZoom();
+ assert.ok(z4>z3+.1,"Minus keyboard shortcut zooms out");
+ gestureReport.tests.keyboard_zoom="pass";
+ await canvas.scrollIntoViewIfNeeded();
+ const rect2=await canvas.boundingBox();
+ await gesturePage.mouse.move(rect2.x+rect2.width/2,rect2.y+rect2.height/2);
+ await gesturePage.keyboard.down("Alt");
+ await gesturePage.mouse.wheel(0,-140);
+ await gesturePage.keyboard.up("Alt");
+ await gesturePage.waitForTimeout(160);
+ const z5=await sampleZoom();
+ assert.ok(z5<z4-.1,"Alt+Wheel zooms GPU camera");
+ gestureReport.tests.modifier_wheel_zoom="pass";
+ await gesturePage.screenshot({path:output+"/zoom-accessibility.png",animations:"disabled"});
+}catch(e){failures++;gestureReport.failure=String(e);}
+finally{reports.push(gestureReport);await gesturePage.close();}
+const touchPage=await browser.newPage({viewport:{width:360,height:740},deviceScaleFactor:2,isMobile:true,hasTouch:true});
+const touchReport={viewport:"mobile-zoom-controls",tests:{}};
+try{
+ await touchPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ const canvas=touchPage.locator("canvas");
+ const gesture=await canvas.evaluate(c=>getComputedStyle(c).touchAction);
+ assert.ok(gesture.includes("pan-y"),"Touch canvas preserves vertical swipe navigation");
+ const plus=touchPage.getByRole("button",{name:"Zoom in",exact:true});
+ const minus=touchPage.getByRole("button",{name:"Zoom out",exact:true});
+ assert.ok(await plus.isVisible()&&await minus.isVisible(),"Zoom controls remain visible on small phones");
+ const bbox=await plus.boundingBox();
+ assert.ok(bbox&&bbox.width>=36&&bbox.height>=36,"Zoom controls remain touch targetable");
+ await plus.click();await minus.click();
+ assert.ok(await touchPage.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),"Mobile zoom controls do not overflow layout");
+ touchReport.tests.touch_zoom_and_scroll="pass";
+}catch(e){failures++;touchReport.failure=String(e);}
+finally{reports.push(touchReport);await touchPage.close();}
 await browser.close();
 const result={status:failures?"failed":"passed",failures,reports};
 await writeFile(output+"/report.json",JSON.stringify(result,null,2));
