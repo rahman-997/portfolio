@@ -304,7 +304,8 @@ try{
  const recoveryResize=await contextLossPage.locator("canvas").evaluate(el=>({
    width:el.width,css:el.clientWidth,ratio:Math.min(devicePixelRatio||1,1.4)
  }));
- assert.ok(recoveryResize.css>picture.width/picture.height*0,"Context-loss canvas still available");
+ assert.ok(recoveryResize.css>Math.round(picture.width/recoveryResize.ratio)+80,
+   "Recovered 2D CSS box must expand when the phone rotates");
  assert.ok(Math.abs(recoveryResize.width-Math.round(recoveryResize.css*recoveryResize.ratio))<=1,
    "Recovered 2D artwork must track orientation changes");
  contextLossReport.tests.recovered_canvas_orientation_resize="pass";
