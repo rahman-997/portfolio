@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
 import styles from "./experience.module.css";
@@ -14,10 +15,12 @@ export default function ExperienceControls({locale}:{locale:Locale}) {
     const preferred:Theme = stored==="dark" || stored==="light"
       ? stored
       : window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-    setTheme(preferred);
+    // Defer state synchronization until after mount to avoid effect render loops.
+    const frame = window.requestAnimationFrame(() => setTheme(preferred));
     document.documentElement.dataset.theme = preferred;
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
+    return () => window.cancelAnimationFrame(frame);
   },[locale]);
   const changeTheme = ()=>{
     const next:Theme = theme==="dark" ? "light" : "dark";
@@ -28,9 +31,9 @@ export default function ExperienceControls({locale}:{locale:Locale}) {
   const label=TEXT[locale];
   return <div className={styles.controls}>
     <nav aria-label={label.language} className={styles.languages} dir="ltr">
-      <a href="/" lang="en" aria-current={locale==="en"?"page":undefined} title="English">EN</a>
-      <a href="/ar/" lang="ar" aria-current={locale==="ar"?"page":undefined} title="العربية">عربي</a>
-      <a href="/tr/" lang="tr" aria-current={locale==="tr"?"page":undefined} title="Türkçe">TR</a>
+      <Link href="/" lang="en" aria-current={locale==="en"?"page":undefined} title="English">EN</Link>
+      <Link href="/ar/" lang="ar" aria-current={locale==="ar"?"page":undefined} title="العربية">عربي</Link>
+      <Link href="/tr/" lang="tr" aria-current={locale==="tr"?"page":undefined} title="Türkçe">TR</Link>
     </nav>
     <button className={styles.themeButton} type="button"
       onClick={changeTheme}
