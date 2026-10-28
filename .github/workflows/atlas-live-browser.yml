@@ -1,0 +1,65 @@
+name: Atlas Live Browser
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/atlas-browser-qa.py"
+      - "scripts/atlas_live_marker.py"
+      - "scripts/tests/test_atlas_live_marker.py"
+      - ".github/workflows/atlas-live-browser.yml"
+  workflow_run:
+    workflows: ["Production smoke"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: atlas-live-browser-${{ github.event.pull_request.number || github.event.workflow_run.id || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    name: Live Atlas interactions and accessibility
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ATLAS_BASE_URL: https://abdulrahman-hajar-portfolio.onrender.com
+      ATLAS_EXPECTED_SHA: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || '' }}
+      ATLAS_QA_OUTPUT: atlas-live-browser-evidence
+      ATLAS_AXE_SCRIPT: .atlas-qa-tools/node_modules/axe-core/axe.min.js
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+
+      - name: Test expected live commit guard
+        run: python3 -m unittest discover -s scripts/tests -p test_atlas_live_marker.py -v
+
+      - name: Install browser test tooling
+        run: |
+          python3 -m pip install --user --disable-pip-version-check playwright==1.56.0
+          npm install --prefix .atlas-qa-tools --no-save --no-package-lock --ignore-scripts --no-audit --no-fund axe-core@4.10.3
+          test -s "$ATLAS_AXE_SCRIPT"
+
+      - name: Test the published site's interactions and accessibility
+        run: python3 scripts/atlas-browser-qa.py
+
+      - name: Save browser screenshots and failure evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: atlas-live-browser-evidence
+          path: atlas-live-browser-evidence/
+          if-no-files-found: warn
+          retention-days: 4

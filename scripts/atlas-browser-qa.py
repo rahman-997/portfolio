@@ -5,8 +5,11 @@ import os
 import sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
+from atlas_live_marker import assert_expected_deploy
 
-BASE = os.environ.get("ATLAS_BASE_URL", "http://127.0.0.1:4173")
+BASE = os.environ.get("ATLAS_BASE_URL", "http://127.0.0.1:4173").rstrip("/")
+EXPECTED_SHA = os.environ.get("ATLAS_EXPECTED_SHA", "").strip()
+AXE_SCRIPT = os.environ.get("ATLAS_AXE_SCRIPT", "node_modules/axe-core/axe.min.js")
 OUTPUT = Path(os.environ.get("ATLAS_QA_OUTPUT", "atlas-qa-artifacts"))
 OUTPUT.mkdir(parents=True, exist_ok=True)
 REPORT = []
@@ -83,6 +86,10 @@ with sync_playwright() as playwright:
         try:
             response = page.goto(BASE + "/", wait_until="networkidle", timeout=60000)
             check(response is not None and response.status == 200, f"{name}: homepage HTTP error")
+            if EXPECTED_SHA:
+                marker = page.locator("[data-deploy-commit]")
+                actual_sha = marker.first.get_attribute("data-deploy-commit") if marker.count() else None
+                assert_expected_deploy(actual_sha, EXPECTED_SHA)
             atlas = page.locator("#ai-lab")
             check(atlas.count() == 1, f"{name}: missing Atlas section")
             atlas.scroll_into_view_if_needed()
@@ -98,7 +105,7 @@ with sync_playwright() as playwright:
             skip.evaluate("(el) => el.blur()")
             atlas.scroll_into_view_if_needed()
             page.get_by_role("button", name="Neural portrait").wait_for(state="visible")
-            page.add_script_tag(path="node_modules/axe-core/axe.min.js")
+            page.add_script_tag(path=AXE_SCRIPT)
             audit_atlas(page, name, "network")
             assert_accessibility_names(page, name)
             # Check rendered text bounds, not only button boxes: small screens may
@@ -177,7 +184,8 @@ with sync_playwright() as playwright:
                 check(duration in ("0s", "0.00s"), f"reduced motion not applied: {duration}")
             check(not errors, f"{name}: browser errors: {errors}")
 
-            REPORT.append({"viewport": name, "width": width, "height": height,
+            REPORT.append({"baseUrl": BASE, "expectedSha": EXPECTED_SHA or None,
+                "viewport": name, "width": width, "height": height,
                 "nodes": 8, "overlap": 0, "overflow": overflow,
                 "modes": "pass", "keyboard": "pass", "console": "clean"})
             print(f"PASS {name}: layout, interactions, keyboard, 3 modes, no console errors", flush=True)
