@@ -10,9 +10,9 @@ BASE = os.environ.get("ATLAS_BASE_URL", "http://127.0.0.1:4173").rstrip("/")
 OUT = Path(os.environ.get("ATLAS_QA_OUTPUT", "atlas-qa-artifacts")) / "v4"
 OUT.mkdir(parents=True, exist_ok=True)
 COPY = {
-    "en": {"backend": "Backend", "tools": "Tools & open source", "all": "All projects"},
-    "ar": {"backend": "الخلفية", "tools": "الأدوات والمصادر المفتوحة", "all": "كل المشاريع"},
-    "tr": {"backend": "Backend", "tools": "Araçlar ve açık kaynak", "all": "Tüm projeler"},
+    "en": {"backend": "Backend", "tools": "Tools & open source", "all": "All projects", "flow":"System flow", "network":"Network", "portrait":"Neural portrait"},
+    "ar": {"backend": "الخلفية", "tools": "الأدوات والمصادر المفتوحة", "all": "كل المشاريع", "flow":"تدفق النظام", "network":"الشبكة", "portrait":"الوجه الرقمي"},
+    "tr": {"backend": "Backend", "tools": "Araçlar ve açık kaynak", "all": "Tüm projeler", "flow":"Sistem akışı", "network":"Ağ", "portrait":"Dijital portre"},
 }
 CASES = [("desktop", 1280, 800), ("mobile", 375, 812)]
 report, failures = [], []
@@ -59,16 +59,16 @@ with sync_playwright() as pw:
                         check(work.locator("article").count() == count,
                               f"{name}: {kind} filter expected {count} projects")
                     page.locator("#ai-lab").scroll_into_view_if_needed()
-                    page.get_by_role("button", name="System flow").click()
+                    page.get_by_role("button", name=COPY[locale]["flow"], exact=True).click()
                     check(page.get_by_label("Illustrative five-stage engineering flow").count() == 1,
                           f"{name}: atlas mode switch broken")
-                    page.get_by_role("button", name="Network").click()
-                    check(page.locator("#ai-lab button[aria-label^='Explore ']").count() == 8,
+                    page.get_by_role("button", name=COPY[locale]["network"], exact=True).click()
+                    check(page.locator("#ai-lab [role='group'] button[aria-pressed]").count() == 8,
                           f"{name}: Atlas network lost nodes")
-                    page.get_by_role("button", name="Neural portrait").click()
+                    page.get_by_role("button", name=COPY[locale]["portrait"], exact=True).click()
                     check(page.locator("#ai-lab [role='img']").count() == 1,
                           f"{name}: portrait view missing")
-                    page.get_by_role("button", name="Network").click()
+                    page.get_by_role("button", name=COPY[locale]["network"], exact=True).click()
                     # Theme toggle must work and persist after page navigation.
                     button = page.locator('button[title*="theme"], button[title*="الوضع"], button[title*="temaya"]')
                     if button.count() == 0:
