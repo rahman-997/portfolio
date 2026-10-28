@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""V4 screenshot and interaction QA: 3 languages × 2 themes × 2 viewports."""
+"""V5 end-to-end QA for languages, themes, projects and four new portfolio sections."""
 import json
 import os
 import sys
@@ -50,6 +50,26 @@ with sync_playwright() as pw:
                     check(work.locator("article").count() == 7,
                           f"{name}: missing public repositories")
                     check(page.locator("#ai-lab").count() == 1, f"{name}: Atlas missing")
+                    # V5: new sections must stay navigable and complete in all locales/themes.
+                    for section in ("highlights", "process", "collaborate", "faq"):
+                        check(page.locator("#" + section).count() == 1,
+                              f"{name}: missing #{section}")
+                    for slug in ("eventify", "bookhaven", "fitflow", "venues-api"):
+                        check(page.locator(f'#highlights a[href="/work/{slug}/"]').count() == 1,
+                              f"{name}: evidence link missing for {slug}")
+                    check(page.locator("#process [data-workflow-step]").count() == 4,
+                          f"{name}: wrong process step count")
+                    check(page.locator("#collaborate [data-collaboration-card]").count() == 3,
+                          f"{name}: wrong collaboration card count")
+                    check(page.locator("#faq details").count() == 4,
+                          f"{name}: FAQ details unavailable")
+                    faq_first = page.locator("#faq details").first
+                    faq_first.locator("summary").click()
+                    check(faq_first.evaluate("(el) => el.open"),
+                          f"{name}: native FAQ did not open")
+                    faq_first.locator("summary").press("Enter")
+                    check(not faq_first.evaluate("(el) => el.open"),
+                          f"{name}: keyboard could not close FAQ")
                     check(page.locator("#work").get_by_role("link", name="Source code" if locale == "en" else "الكود المصدري" if locale == "ar" else "Kaynak kod").count() == 7,
                           f"{name}: project source links missing")
                     allowed_public = {"eventify","bookbookhaven","fitflow-gym","venues-api","mizan-finance","portfolio","free-claude-code"}
@@ -87,6 +107,19 @@ with sync_playwright() as pw:
                     # Toggle back to initial state before taking the reference screenshot.
                     page.locator("header button").first.click()
                     page.locator(f'html[data-theme="{theme}"]').wait_for(timeout=5000)
+                    if label == "mobile":
+                        page.add_script_tag(path=os.environ.get("ATLAS_AXE_SCRIPT", "node_modules/axe-core/axe.min.js"))
+                        for section_id in ("highlights", "process", "collaborate", "faq"):
+                            violations = page.evaluate("""async (section) => {
+                                const issues = await axe.run(document.getElementById(section), {
+                                    runOnly: {type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']},
+                                    rules: {'region': {enabled: false}},
+                                });
+                                return issues.violations.map(v => ({
+                                    id: v.id, nodes: v.nodes.map(n => n.target),
+                                }));
+                            }""", section_id)
+                            check(not violations, f"{name}: {section_id} accessibility: {violations}")
                     overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
                     check(overflow <= 2, f"{name}: horizontal overflow {overflow}px")
                     check(not errors, f"{name}: browser exceptions {errors}")
@@ -123,4 +156,4 @@ with sync_playwright() as pw:
 (OUT/"report.json").write_text(json.dumps({"passed":report,"failed":failures},ensure_ascii=False,indent=2))
 if failures:
     raise SystemExit(1)
-print("Portfolio V4 browser QA passed: 3 languages, 2 themes, 2 viewports, no-JS RTL",flush=True)
+print("Portfolio V5 browser QA passed: languages, themes, workflow, FAQ and WCAG, no-JS RTL",flush=True)

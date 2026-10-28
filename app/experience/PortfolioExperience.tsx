@@ -3,6 +3,8 @@ import { PROFILE_LINKS } from "../portfolio-data";
 import { PUBLIC_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
 import ExperienceControls from "./ExperienceControls";
+import { EvidenceSection, ProcessSection, CollaborateSection, FaqSection } from "./PortfolioExtraSections";
+import { extraSections } from "./extra-sections";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
 import styles from "./experience.module.css";
@@ -11,6 +13,7 @@ const stack = ["React", "Next.js", "TypeScript", "Node.js", "Express", "PostgreS
 
 export default function PortfolioExperience({locale}:{locale:Locale}) {
   const t=TEXT[locale];
+  const more=extraSections[locale];
   return <div className={styles.page} lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
     <a className={styles.skip} href="#main">{t.skip}</a>
     <header className={styles.header}>
@@ -20,7 +23,9 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
       </a>
       <nav className={styles.nav} aria-label={locale==="ar"?"التنقل الرئيسي":locale==="tr"?"Ana gezinme":"Primary navigation"}>
         <a href="#work">{t.navWork}</a>
+        <a href="#highlights">{more.navHighlights}</a>
         <a href="#ai-lab">{t.navAtlas}</a>
+        <a href="#process">{more.navProcess}</a>
         <a href="#about">{t.navAbout}</a>
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
       </nav>
@@ -70,6 +75,8 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <ProjectExplorer locale={locale}/>
       </section>
 
+      <EvidenceSection locale={locale}/>
+
       <div className={styles.atlasSection}>
         <div className={styles.atlasIntro}>
           <p className={styles.sectionLabel}>{t.atlasEyebrow}</p>
@@ -77,6 +84,8 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         </div>
         <AIAtlas locale={locale} />
       </div>
+
+      <ProcessSection locale={locale}/>
 
       <section id="systems" className={styles.systems}>
         <div className={styles.sectionHeader}>
@@ -94,9 +103,12 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <div><p>{t.aboutText}</p><span className={styles.education}>{t.aboutNote}</span></div>
       </section>
 
+      <CollaborateSection locale={locale}/>
+      <FaqSection locale={locale}/>
+
       <section className={styles.contact}>
         <span className={styles.contactStar} aria-hidden="true">✳</span>
-        <p>LET&apos;S BUILD / AH</p>
+        <p>{locale==="ar"?"لنصنع شيئاً / AH":locale==="tr"?"BİRLİKTE ÜRETELİM / AH":"LET'S BUILD / AH"}</p>
         <h2>{t.endTitle}</h2>
         <p className={styles.contactLead}>{t.endText}</p>
         <div className={styles.actions}>
