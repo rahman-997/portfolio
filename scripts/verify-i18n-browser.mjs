@@ -139,7 +139,12 @@ for(const locale of ["en","ar","tr"]){
       heading:{text:heading?.textContent??"",left:r?.left??0,right:r?.right??0,
         scrollWidth:heading?.scrollWidth??0,clientWidth:heading?.clientWidth??0},
       project:projectName?{text:projectName.textContent,scrollWidth:projectName.scrollWidth,clientWidth:projectName.clientWidth}:null,
-      links:linkRects
+      links:linkRects,
+      headerLinks:[...document.querySelectorAll("header a")].map(el=>{
+        const rect=el.getBoundingClientRect();
+        return {text:el.textContent?.trim(),x:rect.x,right:rect.right,y:rect.y,bottom:rect.bottom,
+          width:rect.width,height:rect.height,scrollWidth:el.scrollWidth,clientWidth:el.clientWidth};
+      }).filter(el=>el.width>0&&el.height>0)
     };
    });
    assert.ok(state.heading.text.trim(),"Heading exists after text enlargement");
@@ -154,6 +159,19 @@ for(const locale of ["en","ar","tr"]){
    assert.equal(state.links.length,3,"All three language links present");
    for(const link of state.links){
      assert.ok(link.x>=-1&&link.right<=state.viewport+1,"Language choice remains reachable: "+JSON.stringify(link));
+   }
+   // All visible navigation items must remain both fully reachable and distinct
+   // at 200% text, including the brand and print/PDF actions on résumé pages.
+   for(const link of state.headerLinks){
+     assert.ok(link.x>=-1&&link.right<=state.viewport+1,
+       "Header link must stay within the viewport: "+JSON.stringify(link));
+     assert.ok(link.scrollWidth<=link.clientWidth+1,
+       "Header link label must not be clipped: "+JSON.stringify(link));
+   }
+   for(let i=0;i<state.headerLinks.length;i++)for(let j=i+1;j<state.headerLinks.length;j++){
+     const a=state.headerLinks[i],b=state.headerLinks[j];
+     assert.ok(a.right<=b.x+.5||b.right<=a.x+.5||a.bottom<=b.y+.5||b.bottom<=a.y+.5,
+       "Header links cannot overlap at 200% text: "+JSON.stringify([a,b]));
    }
    for(let i=0;i<state.links.length;i++)for(let j=i+1;j<state.links.length;j++){
      const a=state.links[i],b=state.links[j];
