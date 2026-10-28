@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import HoloInterface from "../components/HoloInterface";
+import PortfolioSections from "../components/PortfolioSections";
 import LanguageLinks from "../components/LanguageLinks";
 import { PROFILE_LINKS, PROJECT_LIST } from "../portfolio-data";
 import { alternateLinks, isTranslationLocale, localePath, translation } from "../i18n";
@@ -34,7 +35,7 @@ export default async function LocalizedHome({params}:Props){
           <span className={home.monogram}>AH</span><span><strong>{t.name}</strong><small>{t.role}</small></span>
         </Link>
         <nav className={home.nav} aria-label={t.nav.home}>
-          <a href="#work">{t.nav.work}</a><a href="#systems">{t.nav.systems}</a>
+          <a href="#work">{t.nav.work}</a><a href="#systems">{t.nav.systems}</a><a href="#process">{t.nav.process}</a>
           <a href="#about">{t.nav.about}</a><Link href={localePath(locale,"resume")}>{t.nav.resume}</Link>
         </nav>
         <LanguageLinks locale={locale}/>
@@ -121,6 +122,7 @@ export default async function LocalizedHome({params}:Props){
             <div className={home.education}><span>{t.educationSection}</span><div><strong>{t.edu}</strong><p>{t.institution} · {t.location}</p></div></div>
           </div>
         </section>
+        <PortfolioSections locale={locale} />
         <section className={home.resumeCallout}><div><span>{t.nav.resume}</span><h2>{t.resumePromo}</h2></div>
           <div className={home.resumeActions}><Link className={home.primaryAction} href={localePath(locale,"resume")}>{t.viewResume} ↗</Link>
             <a className={home.secondaryAction} href="/Abdulrahman-Hajar-Resume.pdf" download>{t.download} <small>EN</small></a></div>
