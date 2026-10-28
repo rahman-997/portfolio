@@ -1,4 +1,6 @@
 import AIAtlas from "../ai-atlas";
+import CinematicHero from "./CinematicHero";
+import FeaturedSystems from "./FeaturedSystems";
 import { PROFILE_LINKS } from "../portfolio-data";
 import { PUBLIC_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
@@ -33,32 +35,8 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
     </header>
 
     <main id="main">
-      <section id="top" className={styles.hero}>
-        <div className={styles.heroBackdrop} aria-hidden="true"/>
-        <div className={styles.heroText}>
-          <p className={styles.heroEyebrow}><span className={styles.liveDot}/>{t.hello}</p>
-          <h1>{t.heroTop}<br/><em>{t.heroBottom}</em></h1>
-          <p className={styles.lead}>{t.heroLead}</p>
-          <div className={styles.actions}>
-            <a className={styles.primaryAction} href="#work">{t.workButton} <span aria-hidden="true">↗</span></a>
-            <a className={styles.secondaryAction} href={PROFILE_LINKS.linkedin} target="_blank" rel="noopener noreferrer">{t.contactButton} ↗</a>
-            <a className={styles.secondaryAction} href="#ai-lab">{locale==="en"?"Explore AI Lab":t.navAtlas} ↗</a>
-          </div>
-          <div className={styles.heroFoot}><span>01—03</span><span>{t.scrollLabel}</span></div>
-        </div>
-        <div className={styles.heroVisual} aria-label={t.visualTitle}>
-          <div className={styles.visualRing} aria-hidden="true"/>
-          <div className={styles.visualOrbit} aria-hidden="true"><i/><i/><i/></div>
-          <div className={styles.visualPanel}>
-            <div className={styles.panelEyebrow}><span className={styles.liveDot}/>{t.dashboard}</div>
-            <div className={styles.visualSymbol} aria-hidden="true"><span>⌘</span><span>∞</span><span>↗</span></div>
-            <h2>{t.visualTitle}</h2>
-            <p>{t.visualDetail}</p>
-            <div className={styles.panelFooter}><span>AH / ENGINEERING</span><span>2026</span></div>
-          </div>
-          <div className={styles.floatingStatus}><span className={styles.liveDot}/>{t.availability}</div>
-        </div>
-      </section>
+      <CinematicHero locale={locale}/>
+      <FeaturedSystems locale={locale}/>
 
       <section className={styles.metrics} aria-label={t.projectEyebrow}>
         <div><strong>{String(PUBLIC_PROJECT_COUNT).padStart(2,"0")}</strong><span>{t.metricProjects}</span></div>
