@@ -32,8 +32,7 @@ with sync_playwright() as pw:
                 name = f"{locale}-{theme}-{label}"
                 context = browser.new_context(viewport={"width":width, "height":height},
                     color_scheme=theme, reduced_motion="reduce")
-                context.add_init_script(
-                    "(theme) => localStorage.setItem('portfolio-appearance', theme)", theme)
+                context.add_init_script("localStorage.setItem('portfolio-appearance', " + json.dumps(theme) + ");")
                 page = context.new_page()
                 errors = []
                 page.on("pageerror", lambda err: errors.append(str(err)))
