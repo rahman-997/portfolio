@@ -9,7 +9,7 @@ export const portfolioExtras = {
     nav: "Process",
     process: {
       eyebrow: "05 / DELIVERY PROCESS",
-      title: "From a clear question to a verifiable release.",
+      title: "How I work: from a clear question to a verifiable release.",
       description: "Good engineering is a sequence of decisions, not a pile of frameworks. This is the approach I use to reason about a project, its risks, and its delivery.",
       cta: "Explore by engineering challenge",
       steps: [
@@ -21,7 +21,7 @@ export const portfolioExtras = {
     },
     explore: {
       eyebrow: "06 / EXPLORE BY CHALLENGE",
-      title: "Pick the engineering question that interests you.",
+      title: "Explore by challenge. Follow the evidence.",
       description: "Each path takes you directly to a real case study, its trade-offs and the source code behind it.",
       cta:"Read the case study",
       next:"See quick answers",
@@ -34,7 +34,7 @@ export const portfolioExtras = {
     },
     questions:{
       eyebrow:"07 / QUICK ANSWERS",
-      title:"A few useful details, up front.",
+      title:"Quick answers, useful details up front.",
       description:"For people evaluating a project, a role or a collaboration.",
       items:[
         {question:"Can I inspect the source code?",answer:"Yes. The case studies link to each project's source and provide context about the architecture and its trade-offs.",action:"Explore GitHub",destination:"github"},
@@ -47,7 +47,7 @@ export const portfolioExtras = {
     nav:"طريقة عملي",
     process:{
       eyebrow:"05 / منهجية العمل",
-      title:"من سؤال واضح إلى إصدار يمكن التحقق منه.",
+      title:"كيف أعمل: من سؤال واضح إلى إصدار يمكن التحقق منه.",
       description:"الهندسة الجيدة سلسلة قرارات مدروسة، وليست مجموعة أدوات فقط. هذه هي الطريقة التي أتعامل بها مع متطلبات المشروع ومخاطره وتسليمه.",
       cta:"استكشف حسب التحدّي",
       steps:[
@@ -85,7 +85,7 @@ export const portfolioExtras = {
     nav:"Çalışma sürecim",
     process:{
       eyebrow:"05 / ÇALIŞMA SÜRECİ",
-      title:"Net bir sorudan doğrulanabilir bir sürüme.",
+      title:"Nasıl çalışırım: net bir sorudan doğrulanabilir bir sürüme.",
       description:"İyi mühendislik araç listesi değil, bilinçli kararlar dizisidir. Projenin gereksinimlerini, risklerini ve teslimatını bu yaklaşımla ele alırım.",
       cta:"Probleme göre keşfet",
       steps:[
