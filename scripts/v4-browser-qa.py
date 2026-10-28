@@ -50,6 +50,31 @@ with sync_playwright() as pw:
                     check(work.locator("article").count() == 7,
                           f"{name}: missing public repositories")
                     check(page.locator("#ai-lab").count() == 1, f"{name}: Atlas missing")
+                    # Cinematic V6: real featured media and two new user-directed systems.
+                    check(page.locator('[data-cinematic-scene="true"]').count() == 1,
+                          f"{name}: cinematic scene missing")
+                    check(page.locator("#featured [data-featured-system]").count() == 3,
+                          f"{name}: three visual project stories missing")
+                    for slug in ("eventify", "bookhaven", "fitflow"):
+                        check(page.locator(f'#featured a[href="/work/{slug}/"]').count() == 1,
+                              f"{name}: featured case study {slug} missing")
+                    check(page.locator('#mission-paths [data-mission-path]').count() == 3,
+                          f"{name}: guided mission paths missing")
+                    blueprints = page.locator("#blueprint-lab [data-blueprint-selector]")
+                    check(blueprints.get_by_role("button").count() == 3,
+                          f"{name}: missing architecture choices")
+                    for project in ("BookHaven", "FitFlow", "Eventify"):
+                        button = blueprints.get_by_role("button", name=project)
+                        button.click()
+                        check(button.get_attribute("aria-pressed") == "true",
+                              f"{name}: selection didn't update for {project}")
+                        check(page.locator("#blueprint-lab [role='img']").count() == 1,
+                              f"{name}: accessible diagram missing for {project}")
+                    check(page.locator("#blueprint-lab [aria-live='polite']").count() == 1,
+                          f"{name}: inspector has no announcement region")
+                    # Semantic deep links must lead to real on-page navigation destinations.
+                    for section in ("featured", "blueprint-lab", "work", "collaborate", "contact"):
+                        check(page.locator("#" + section).count() == 1, f"{name}: missing #{section}")
                     # V5: new sections must stay navigable and complete in all locales/themes.
                     for section in ("highlights", "process", "collaborate", "faq"):
                         check(page.locator("#" + section).count() == 1,
@@ -109,7 +134,7 @@ with sync_playwright() as pw:
                     page.locator(f'html[data-theme="{theme}"]').wait_for(timeout=5000)
                     if label == "mobile":
                         page.add_script_tag(path=os.environ.get("ATLAS_AXE_SCRIPT", "node_modules/axe-core/axe.min.js"))
-                        for section_id in ("highlights", "process", "collaborate", "faq"):
+                        for section_id in ("highlights", "process", "collaborate", "faq", "blueprint-lab", "mission-paths", "featured"):
                             violations = page.evaluate("""async (section) => {
                                 const issues = await axe.run(document.getElementById(section), {
                                     runOnly: {type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']},
