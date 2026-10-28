@@ -59,6 +59,30 @@ for(const [locale,width,height] of cases){
   assert.ok(await zoomIn.isVisible()&&await zoomOut.isVisible(),"Localized on-screen zoom controls accessible");
   await zoomIn.click();await zoomOut.click();
   report.checks.localized_touch_camera_controls="pass";
+  // V3.8: proof-based sections must be visible, localized, navigable and
+  // accessible with native <details> without creating horizontal overflow.
+  for(const id of ["process","explore","questions"]){
+    const region=page.locator('section#'+id);
+    assert.equal(await region.count(),1,"One new section #"+id+" for "+locale);
+    assert.ok(await region.getByRole("heading",{level:2}).isVisible(),"New section has a visible heading");
+    assert.ok(await page.locator('a[href="#'+id+'"]').count()>=1,"Section "+id+" is reachable by anchor");
+  }
+  assert.equal(await page.locator('[data-process-step]').count(),4,"All 4 work stages visible");
+  assert.equal(await page.locator('[data-focus-project]').count(),4,"All 4 engineering challenge paths visible");
+  for(const slug of ["eventify","bookhaven","fitflow","venues-api"]){
+    assert.equal(await page.locator('#explore a[href="/'+locale+'/work/'+slug+'/"]').count(),1,
+      "Challenge must link to its localized case study");
+  }
+  const faq=page.locator("#questions details").first();
+  assert.equal(await page.locator("#questions details").count(),3,"Three FAQs");
+  await faq.locator("summary").click();
+  assert.ok(await faq.getAttribute("open")!==null,"Native FAQ expands");
+  assert.ok(await faq.locator("a").isVisible(),"FAQ answer contains a usable link");
+  await faq.locator("summary").click();
+  assert.ok(await faq.getAttribute("open")===null,"Native FAQ collapses");
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),
+    "New sections must not introduce sideways scrolling");
+  report.checks.process_explore_faq="pass";
   report.checks.home_and_rtl="pass";report.home=state;
   await page.screenshot({path:folder+"/"+locale+"-"+width+"-home.png",fullPage:true});
   await page.getByRole("link",{name:locale==="ar"?"السيرة الذاتية":"Özgeçmiş"}).first().click();
@@ -103,6 +127,14 @@ for(const locale of ["ar","tr"]){
      viewport:document.documentElement.clientWidth,body:document.documentElement.scrollWidth
    }));
    assert.ok(dimensions.body<=dimensions.viewport+1,"No sideways scrolling without JavaScript on "+route);
+   if(route==="/"){
+     assert.equal(await page.locator('section[data-portfolio-section]').count(),3,
+       "All three extra sections must render without JavaScript");
+     const details=page.locator('#questions details').first();
+     await details.locator("summary").click();
+     assert.ok(await details.getAttribute("open")!==null,"FAQ works without JavaScript");
+     report.tests.static_portfolio_sections="pass";
+   }
    report.tests.raw_html_before_javascript="pass";
    report.tests.no_script_layout="pass";report.dimensions=dimensions;
    if(route==="/")await page.screenshot({path:folder+"/"+locale+"-no-js-320.png",fullPage:false});
@@ -186,6 +218,15 @@ for(const locale of ["en","ar","tr"]){
      const a=state.links[i],b=state.links[j];
      assert.ok(a.right<=b.x+1||b.right<=a.x+1||a.bottom<=b.y+1||b.bottom<=a.y+1,
        "Language links must not overlap at 200% text: "+JSON.stringify([a,b]));
+   }
+   if(route==="/"){
+     assert.equal(await page.locator('section[data-portfolio-section]').count(),3,
+       "All added portfolio sections survive 200% enlarged text in "+locale);
+     const newSections=await page.locator('section[data-portfolio-section]').evaluateAll(els=>
+       els.map(el=>{const r=el.getBoundingClientRect();return {id:el.id,left:r.left,right:r.right};}));
+     for(const bounds of newSections)assert.ok(bounds.left>=-1&&bounds.right<=state.viewport+1,
+       "Added section fits enlarged mobile viewport: "+JSON.stringify(bounds));
+     report.tests.enlarged_portfolio_sections="pass";
    }
    report.tests.readable_enlarged_text="pass";report.metrics=state;
    await page.screenshot({path:folder+"/"+locale+"-"+(route==="/resume/"?"resume":"home")+"-text-200.png",animations:"disabled"});
