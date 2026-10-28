@@ -193,6 +193,16 @@ try{
  assert.ok(bbox&&bbox.width>=36&&bbox.height>=36,"Zoom controls remain touch targetable");
  await plus.click();await minus.click();
  assert.ok(await touchPage.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),"Mobile zoom controls do not overflow layout");
+ // Every primary Holo control must have a usable 44px touch target on phones.
+ const panelButtons=touchPage.locator('[class*="HoloInterface_controls"] button');
+ assert.equal(await panelButtons.count(),6,"Three mode + three action buttons remain available");
+ for(const control of await panelButtons.all()){
+   const bounds=await control.boundingBox();
+   const label=await control.getAttribute("aria-label")??await control.textContent();
+   assert.ok(bounds&&bounds.height>=43.5&&bounds.width>=43.5,
+     "Mobile Holo control touch target must be >=44px: "+label+" "+JSON.stringify(bounds));
+ }
+ touchReport.tests.mobile_44px_control_targets="pass";
  touchReport.tests.touch_zoom_and_scroll="pass";
 }catch(e){failures++;touchReport.failure=String(e);}
 finally{reports.push(touchReport);await touchPage.close();}
@@ -312,6 +322,38 @@ try{
  await contextLossPage.screenshot({path:output+"/context-lost-fallback.png",animations:"disabled"});
 }catch(e){failures++;contextLossReport.failure=String(e);}
 finally{reports.push(contextLossReport);await contextLossPage.close();}
+// V3.6: a GPU shader may fail after a WebGL context was allocated.
+// Recovery must mount a NEW 2D canvas with actual artwork, not a blank
+// WebGL canvas or a misleading "STATIC" label.
+const startupFaultPage=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});
+const startupFaultReport={viewport:"webgl-shader-initialization-fault",tests:{}};
+const startupErrors=[];startupFaultPage.on("pageerror",e=>startupErrors.push(String(e)));
+await startupFaultPage.addInitScript(()=>{
+ const original=WebGL2RenderingContext.prototype.getShaderParameter;
+ WebGL2RenderingContext.prototype.getShaderParameter=function(shader,flag){
+   if(flag===this.COMPILE_STATUS)return false;
+   return original.call(this,shader,flag);
+ };
+});
+try{
+ await startupFaultPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ await startupFaultPage.getByText("STATIC · 2D").waitFor({state:"visible",timeout:8000});
+ const state=await startupFaultPage.locator("canvas").evaluate(el=>{
+   const ctx=el.getContext("2d");
+   if(!ctx)return {kind:"unusable",pixels:0};
+   const pixels=ctx.getImageData(0,0,el.width,el.height).data;
+   let painted=0;for(let i=3;i<pixels.length;i+=128)if(pixels[i]>0)painted++;
+   return {kind:"2d",pixels:painted,width:el.width,height:el.height};
+ });
+ assert.equal(state.kind,"2d","Shader failure must result in a real Canvas2D renderer");
+ assert.ok(state.pixels>30,"Static artwork actually painted after shader failure");
+ assert.equal(await startupFaultPage.getByRole("status").count(),1,"Status announces 2D fallback");
+ assert.equal(await startupFaultPage.getByRole("button",{name:"Zoom in"}).count(),0,"3D-only controls are hidden");
+ assert.deepEqual(startupErrors,[],"No uncaught JS exceptions after shader failure");
+ startupFaultReport.tests.shader_initialization_recovery="pass";
+ startupFaultReport.metrics=state;
+}catch(e){failures++;startupFaultReport.failure=String(e);}
+finally{reports.push(startupFaultReport);await startupFaultPage.close();}
 await browser.close();
 const result={status:failures?"failed":"passed",failures,reports};
 await writeFile(output+"/report.json",JSON.stringify(result,null,2));
