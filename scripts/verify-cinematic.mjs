@@ -10,6 +10,10 @@ for(const [locale,path] of cases) {
  for(const project of ["eventify","bookhaven","fitflow"]) {
    assert(s.includes("/work/"+project+"/"),`${locale}: missing case study link ${project}`);
  }
+ assert(s.includes('id="blueprint-lab"'),`${locale}: missing interactive architecture lab`);
+ assert(s.includes('data-blueprint-selector="true"'),`${locale}: missing architecture explorer controls`);
+ assert(s.includes('id="mission-paths"'),`${locale}: missing audience navigation`);
+ assert((s.match(/data-mission-path=/g)||[]).length===3,`${locale}: missing journey paths`);
  assert(s.includes('id="work"'),`${locale}: complete 7-project library missing`);
  assert(s.includes('id="ai-lab"'),`${locale}: AI Atlas must remain`);
  assert(s.includes('id="highlights"'),`${locale}: case study evidence must remain`);
