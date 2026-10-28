@@ -1,3 +1,5 @@
+import { assertAtlasProductionContract } from "./atlas-production-contract.mjs";
+
 const baseUrl = (process.env.PORTFOLIO_URL ?? "https://abdulrahman-hajar-portfolio.onrender.com").replace(/\/$/, "");
 const expectedSha = process.env.EXPECTED_GIT_SHA?.trim() || null;
 const requireSecurityHeaders = process.env.REQUIRE_SECURITY_HEADERS === "true";
@@ -83,6 +85,9 @@ for (const expected of [
 ]) {
   if (!homeHtml.includes(expected)) throw new Error(`Homepage production contract missing: ${expected}`);
 }
+
+const atlasContract = assertAtlasProductionContract(homeHtml);
+console.log(`Production AI Atlas verified: ${atlasContract.nodeCount} disciplines, ${atlasContract.verifiedModes} modes`);
 
 if (expectedSha && !homeHtml.includes(`data-deploy-commit="${expectedSha}"`)) {
   throw new Error(`Homepage deploy marker does not match expected SHA ${expectedSha}`);
