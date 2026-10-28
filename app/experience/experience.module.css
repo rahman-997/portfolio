@@ -100,9 +100,10 @@
 .projectActions .projectPrimary{color:var(--accent)}
 .projectActions a:hover{color:var(--ink)}
 .repoNotice{color:var(--muted);font-size:.75rem;margin-top:1.5rem;line-height:1.7}
-.atlasSection{padding:5.5rem 0 7rem;background:var(--surface2);border-block:1px solid var(--line)}
+.atlasSection{padding:5.5rem 0 7rem;background:#071521;color:#eef8f6;border-block:1px solid rgba(120,210,230,.18)}
 .atlasIntro{width:min(1324px,calc(100% - 56px));margin:0 auto 2.6rem}
-.atlasIntro h2{max-width:860px}
+.atlasIntro h2{max-width:860px;color:#eef8f6}
+.atlasIntro .sectionLabel{color:#a8ffbe}
 .valueGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
 .valueGrid article{padding:2rem 1.7rem;min-height:230px;border-top:2px solid var(--accent);border-radius:0 0 18px 18px;background:var(--surface)}
 .valueGrid article>span{font-size:.8rem;color:var(--accent);font-weight:850}
