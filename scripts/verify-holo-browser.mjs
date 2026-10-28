@@ -203,6 +203,33 @@ try{
      "Mobile Holo control touch target must be >=44px: "+label+" "+JSON.stringify(bounds));
  }
  touchReport.tests.mobile_44px_control_targets="pass";
+ await touchPage.setViewportSize({width:320,height:700});
+ await touchPage.waitForTimeout(180);
+ const narrow=await touchPage.evaluate(()=>{
+   const panel=document.querySelector('[class*="HoloInterface_controls"]');
+   const groups=panel?[...panel.children].filter(e=>e.matches('[class*="HoloInterface_modes"],[class*="HoloInterface_actions"]')):[];
+   return {
+     viewport:document.documentElement.clientWidth,
+     scroll:document.documentElement.scrollWidth,
+     groupRects:groups.map(el=>{const b=el.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}),
+     buttons:panel?[...panel.querySelectorAll("button")].map(el=>{
+       const b=el.getBoundingClientRect();
+       return {x:b.x,y:b.y,width:b.width,height:b.height};
+     }):[],
+     panelBounds:(()=>{const b=panel.getBoundingClientRect();return {left:b.left,right:b.right,top:b.top,bottom:b.bottom};})()
+   };
+ });
+ assert.ok(narrow.scroll<=narrow.viewport+1,"320px portrait must not overflow sideways");
+ assert.equal(narrow.groupRects.length,2,"Mode and action groups retained");
+ assert.ok(narrow.groupRects[0].y+narrow.groupRects[0].height<=narrow.groupRects[1].y+.5,
+   "320px mode and action groups must not overlap");
+ for(const btn of narrow.buttons){
+   assert.ok(btn.width>=43.5&&btn.height>=43.5,"320px button too small");
+   assert.ok(btn.x>=narrow.panelBounds.left-1&&btn.x+btn.width<=narrow.panelBounds.right+1,
+     "320px button must remain inside Holo control bar");
+ }
+ touchReport.tests.narrow_mobile_no_overlap="pass";
+ touchReport.narrow=narrow;
  touchReport.tests.touch_zoom_and_scroll="pass";
 }catch(e){failures++;touchReport.failure=String(e);}
 finally{reports.push(touchReport);await touchPage.close();}
