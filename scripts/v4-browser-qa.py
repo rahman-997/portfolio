@@ -148,6 +148,15 @@ with sync_playwright() as pw:
                     overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
                     check(overflow <= 2, f"{name}: horizontal overflow {overflow}px")
                     check(not errors, f"{name}: browser exceptions {errors}")
+                    if label == "desktop" and (theme == "dark" or (locale == "en" and theme == "light")):
+                        for section_id, shot in (
+                            ("top", "hero"), ("featured", "features"),
+                            ("blueprint-lab", "blueprint"), ("mission-paths", "paths")
+                        ):
+                            page.locator("#" + section_id).screenshot(
+                                path=str(OUT / (name + "-" + shot + ".png")),
+                                animations="disabled", timeout=30000
+                            )
                     if label == "mobile":
                         page.screenshot(path=str(OUT / (name + ".png")), full_page=True,
                                         animations="disabled")
