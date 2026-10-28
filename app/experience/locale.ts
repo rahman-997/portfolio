@@ -1,0 +1,100 @@
+export type Locale = "en" | "ar" | "tr";
+export const LOCALES: Locale[] = ["en", "ar", "tr"];
+export const localeHome = (locale: Locale) => locale === "en" ? "/" : `/${locale}/`;
+
+export const TEXT = {
+  en: {
+    skip: "Skip to content", role: "Software Engineer · Full-Stack Developer",
+    navWork: "Projects", navAtlas: "AI Lab", navAbout: "About", navResume: "Résumé",
+    hello: "Independent software engineering / Istanbul, Türkiye", heroTop: "Ideas built into",
+    heroBottom: "working systems.", heroLead: "I design, build and ship complete digital products, from thoughtful interfaces to reliable APIs, data and production operations.",
+    workButton: "Explore all projects", contactButton: "Let's connect", scrollLabel: "SCROLL TO EXPLORE",
+    dashboard: "ENGINEERING / IN MOTION", visualTitle: "From concept to production",
+    visualDetail: "Interface → Logic → Data → Deployment", availability: "OPEN TO OPPORTUNITIES",
+    metricProjects: "Public repositories", metricStudies: "Deep-dive case studies", metricLanguages: "Languages",
+    atlasEyebrow: "INTERACTIVE SYSTEMS", atlasTitle: "Explore the engineering beneath the surface.",
+    projectEyebrow: "01 / WORK LIBRARY", projectTitle: "Built. Tested. Shared.",
+    projectLead: "A complete catalog of public code repositories, including a clearly identified open-source fork. Private work stays private.",
+    filterAll: "All projects", filterProduct: "Products", filterBackend: "Backend", filterTools: "Tools & open source",
+    caseStudy: "Case study (EN)", live: "Live demo", source: "Source code", fork: "Open-source fork",
+    original: "Original project", noDemo: "Code repository", projectCount: "projects",
+    systemEyebrow: "02 / APPROACH", systemTitle: "Make the whole journey dependable.",
+    systemLead: "A polished interface is only the beginning. I connect it to maintainable services, clear data ownership and useful automated tests.",
+    systemCards: [
+      {title:"Experience",text:"Accessible, fast interfaces built for real people and real devices."},
+      {title:"Architecture",text:"Explicit boundaries across APIs, data, queues and system behavior."},
+      {title:"Verification",text:"Tests, security checks and production monitoring that keep work trustworthy."}
+    ],
+    aboutEyebrow: "03 / ABOUT", aboutTitle: "Curiosity meets engineering discipline.",
+    aboutText: "I'm Abdulrahman Hajar, a software engineer and Computer Engineering student at Nişantaşı University in Istanbul. I work across frontend, backend, AI integrations and reliability, with an emphasis on products that do more than look good.",
+    aboutNote: "Computer Engineering · Nişantaşı University",
+    endTitle: "Have an idea worth building?", endText: "Explore the code, see the live products or connect to discuss engineering opportunities.",
+    github: "GitHub profile", linkedIn: "Connect on LinkedIn", top: "Back to top",
+    themeLight: "Switch to light theme", themeDark: "Switch to dark theme",
+    language: "Choose language", repoNotice: "Only public repositories are listed. Private repositories are not exposed.",
+    otherLocaleNote: "Detailed legacy case studies and résumé remain available in English."
+  },
+  ar: {
+    skip: "تخطَّ إلى المحتوى", role: "مهندس برمجيات · مطوّر متكامل",
+    navWork: "المشاريع", navAtlas: "مختبر الذكاء الاصطناعي", navAbout: "عني", navResume: "السيرة الذاتية",
+    hello: "هندسة برمجيات مستقلة / إسطنبول، تركيا", heroTop: "أحوّل الأفكار إلى",
+    heroBottom: "أنظمة تعمل فعلاً.", heroLead: "أصمّم وأطوّر وأطلق منتجات رقمية متكاملة، من الواجهات المدروسة إلى واجهات البرمجة والبيانات والأنظمة الإنتاجية الموثوقة.",
+    workButton: "استعرض جميع المشاريع", contactButton: "لنتواصل", scrollLabel: "اكتشف المزيد",
+    dashboard: "هندسة / قيد التطوير", visualTitle: "من الفكرة إلى الإطلاق",
+    visualDetail: "واجهة ← منطق العمل ← البيانات ← النشر", availability: "متاح لفرص جديدة",
+    metricProjects: "مستودعات عامة", metricStudies: "دراسات تقنية مفصلة", metricLanguages: "لغات",
+    atlasEyebrow: "أنظمة تفاعلية", atlasTitle: "اكتشف الهندسة التي تقف خلف التجربة.",
+    projectEyebrow: "01 / مكتبة الأعمال", projectTitle: "مشاريع حقيقية. وكود متاح.",
+    projectLead: "معرض لجميع مستودعات الكود العامة، مع تمييز المشاريع الأصلية عن النسخ المتفرعة من المصادر المفتوحة. تبقى المشاريع الخاصة غير منشورة.",
+    filterAll: "كل المشاريع", filterProduct: "المنتجات", filterBackend: "الخلفية", filterTools: "الأدوات والمصادر المفتوحة",
+    caseStudy: "دراسة المشروع (EN)", live: "التجربة الحية", source: "الكود المصدري", fork: "نسخة متفرعة مفتوحة المصدر",
+    original: "مشروع أصلي", noDemo: "مستودع المشروع", projectCount: "مشاريع",
+    systemEyebrow: "02 / طريقة العمل", systemTitle: "أهتم برحلة المنتج كاملة.",
+    systemLead: "الواجهة الجميلة مجرد البداية. أربطها بخدمات قابلة للصيانة وملكية واضحة للبيانات واختبارات تلقائية مفيدة.",
+    systemCards: [
+      {title:"التجربة",text:"واجهات سريعة وسهلة الوصول، مصممة لأشخاص وأجهزة حقيقية."},
+      {title:"الهندسة",text:"حدود واضحة بين واجهات البرمجة والبيانات والمهام الخلفية."},
+      {title:"التحقق",text:"اختبارات وفحوص أمان ومراقبة للإنتاج تمنح النتائج مصداقية."}
+    ],
+    aboutEyebrow: "03 / نبذة", aboutTitle: "فضول تقني وانضباط هندسي.",
+    aboutText: "أنا عبدالرحمن حجار، مهندس برمجيات وطالب هندسة حاسوب في جامعة نيشانتاشي في إسطنبول. أعمل على الواجهات والخدمات الخلفية وتكاملات الذكاء الاصطناعي وموثوقية الأنظمة، مع التركيز على المنتجات التي تتجاوز المظهر الجميل.",
+    aboutNote: "هندسة الحاسوب · جامعة نيشانتاشي",
+    endTitle: "عندك فكرة تستحق التنفيذ؟", endText: "استكشف الكود، جرّب المنتجات أو تواصل معي لمناقشة فرص هندسة البرمجيات.",
+    github: "حساب GitHub", linkedIn: "تواصل عبر LinkedIn", top: "العودة للأعلى",
+    themeLight: "تفعيل الوضع الفاتح", themeDark: "تفعيل الوضع الداكن",
+    language: "اختر اللغة", repoNotice: "نعرض المستودعات العامة فقط. المشاريع الخاصة تبقى خاصة.",
+    otherLocaleNote: "دراسات الحالة التقنية السابقة والسيرة الذاتية متوفرة بالإنجليزية."
+  },
+  tr: {
+    skip: "İçeriğe geç", role: "Yazılım Mühendisi · Full-Stack Geliştirici",
+    navWork: "Projeler", navAtlas: "Yapay Zekâ Lab", navAbout: "Hakkımda", navResume: "Özgeçmiş",
+    hello: "Bağımsız yazılım mühendisliği / İstanbul, Türkiye", heroTop: "Fikirleri çalışan",
+    heroBottom: "sistemlere dönüştürüyorum.", heroLead: "Düşünülmüş arayüzlerden güvenilir API'lere, veri altyapılarına ve canlı operasyonlara kadar uçtan uca dijital ürünler tasarlıyor, geliştiriyor ve yayımlıyorum.",
+    workButton: "Tüm projeleri keşfet", contactButton: "İletişime geç", scrollLabel: "KEŞFETMEK İÇİN KAYDIR",
+    dashboard: "MÜHENDİSLİK / CANLI", visualTitle: "Fikirden üretime",
+    visualDetail: "Arayüz → İş mantığı → Veri → Dağıtım", availability: "FIRSATLARA AÇIK",
+    metricProjects: "Herkese açık depolar", metricStudies: "Teknik proje incelemeleri", metricLanguages: "Dil",
+    atlasEyebrow: "ETKİLEŞİMLİ SİSTEMLER", atlasTitle: "Deneyimin arkasındaki mühendisliği keşfedin.",
+    projectEyebrow: "01 / PROJE KÜTÜPHANESİ", projectTitle: "Geliştirildi. Test edildi. Paylaşıldı.",
+    projectLead: "Açık kaynak fork'u açıkça belirtilmiş tüm herkese açık kod depoları. Özel çalışmalar gizli tutulur.",
+    filterAll: "Tüm projeler", filterProduct: "Ürünler", filterBackend: "Backend", filterTools: "Araçlar ve açık kaynak",
+    caseStudy: "Teknik inceleme (EN)", live: "Canlı demo", source: "Kaynak kod", fork: "Açık kaynak fork'u",
+    original: "Özgün proje", noDemo: "Kod deposu", projectCount: "proje",
+    systemEyebrow: "02 / YAKLAŞIM", systemTitle: "Tüm sürecin güvenilir olmasını sağlıyorum.",
+    systemLead: "İyi bir arayüz yalnızca başlangıç. Bakımı kolay servisleri, net veri sahipliğini ve anlamlı otomatik testleri bir araya getiriyorum.",
+    systemCards: [
+      {title:"Deneyim",text:"Gerçek insanlara ve cihazlara yönelik erişilebilir, hızlı arayüzler."},
+      {title:"Mimari",text:"API, veri, kuyruk ve sistem davranışlarında açık sorumluluklar."},
+      {title:"Doğrulama",text:"Güvenilir teslimatlar için testler, güvenlik denetimleri ve üretim izlemesi."}
+    ],
+    aboutEyebrow: "03 / HAKKIMDA", aboutTitle: "Merak, mühendislik disipliniyle buluşuyor.",
+    aboutText: "Ben Abdulrahman Hajar. İstanbul Nişantaşı Üniversitesi'nde Bilgisayar Mühendisliği öğrencisiyim ve yazılım geliştiriyorum. Ön yüz, backend, yapay zekâ entegrasyonları ve güvenilir sistemler üzerinde çalışıyor; güzel görünmenin ötesine geçen ürünlere odaklanıyorum.",
+    aboutNote: "Bilgisayar Mühendisliği · Nişantaşı Üniversitesi",
+    endTitle: "Geliştirilmeye değer bir fikriniz mi var?", endText: "Kodu inceleyin, canlı ürünleri deneyin veya yazılım mühendisliği fırsatlarını konuşmak için iletişime geçin.",
+    github: "GitHub profili", linkedIn: "LinkedIn'de iletişim", top: "Başa dön",
+    themeLight: "Açık temaya geç", themeDark: "Koyu temaya geç",
+    language: "Dil seçimi", repoNotice: "Yalnızca herkese açık depolar listelenir. Özel depolar açıklanmaz.",
+    otherLocaleNote: "Ayrıntılı önceki incelemeler ve özgeçmiş İngilizce olarak sunulmaktadır."
+  },
+} as const;
+export function copyFor(locale: Locale) { return TEXT[locale]; }
