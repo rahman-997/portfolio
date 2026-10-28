@@ -212,6 +212,24 @@ try{
  const reset=await sample();
  assert.ok(Math.abs(reset-4.15)<.03,"Reset returns zoom to baseline after pinch");
  pinchReport.tests.reset_after_pinch="pass";
+ // The reverse pinch should zoom back out, then reset must still work.
+ await canvas.scrollIntoViewIfNeeded();
+ const reverseRect=await canvas.boundingBox();
+ assert.ok(reverseRect,"Touch canvas still visible after reset");
+ const rx=reverseRect.x+reverseRect.width/2,ry=reverseRect.y+reverseRect.height/2;
+ const reverseFingers=(span)=>[{x:rx-span,y:ry,id:31},{x:rx+span,y:ry,id:32}];
+ await cdp.send("Input.dispatchTouchEvent",{type:"touchStart",touchPoints:reverseFingers(85)});
+ for(const span of [72,55,40,26]){
+   await cdp.send("Input.dispatchTouchEvent",{type:"touchMove",touchPoints:reverseFingers(span)});
+   await pinchPage.waitForTimeout(35);
+ }
+ await cdp.send("Input.dispatchTouchEvent",{type:"touchEnd",touchPoints:[]});
+ await pinchPage.waitForTimeout(150);
+ const zoomedOut=await sample();
+ assert.ok(zoomedOut>reset+.20,"Pinch inward should zoom GPU camera out");
+ pinchReport.tests.reverse_pinch_zoom_out="pass";
+ await pinchPage.getByRole("button",{name:"Reset 3D view"}).click();
+ await pinchPage.waitForTimeout(120);
  const after=await pinchPage.evaluate(()=>({
    overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
    viewportScale:window.visualViewport?.scale??1,
