@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PROFILE_LINKS, PROJECT_LIST } from "./portfolio-data";
 import HoloInterface from "./components/HoloInterface";
 import PortfolioSections from "./components/PortfolioSections";
+import PortfolioNextSections from "./components/PortfolioNextSections";
 import LanguageLinks from "./components/LanguageLinks";
 import styles from "./home.module.css";
 
@@ -295,6 +296,7 @@ export default function Home() {
         </section>
 
         <PortfolioSections locale="en" />
+        <PortfolioNextSections locale="en" />
 
         <section className={styles.resumeCallout}>
           <div>
@@ -308,7 +310,7 @@ export default function Home() {
         </section>
 
         <section className={styles.contact}>
-          <p>08 / CONTACT</p>
+          <p>10 / CONTACT</p>
           <h2>Looking for evidence? Start with the work.</h2>
           <p>Review the live systems, inspect the source, or connect with me for software engineering opportunities and serious product work.</p>
           <div className={styles.contactLinks}>
