@@ -83,6 +83,16 @@ for(const [locale,width,height] of cases){
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),
     "New sections must not introduce sideways scrolling");
   report.checks.process_explore_faq="pass";
+  // Capture each new section directly; fullPage screenshots of very tall
+  // WebGL pages can repeat composited viewport tiles in headless Chromium.
+  if(locale==="ar" && (width===390||width===1440)){
+    for(const id of ["process","explore","questions"]){
+      await page.locator("section#"+id).screenshot({
+        path:folder+"/ar-"+width+"-"+id+"-section.png",
+        animations:"disabled",timeout:30000
+      });
+    }
+  }
   report.checks.home_and_rtl="pass";report.home=state;
   await page.screenshot({path:folder+"/"+locale+"-"+width+"-home.png",fullPage:true});
   await page.getByRole("link",{name:locale==="ar"?"السيرة الذاتية":"Özgeçmiş"}).first().click();
