@@ -1,0 +1,167 @@
+/* V3.8 / static editorial additions. Inherits site palette and RTL direction. */
+.section{
+ width:min(1240px,calc(100% - 48px));
+ margin:0 auto;
+ padding:106px 0 0;
+ scroll-margin-top:110px;
+ min-width:0;
+}
+.intro{
+ display:grid;grid-template-columns:180px minmax(0,1fr);
+ gap:3rem;align-items:start;margin-bottom:34px;
+}
+.eyebrow{
+ margin:.35rem 0 0;color:#8ba99a;
+ font-size:.66rem;font-weight:850;letter-spacing:.12em;
+}
+.intro h2{
+ max-width:920px;margin:0;
+ font-size:clamp(2.6rem,5.4vw,5.5rem);
+ font-weight:760;letter-spacing:-.06em;line-height:1.02;
+ text-wrap:balance;overflow-wrap:break-word;
+}
+.lead{
+ color:#a3b6ad;max-width:760px;
+ font-size:.87rem;line-height:1.82;margin:1.1rem 0 0;
+ text-wrap:pretty;
+}
+.jump{
+ display:inline-flex;align-items:center;justify-content:space-between;
+ gap:1.25rem;min-height:44px;margin-top:22px;padding:10px 16px;
+ border:1px solid rgba(168,255,190,.31);border-radius:10px;
+ color:#b8ffcf;font-size:.74rem;font-weight:800;text-decoration:none;
+ background:rgba(168,255,190,.045);transition:background .18s,border-color .18s;
+}
+.jump:hover{background:rgba(168,255,190,.12);border-color:#a8ffbe}
+.jump:focus-visible,.challengeCard a:focus-visible,.faqItem a:focus-visible{
+ outline:2px solid #a8ffbe;outline-offset:4px;
+}
+.timeline{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ list-style:none;margin:0;padding:0;
+ border:1px solid rgba(232,244,237,.13);border-radius:18px;
+ background:linear-gradient(145deg,#10201b,#081512);overflow:hidden;
+}
+.step{
+ min-width:0;position:relative;display:flex;flex-direction:column;
+ min-height:263px;padding:25px 21px 28px;
+ border-inline-end:1px solid rgba(232,244,237,.13);
+}
+.step:last-child{border-inline-end:none}
+.stepNumber{
+ display:grid;place-items:center;width:43px;height:43px;
+ border:1px solid rgba(168,255,190,.32);border-radius:12px;
+ color:#b8ffcf;background:rgba(168,255,190,.06);
+ font:800 .74rem/1 ui-monospace,Consolas,monospace;
+}
+.step h3{
+ font-size:1.3rem;line-height:1.28;letter-spacing:-.03em;
+ margin:35px 0 10px;overflow-wrap:anywhere;
+}
+.step p{font-size:.77rem;line-height:1.75;color:#91a69b;margin:0}
+.challengeSection{padding-top:128px}
+.challengeGrid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:13px;
+}
+.challengeCard{
+ position:relative;display:flex;flex-direction:column;min-width:0;
+ min-height:315px;padding:27px 29px;
+ border:1px solid rgba(232,244,237,.14);border-radius:16px;
+ background:linear-gradient(140deg,rgba(25,51,44,.74),rgba(8,21,20,.98) 68%);
+ transition:border-color .18s,transform .18s;
+}
+.challengeCard:hover{border-color:rgba(168,255,190,.41);transform:translateY(-2px)}
+.challengeMeta{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:16px;color:#9ab9a6;font-size:.64rem;font-weight:750;
+}
+.challengeMeta span:first-child{
+ flex:0 0 auto;color:#a8ffbe;
+ font-family:ui-monospace,Consolas,monospace;
+}
+.challengeCard h3{
+ max-width:520px;margin:38px 0 11px;
+ font-size:clamp(1.5rem,2.25vw,2.2rem);
+ line-height:1.23;letter-spacing:-.035em;overflow-wrap:anywhere;
+}
+.challengeCard>p{
+ max-width:520px;margin:0 0 26px;
+ color:#a1b5aa;font-size:.78rem;line-height:1.72;
+}
+.cardBottom{
+ display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;
+ gap:10px;margin-top:auto;padding-top:16px;
+ border-top:1px solid rgba(232,244,237,.13);
+}
+.projectName{font-size:.66rem;color:#8eafa0;letter-spacing:.03em}
+.cardBottom a{
+ display:inline-flex;align-items:center;gap:8px;
+ padding:10px 0;min-height:44px;text-decoration:none;
+ color:#d4ffe2;font-weight:800;font-size:.73rem;
+}
+.cardBottom a:hover{color:#fff}
+.faqSection{padding-top:126px;padding-bottom:42px}
+.faqList{border-top:1px solid rgba(232,244,237,.16)}
+.faqItem{border-bottom:1px solid rgba(232,244,237,.16)}
+.faqItem summary{
+ display:flex;align-items:center;gap:21px;
+ min-height:80px;padding:17px 9px;
+ cursor:pointer;list-style:none;font-size:clamp(.98rem,1.6vw,1.38rem);
+ font-weight:730;line-height:1.4;
+}
+.faqItem summary::-webkit-details-marker{display:none}
+.faqItem summary:focus-visible{
+ outline:2px solid #a8ffbe;outline-offset:-2px;border-radius:8px;
+}
+.faqCount{
+ flex:0 0 31px;color:#9cb4a3;font:750 .64rem/1 ui-monospace,Consolas,monospace;
+}
+.faqPlus{margin-inline-start:auto;font-size:1.5rem;color:#a8ffbe;transition:transform .16s}
+.faqItem[open] .faqPlus{transform:rotate(45deg)}
+.faqAnswer{padding:0 60px 25px;max-width:880px}
+.faqAnswer p{margin:0;color:#a2b4a8;line-height:1.9;font-size:.82rem}
+.faqAnswer a{
+ display:inline-flex;align-items:center;gap:9px;
+ padding:9px 0;min-height:44px;margin-top:8px;
+ color:#a8ffbe;font-size:.74rem;font-weight:800;text-decoration:none;
+}
+.faqAnswer a:hover{color:white}
+@media(max-width:1080px){
+ .intro{grid-template-columns:1fr;gap:12px}
+ .timeline{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .step{min-height:224px;border-bottom:1px solid rgba(232,244,237,.13)}
+ .step:nth-child(2){border-inline-end:none}
+ .step:nth-child(n+3){border-bottom:none}
+}
+@media(max-width:760px){
+ .section{width:calc(100% - 32px);padding-top:82px;scroll-margin-top:90px}
+ .intro{margin-bottom:23px}
+ .intro h2{font-size:clamp(2.5rem,11vw,4.1rem)}
+ .challengeSection,.faqSection{padding-top:91px}
+ .challengeCard{min-height:275px;padding:22px}
+ .faqItem summary{gap:10px;min-height:72px}
+ .faqAnswer{padding-inline:37px}
+}
+@media(max-width:540px){
+ .timeline,.challengeGrid{grid-template-columns:minmax(0,1fr)}
+ .timeline{border-radius:14px}
+ .step{min-height:0;padding:24px 22px}
+ .step:nth-child(n){border-inline-end:none;border-bottom:1px solid rgba(232,244,237,.13)}
+ .step:last-child{border-bottom:none}
+ .step h3{margin:18px 0 7px}
+ .challengeCard{min-height:263px}
+ .challengeCard h3{margin-top:24px;font-size:clamp(1.32rem,6vw,2rem)}
+ .challengeMeta{flex-wrap:wrap;gap:7px}
+}
+@media(max-width:430px){
+ .section{width:calc(100% - 24px)}
+ .intro h2{font-size:clamp(2.1rem,10vw,3.2rem)}
+ .challengeCard{padding:19px 17px}
+ .faqAnswer{padding-inline:16px}
+ .faqItem summary{padding-inline:4px}
+}
+@media(prefers-reduced-motion:reduce){
+ .challengeCard,.jump,.faqPlus{transition:none}
+ .challengeCard:hover{transform:none}
+}
