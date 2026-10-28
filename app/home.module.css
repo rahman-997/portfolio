@@ -4,3 +4,22 @@
 .heroActions { flex-wrap: wrap; }
 .heroActions a[href="#ai-lab"] { border-color: rgba(120, 223, 255, .38); background: rgba(120, 223, 255, .035); }
 .heroActions a[href="#ai-lab"]:hover { border-color: rgba(120, 223, 255, .75); background: rgba(120, 223, 255, .09); }
+
+/* Hide the skip link visually without removing it from keyboard tab order.
+   The previous offscreen-only positioning leaked into stitched screenshots. */
+.page .skip:not(:focus-visible) {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+.page .skip:focus-visible {
+  width: auto;
+  height: auto;
+  padding: .8rem 1rem;
+  clip-path: none;
+  top: 1rem;
+  pointer-events: auto;
+}
