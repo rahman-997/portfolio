@@ -75,7 +75,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
           <p className={styles.sectionLabel}>{t.atlasEyebrow}</p>
           <h2>{t.atlasTitle}</h2>
         </div>
-        <AIAtlas />
+        <AIAtlas locale={locale} />
       </div>
 
       <section id="systems" className={styles.systems}>
