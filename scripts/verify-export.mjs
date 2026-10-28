@@ -105,6 +105,35 @@ if (!homeHtml.includes(`<link rel="canonical" href="${canonicalHost}/"`)) {
   throw new Error("Homepage canonical URL must use the primary Render portfolio hostname");
 }
 
+// Guard against accidentally dropping the interactive atlas from the homepage.
+for (const marker of [
+  'id="ai-lab"',
+  "AH / SYSTEMS ATLAS",
+  "DISCIPLINE INSPECTOR",
+  "Explore Interface",
+  "Neural portrait",
+  "System flow",
+  "Previous discipline",
+  "Next discipline",
+  "Explore AI Lab",
+]) {
+  if (!homeHtml.includes(marker)) {
+    throw new Error("Interactive systems atlas is missing from the static homepage: " + marker);
+  }
+}
+
+// The production export always server-renders the network view. Guard additional
+// client-only modes and the mobile fallback directly at their source.
+const atlasSource = readFileSync(join(root, "app/ai-atlas.tsx"), "utf8");
+const atlasStyles = readFileSync(join(root, "app/ai-atlas.module.css"), "utf8");
+for (const marker of ["handleNodeKeyDown", "flowView", "portraitView", "prefers-reduced-motion", "signalParticle"]) {
+  const source = marker === "prefers-reduced-motion" ? atlasStyles : atlasSource;
+  if (!source.includes(marker)) throw new Error("Atlas interaction or accessibility regression: " + marker);
+}
+for (const marker of [".visualNetwork", ".network {", ".node {", "@media (max-width: 760px)"]) {
+  if (!atlasStyles.includes(marker)) throw new Error("Atlas mobile layout regression: " + marker);
+}
+
 const robotsText = readFileSync(join(outDir, "robots.txt"), "utf8");
 for (const expected of [
   `Host: ${canonicalHost}`,

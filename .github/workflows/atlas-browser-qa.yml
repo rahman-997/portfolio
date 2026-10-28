@@ -1,0 +1,72 @@
+name: Atlas Browser QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "app/ai-atlas.tsx"
+      - "app/ai-atlas.module.css"
+      - "app/home.module.css"
+      - "app/page.tsx"
+      - "scripts/atlas-browser-qa.py"
+      - ".github/workflows/atlas-browser-qa.yml"
+      - "package.json"
+      - "package-lock.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: atlas-browser-qa-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Node version
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install npm version and dependencies
+        run: |
+          npm install --global npm@11.19.1
+          npm ci --no-audit --no-fund
+
+      - name: Export static site
+        run: npm run build
+
+      - name: Prepare headless browser
+        run: python3 -m pip install --user --disable-pip-version-check playwright==1.56.0
+
+      - name: Install disposable WCAG auditing engine
+        run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund axe-core@4.10.3
+
+      - name: Start local static server
+        run: |
+          nohup python3 -m http.server 4173 --bind 127.0.0.1 --directory out > /tmp/atlas-server.log 2>&1 &
+          for attempt in {1..20}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/atlas-server.log
+          exit 1
+
+      - name: Browser acceptance and screenshots
+        run: python3 scripts/atlas-browser-qa.py
+
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: atlas-browser-evidence
+          path: atlas-qa-artifacts/
+          if-no-files-found: warn
+          retention-days: 7
