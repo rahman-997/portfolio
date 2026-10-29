@@ -1,4 +1,4 @@
-.blueprint,.missions{position:relative;isolation:isolate;padding:100px max(24px,calc((100% - 1370px)/2));color:#e7f7fc;background:#061320;overflow:hidden;border-block:1px solid #275371}
+.blueprint,.missions{scroll-margin-top:9rem;position:relative;isolation:isolate;padding:100px max(24px,calc((100% - 1370px)/2));color:#e7f7fc;background:#061320;overflow:hidden;border-block:1px solid #275371}
 .blueprint::before,.missions::before{content:"";pointer-events:none;position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 90% 11%,#27608a55,transparent 38%),radial-gradient(ellipse at 2% 94%,#0d38604a,transparent 36%)}
 .missions{background:#070f1d}
 .heading,.missionHeader{max-width:800px;margin:0 0 48px}
