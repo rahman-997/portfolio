@@ -46,6 +46,13 @@ with sync_playwright() as pw:
                     expected_dir = "rtl" if locale == "ar" else "ltr"
                     check(page.locator("html").get_attribute("dir") == expected_dir,
                           f"{name}: wrong document direction")
+                    if locale == "ar":
+                        headline = page.locator("#cinematic-heading span").first.evaluate("""el => {
+                            const cs = getComputedStyle(el);
+                            return {height:el.getBoundingClientRect().height, lineHeight:parseFloat(cs.lineHeight)};
+                        }""")
+                        check(headline["height"] <= headline["lineHeight"] * 1.25,
+                              f"{name}: Arabic cinematic headline wrapped awkwardly: {headline}")
                     work = page.locator("#work")
                     check(work.locator("article").count() == 7,
                           f"{name}: missing public repositories")
