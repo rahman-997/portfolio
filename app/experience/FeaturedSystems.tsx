@@ -39,8 +39,8 @@ const design = {
  },
 } as const;
 const covers: Record<string, string> = {
- eventify:"/projects/eventify-cover.jpg",
- bookbookhaven:"/projects/bookhaven-cover.jpg",
+ eventify:"/projects/eventify-concept.svg",
+ bookbookhaven:"/projects/bookhaven-concept.svg",
  "fitflow-gym":"/projects/fitflow-cover.svg",
 };
 export default function FeaturedSystems({locale}:{locale:Locale}) {
@@ -77,7 +77,7 @@ export default function FeaturedSystems({locale}:{locale:Locale}) {
           <div className={styles.visualNoise}/>
           <div className={styles.orbitalDecoration}/>
           <div className={styles.browserFrame}>
-            <div className={styles.browserBar}><span className={styles.bulbs}><i/><i/><i/></span><span className={styles.browserTitle}>{p.name.toUpperCase()} / INTERFACE</span><span>↗</span></div>
+            <div className={styles.browserBar}><span className={styles.bulbs}><i/><i/><i/></span><span className={styles.browserTitle}>{p.name.toUpperCase()} / {p.id==="fitflow-gym"?"INTERFACE PREVIEW":"CONCEPT ILLUSTRATION"}</span><span>↗</span></div>
             <div className={styles.browserImage}>
               <Image src={covers[p.id]} alt="" fill sizes="(max-width: 900px) 90vw, 48vw" className={styles.coverImage} unoptimized/>
             </div>
