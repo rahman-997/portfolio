@@ -64,6 +64,7 @@ export default function CinematicHero({locale}:{locale:Locale}){
           <a className={styles.actionPrimary} href="#featured">{t.build}<span aria-hidden="true">↗</span></a>
           <a className={styles.actionSecondary} href={PROFILE_LINKS.linkedin} rel="noopener noreferrer" target="_blank">{t.connect}<span aria-hidden="true">↗</span></a>
         </div>
+        <a className={styles.labShortcut} href="#ai-lab">{locale==="ar"?"مختبر الذكاء الاصطناعي":locale==="tr"?"Yapay Zekâ Lab":"Explore AI Lab"}<span aria-hidden="true">↗</span></a>
         <div className={styles.signature}>
           <span className={styles.miniCross} aria-hidden="true">✳</span>
           <div><strong>ABDULRAHMAN HAJAR</strong><span>SOFTWARE ENGINEER / FULL-STACK</span></div>
