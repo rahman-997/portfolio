@@ -157,6 +157,9 @@ with sync_playwright() as pw:
                     overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
                     check(overflow <= 2, f"{name}: horizontal overflow {overflow}px")
                     check(not errors, f"{name}: browser exceptions {errors}")
+                    # Keep the real sticky header during functional checks; omit its
+                    # overlay only for clean section-by-section preview captures.
+                    page.add_style_tag(content="header { position: relative !important; }")
                     if label == "desktop" and (theme == "dark" or (locale == "en" and theme == "light")):
                         for section_id, shot in (
                             ("top", "hero"), ("featured", "features"),
