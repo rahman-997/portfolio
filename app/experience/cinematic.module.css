@@ -80,3 +80,7 @@
  .visualHalo,.orbitFrame::before,.coreArt{animation:none}
  .actionPrimary,.actionSecondary{transition:none}
 }
+
+.labShortcut{display:inline-flex;align-items:center;gap:.65rem;min-height:42px;margin-top:15px;color:#9bdae8!important;font:750 .71rem ui-monospace,monospace;letter-spacing:.07em;text-decoration:none;border-bottom:1px solid #9ed8e872}
+.labShortcut:hover{color:#eaffff!important}
+.labShortcut span{font-size:1rem}
