@@ -55,6 +55,15 @@ with sync_playwright() as pw:
                           f"{name}: cinematic scene missing")
                     check(page.locator("#featured [data-featured-system]").count() == 3,
                           f"{name}: three visual project stories missing")
+                    media = page.locator("#featured img").evaluate_all("""async images => {
+                        return await Promise.all(images.map(async img => {
+                            img.loading = 'eager';
+                            await img.decode().catch(() => {});
+                            return {src: img.currentSrc || img.src, naturalWidth: img.naturalWidth};
+                        }));
+                    }""")
+                    check(len(media) == 3 and all(m["naturalWidth"] > 0 for m in media),
+                          f"{name}: broken featured media: {media}")
                     for slug in ("eventify", "bookhaven", "fitflow"):
                         check(page.locator(f'#featured a[href="/work/{slug}/"]').count() == 1,
                               f"{name}: featured case study {slug} missing")
