@@ -39,6 +39,7 @@
 .bottomline{min-height:48px;padding-top:12px;border-top:1px solid #5cabc32e;color:#83adca}
 .bottomRule{height:1px;background:#549ac55c;flex:1}
 :global([dir="rtl"]) .headline{letter-spacing:-.05em;font-family:system-ui,"Segoe UI",sans-serif;line-height:1.22}
+:global([dir="rtl"]) .headline span{white-space:nowrap;font-size:.9em}
 :global([dir="rtl"]) .headline strong{letter-spacing:-.045em}
 :global([dir="rtl"]) .visual{margin-inline-start:-40px}
 @keyframes breath{50%{transform:scale(1.13);opacity:.65}}
