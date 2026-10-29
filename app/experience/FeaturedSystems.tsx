@@ -82,7 +82,7 @@ export default function FeaturedSystems({locale}:{locale:Locale}) {
               <Image src={covers[p.id]} alt="" fill sizes="(max-width: 900px) 90vw, 48vw" className={styles.coverImage} unoptimized/>
             </div>
           </div>
-          <span className={styles.visualCoordinate}>PROJECT_00{i+1} // SOURCE VERIFIED</span>
+          <span className={styles.visualCoordinate}>PROJECT_00{i+1} / SOURCE VERIFIED</span>
         </div>
       </article>)}
     </div>
