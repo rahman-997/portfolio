@@ -21,3 +21,28 @@
 
 /* V2 Visual QA mobile declutter: leave head/face of real 3D artwork visible. */
 @media(max-width:760px){.readout{top:14px}.readout strong,.readout small,.side{display:none}}
+
+/* V3.2: separate touch/mouse camera zoom from ordinary page scrolling. */
+.zoomActions{position:absolute;z-index:4;right:13px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px}
+.zoomActions button{width:44px;height:44px;display:grid;place-items:center;appearance:none;border:1px solid #68cbe58a;border-radius:11px;background:#071d2eea;color:#d3f5ff;box-shadow:0 4px 18px #0007;font:700 24px/1 ui-sans-serif,system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.zoomActions button:hover{border-color:#9cfdff;color:#fff;background:#16445a}
+.zoomActions button:focus-visible{outline:2px solid #86eaff;outline-offset:3px}
+@media(max-width:760px){.zoomActions{right:9px;gap:8px}.zoomActions button{width:42px;height:44px}.hint{max-width:calc(100% - 22px);font-size:8px}}
+@media(prefers-reduced-motion:reduce){.zoomActions button{transition:none}}
+
+/* V3.6: accessible action sizes and two-row controls for narrow touch screens.
+ * Keep the viewport usable while ensuring every control has >=44px hit area. */
+.modes button,.actions button{min-height:44px;min-width:44px}
+@media(max-width:760px){
+ .modes button,.actions button{min-height:44px;min-width:44px}
+}
+@media(max-width:450px){
+ .shell{min-height:450px}
+ .stage{inset:50px 0 108px}
+ .controls{
+  height:108px;display:flex;flex-direction:column;align-items:stretch;
+  justify-content:center;gap:3px;padding:4px 12px
+ }
+ .modes,.actions{width:100%;justify-content:space-between;gap:6px;min-height:44px}
+ .modes button,.actions button{flex:1;min-width:44px;min-height:44px;padding-inline:6px}
+}

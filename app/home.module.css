@@ -23,3 +23,17 @@
 .projectVisualLegend>div{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
 .projectVisualLegend em{font-style:normal;border:1px solid rgba(132,230,189,.3);border-radius:6px;padding:7px 9px;font-size:.58rem;letter-spacing:.04em;color:#c5f4e0;background:rgba(5,32,29,.54)}
 @media(max-width:760px){.projectVisualLegend{padding:20px}.projectVisualLegend>strong{font-size:2.65rem}.projectVisualLegend em{font-size:.54rem}}
+
+/* Portfolio V3 responsive language navigation */
+.headerUtility{justify-self:end;display:flex;align-items:center;gap:9px;min-width:0}
+@media(max-width:760px){.headerUtility .headerAction{display:none}.headerUtility{gap:4px}}
+
+
+/* V3.7: keep large English display type inside the viewport when the user
+ * enlarges the browser's base text size. Normal mobile sizing is retained. */
+@media(max-width:430px){
+ .hero h1{font-size:min(clamp(3.35rem,16vw,4.25rem),15vw);line-height:1;overflow-wrap:anywhere}
+ .identity{min-width:0}
+ .identity>span:last-child{min-width:0}
+ .identity strong{font-size:min(.74rem,4vw);overflow-wrap:anywhere}
+}

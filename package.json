@@ -9,13 +9,15 @@
   "packageManager": "npm@11.19.1",
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "next build --webpack && node scripts/localize-static-html.mjs",
     "start": "next start",
     "lint": "eslint . --ignore-pattern .next --ignore-pattern out",
     "typecheck": "tsc --noEmit",
     "verify:export": "node scripts/verify-export.mjs && node scripts/verify-toolchain.mjs && node scripts/verify-resume-seo.mjs",
     "audit": "node scripts/audit-dependencies.mjs",
-    "verify:production": "node scripts/verify-production.mjs"
+    "verify:production": "node scripts/verify-production.mjs",
+    "preview:local": "node scripts/preview-static.mjs",
+    "preview:lan": "node scripts/preview-static.mjs --lan"
   },
   "dependencies": {
     "next": "16.4.3",

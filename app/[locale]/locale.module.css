@@ -1,0 +1,42 @@
+.localized{font-family:inherit}.localized:lang(ar){font-family:Tahoma,"Noto Sans Arabic","Segoe UI",system-ui,sans-serif}.localized:lang(ar) h1,.localized:lang(ar) h2,.localized:lang(ar) h3{letter-spacing:-.035em;line-height:1.16}.localized:lang(ar) h1{font-size:clamp(2.8rem,4.5vw,4.8rem);line-height:1.12}.localized:lang(tr) h1{font-size:clamp(3.4rem,6.9vw,7.4rem);line-height:.94}.localized:lang(ar) p,.localized:lang(ar) small{line-height:1.85}.projectOverlay{position:absolute;inset:auto 0 0;z-index:3;display:flex;flex-direction:column;align-items:flex-start;padding:25px;gap:7px;background:linear-gradient(180deg,transparent,#041013ed 30%,#041013);pointer-events:none}.projectOverlay small{font-size:10px;color:#94e7d1}.projectOverlay strong{font-size:clamp(1.5rem,3vw,2.5rem);color:#fff}.projectOverlay span{font-size:.81rem;color:#c5d7db}.codeDiagram{display:grid;place-items:center;text-align:center;padding:50px 20px;color:#b4f7d3;min-height:340px;font:700 18px/2 ui-monospace,Consolas,monospace;background:radial-gradient(circle at 40% 25%,#14565877,#051819 75%)}@media(max-width:760px){.localized:lang(ar) h1{font-size:clamp(2.55rem,11vw,4.2rem)}.localized:lang(tr) h1{font-size:clamp(2.8rem,12vw,4.8rem)}.projectOverlay{padding:18px}}
+.localized:lang(ar) h1,.localized:lang(ar) h2,.localized:lang(ar) h3{font-weight:700;line-height:1.35;letter-spacing:-.025em}
+.localized:lang(ar) p{line-height:1.9}
+@media(max-width:700px){.localized header{height:auto;min-height:68px;flex-wrap:wrap;row-gap:9px;padding-top:8px;padding-bottom:8px}.localized header a{white-space:normal}.localized h1{overflow-wrap:anywhere}}
+
+/* V3.1: predictable bidi and touch-safe typography on narrow screens. */
+.localized{min-width:0;overflow-wrap:break-word}
+.localized :is(h1,h2,h3){text-wrap:balance}
+.localized :is(p,li){text-wrap:pretty}
+.localized :is([dir="ltr"],code){unicode-bidi:isolate}
+.localized header{max-width:100%}
+.localized :is(a,button):focus-visible{outline:2px solid #9ce9da;outline-offset:3px}
+@media(max-width:430px){
+ .localized header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;min-height:80px;padding-block:8px}
+ .localized header > nav:not([dir]){flex:1 0 100%;order:3;display:flex;justify-content:space-between;flex-wrap:wrap;gap:7px}
+ .localized header a{min-height:44px}
+ .localized h1{hyphens:auto}
+}
+@media(prefers-reduced-motion:reduce){.localized :is(a,button){transition:none}}
+
+/* Keep mixed-script project names intact inside Arabic/Turkish layouts. */
+.localized h3[dir="ltr"]{
+  font-size:clamp(1.95rem,3.7vw,3.85rem);
+  line-height:1.04;
+  letter-spacing:-.045em;
+  white-space:nowrap;
+  overflow-wrap:normal;
+  word-break:normal;
+  text-align:start;
+}
+@media(max-width:640px){.localized h3[dir="ltr"]{font-size:clamp(1.95rem,7vw,3.5rem)}}
+
+/* V3.7: preserve Arabic résumé heading at 200% user font enlargement. */
+@media(max-width:760px){.localized:lang(ar) h1{font-size:min(2.55rem,12vw);overflow-wrap:anywhere}}
+
+/* V3.7: preserve single-line Latin project labels without letting 200% text
+ * enlargement expand an Arabic résumé grid beyond the phone viewport. */
+@media(max-width:640px){
+ .localized h3[dir="ltr"]{
+  font-size:min(clamp(1.95rem,7vw,3.5rem),9vw);
+ }
+}

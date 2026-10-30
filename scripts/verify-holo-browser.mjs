@@ -97,9 +97,290 @@ try {
   assert.equal(data.tabIndex,-1,"non-interactive artwork removed from tab sequence");
   fallbackReport.tests.static_fallback="pass";
   fallbackReport.metrics=data;
+  // A phone orientation change must redraw the static portrait at its NEW
+  // raster dimensions. An unchanged initial bitmap becomes blurry or distorted.
+  const initialSize=await fallbackPage.locator("canvas").evaluate(el=>({
+    raster:el.width,css:el.clientWidth,ratio:Math.min(devicePixelRatio||1,1.4)
+  }));
+  await fallbackPage.setViewportSize({width:560,height:390});
+  await fallbackPage.waitForTimeout(400);
+  const oriented=await fallbackPage.locator("canvas").evaluate(el=>({
+    raster:el.width,css:el.clientWidth,
+    painted:(()=>{
+      const pixels=el.getContext("2d").getImageData(0,0,el.width,el.height).data;
+      let count=0;for(let i=3;i<pixels.length;i+=128)if(pixels[i]>0)count++;
+      return count;
+    })()
+  }));
+  assert.ok(oriented.css>initialSize.css+80,"Orientation changes actual canvas CSS width");
+  assert.ok(Math.abs(oriented.raster-Math.round(oriented.css*initialSize.ratio))<=1,
+    "Static 2D raster must track changed CSS width rather than stretching its original frame");
+  assert.ok(oriented.painted>30,"Repainted 2D fallback stays visible after rotation");
+  fallbackReport.tests.static_fallback_orientation_resize="pass";
+  fallbackReport.resize={initial:initialSize,after:oriented};
+  await fallbackPage.screenshot({path:output+"/no-webgl2-rotated.png",fullPage:false});
   await fallbackPage.screenshot({path:output+"/no-webgl2.png",fullPage:false});
 } catch(error){failures++;fallbackReport.failure=String(error);}
 finally {reports.push(fallbackReport);await fallbackPage.close();}
+// V3.2 usability: normal wheel must scroll the page; zoom is explicit and
+// accessible on mouse, keyboard, and touch. Query the actual GPU zoom uniform.
+const gesturePage=await browser.newPage({viewport:{width:1280,height:800},deviceScaleFactor:1});
+const gestureReport={viewport:"wheel-zoom-accessibility",tests:{}};
+try {
+ await gesturePage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ const canvas=gesturePage.locator("canvas");
+ await canvas.scrollIntoViewIfNeeded();
+ const sampleZoom=()=>canvas.evaluate(c=>{
+   const gl=c.getContext("webgl2"),program=gl?.getParameter(gl.CURRENT_PROGRAM);
+   const location=program&&gl.getUniformLocation(program,"uZoom");
+   return location?gl.getUniform(program,location):null;
+ });
+ const rect=await canvas.boundingBox();
+ assert.ok(rect,"3D canvas visible");
+ await gesturePage.mouse.move(rect.x+rect.width/2,rect.y+rect.height/2);
+ const beforeScroll=await gesturePage.evaluate(()=>scrollY);
+ await gesturePage.mouse.wheel(0,320);
+ await gesturePage.waitForTimeout(280);
+ const afterScroll=await gesturePage.evaluate(()=>scrollY);
+ assert.ok(afterScroll>beforeScroll+25,"Ordinary wheel over 3D canvas should scroll the document");
+ gestureReport.tests.natural_page_scroll="pass";
+ await canvas.scrollIntoViewIfNeeded();
+ const z0=await sampleZoom();
+ assert.ok(typeof z0==="number","Actual GPU zoom uniform readable");
+ await gesturePage.getByRole("button",{name:"Zoom in",exact:true}).click();
+ await gesturePage.waitForTimeout(160);
+ const z1=await sampleZoom();
+ assert.ok(z1<z0-.1,"Zoom in button changes the GPU camera");
+ await gesturePage.getByRole("button",{name:"Zoom out",exact:true}).click();
+ await gesturePage.waitForTimeout(160);
+ const z2=await sampleZoom();
+ assert.ok(z2>z1+.1,"Zoom out button changes GPU zoom");
+ gestureReport.tests.touch_friendly_zoom_buttons="pass";
+ await canvas.focus();
+ await gesturePage.keyboard.press("+");
+ await gesturePage.waitForTimeout(160);
+ const z3=await sampleZoom();
+ assert.ok(z3<z2-.1,"Plus keyboard shortcut zooms in");
+ await gesturePage.keyboard.press("-");
+ await gesturePage.waitForTimeout(160);
+ const z4=await sampleZoom();
+ assert.ok(z4>z3+.1,"Minus keyboard shortcut zooms out");
+ gestureReport.tests.keyboard_zoom="pass";
+ await canvas.scrollIntoViewIfNeeded();
+ const rect2=await canvas.boundingBox();
+ await gesturePage.mouse.move(rect2.x+rect2.width/2,rect2.y+rect2.height/2);
+ await gesturePage.keyboard.down("Alt");
+ await gesturePage.mouse.wheel(0,-140);
+ await gesturePage.keyboard.up("Alt");
+ await gesturePage.waitForTimeout(160);
+ const z5=await sampleZoom();
+ assert.ok(z5<z4-.1,"Alt+Wheel zooms GPU camera");
+ gestureReport.tests.modifier_wheel_zoom="pass";
+ await gesturePage.screenshot({path:output+"/zoom-accessibility.png",animations:"disabled"});
+}catch(e){failures++;gestureReport.failure=String(e);}
+finally{reports.push(gestureReport);await gesturePage.close();}
+const touchPage=await browser.newPage({viewport:{width:360,height:740},deviceScaleFactor:2,isMobile:true,hasTouch:true});
+const touchReport={viewport:"mobile-zoom-controls",tests:{}};
+try{
+ await touchPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ const canvas=touchPage.locator("canvas");
+ const gesture=await canvas.evaluate(c=>getComputedStyle(c).touchAction);
+ assert.ok(gesture.includes("pan-y"),"Touch canvas preserves vertical swipe navigation");
+ const plus=touchPage.getByRole("button",{name:"Zoom in",exact:true});
+ const minus=touchPage.getByRole("button",{name:"Zoom out",exact:true});
+ assert.ok(await plus.isVisible()&&await minus.isVisible(),"Zoom controls remain visible on small phones");
+ const bbox=await plus.boundingBox();
+ assert.ok(bbox&&bbox.width>=36&&bbox.height>=36,"Zoom controls remain touch targetable");
+ await plus.click();await minus.click();
+ assert.ok(await touchPage.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),"Mobile zoom controls do not overflow layout");
+ // Every primary Holo control must have a usable 44px touch target on phones.
+ const panelButtons=touchPage.locator('[class*="HoloInterface_controls"] button');
+ assert.equal(await panelButtons.count(),6,"Three mode + three action buttons remain available");
+ for(const control of await panelButtons.all()){
+   const bounds=await control.boundingBox();
+   const label=await control.getAttribute("aria-label")??await control.textContent();
+   assert.ok(bounds&&bounds.height>=43.5&&bounds.width>=43.5,
+     "Mobile Holo control touch target must be >=44px: "+label+" "+JSON.stringify(bounds));
+ }
+ touchReport.tests.mobile_44px_control_targets="pass";
+ await touchPage.setViewportSize({width:320,height:700});
+ await touchPage.waitForTimeout(180);
+ const narrow=await touchPage.evaluate(()=>{
+   const panel=document.querySelector('[class*="HoloInterface_controls"]');
+   const groups=panel?[...panel.children].filter(e=>e.matches('[class*="HoloInterface_modes"],[class*="HoloInterface_actions"]')):[];
+   return {
+     viewport:document.documentElement.clientWidth,
+     scroll:document.documentElement.scrollWidth,
+     groupRects:groups.map(el=>{const b=el.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}),
+     buttons:panel?[...panel.querySelectorAll("button")].map(el=>{
+       const b=el.getBoundingClientRect();
+       return {x:b.x,y:b.y,width:b.width,height:b.height};
+     }):[],
+     panelBounds:(()=>{const b=panel.getBoundingClientRect();return {left:b.left,right:b.right,top:b.top,bottom:b.bottom};})()
+   };
+ });
+ assert.ok(narrow.scroll<=narrow.viewport+1,"320px portrait must not overflow sideways");
+ assert.equal(narrow.groupRects.length,2,"Mode and action groups retained");
+ assert.ok(narrow.groupRects[0].y+narrow.groupRects[0].height<=narrow.groupRects[1].y+.5,
+   "320px mode and action groups must not overlap");
+ for(const btn of narrow.buttons){
+   assert.ok(btn.width>=43.5&&btn.height>=43.5,"320px button too small");
+   assert.ok(btn.x>=narrow.panelBounds.left-1&&btn.x+btn.width<=narrow.panelBounds.right+1,
+     "320px button must remain inside Holo control bar");
+ }
+ touchReport.tests.narrow_mobile_no_overlap="pass";
+ touchReport.narrow=narrow;
+ touchReport.tests.touch_zoom_and_scroll="pass";
+}catch(e){failures++;touchReport.failure=String(e);}
+finally{reports.push(touchReport);await touchPage.close();}
+// V3.3: native two-finger pinch should zoom the actual GPU camera on touch
+// devices without taking away ordinary single-finger vertical page swipes.
+const pinchPage=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});
+const pinchReport={viewport:"touch-pinch-to-zoom",tests:{}};
+const pinchErrors=[];pinchPage.on("pageerror",e=>pinchErrors.push(String(e)));
+try{
+ await pinchPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ const canvas=pinchPage.locator("canvas");
+ await canvas.scrollIntoViewIfNeeded();
+ await pinchPage.waitForTimeout(250);
+ const sample=()=>canvas.evaluate(c=>{
+   const gl=c.getContext("webgl2"),program=gl?.getParameter(gl.CURRENT_PROGRAM);
+   const loc=program&&gl.getUniformLocation(program,"uZoom");
+   return loc?gl.getUniform(program,loc):null;
+ });
+ const initial=await sample();
+ assert.equal(typeof initial,"number","GPU zoom available for touch test");
+ const bounds=await canvas.boundingBox();
+ assert.ok(bounds,"Canvas has nonzero touch bounds");
+ const x=bounds.x+bounds.width/2,y=bounds.y+bounds.height/2;
+ const cdp=await pinchPage.context().newCDPSession(pinchPage);
+ const fingers=(span)=>[{x:x-span,y,id:11},{x:x+span,y,id:22}];
+ await cdp.send("Input.dispatchTouchEvent",{type:"touchStart",touchPoints:fingers(28)});
+ for(const span of [38,55,75,90]){
+   await cdp.send("Input.dispatchTouchEvent",{type:"touchMove",touchPoints:fingers(span)});
+   await pinchPage.waitForTimeout(35);
+ }
+ await cdp.send("Input.dispatchTouchEvent",{type:"touchEnd",touchPoints:[]});
+ await pinchPage.waitForTimeout(180);
+ const pinched=await sample();
+ assert.ok(pinched<initial-.20,
+   "Pinch spread should zoom the real GPU bust, not the document: "+initial+" -> "+pinched);
+ pinchReport.tests.two_finger_gpu_zoom="pass";
+ await pinchPage.getByRole("button",{name:"Reset 3D view"}).click();
+ await pinchPage.waitForTimeout(120);
+ const reset=await sample();
+ assert.ok(Math.abs(reset-4.15)<.03,"Reset returns zoom to baseline after pinch");
+ pinchReport.tests.reset_after_pinch="pass";
+ // The reverse pinch should zoom back out, then reset must still work.
+ await canvas.scrollIntoViewIfNeeded();
+ const reverseRect=await canvas.boundingBox();
+ assert.ok(reverseRect,"Touch canvas still visible after reset");
+ const rx=reverseRect.x+reverseRect.width/2,ry=reverseRect.y+reverseRect.height/2;
+ const reverseFingers=(span)=>[{x:rx-span,y:ry,id:31},{x:rx+span,y:ry,id:32}];
+ await cdp.send("Input.dispatchTouchEvent",{type:"touchStart",touchPoints:reverseFingers(85)});
+ for(const span of [72,55,40,26]){
+   await cdp.send("Input.dispatchTouchEvent",{type:"touchMove",touchPoints:reverseFingers(span)});
+   await pinchPage.waitForTimeout(35);
+ }
+ await cdp.send("Input.dispatchTouchEvent",{type:"touchEnd",touchPoints:[]});
+ await pinchPage.waitForTimeout(150);
+ const zoomedOut=await sample();
+ assert.ok(zoomedOut>reset+.20,"Pinch inward should zoom GPU camera out");
+ pinchReport.tests.reverse_pinch_zoom_out="pass";
+ await pinchPage.getByRole("button",{name:"Reset 3D view"}).click();
+ await pinchPage.waitForTimeout(120);
+ const after=await pinchPage.evaluate(()=>({
+   overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
+   viewportScale:window.visualViewport?.scale??1,
+   touchAction:getComputedStyle(document.querySelector("canvas")).touchAction,
+ }));
+ assert.ok(after.overflow<=1,"Pinch must not cause horizontal overflow");
+ assert.ok(Math.abs(after.viewportScale-1)<.01,"Pinch should not unexpectedly zoom the whole page");
+ assert.ok(after.touchAction.includes("pan-y"),"Single-finger vertical page swipe remains enabled");
+ assert.deepEqual(pinchErrors,[],"No uncaught errors during touch gestures");
+ pinchReport.tests.viewport_and_accessibility="pass";
+ pinchReport.metrics={before:initial,pinched,reset,...after};
+ await pinchPage.screenshot({path:output+"/mobile-pinch.png",animations:"disabled"});
+}catch(e){failures++;pinchReport.failure=String(e);}
+finally{reports.push(pinchReport);await pinchPage.close();}
+// V3.4 GPU reliability: WebGL context loss must switch to a visible painted
+// 2D portrait with accessible status, not leave an empty black GPU canvas.
+const contextLossPage=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:2});
+const contextLossReport={viewport:"webgl-context-loss",tests:{}};
+const lossErrors=[];contextLossPage.on("pageerror",e=>lossErrors.push(String(e)));
+try{
+ await contextLossPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ const canvas=contextLossPage.locator("canvas").first();
+ await canvas.waitFor({state:"visible",timeout:10000});
+ const extension=await canvas.evaluate(el=>{
+   const gl=el.getContext("webgl2");
+   const ext=gl?.getExtension("WEBGL_lose_context");
+   if(!ext)return false;
+   ext.loseContext();return true;
+ });
+ assert.ok(extension,"Chrome GPU simulator exposes WEBGL_lose_context extension");
+ await contextLossPage.getByText("STATIC · 2D").waitFor({state:"visible",timeout:6500});
+ const picture=await contextLossPage.locator("canvas").evaluate(el=>{
+   const context=el.getContext("2d");
+   if(!context)return {painted:0,kind:"not-2d"};
+   const {width,height}=el;
+   const pixels=context.getImageData(0,0,width,height).data;
+   let painted=0;
+   for(let i=3;i<pixels.length;i+=128)if(pixels[i]>0)painted++;
+   return {painted,kind:"2d",width,height};
+ });
+ assert.ok(picture.painted>30,"Context loss must still display an actual painted portrait");
+ assert.equal(await contextLossPage.getByRole("status").count(),1,"Context loss announced as fallback");
+ assert.equal(await contextLossPage.getByRole("button",{name:"Zoom in"}).count(),0,"Unavailable GPU interactions hidden");
+ assert.deepEqual(lossErrors,[],"No uncaught JS error during context loss");
+ contextLossReport.tests.graceful_gpu_context_loss="pass";
+ contextLossReport.metrics=picture;
+ // The GPU-loss fallback uses the same responsive renderer as unsupported GPUs.
+ await contextLossPage.setViewportSize({width:560,height:390});
+ await contextLossPage.waitForTimeout(400);
+ const recoveryResize=await contextLossPage.locator("canvas").evaluate(el=>({
+   width:el.width,css:el.clientWidth,ratio:Math.min(devicePixelRatio||1,1.4)
+ }));
+ assert.ok(recoveryResize.css>Math.round(picture.width/recoveryResize.ratio)+80,
+   "Recovered 2D CSS box must expand when the phone rotates");
+ assert.ok(Math.abs(recoveryResize.width-Math.round(recoveryResize.css*recoveryResize.ratio))<=1,
+   "Recovered 2D artwork must track orientation changes");
+ contextLossReport.tests.recovered_canvas_orientation_resize="pass";
+ await contextLossPage.screenshot({path:output+"/context-lost-fallback.png",animations:"disabled"});
+}catch(e){failures++;contextLossReport.failure=String(e);}
+finally{reports.push(contextLossReport);await contextLossPage.close();}
+// V3.6: a GPU shader may fail after a WebGL context was allocated.
+// Recovery must mount a NEW 2D canvas with actual artwork, not a blank
+// WebGL canvas or a misleading "STATIC" label.
+const startupFaultPage=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});
+const startupFaultReport={viewport:"webgl-shader-initialization-fault",tests:{}};
+const startupErrors=[];startupFaultPage.on("pageerror",e=>startupErrors.push(String(e)));
+await startupFaultPage.addInitScript(()=>{
+ const original=WebGL2RenderingContext.prototype.getShaderParameter;
+ WebGL2RenderingContext.prototype.getShaderParameter=function(shader,flag){
+   if(flag===this.COMPILE_STATUS)return false;
+   return original.call(this,shader,flag);
+ };
+});
+try{
+ await startupFaultPage.goto(origin,{waitUntil:"networkidle",timeout:30000});
+ await startupFaultPage.getByText("STATIC · 2D").waitFor({state:"visible",timeout:8000});
+ const state=await startupFaultPage.locator("canvas").evaluate(el=>{
+   const ctx=el.getContext("2d");
+   if(!ctx)return {kind:"unusable",pixels:0};
+   const pixels=ctx.getImageData(0,0,el.width,el.height).data;
+   let painted=0;for(let i=3;i<pixels.length;i+=128)if(pixels[i]>0)painted++;
+   return {kind:"2d",pixels:painted,width:el.width,height:el.height};
+ });
+ assert.equal(state.kind,"2d","Shader failure must result in a real Canvas2D renderer");
+ assert.ok(state.pixels>30,"Static artwork actually painted after shader failure");
+ assert.equal(await startupFaultPage.getByRole("status").count(),1,"Status announces 2D fallback");
+ assert.equal(await startupFaultPage.getByRole("button",{name:"Zoom in"}).count(),0,"3D-only controls are hidden");
+ assert.deepEqual(startupErrors,[],"No uncaught JS exceptions after shader failure");
+ startupFaultReport.tests.shader_initialization_recovery="pass";
+ startupFaultReport.metrics=state;
+}catch(e){failures++;startupFaultReport.failure=String(e);}
+finally{reports.push(startupFaultReport);await startupFaultPage.close();}
 await browser.close();
 const result={status:failures?"failed":"passed",failures,reports};
 await writeFile(output+"/report.json",JSON.stringify(result,null,2));

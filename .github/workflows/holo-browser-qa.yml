@@ -4,9 +4,15 @@ on:
   push:
     branches:
       - feature/interactive-hologram-v2
+      - feature/portfolio-v3-i18n
     paths:
       - .github/workflows/holo-browser-qa.yml
       - scripts/verify-holo-browser.mjs
+      - scripts/verify-i18n-browser.mjs
+      - app/i18n.ts
+      - 'app/**'
+      - app/components/LanguageLinks.tsx
+      - app/components/LanguageLinks.module.css
       - app/components/HoloInterface.tsx
       - app/components/HoloInterface.module.css
       - app/components/holo3d-engine.ts
@@ -22,7 +28,7 @@ permissions:
 
 jobs:
   browser-check:
-    if: github.ref == 'refs/heads/feature/interactive-hologram-v2'
+    if: github.ref == 'refs/heads/feature/interactive-hologram-v2' || github.ref == 'refs/heads/feature/portfolio-v3-i18n'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -64,6 +70,11 @@ jobs:
           curl --fail --silent --show-error http://127.0.0.1:4173/ > /dev/null
           CHROME_PATH="$(command -v google-chrome || command -v chromium || true)"
           QA_CHROME_PATH="$CHROME_PATH" node scripts/verify-holo-browser.mjs
+      - name: Verify V3 multilingual UI in Chrome
+        if: github.ref == 'refs/heads/feature/portfolio-v3-i18n'
+        run: |
+          CHROME_PATH="$(command -v google-chrome || command -v chromium || true)"
+          QA_CHROME_PATH="$CHROME_PATH" node scripts/verify-i18n-browser.mjs
       - name: Upload Chrome screenshots and QA report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
