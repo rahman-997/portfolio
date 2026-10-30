@@ -39,11 +39,11 @@ const design = {
   browse:"TÜM DEPOLARI GÖR",
  },
 } as const;
-const captures = proof.screenshots as Record<string, {src:string; sourceUrl:string; capturedAt:string; sha256:string; title:string; verified:boolean}>;
+const captures = proof.screenshots as Record<string, {src:string; sourceUrl:string; capturedAt:string; sha256:string; title:string; verified:boolean;publicPageStatus?:string;apiHealthHttp?:number|null}>;
 const captureLabels = {
-  en:{photo:"ACTUAL LIVE SITE · VERIFIED CAPTURE",none:"LIVE SCREENSHOT NOT VERIFIED",hint:"No replacement artwork: the source and case study are available below.",proof:"Captured from public site"},
-  ar:{photo:"صورة حقيقية · موثقة من الموقع",none:"لم تُتحقّق صورة حية بعد",hint:"لا نستخدم رسماً بديلاً يوهم بأنها واجهة حقيقية. روابط الكود والدراسة أدناه.",proof:"لقطة من الموقع العام"},
-  tr:{photo:"GERÇEK SİTE · DOĞRULANMIŞ GÖRÜNTÜ",none:"CANLI EKRAN GÖRÜNTÜSÜ DOĞRULANMADI",hint:"Gerçek arayüzü taklit eden görsel yok. Kaynak kod ve inceleme aşağıda.",proof:"Açık siteden yakalandı"},
+  en:{photo:"PUBLIC SITE · REAL SCREENSHOT",warn:"A public service was reconnecting when captured",none:"LIVE SCREENSHOT NOT VERIFIED",hint:"No replacement artwork: the source and case study are available below.",proof:"Captured from public site"},
+  ar:{photo:"لقطة حقيقية من الموقع العام",warn:"إحدى الخدمات كانت تعيد الاتصال وقت التصوير",none:"لم تُتحقّق صورة حية بعد",hint:"لا نستخدم رسماً بديلاً يوهم بأنها واجهة حقيقية. روابط الكود والدراسة أدناه.",proof:"لقطة من الموقع العام"},
+  tr:{photo:"AÇIK SİTEDEN GERÇEK EKRAN GÖRÜNTÜSÜ",warn:"Görüntü alınırken bir servis yeniden bağlanıyordu",none:"CANLI EKRAN GÖRÜNTÜSÜ DOĞRULANMADI",hint:"Gerçek arayüzü taklit eden görsel yok. Kaynak kod ve inceleme aşağıda.",proof:"Açık siteden yakalandı"},
 } as const;
 
 export default function FeaturedSystems({locale}:{locale:Locale}) {
@@ -86,7 +86,7 @@ export default function FeaturedSystems({locale}:{locale:Locale}) {
               <div className={styles.browserImage}>
                 <Image src={captures[p.id].src} alt={labels.proof+" · "+p.name+" · "+captures[p.id].capturedAt.slice(0,10)} fill sizes="(max-width: 900px) 90vw, 48vw" className={styles.coverImage} unoptimized/>
               </div>
-              <figcaption className={styles.captureCaption}>{labels.proof}: {captures[p.id].capturedAt.slice(0,10)} UTC</figcaption>
+              <figcaption className={styles.captureCaption}>{labels.proof}: {captures[p.id].capturedAt.slice(0,10)} UTC{captures[p.id].publicPageStatus==="degraded"?<> · <span className={styles.captureWarning}>{labels.warn}</span></>:null}</figcaption>
             </figure>
           ):(
             <div className={styles.unverified}>
