@@ -76,7 +76,7 @@ for(const {locale,directory,heading} of cases){
  }
  assert.equal((advanced.compare.match(/data-compare-project="/g)??[]).length,4,"Four comparison items for "+locale);
  assert.equal((advanced.patterns.match(/data-pattern-project="/g)??[]).length,4,"Four architecture walkthroughs for "+locale);
- assert.equal((advanced.patterns.match(/<details\\b/g)??[]).length,4,"Native interactive details in "+locale);
+ assert.equal((advanced.patterns.match(/<details\b/g)??[]).length,4,"Native interactive details in "+locale);
  assert.equal((advanced.quality.match(/data-quality-category="/g)??[]).length,4,"Four quality categories in "+locale);
  assert.ok(advanced.quality.includes("https://github.com/rahman-997/portfolio/actions/workflows/ci.yml"),
    "Quality evidence must link to GitHub workflow in "+locale);
