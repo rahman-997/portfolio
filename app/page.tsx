@@ -3,6 +3,7 @@ import { PROFILE_LINKS, PROJECT_LIST } from "./portfolio-data";
 import HoloInterface from "./components/HoloInterface";
 import PortfolioSections from "./components/PortfolioSections";
 import PortfolioNextSections from "./components/PortfolioNextSections";
+import EngineeringPlaybook from "./components/EngineeringPlaybook";
 import LanguageLinks from "./components/LanguageLinks";
 import styles from "./home.module.css";
 
@@ -297,6 +298,7 @@ export default function Home() {
 
         <PortfolioSections locale="en" />
         <PortfolioNextSections locale="en" />
+        <EngineeringPlaybook locale={ "en" } />
 
         <section className={styles.resumeCallout}>
           <div>
