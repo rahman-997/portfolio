@@ -7,8 +7,8 @@ import styles from "./featured.module.css";
 const design = {
  en:{
   eyebrow:"SELECTED SYSTEMS / THREE DEEP DIVES",
-  title:"Not just code.",second:"Built worlds.",
-  lead:"Three shipped engineering stories. Explore the product, trace the architecture, and inspect the actual source.",
+  title:"The work.",second:"Speaks for itself.",
+  lead:"A closer look at three real products, with actual interface captures, source repositories and architecture studies.",
   study:"EXPLORE THE CASE STUDY",
   demo:"VIEW LIVE PROJECT",
   index:"FEATURED 03 / 07",
@@ -18,7 +18,7 @@ const design = {
  },
  ar:{
   eyebrow:"أنظمة مختارة / ثلاث دراسات معمقة",
-  title:"ليس مجرد كود.",second:"بل عوالم تعمل.",
+  title:"مشاريع حقيقية.",second:"وتفاصيل تستحق الاكتشاف.",
   lead:"ثلاث تجارب هندسية حقيقية. استكشف المنتج، افهم المعمارية، وراجع الكود الأصلي.",
   study:"اكتشف دراسة المشروع",
   demo:"افتح المشروع الحي",
@@ -29,7 +29,7 @@ const design = {
  },
  tr:{
   eyebrow:"SEÇİLMİŞ SİSTEMLER / ÜÇ DETAYLI İNCELEME",
-  title:"Yalnızca kod değil.",second:"Çalışan dünyalar.",
+  title:"İşler konuşsun.",second:"Kod kanıtlasın.",
   lead:"Üç gerçek mühendislik hikâyesi. Ürünü keşfedin, mimarisini inceleyin ve gerçek kaynak koda ulaşın.",
   study:"TEKNİK İNCELEMEYİ AÇ",
   demo:"CANLI PROJEYİ GÖR",
