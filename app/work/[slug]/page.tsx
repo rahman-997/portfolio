@@ -93,7 +93,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       ))}
 
       <header className={styles.header}>
-        <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio"><span>AH</span><strong>Abdulrahman Hajar</strong></Link>
+        <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio"><span><Image src="/brand/hajar-emblem.svg" width={24} height={30} alt="" unoptimized /></span><strong>HAJAR</strong></Link>
         <Link className={styles.back} href="/#work">← Selected work</Link>
       </header>
 
