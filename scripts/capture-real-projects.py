@@ -55,8 +55,20 @@ with sync_playwright() as pw:
             page = context.new_page()
             try:
                 print(f"CAPTURE {slug}: attempt {attempt} {url}", flush=True)
+                backend_http = None
+                if slug == "eventify":
+                    # Give Render's publicly documented API a chance to wake up.
+                    # This is GET-only and never mutates bookings or demo state.
+                    try:
+                        backend_response = page.request.get(
+                            "https://backend2-api.onrender.com/health",
+                            timeout=75000,
+                        )
+                        backend_http = backend_response.status
+                    except Exception:
+                        backend_http = None
                 response = page.goto(url, wait_until="domcontentloaded", timeout=85000)
-                page.wait_for_timeout(2500)
+                page.wait_for_timeout(3500)
                 page.evaluate("document.fonts.ready")
                 okay, message = valid_page(page, response)
                 if not okay:
@@ -73,8 +85,14 @@ with sync_playwright() as pw:
                 path = OUTPUT / (slug + "-actual.jpg")
                 path.write_bytes(shot)
                 sha256 = hashlib.sha256(shot).hexdigest()
+                visible_text = page.locator("body").inner_text(timeout=12000).lower()
+                degraded = ("could not load events" in visible_text or
+                            "temporarily degraded" in visible_text or
+                            "is reconnecting" in visible_text)
                 results["screenshots"][slug] = {
                     "src": "/projects/live/" + path.name,
+                    "publicPageStatus": "degraded" if degraded else "landing-loaded",
+                    "apiHealthHttp": backend_http,
                     "sourceUrl": url,
                     "finalUrl": page.url,
                     "capturedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
