@@ -134,7 +134,7 @@ for(const [locale,width,height] of cases){
   for(const [tool,projectSlug] of [
     ["BullMQ","eventify"],["MongoDB","bookhaven"],["PWA","fitflow"],["REST","venues-api"]
   ]){
-    const matches=page.locator("#toolbox li").filter({has:page.locator("strong").getByText(tool,{exact:true})});
+    const matches=page.locator("#toolbox li").filter({has:page.locator("strong").filter({hasText:new RegExp("^"+tool+"$")})});
     assert.equal(await matches.count(),1,"One technology row for "+tool);
     assert.equal(await matches.locator('a[href="/'+locale+'/work/'+projectSlug+'/"]').count(),1,
       "Declared stack link "+tool+" → "+projectSlug);
