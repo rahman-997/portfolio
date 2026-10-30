@@ -2,6 +2,35 @@ import {createHash} from "node:crypto";
 import {readFileSync,existsSync} from "node:fs";
 const assert=(ok,msg)=>{if(!ok)throw Error("Cinematic preview contract: "+msg);};
 const cases=[["en","out/index.html"],["ar","out/ar/index.html"],["tr","out/tr/index.html"]];
+const logoPath = "out/brand/hajar-emblem.svg";
+assert(existsSync(logoPath), "HAJAR emblem is missing from export");
+const logoSvg = readFileSync(logoPath, "utf8");
+assert(logoSvg.includes('viewBox="20 10 120 150"') && logoSvg.includes("bronze"),
+       "HAJAR emblem is not the icon traced from owner's uploaded artwork");
+const favicon = readFileSync("out/favicon.svg", "utf8");
+assert(favicon.includes("HAJAR emblem") && !favicon.includes("AH mark"),
+       "Legacy AH favicon still shipped");
+for (const [file,size] of [
+  ["icon-192.png",192],
+  ["icon-512.png",512],
+  ["icon-maskable-512.png",512],
+  ["apple-touch-icon.png",180],
+]){
+  const bytes=readFileSync("out/icons/"+file);
+  assert(bytes.subarray(0,8).toString("hex")==="89504e470d0a1a0a",
+         "Invalid branded PNG icon "+file);
+  assert(bytes.readUInt32BE(16)===size && bytes.readUInt32BE(20)===size,
+         "Wrong branded PNG icon dimensions "+file);
+}
+const eventifyStudy=readFileSync("out/work/eventify/index.html","utf8");
+assert(eventifyStudy.includes('src="/brand/hajar-emblem.svg"'),
+       "HAJAR mark missing from case study");
+for (let index=1;index<=5;index++){
+  assert(eventifyStudy.includes('id="eventify-frame-'+index+'"'),
+         "Missing accessible Eventify frame "+index);
+}
+assert(eventifyStudy.includes('id="eventify-story"') && eventifyStudy.includes('aria-roledescription="carousel"'),
+       "Accessible five-frame Eventify adaptation missing");
 const screenProof = JSON.parse(readFileSync("app/experience/project-captures.json","utf8"));
 assert(Object.keys(screenProof.screenshots).length === 3,
        "All three featured project visuals must come from authentic live captures");
@@ -28,6 +57,8 @@ for(const [locale,path] of cases) {
  assert(existsSync(path),`missing export ${path}`);
  const s=readFileSync(path,"utf8");
  assert(s.includes('data-cinematic-scene="true"'),`${locale}: missing immersive hero`);
+ assert(s.includes("/brand/hajar-emblem.svg"),
+       `${locale}: placeholder identity still used instead of HAJAR emblem`);
  assert(s.includes('data-featured-showcase="true"'),`${locale}: missing featured gallery`);
  assert((s.match(/data-visual-source="live-screenshot"/g)||[]).length===3,
         `${locale}: every featured visual must be a verified live screenshot`);
