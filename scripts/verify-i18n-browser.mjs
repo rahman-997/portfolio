@@ -129,6 +129,18 @@ for(const [locale,width,height] of cases){
      "QA links to the real workflow");
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),
     "V3.10 sections do not overflow "+width);
+  // Validate that named technologies resolve only to the project data that
+  // actually declares them, not generic badges or invented experience.
+  for(const [tool,projectSlug] of [
+    ["BullMQ","eventify"],["MongoDB","bookhaven"],["PWA","fitflow"],["REST","venues-api"]
+  ]){
+    const matches=page.locator("#toolbox li").filter({has:page.locator("strong").getByText(tool,{exact:true})});
+    assert.equal(await matches.count(),1,"One technology row for "+tool);
+    assert.equal(await matches.locator('a[href="/'+locale+'/work/'+projectSlug+'/"]').count(),1,
+      "Declared stack link "+tool+" → "+projectSlug);
+    assert.equal(await matches.locator("a").count(),1,"Tool "+tool+" must not claim another project");
+  }
+  report.checks.technology_to_real_project_map="pass";
   report.checks.comparison_patterns_quality_toolbox="pass";
   report.checks.decisions_and_collaboration="pass";
   report.checks.process_explore_faq="pass";
