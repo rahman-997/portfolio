@@ -147,7 +147,11 @@ for(const [locale,width,height] of cases){
   // Capture each new section directly; fullPage screenshots of very tall
   // WebGL pages can repeat composited viewport tiles in headless Chromium.
   if(locale==="ar" && (width===390||width===1440)){
+    // QA only: clear keyboard focus before still captures, so the useful
+    // focus-only "skip to content" link does not cover the section screenshots.
+    // Do not change the site's actual focus-visible behavior.
     for(const id of ["process","explore","questions","decisions","collaborate","compare","patterns","quality","toolbox"]){
+      await page.evaluate(()=>{ if(document.activeElement instanceof HTMLElement)document.activeElement.blur(); });
       await page.locator("section#"+id).screenshot({
         path:folder+"/ar-"+width+"-"+id+"-section.png",
         animations:"disabled",timeout:30000
