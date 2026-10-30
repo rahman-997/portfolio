@@ -188,3 +188,10 @@
   .visualRing{animation:none}
   .project,.primaryAction,.secondaryAction{transition:none}
 }
+
+/* User-provided HAJAR identity extracted from the Eventify cover. */
+.brandEmblem{width:49px;height:54px;flex:none;display:flex;align-items:center;justify-content:center;padding:5px 8px;border:1px solid rgba(205,173,140,.45);border-radius:13px;background:#0c1619;box-shadow:0 0 22px rgba(166,119,77,.10)}
+.brandEmblem img{display:block;width:auto;height:42px;object-fit:contain}
+.brandText strong{font-weight:900;letter-spacing:.105em;font-size:.86rem}
+.brandText small{font-size:.55rem;max-width:250px;line-height:1.35}
+@media(max-width:760px){.brandEmblem{width:43px;height:47px;padding:4px 6px}.brandEmblem img{height:36px}.brandText strong{font-size:.77rem}}
