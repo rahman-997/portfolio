@@ -33,7 +33,16 @@ jobs:
         run: python3 -m pip install --user --disable-pip-version-check playwright==1.56.0 pillow==11.3.0
 
       - name: Capture genuine public landing pages, without sign-in
-        run: python3 scripts/capture-real-projects.py
+        run: |
+          # Do not refresh already verified, dated screenshots on every PR sync.
+          if [ -f public/projects/live/eventify-actual.jpg ] && \
+             [ -f public/projects/live/bookbookhaven-actual.jpg ] && \
+             [ -f public/projects/live/fitflow-gym-actual.jpg ]; then
+            echo "All three authentic dated screenshots are already checked into this preview."
+            cp app/experience/project-captures.json capture-report.json
+            exit 0
+          fi
+          python3 scripts/capture-real-projects.py
 
       - name: Upload capture report and actual screenshots
         if: always()
