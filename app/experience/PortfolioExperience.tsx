@@ -5,6 +5,7 @@ import FeaturedSystems from "./FeaturedSystems";
 import BlueprintLab from "./BlueprintLab";
 import MissionPaths from "./MissionPaths";
 import shell from "./shell.module.css";
+import atelier from "./atelier.module.css";
 import { PROFILE_LINKS } from "../portfolio-data";
 import { PUBLIC_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
@@ -18,7 +19,7 @@ const stack = ["React", "Next.js", "TypeScript", "Node.js", "Express", "PostgreS
 
 export default function PortfolioExperience({locale}:{locale:Locale}) {
   const t=TEXT[locale];
-  return <div className={`${styles.page} ${shell.shell}`} lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
+  return <div className={`${styles.page} ${shell.shell} ${atelier.atelier}`} data-design-system="hajar-atelier" lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
     <a className={styles.skip} href="#main">{t.skip}</a>
     <header className={styles.header}>
       <a className={styles.brand} href="#top" aria-label="Abdulrahman Hajar">
@@ -90,7 +91,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
 
       <section id="contact" className={styles.contact}>
         <span className={styles.contactStar} aria-hidden="true">✳</span>
-        <p>{locale==="ar"?"لنصنع شيئاً / AH":locale==="tr"?"BİRLİKTE ÜRETELİM / AH":"LET'S BUILD / AH"}</p>
+        <p>{locale==="ar"?"لنصنع شيئاً / HAJAR":locale==="tr"?"BİRLİKTE ÜRETELİM / HAJAR":"LET'S BUILD / HAJAR"}</p>
         <h2>{t.endTitle}</h2>
         <p className={styles.contactLead}>{t.endText}</p>
         <div className={styles.actions}>
