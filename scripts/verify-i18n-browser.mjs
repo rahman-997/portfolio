@@ -199,8 +199,12 @@ for(const locale of ["ar","tr"]){
    }));
    assert.ok(dimensions.body<=dimensions.viewport+1,"No sideways scrolling without JavaScript on "+route);
    if(route==="/"){
-     assert.equal(await page.locator('section[data-portfolio-section]').count(),9,
-       "All nine additional sections must render without JavaScript");
+     const extraIds=await page.locator('section[data-portfolio-section]').evaluateAll(els=>els.map(el=>el.id));
+     for(const id of ["process","explore","questions","decisions","collaborate","compare","patterns","quality","toolbox"]){
+       assert.equal(extraIds.filter(x=>x===id).length,1,
+         "Unique section #"+id+" should render without JavaScript: "+JSON.stringify(extraIds));
+     }
+     report.extraSectionIds=extraIds;
      const details=page.locator('#questions details').first();
      await details.locator("summary").click();
      assert.ok(await details.getAttribute("open")!==null,"FAQ works without JavaScript");
@@ -294,8 +298,11 @@ for(const locale of ["en","ar","tr"]){
        "Language links must not overlap at 200% text: "+JSON.stringify([a,b]));
    }
    if(route==="/"){
-     assert.equal(await page.locator('section[data-portfolio-section]').count(),9,
-       "All added portfolio sections survive 200% enlarged text in "+locale);
+     const ids=await page.locator('section[data-portfolio-section]').evaluateAll(els=>els.map(el=>el.id));
+     for(const id of ["process","explore","questions","decisions","collaborate","compare","patterns","quality","toolbox"]){
+       assert.equal(ids.filter(x=>x===id).length,1,
+         "Each expected section appears once at 200% text: "+id+" in "+JSON.stringify(ids));
+     }
      const newSections=await page.locator('section[data-portfolio-section]').evaluateAll(els=>
        els.map(el=>{const r=el.getBoundingClientRect();return {id:el.id,left:r.left,right:r.right};}));
      for(const bounds of newSections)assert.ok(bounds.left>=-1&&bounds.right<=state.viewport+1,
