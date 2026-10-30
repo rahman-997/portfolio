@@ -217,6 +217,37 @@ with sync_playwright() as pw:
             failures.append({"case":locale+"-no-js","error":str(exc)})
         finally:
             context.close()
+    # Brand and Eventify case-study acceptance at desktop and mobile widths.
+    for label, width, height in [("desktop", 1280, 900), ("mobile", 375, 812)]:
+        context = browser.new_context(viewport={"width":width, "height":height},
+                                      reduced_motion="reduce")
+        page = context.new_page()
+        case_name = "eventify-brand-" + label
+        try:
+            response = page.goto(BASE+"/work/eventify/",wait_until="networkidle",timeout=60000)
+            check(response is not None and response.status == 200, case_name+": case study HTTP")
+            check(page.locator("#eventify-story").count() == 1,case_name+": story missing")
+            check(page.locator("#eventify-story article[id^='eventify-frame-']").count() == 5,
+                  case_name+": should render 5 frames")
+            mark = page.locator("header img[src='/brand/hajar-emblem.svg']")
+            check(mark.count() == 1,case_name+": real HAJAR mark missing from header")
+            loaded = mark.evaluate("""async img => {
+                await img.decode().catch(() => {});
+                return img.naturalWidth > 0;
+            }""")
+            check(loaded,case_name+": HAJAR SVG did not load")
+            last = page.locator("#eventify-frame-5")
+            page.locator('a[href="#eventify-frame-5"]').click()
+            check(last.count()==1 and last.is_visible(),case_name+": final slide unreachable")
+            page.screenshot(path=str(OUT/(case_name+".png")),full_page=True,
+                            animations="disabled",timeout=30000)
+            report.append({"case":case_name,"status":"pass","slides":5,"brand":"HAJAR"})
+            print("PASS",case_name,"logo and 5 semantic story panels",flush=True)
+        except Exception as exc:
+            failures.append({"case":case_name,"error":str(exc)})
+            print("FAIL",case_name,exc,file=sys.stderr,flush=True)
+        finally:
+            context.close()
     browser.close()
 (OUT/"report.json").write_text(json.dumps({"passed":report,"failed":failures},ensure_ascii=False,indent=2))
 if failures:
