@@ -101,12 +101,41 @@ for(const [locale,width,height] of cases){
   assert.ok(await collabResume.isVisible(),"Collaboration résumé CTA is usable");
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),
     "Five sections have zero sideways scroll at "+width);
+  // V3.10: real project comparison + architecture disclosures + QA source
+  // and a technology map. No invented score or app state is required.
+  for(const id of ["compare","patterns","quality","toolbox"]){
+   const section=page.locator("section#"+id);
+   assert.equal(await section.count(),1,"V3.10 #"+id+" exists");
+   assert.ok(await section.getByRole("heading",{level:2}).isVisible(),"Visible heading #"+id);
+   assert.ok(await page.locator('a[href="#'+id+'"]').count()>0,"Accessible nav to #"+id);
+  }
+  assert.equal(await page.locator('[data-compare-project]').count(),4,"Four comparisons");
+  assert.equal(await page.locator('[data-pattern-project]').count(),4,"Four native architecture disclosures");
+  assert.equal(await page.locator('[data-quality-category]').count(),4,"Four check categories");
+  assert.ok(await page.locator('[data-tool-category]').count()>=3,"Technology groups");
+  for(const slug of ["eventify","bookhaven","fitflow","venues-api"]){
+   assert.equal(await page.locator('#compare a[href="/'+locale+'/work/'+slug+'/"]').count(),1,
+      "Compare case study path "+slug);
+   assert.equal(await page.locator('#patterns a[href="/'+locale+'/work/'+slug+'/"]').count(),1,
+      "Pattern case study path "+slug);
+  }
+  const pattern=page.locator("#patterns details").first();
+  await pattern.locator("summary").click();
+  assert.ok(await pattern.getAttribute("open")!==null,"Architecture details open");
+  assert.equal(await pattern.locator("ol li").count(),4,"Architecture draws four real stages");
+  await pattern.locator("summary").click();
+  assert.ok(await pattern.getAttribute("open")===null,"Architecture details close");
+  assert.equal(await page.locator('#quality a[href="https://github.com/rahman-997/portfolio/actions/workflows/ci.yml"]').count(),1,
+     "QA links to the real workflow");
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),
+    "V3.10 sections do not overflow "+width);
+  report.checks.comparison_patterns_quality_toolbox="pass";
   report.checks.decisions_and_collaboration="pass";
   report.checks.process_explore_faq="pass";
   // Capture each new section directly; fullPage screenshots of very tall
   // WebGL pages can repeat composited viewport tiles in headless Chromium.
   if(locale==="ar" && (width===390||width===1440)){
-    for(const id of ["process","explore","questions","decisions","collaborate"]){
+    for(const id of ["process","explore","questions","decisions","collaborate","compare","patterns","quality","toolbox"]){
       await page.locator("section#"+id).screenshot({
         path:folder+"/ar-"+width+"-"+id+"-section.png",
         animations:"disabled",timeout:30000
@@ -158,11 +187,14 @@ for(const locale of ["ar","tr"]){
    }));
    assert.ok(dimensions.body<=dimensions.viewport+1,"No sideways scrolling without JavaScript on "+route);
    if(route==="/"){
-     assert.equal(await page.locator('section[data-portfolio-section]').count(),5,
-       "All five extra sections must render without JavaScript");
+     assert.equal(await page.locator('section[data-portfolio-section]').count(),9,
+       "All nine additional sections must render without JavaScript");
      const details=page.locator('#questions details').first();
      await details.locator("summary").click();
      assert.ok(await details.getAttribute("open")!==null,"FAQ works without JavaScript");
+     const pattern=page.locator('#patterns details').first();
+     await pattern.locator("summary").click();
+     assert.ok(await pattern.getAttribute("open")!==null,"Architecture disclosure works without JS");
      report.tests.static_portfolio_sections="pass";
    }
    report.tests.raw_html_before_javascript="pass";
@@ -250,12 +282,14 @@ for(const locale of ["en","ar","tr"]){
        "Language links must not overlap at 200% text: "+JSON.stringify([a,b]));
    }
    if(route==="/"){
-     assert.equal(await page.locator('section[data-portfolio-section]').count(),5,
+     assert.equal(await page.locator('section[data-portfolio-section]').count(),9,
        "All added portfolio sections survive 200% enlarged text in "+locale);
      const newSections=await page.locator('section[data-portfolio-section]').evaluateAll(els=>
        els.map(el=>{const r=el.getBoundingClientRect();return {id:el.id,left:r.left,right:r.right};}));
      for(const bounds of newSections)assert.ok(bounds.left>=-1&&bounds.right<=state.viewport+1,
        "Added section fits enlarged mobile viewport: "+JSON.stringify(bounds));
+     const more=page.locator('#quality a');
+     assert.ok(await more.isVisible(),"Quality link visible at 200% text");
      report.tests.enlarged_portfolio_sections="pass";
    }
    report.tests.readable_enlarged_text="pass";report.metrics=state;
