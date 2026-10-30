@@ -75,7 +75,7 @@ export default function BlueprintLab({locale}:{locale:Locale}){
      <p>{t.lead}</p>
    </div>
    <div className={styles.console}>
-     <div className={styles.consoleHeader}><div><span className={styles.screenDot}/><strong>AH / ARCHITECTURE EXPLORER</strong></div><span className={styles.consoleTag}>{t.illustrative}</span></div>
+     <div className={styles.consoleHeader}><div><span className={styles.screenDot}/><strong>HAJAR / ARCHITECTURE EXPLORER</strong></div><span className={styles.consoleTag}>{t.illustrative}</span></div>
      <div className={styles.selectors} data-blueprint-selector="true" role="group" aria-label={t.select}>
        {t.projects.map((item,index)=><button key={item.key} onClick={()=>setActive(index)} type="button"
          aria-pressed={active===index} className={active===index?styles.selected:styles.selector}>
@@ -93,7 +93,7 @@ export default function BlueprintLab({locale}:{locale:Locale}){
              {i<p.layers.length-1&&<span aria-hidden="true" className={styles.nodeArrow}>→</span>}
            </li>)}
          </ol>
-         <div className={styles.diagramFooter} aria-hidden="true"><span>INPUT / CONTRACT / STATE / OUTCOME</span><span>AH · 2026</span></div>
+         <div className={styles.diagramFooter} aria-hidden="true"><span>INPUT / CONTRACT / STATE / OUTCOME</span><span>HAJAR · 2026</span></div>
        </div>
        <div className={styles.blueprintAside} aria-live="polite" aria-atomic="true">
          <span className={styles.asideEyebrow}>{p.kind}</span>
