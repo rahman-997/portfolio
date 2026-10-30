@@ -54,7 +54,7 @@ export default function CinematicHero({locale}:{locale:Locale}){
     aria-labelledby="cinematic-heading">
     <div className={styles.stars} aria-hidden="true"/>
     <div className={styles.grid} aria-hidden="true"/>
-    <div className={styles.topline}><span><i className={styles.signalDot}/>{t.eyebrow}</span><span>AH / SYSTEMS_26</span></div>
+    <div className={styles.topline}><span><i className={styles.signalDot}/>{t.eyebrow}</span><span>HAJAR / SYSTEMS_26</span></div>
     <div className={styles.heroColumns}>
       <div className={styles.copy}>
         <div className={styles.indexRow}><span className={styles.blueDash}/>{t.index}</div>
