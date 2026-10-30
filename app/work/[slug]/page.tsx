@@ -10,6 +10,7 @@ import {
   type ProjectSlug,
 } from "../../portfolio-data";
 import styles from "./case-study.module.css";
+import EventifyStory from "./EventifyStory";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -141,6 +142,8 @@ export default async function CaseStudyPage({ params }: PageProps) {
             <div className={styles.signalList}>{study.evidence.map((item) => <div key={item}><i>↗</i><span>{item}</span></div>)}</div>
           </div>
         </section>
+
+        {slug === "eventify" ? <EventifyStory /> : null}
 
         <section className={styles.next}>
           <div><span>VERIFY IT</span><h2>The implementation is public.</h2><p>Review the live behavior, source code, tests, architecture, and deployment details directly.</p></div>
