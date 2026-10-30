@@ -75,7 +75,7 @@ export default function FeaturedSystems({locale}:{locale:Locale}) {
               {p.demo&&<a className={styles.demoLink} href={p.demo} target="_blank" rel="noopener noreferrer">{t.demo}<span aria-hidden="true">↗</span></a>}
             </div>
           </div>
-          <div className={styles.foot}><span>AH / ENGINEERING</span><span>SYSTEM_{String(i+1).padStart(2,"0")}</span></div>
+          <div className={styles.foot}><span>HAJAR / ENGINEERING</span><span>SYSTEM_{String(i+1).padStart(2,"0")}</span></div>
         </div>
         <div className={styles.storyVisual} data-visual-source={captures[p.id]?.verified?"live-screenshot":"unverified"}>
           <div className={styles.visualNoise} aria-hidden="true"/>
