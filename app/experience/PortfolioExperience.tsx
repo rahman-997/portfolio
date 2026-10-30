@@ -1,3 +1,4 @@
+import Image from "next/image";
 import AIAtlas from "../ai-atlas";
 import CinematicHero from "./CinematicHero";
 import FeaturedSystems from "./FeaturedSystems";
@@ -21,8 +22,8 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
     <a className={styles.skip} href="#main">{t.skip}</a>
     <header className={styles.header}>
       <a className={styles.brand} href="#top" aria-label="Abdulrahman Hajar">
-        <span className={styles.monogram}>AH<span className={styles.markDot}>.</span></span>
-        <span className={styles.brandText}><strong>Abdulrahman Hajar</strong><small>{t.role}</small></span>
+        <span className={styles.brandEmblem}><Image src="/brand/hajar-emblem.svg" width={37} height={47} alt="" unoptimized /></span>
+        <span className={styles.brandText}><strong>HAJAR</strong><small>Abdulrahman Hajar · {t.role}</small></span>
       </a>
       <nav className={styles.nav} aria-label={locale==="ar"?"التنقل الرئيسي":locale==="tr"?"Ana gezinme":"Primary navigation"}>
         <a href="#work">{t.navWork}</a>
@@ -98,6 +99,6 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         </div>
       </section>
     </main>
-    <footer className={styles.footer}><span>AH. <b>Abdulrahman Hajar</b> © 2026</span><a href="#top">{t.top} ↑</a></footer>
+    <footer className={styles.footer}><span>HAJAR <b>Abdulrahman Hajar</b> © 2026</span><a href="#top">{t.top} ↑</a></footer>
   </div>;
 }
