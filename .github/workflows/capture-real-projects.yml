@@ -7,6 +7,8 @@ on:
     branches: [main]
     paths:
       - "scripts/capture-real-projects.py"
+      - "scripts/build-brand-icons.py"
+      - "public/brand/hajar-emblem.svg"
       - ".github/workflows/capture-real-projects.yml"
   workflow_dispatch:
 
@@ -30,7 +32,7 @@ jobs:
           persist-credentials: true
 
       - name: Install browser and image check dependencies
-        run: python3 -m pip install --user --disable-pip-version-check playwright==1.56.0 pillow==11.3.0
+        run: python3 -m pip install --user --disable-pip-version-check playwright==1.56.0 pillow==11.3.0 cairosvg==2.7.1
 
       - name: Capture genuine public landing pages, without sign-in
         run: |
@@ -43,6 +45,9 @@ jobs:
             exit 0
           fi
           python3 scripts/capture-real-projects.py
+
+      - name: Render real HAJAR app icons at PWA and Apple dimensions
+        run: python3 scripts/build-brand-icons.py
 
       - name: Upload capture report and actual screenshots
         if: always()
@@ -59,10 +64,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app/experience/project-captures.json public/projects/live/
+          git add app/experience/project-captures.json public/projects/live/ public/icons/
           if git diff --cached --quiet; then
             echo "No new authentic evidence to commit"
             exit 0
           fi
-          git commit -m "docs(v6): add dated authentic public project captures [skip ci]"
+          git commit -m "feat(brand): update real HAJAR PWA icons and verified imagery [skip ci]"
           git push origin "HEAD:feature/cinematic-portfolio-v6-preview-20261029"
