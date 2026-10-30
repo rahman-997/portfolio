@@ -62,15 +62,27 @@ with sync_playwright() as pw:
                           f"{name}: cinematic scene missing")
                     check(page.locator("#featured [data-featured-system]").count() == 3,
                           f"{name}: three visual project stories missing")
-                    media = page.locator("#featured img").evaluate_all("""async images => {
+                    # Never confuse a marketing illustration with an actual product capture.
+                    media = page.locator('#featured [data-visual-source="live-screenshot"] img').evaluate_all("""async images => {
                         return await Promise.all(images.map(async img => {
                             img.loading = 'eager';
                             await img.decode().catch(() => {});
                             return {src: img.currentSrc || img.src, naturalWidth: img.naturalWidth};
                         }));
                     }""")
-                    check(len(media) == 3 and all(m["naturalWidth"] > 0 for m in media),
-                          f"{name}: broken featured media: {media}")
+                    real_count = page.locator('#featured [data-visual-source="live-screenshot"]').count()
+                    absent_count = page.locator('#featured [data-visual-source="unverified"]').count()
+                    check(real_count + absent_count == 3,
+                          f"{name}: every project needs a truthful visual state")
+                    check(len(media) == real_count and all(m["naturalWidth"] > 0 for m in media),
+                          f"{name}: broken real project screenshot {media}")
+                    check(all("/projects/live/" in m["src"] for m in media),
+                          f"{name}: non-evidence image presented as a live screenshot")
+                    for card in page.locator('#featured [data-visual-source="unverified"]').all():
+                        check(card.locator("img").count() == 0,
+                              f"{name}: an unverified project contains fake preview imagery")
+                        check(card.get_by_role("link").count() >= 1,
+                              f"{name}: missing direct source evidence link")
                     for slug in ("eventify", "bookhaven", "fitflow"):
                         check(page.locator(f'#featured a[href="/work/{slug}/"]').count() == 1,
                               f"{name}: featured case study {slug} missing")
