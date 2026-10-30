@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Locale } from "./locale";
 import { PUBLIC_PROJECTS } from "./projects";
+import proof from "./project-captures.json";
 import styles from "./featured.module.css";
 
 const design = {
@@ -38,13 +39,16 @@ const design = {
   browse:"TÜM DEPOLARI GÖR",
  },
 } as const;
-const covers: Record<string, string> = {
- eventify:"/projects/eventify-concept.svg",
- bookbookhaven:"/projects/bookhaven-concept.svg",
- "fitflow-gym":"/projects/fitflow-cover.svg",
-};
+const captures = proof.screenshots as Record<string, {src:string; sourceUrl:string; capturedAt:string; sha256:string; title:string; verified:boolean}>;
+const captureLabels = {
+  en:{photo:"ACTUAL LIVE SITE · VERIFIED CAPTURE",none:"LIVE SCREENSHOT NOT VERIFIED",hint:"No replacement artwork: the source and case study are available below.",proof:"Captured from public site"},
+  ar:{photo:"صورة حقيقية · موثقة من الموقع",none:"لم تُتحقّق صورة حية بعد",hint:"لا نستخدم رسماً بديلاً يوهم بأنها واجهة حقيقية. روابط الكود والدراسة أدناه.",proof:"لقطة من الموقع العام"},
+  tr:{photo:"GERÇEK SİTE · DOĞRULANMIŞ GÖRÜNTÜ",none:"CANLI EKRAN GÖRÜNTÜSÜ DOĞRULANMADI",hint:"Gerçek arayüzü taklit eden görsel yok. Kaynak kod ve inceleme aşağıda.",proof:"Açık siteden yakalandı"},
+} as const;
+
 export default function FeaturedSystems({locale}:{locale:Locale}) {
  const t=design[locale];
+ const labels=captureLabels[locale];
  const featured=PUBLIC_PROJECTS.filter(p=>["eventify","bookbookhaven","fitflow-gym"].includes(p.id));
  return <section className={styles.featured} id="featured" data-featured-showcase="true" aria-labelledby="featured-title">
     <div className={styles.sectionIntro}>
@@ -73,16 +77,26 @@ export default function FeaturedSystems({locale}:{locale:Locale}) {
           </div>
           <div className={styles.foot}><span>AH / ENGINEERING</span><span>SYSTEM_{String(i+1).padStart(2,"0")}</span></div>
         </div>
-        <div className={styles.storyVisual} aria-hidden="true">
-          <div className={styles.visualNoise}/>
-          <div className={styles.orbitalDecoration}/>
-          <div className={styles.browserFrame}>
-            <div className={styles.browserBar}><span className={styles.bulbs}><i/><i/><i/></span><span className={styles.browserTitle}>{p.name.toUpperCase()} / {p.id==="fitflow-gym"?"INTERFACE PREVIEW":"CONCEPT ILLUSTRATION"}</span><span>↗</span></div>
-            <div className={styles.browserImage}>
-              <Image src={covers[p.id]} alt="" fill sizes="(max-width: 900px) 90vw, 48vw" className={styles.coverImage} unoptimized/>
+        <div className={styles.storyVisual} data-visual-source={captures[p.id]?.verified?"live-screenshot":"unverified"}>
+          <div className={styles.visualNoise} aria-hidden="true"/>
+          <div className={styles.orbitalDecoration} aria-hidden="true"/>
+          {captures[p.id]?.verified?(
+            <figure className={styles.browserFrame}>
+              <div className={styles.browserBar} aria-hidden="true"><span className={styles.bulbs}><i/><i/><i/></span><span className={styles.browserTitle}>{p.name.toUpperCase()} / {labels.photo}</span><span>↗</span></div>
+              <div className={styles.browserImage}>
+                <Image src={captures[p.id].src} alt={labels.proof+" · "+p.name+" · "+captures[p.id].capturedAt.slice(0,10)} fill sizes="(max-width: 900px) 90vw, 48vw" className={styles.coverImage} unoptimized/>
+              </div>
+              <figcaption className={styles.captureCaption}>{labels.proof}: {captures[p.id].capturedAt.slice(0,10)} UTC</figcaption>
+            </figure>
+          ):(
+            <div className={styles.unverified}>
+              <span className={styles.unverifiedSymbol} aria-hidden="true">⌘</span>
+              <strong>{labels.none}</strong>
+              <p>{labels.hint}</p>
+              <a href={p.source} target="_blank" rel="noopener noreferrer">{t.proof} ↗</a>
             </div>
-          </div>
-          <span className={styles.visualCoordinate}>PROJECT_00{i+1} / SOURCE VERIFIED</span>
+          )}
+          <span className={styles.visualCoordinate}>PROJECT_00{i+1} / {captures[p.id]?.verified?"CAPTURE VERIFIED":"SOURCE VERIFIED"}</span>
         </div>
       </article>)}
     </div>
