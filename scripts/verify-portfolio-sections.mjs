@@ -58,5 +58,36 @@ for(const {locale,directory,heading} of cases){
    "Collaboration includes localized résumé in "+locale);
  assert.ok(newSections.collaborate.includes("https://www.linkedin.com/in/"),
    "Collaboration links to existing LinkedIn profile in "+locale);
- console.log(locale+": 5 localized sections, 4 steps, 4 project paths, 3 FAQ entries, 4 decisions, 3 collaboration areas verified");
+ // V3.10: data-backed project matrix, architecture walkthroughs, quality evidence,
+ // and a technology-to-project map, all usable from the static HTML response.
+ const advanced=Object.fromEntries(["compare","patterns","quality","toolbox"].map(id=>{
+   const match=html.match(new RegExp('<section\\b[^>]*\\bid="'+id+'"[^>]*>([\\s\\S]*?)<\\/section>','i'));
+   assert.ok(match,"Missing V3.10 section #"+id+" in "+locale);
+   assert.ok(html.includes('href="#'+id+'"'),"Missing anchor to #"+id+" in "+locale);
+   return [id,match[1]];
+ }));
+ const headings=locale==="ar"
+   ?["مقارنة المشاريع","استكشف البنية التقنية","أدلة الجودة","التقنيات في سياقها"]
+   :locale==="tr"
+   ?["Projeleri karşılaştır","Mimariyi keşfet","Kalite kanıtları","Teknolojiler bağlamında"]
+   :["Compare the projects","Explore the architecture","Quality you can inspect","Technologies in context"];
+ for(const [index,id] of ["compare","patterns","quality","toolbox"].entries()){
+   assert.ok(advanced[id].includes(headings[index]),"Missing localized V3.10 heading "+id+" in "+locale);
+ }
+ assert.equal((advanced.compare.match(/data-compare-project="/g)??[]).length,4,"Four comparison items for "+locale);
+ assert.equal((advanced.patterns.match(/data-pattern-project="/g)??[]).length,4,"Four architecture walkthroughs for "+locale);
+ assert.equal((advanced.patterns.match(/<details\\b/g)??[]).length,4,"Native interactive details in "+locale);
+ assert.equal((advanced.quality.match(/data-quality-category="/g)??[]).length,4,"Four quality categories in "+locale);
+ assert.ok(advanced.quality.includes("https://github.com/rahman-997/portfolio/actions/workflows/ci.yml"),
+   "Quality evidence must link to GitHub workflow in "+locale);
+ assert.ok((advanced.toolbox.match(/data-tool-category="/g)??[]).length>=3,
+   "Technology map needs 3+ categories in "+locale);
+ for(const slug of ["eventify","bookhaven","fitflow","venues-api"]){
+   assert.ok(advanced.compare.includes('href="'+prefix+'work/'+slug+'/\"'),
+     "Comparison link to "+slug+" missing in "+locale);
+   assert.ok(advanced.patterns.includes('href="'+prefix+'work/'+slug+'/\"'),
+     "Architecture link to "+slug+" missing in "+locale);
+ }
+ console.log(locale+": 9 new sections: 4 comparisons, 4 architecture details, 4 quality categories, contextual technologies");
+ console.log(locale+": 9 localized sections, 4 steps, 4 project paths, 3 FAQ entries, 4 decisions, 3 collaboration areas verified");
 }
