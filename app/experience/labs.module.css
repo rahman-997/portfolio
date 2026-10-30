@@ -88,3 +88,39 @@
  .diagramNode small{font-size:.63rem}
 }
 @media(prefers-reduced-motion:reduce){.path{transition:none}}
+
+/* HAJAR atelier finish: remove remaining electric-blue console styling. */
+.blueprint,.missions{color:#f3ede5;border-color:#8b7b6957;background:#262c29}
+.blueprint::before,.missions::before{background:radial-gradient(ellipse at 75% 12%,#a8866420,transparent 42%)}
+.overline{color:#d8b08a;font-family:var(--font-interface);letter-spacing:.055em}
+.glint{background:#be9875;box-shadow:none}
+.heading>p,.missionHeader>p{color:#d0cbc2}
+.console{border-color:#8b7b69;background:#252a29;box-shadow:0 30px 60px #0003}
+.consoleHeader{background:#343936;border-color:#8b7b6970;color:#eee4d6}
+.consoleHeader>div{color:#e3d1bc}
+.consoleTag{color:#c9baa8}
+.screenDot{background:#be9875;box-shadow:none}
+.selector,.selected{border-color:#83736460;background:#353a36;color:#e6e0d6}
+.selector:hover{background:#4b4b41;color:#fff}
+.selected{background:#be9875;color:#202725}
+.diagram{background:radial-gradient(ellipse at 52% 53%,#4c463c49,transparent 70%),#242c2a}
+.diagramBackdrop{background-image:linear-gradient(#a18b7031 1px,transparent 1px),linear-gradient(90deg,#a18b7031 1px,transparent 1px)}
+.diagramMicro,.diagramFooter{color:#c6ae92}
+.diagramNode{background:linear-gradient(155deg,#3d4540,#303834);border-color:#b79a7b;box-shadow:0 8px 24px #0003}
+.diagramNode strong{color:#f6eee2}
+.diagramNode small{color:#d8cabb}
+.nodeHead,.nodeArrow{color:#d7b08c}
+.nodeIndicator{background:#e2c398}
+.blueprintAside{background:linear-gradient(140deg,#353c37,#272f2b);border-color:#8f7a64}
+.asideEyebrow,.proofLinks a{color:#e0bb94}
+.blueprintAside>p{color:#d4cbc1}
+.proofLinks a{border-color:#8c776056}
+.asideFooter{color:#baa998}
+.path{background:#323a35;border-color:#8b7b6970}
+.path:hover{border-color:#d0aa87}
+.pathTop,.pathIcon{color:#d9b48e}
+.path h3{font-family:var(--font-interface);color:#f8f0e5}
+.path p{color:#d9cfc3}
+.pathActions a{border-color:#8b7b6958;color:#eac49d}
+.pathActions a:last-child{color:#c9b6a2}
+@media(prefers-reduced-motion:reduce){.path,.selector,.selected{transition:none}}
