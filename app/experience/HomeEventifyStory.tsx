@@ -74,9 +74,9 @@ export default function HomeEventifyStory({locale}:{locale:Locale}){
        <div>{current.tags.map(tag=><small key={tag}>{tag}</small>)}</div>
       </div>
     </div>
-    <div className={styles.chapterTabs} role="tablist" aria-label={t.eyebrow}>
+    <div className={styles.chapterTabs} role="group" aria-label={t.eyebrow}>
       {t.chapters.map((chapter,i)=><button key={labels[i]} type="button" data-eventify-slide={labels[i]}
-        role="tab" aria-selected={i===index} tabIndex={i===index?0:-1}
+        aria-pressed={i===index}
         className={i===index?styles.chapterActive:styles.chapter} onClick={()=>setIndex(i)}>
         <span>{labels[i]}</span><strong>{chapter.short}</strong>
       </button>)}
