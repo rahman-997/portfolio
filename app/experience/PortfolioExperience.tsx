@@ -26,8 +26,8 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
     <a className={styles.skip} href="#main">{t.skip}</a>
     <header className={styles.header}>
       <a className={styles.brand} href="#top" aria-label="Abdulrahman Hajar">
-        <span className={styles.brandEmblem}><Image src="/brand/hajar-emblem.svg" width={37} height={47} alt="" unoptimized /></span>
-        <span className={styles.brandText}><strong>HAJAR</strong><small>Abdulrahman Hajar · {t.role}</small></span>
+        <span className={`${styles.brandEmblem} ${referenceShell.logoWrap}`}><Image src="/brand/hajar-emblem.svg" width={37} height={47} alt="" unoptimized /></span>
+        <span className={styles.brandText}><strong>HAJAR</strong><small>{locale==="ar"?"مهندس برمجيات":locale==="tr"?"YAZILIM MÜHENDİSİ":"SOFTWARE ENGINEER"}</small></span>
       </a>
       <nav className={styles.nav} aria-label={locale==="ar"?"التنقل الرئيسي":locale==="tr"?"Ana gezinme":"Primary navigation"}>
         <a href="#work">{t.navWork}</a>
