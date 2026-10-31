@@ -1,0 +1,49 @@
+name: HAJAR review build (isolated, no deploy)
+
+on:
+  push:
+    branches:
+      - qa/hajar-cloud-build-review-20261031
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-build:
+    name: Build current GitHub repository snapshot
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout review branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Set up pinned npm
+        run: npm install --global npm@11.19.1
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build Next.js static export
+        run: npm run build
+      - name: Verify static export
+        run: npm run verify:export
+      - name: Confirm export files exist
+        run: |
+          test -s out/index.html
+          test -s out/resume/index.html
+          test -s out/work/eventify/index.html
+          echo "Verified static output for remote repository commit: $GITHUB_SHA"
+      - name: Upload review artifact (never deployed)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: remote-portfolio-review-out
+          path: out/
+          if-no-files-found: error
+          retention-days: 7
