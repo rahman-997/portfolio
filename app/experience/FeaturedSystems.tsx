@@ -28,7 +28,7 @@ export default function FeaturedSystems({locale}:{locale:Locale}){
         <div className={styles.unverified}>{t.noImage}</div>}
        <span className={styles.index}>0{index+1} / 03</span>
       </div>
-      <div className={styles.titleRow}><h3>{project.name}</h3>{project.study?<a href={project.study} aria-label={t.study+" · "+project.name}>↗</a>:null}</div>
+      <div className={styles.titleRow}><h3>{project.name}</h3><span aria-hidden="true">↗</span></div>
       <p className={styles.description}>{project.text[locale].headline}</p>
       <ul className={styles.tags}>{project.stack.slice(0,3).map(tech=><li key={tech}>{tech}</li>)}</ul>
       <div className={styles.links}>
