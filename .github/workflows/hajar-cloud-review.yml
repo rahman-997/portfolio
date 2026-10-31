@@ -34,6 +34,8 @@ jobs:
         run: npm run build
       - name: Verify static export
         run: npm run verify:export
+      - name: Check images are compatible with static hosting
+        run: node scripts/check-static-image-export.mjs
       - name: Confirm export files exist
         run: |
           test -s out/index.html
