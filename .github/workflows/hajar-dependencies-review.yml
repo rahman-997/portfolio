@@ -1,0 +1,28 @@
+name: HAJAR isolated dependency transfer
+
+on:
+  push:
+    branches: [qa/hajar-cloud-build-review-20261031]
+
+permissions:
+  contents: read
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22.16.0'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Pack dependencies for offline project verification
+        run: tar -czf /tmp/hajar-review-node-modules.tgz node_modules
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: hajar-review-node-dependencies
+          path: /tmp/hajar-review-node-modules.tgz
+          retention-days: 1
+          if-no-files-found: error
