@@ -193,7 +193,7 @@ with sync_playwright() as pw:
                     # Keep the real sticky header during functional checks; omit its
                     # overlay only for clean section-by-section preview captures.
                     page.add_style_tag(content="header { position: relative !important; }")
-                    if label == "desktop" and (theme == "dark" or (locale == "en" and theme == "light")):
+                    if label == "desktop":
                         for section_id, shot in (
                             ("top", "hero"), ("featured", "features"),
                             ("eventify-feature-story", "eventify-story"), ("system-overview", "overview"),
