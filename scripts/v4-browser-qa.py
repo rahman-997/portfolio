@@ -62,6 +62,20 @@ with sync_playwright() as pw:
                           f"{name}: cinematic scene missing")
                     check(page.locator("#featured [data-featured-system]").count() == 3,
                           f"{name}: three visual project stories missing")
+                    check(page.locator("#eventify-feature-story [data-eventify-slide]").count() == 5,
+                          f"{name}: missing 5 Eventify case story chapters")
+                    story_controls = page.locator('#eventify-feature-story button[aria-label]')
+                    check(story_controls.count() == 2, f"{name}: carousel arrows are missing")
+                    story_controls.nth(1).click()
+                    check(page.locator('#eventify-feature-story [data-eventify-slide="02"]').get_attribute("aria-pressed") == "true",
+                          f"{name}: Eventify next chapter failed")
+                    page.locator('#eventify-feature-story [data-eventify-slide="05"]').click()
+                    check(page.locator('#eventify-feature-story [data-eventify-slide="05"]').get_attribute("aria-pressed") == "true",
+                          f"{name}: fifth chapter selection failed")
+                    page.locator('#eventify-feature-story [data-eventify-slide="01"]').click()
+                    check(page.locator('#system-overview .__missing__').count() == 0 and
+                          page.locator('#system-overview li').count() == 4,
+                          f"{name}: four-layer reference architecture missing")
                     # Never confuse a marketing illustration with an actual product capture.
                     media = page.locator('#featured [data-visual-source="live-screenshot"] img').evaluate_all("""async images => {
                         return await Promise.all(images.map(async img => {
@@ -182,6 +196,7 @@ with sync_playwright() as pw:
                     if label == "desktop" and (theme == "dark" or (locale == "en" and theme == "light")):
                         for section_id, shot in (
                             ("top", "hero"), ("featured", "features"),
+                            ("eventify-feature-story", "eventify-story"), ("system-overview", "overview"),
                             ("blueprint-lab", "blueprint"), ("mission-paths", "paths")
                         ):
                             page.locator("#" + section_id).screenshot(
