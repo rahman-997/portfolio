@@ -1,0 +1,45 @@
+{
+  "method": "Headless Chromium capture of public, unauthenticated project homepages",
+  "screenshots": {
+    "eventify": {
+      "src": "/projects/live/eventify-actual.jpg",
+      "publicPageStatus": "landing-loaded",
+      "apiHealthHttp": 200,
+      "sourceUrl": "https://eventify-web.onrender.com/",
+      "finalUrl": "https://eventify-web.onrender.com/",
+      "capturedAt": "2026-10-30T11:43:19+00:00",
+      "sha256": "d157b69ca1e89292dbc3fa9af3037bbbca53e7bd7cc1f35331f6befe8b56fa06",
+      "httpStatus": 200,
+      "title": "Eventify — Discover & Book Events",
+      "viewport": "1440x900",
+      "verified": true
+    },
+    "bookbookhaven": {
+      "src": "/projects/live/bookbookhaven-actual.jpg",
+      "publicPageStatus": "landing-loaded",
+      "apiHealthHttp": null,
+      "sourceUrl": "https://bookbookhaven-free.onrender.com/",
+      "finalUrl": "https://bookbookhaven-free.onrender.com/",
+      "capturedAt": "2026-10-30T11:43:25+00:00",
+      "sha256": "e87a72dd78cee31a3b93efca32e55f8bbf7fc7dcf5e0ef95a401f2d55f5b56ea",
+      "httpStatus": 200,
+      "title": "BookHaven — Find your next chapter",
+      "viewport": "1440x900",
+      "verified": true
+    },
+    "fitflow-gym": {
+      "src": "/projects/live/fitflow-gym-actual.jpg",
+      "publicPageStatus": "landing-loaded",
+      "apiHealthHttp": null,
+      "sourceUrl": "https://fitflow-gym.onrender.com/",
+      "finalUrl": "https://fitflow-gym.onrender.com/",
+      "capturedAt": "2026-10-30T11:43:29+00:00",
+      "sha256": "8be4209345a7f71d4557dc89e8ea501b7bada48a7ccdcebbe3b204eef3af5fcf",
+      "httpStatus": 200,
+      "title": "FitFlow — Local-First Fitness PWA",
+      "viewport": "1440x900",
+      "verified": true
+    }
+  },
+  "unavailable": {}
+}

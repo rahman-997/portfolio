@@ -1,0 +1,81 @@
+/* HAJAR Atelier visual identity based on the original ivory-bronze emblem. */
+.atelier.atelier{
+ --canvas:#171b1b;--surface:#242a28;--surface2:#2d3431;
+ --ink:#f3eee6;--muted:#c1c0b7;--line:#b39c7a50;
+ --accent:#be9875;--accentInk:#171b1b;
+ --cardShadow:0 16px 42px #0004;--softGlow:#be987518;
+ background:var(--canvas);color:var(--ink);font-family:var(--font-interface);
+}
+:global(html[data-theme="dark"]) .atelier.atelier{
+ --canvas:#171b1b;--surface:#242a28;--surface2:#2d3431;
+ --ink:#f3eee6;--muted:#c1c0b7;--line:#b39c7a50;
+ --accent:#be9875;--accentInk:#171b1b;
+}
+:global(html[data-theme="light"]) .atelier.atelier{
+ --canvas:#f4f0e8;--surface:#fffcf7;--surface2:#ebe5da;
+ --ink:#242a28;--muted:#59615c;--line:#796e5a54;
+ --accent:#855e42;--accentInk:#fff;
+ --cardShadow:0 14px 40px #3e322315;--softGlow:#855e4215;
+}
+@media(prefers-color-scheme:light){
+ .atelier.atelier{
+ --canvas:#f4f0e8;--surface:#fffcf7;--surface2:#ebe5da;
+ --ink:#242a28;--muted:#59615c;--line:#796e5a54;
+ --accent:#855e42;--accentInk:#fff;
+ }
+}
+.atelier :global(header){font-family:var(--font-interface);box-shadow:none!important;border-bottom:1px solid var(--line)!important}
+.atelier :global(header) a{font-weight:600}
+.atelier :global(#work) h2,
+.atelier :global(#highlights) h2,
+.atelier :global(#process) h2,
+.atelier :global(#collaborate) h2,
+.atelier :global(#faq) h2,
+.atelier :global(#systems) h2,
+.atelier :global(#about) h2{font-family:var(--font-editorial);font-weight:600;letter-spacing:-.04em;line-height:1.03}
+.atelier :global(#work) h3,
+.atelier :global(#highlights) h3,
+.atelier :global(#process) h3,
+.atelier :global(#collaborate) h3,
+.atelier :global(#faq) summary,
+.atelier :global(#systems) h3{font-family:var(--font-interface);letter-spacing:-.02em}
+:global([dir="rtl"]) .atelier.atelier{font-family:var(--font-ar);letter-spacing:0}
+:global([dir="rtl"]) .atelier :global(#work) h2,
+:global([dir="rtl"]) .atelier :global(#highlights) h2,
+:global([dir="rtl"]) .atelier :global(#process) h2,
+:global([dir="rtl"]) .atelier :global(#collaborate) h2,
+:global([dir="rtl"]) .atelier :global(#faq) h2,
+:global([dir="rtl"]) .atelier :global(#systems) h2,
+:global([dir="rtl"]) .atelier :global(#about) h2{font-family:var(--font-ar);font-weight:600;letter-spacing:0;line-height:1.32}
+.atelier :global(#work),.atelier :global(#highlights),.atelier :global(#faq),.atelier :global(#about){scroll-margin-top:9rem}
+.atelier :global(#work){padding-top:90px}
+.atelier :global(#work) article,.atelier :global(#highlights) article,.atelier :global(#collaborate) article{border-color:var(--line);box-shadow:none;border-radius:3px}
+.atelier :global(#process){background:var(--surface2);border-color:var(--line);border-radius:3px}
+.atelier :global(#process) li{border-color:var(--line);border-radius:0}
+.atelier :global(#contact){background:#be9875!important;color:#17201e!important}
+.atelier :global(#contact) h2{color:#17201e}
+.atelier :global(#contact) a{color:#1e2523!important}
+.atelier :global(#mission-paths),
+.atelier :global(#blueprint-lab){background:#262c2a;color:#f6f0e8;border-color:#7f6f5c66}
+.atelier :global(#mission-paths) h2,
+.atelier :global(#blueprint-lab) h2{font-family:var(--font-editorial);font-weight:600;line-height:.97;letter-spacing:-.04em}
+.atelier :global(#mission-paths) h2 em,
+.atelier :global(#blueprint-lab) h2 em{color:#d7b08c;font-style:italic}
+.atelier :global(#mission-paths) article{background:#303733;border-color:#8c796470;border-radius:3px}
+.atelier :global(#mission-paths) article:hover{border-color:#d0ab86}
+.atelier :global(#mission-paths) article h3{color:#f7f0e7;font-weight:600}
+.atelier :global(#mission-paths) article p{color:#d5ccc0}
+.atelier :global(#mission-paths) article a{color:#e3c5a1!important}
+.atelier :global(#blueprint-lab) button{background:#343b36;color:#f4ede3;border-color:#9a887455;font-family:var(--font-interface)}
+.atelier :global(#blueprint-lab) button[aria-pressed="true"]{background:#be9875;color:#192220}
+.atelier :global(#blueprint-lab) [role="img"]{background:#232a28}
+.atelier :global(#blueprint-lab) a{color:#dfbd94}
+.atelier :global(#ai-lab) :is(a,button):focus-visible{outline-color:#dfbd94}
+:global([dir="rtl"]) .atelier :global(#mission-paths) h2,
+:global([dir="rtl"]) .atelier :global(#blueprint-lab) h2{font-family:var(--font-ar);font-style:normal;letter-spacing:0;line-height:1.35}
+:global([dir="rtl"]) .atelier :global(#mission-paths) h2 em,
+:global([dir="rtl"]) .atelier :global(#blueprint-lab) h2 em{font-style:normal}
+.atelier :global(#faq) summary{line-height:1.65}
+.atelier :global(#faq) summary:focus-visible,
+.atelier :global(#blueprint-lab) button:focus-visible{outline:3px solid #d8b78f;outline-offset:2px}
+@media(max-width:760px){.atelier :global(#work){padding-top:55px}.atelier :global(#mission-paths) h2,.atelier :global(#blueprint-lab) h2{font-size:clamp(2.8rem,9vw,4.3rem)}}

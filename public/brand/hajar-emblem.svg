@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 10 120 150" role="img" aria-labelledby="title desc">
+  <title id="title">HAJAR emblem</title>
+  <desc id="desc">Transparent vector tracing of the ivory and bronze mark in the owner's Eventify carousel cover.</desc>
+  <defs>
+    <linearGradient id="ivory" x1="31" y1="140" x2="96" y2="19" gradientUnits="userSpaceOnUse"><stop stop-color="#d8d5ce"/><stop offset=".78" stop-color="#c4c2be"/><stop offset="1" stop-color="#e3e0da"/></linearGradient>
+    <linearGradient id="bronze" x1="74" y1="149" x2="128" y2="49" gradientUnits="userSpaceOnUse"><stop stop-color="#b99a79"/><stop offset="1" stop-color="#94785d"/></linearGradient>
+  </defs>
+  <path d="M93 18 C95 38 96 60 83 80 C70 101 50 122 35 143 C28 128 28 114 36 98 C49 71 78 45 93 18Z" fill="url(#ivory)"/>
+  <path d="M35 143 C26 124 34 107 46 91 C59 75 79 55 92 23 C86 54 76 76 64 91 C51 108 42 126 35 143Z" fill="#f6f3ec" opacity=".16"/>
+  <path d="M101 44 C115 60 124 75 127 88 C131 107 107 130 74 148 C84 126 110 106 113 88 C116 74 109 56 101 44Z" fill="url(#bronze)"/>
+  <path d="M83 79 C75 89 72 98 71 104 C70 95 73 86 83 79Z" fill="#b59471"/>
+</svg>

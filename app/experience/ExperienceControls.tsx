@@ -9,12 +9,12 @@ type Theme = "light" | "dark";
 const STORAGE_KEY = "portfolio-appearance";
 
 export default function ExperienceControls({locale}:{locale:Locale}) {
-  const [theme,setTheme] = useState<Theme>("dark");
+  const [theme,setTheme] = useState<Theme>("light");
   useEffect(()=>{
     const stored = window.localStorage.getItem(STORAGE_KEY);
     const preferred:Theme = stored==="dark" || stored==="light"
       ? stored
-      : window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      : "light";
     // Defer state synchronization until after mount to avoid effect render loops.
     const frame = window.requestAnimationFrame(() => setTheme(preferred));
     document.documentElement.dataset.theme = preferred;
