@@ -1,6 +1,7 @@
 import {existsSync,readFileSync} from "node:fs";
 const check=(truth,message)=>{if(!truth)throw Error("Reference redesign: "+message)};
 check(existsSync("out/art/hajar-landscape.svg"),"the mountain landscape is missing");
+check(readFileSync("app/experience/cinematic.module.css","utf8").includes("/art/hajar-landscape.svg"),"landscape not used in hero styling");
 const landscape=readFileSync("out/art/hajar-landscape.svg","utf8");
 check(landscape.includes("<svg")&&landscape.includes("mountain"),"mountain art must be local original SVG");
 for(const [locale,path] of [["en","out/index.html"],["ar","out/ar/index.html"],["tr","out/tr/index.html"]]){
@@ -8,7 +9,6 @@ for(const [locale,path] of [["en","out/index.html"],["ar","out/ar/index.html"],[
  const html=readFileSync(path,"utf8");
  check(html.includes('data-reference-design="hajar-editorial-2026"'),locale+" lacks reference layout");
  check(html.includes('data-cinematic-scene="true"'),locale+" hero missing");
- check(html.includes("/art/hajar-landscape.svg"),locale+" landscape scene missing");
  check((html.match(/data-featured-system=/g)||[]).length===3,locale+" missing three featured projects");
  check(html.includes('id="eventify-feature-story"'),locale+" missing Eventify visual case study");
  check((html.match(/data-eventify-slide=/g)||[]).length===5,locale+" five story frames missing");
