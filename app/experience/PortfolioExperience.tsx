@@ -2,6 +2,9 @@ import Image from "next/image";
 import AIAtlas from "../ai-atlas";
 import CinematicHero from "./CinematicHero";
 import FeaturedSystems from "./FeaturedSystems";
+import HomeEventifyStory from "./HomeEventifyStory";
+import ReferenceBlueprint from "./ReferenceBlueprint";
+import referenceShell from "./reference-shell.module.css";
 import BlueprintLab from "./BlueprintLab";
 import MissionPaths from "./MissionPaths";
 import shell from "./shell.module.css";
@@ -19,7 +22,7 @@ const stack = ["React", "Next.js", "TypeScript", "Node.js", "Express", "PostgreS
 
 export default function PortfolioExperience({locale}:{locale:Locale}) {
   const t=TEXT[locale];
-  return <div className={`${styles.page} ${shell.shell} ${atelier.atelier}`} data-design-system="hajar-atelier" lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
+  return <div className={`${styles.page} ${shell.shell} ${atelier.atelier} ${referenceShell.referenceShell}`} data-design-system="hajar-atelier" data-reference-design="hajar-editorial-2026" lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
     <a className={styles.skip} href="#main">{t.skip}</a>
     <header className={styles.header}>
       <a className={styles.brand} href="#top" aria-label="Abdulrahman Hajar">
@@ -32,14 +35,23 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <a href="#ai-lab">{t.navAtlas}</a>
 
         <a href="#about">{t.navAbout}</a>
+        <a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a>
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
       </nav>
       <ExperienceControls locale={locale}/>
+      <details className={referenceShell.mobileMenu}>
+        <summary aria-label={locale==="ar"?"فتح القائمة":locale==="tr"?"Menüyü aç":"Open menu"}><span aria-hidden="true">☰</span></summary>
+        <nav aria-label={locale==="ar"?"قائمة الموبايل":locale==="tr"?"Mobil menü":"Mobile menu"}>
+          <a href="#featured">{t.navWork}</a><a href="#blueprint-lab">Blueprint Lab</a><a href="#ai-lab">{t.navAtlas}</a><a href="#about">{t.navAbout}</a><a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a>
+        </nav>
+      </details>
     </header>
 
     <main id="main">
       <CinematicHero locale={locale}/>
       <FeaturedSystems locale={locale}/>
+      <HomeEventifyStory locale={locale}/>
+      <ReferenceBlueprint locale={locale}/>
       <MissionPaths locale={locale}/>
 
       <section className={styles.metrics} aria-label={t.projectEyebrow}>
@@ -100,6 +112,10 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         </div>
       </section>
     </main>
-    <footer className={styles.footer}><span>HAJAR <b>Abdulrahman Hajar</b> © 2026</span><a href="#top">{t.top} ↑</a></footer>
+    <footer className={styles.footer}>
+      <a className={referenceShell.footerBrand} href="#top"><Image src="/brand/hajar-emblem.svg" alt="" width={34} height={43} unoptimized/><span><strong>HAJAR</strong><small>SOFTWARE ENGINEER</small></span></a>
+      <nav className={referenceShell.footerNav} aria-label="Footer"><a href="#work">{t.navWork}</a><a href="#blueprint-lab">Blueprint Lab</a><a href="#ai-lab">{t.navAtlas}</a><a href="#about">{t.navAbout}</a><a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a></nav>
+      <span>© 2026 Abdulrahman Hajar</span><a href="#top">{t.top} ↑</a>
+    </footer>
   </div>;
 }
