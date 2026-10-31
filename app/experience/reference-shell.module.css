@@ -50,3 +50,10 @@
 @media(max-width:900px){.referenceShell>header>nav{display:none}.mobileMenu{display:block}.referenceShell>header>a:first-of-type{margin-inline-end:auto}}
 @media(max-width:720px){.referenceShell>header{min-height:65px;padding:7px 14px;gap:7px}.referenceShell>header>a:first-of-type{min-width:0;margin-inline-end:auto}.referenceShell>header>a:first-of-type strong{font-size:1.2rem}.referenceShell>header>a:first-of-type small{font-size:.46rem}.referenceShell>header>a:first-of-type img{width:28px;height:37px}.referenceShell>header :global(button){min-height:42px;padding-inline:8px}.referenceShell>footer{padding:28px 19px;gap:15px}.footerNav{order:3;width:100%}.referenceShell :global(#work){padding-top:50px}}
 @media(max-width:390px){.referenceShell>header>a:first-of-type small{display:none}.referenceShell>header>a:first-of-type strong{font-size:1.07rem}.mobileMenu summary{width:40px;height:42px}}
+
+.logoWrap.logoWrap{width:43px;height:53px;border:0;border-radius:0;box-shadow:none;background:transparent;padding:1px;flex:none}
+.logoWrap img{height:49px;width:auto}
+.referenceShell>header{flex-wrap:nowrap}
+:global(html[data-theme="dark"]) .logoWrap{background:#202724}
+.referenceShell>header>a:first-of-type small{letter-spacing:.11em}
+@media(max-width:720px){.logoWrap.logoWrap{width:35px;height:43px}.logoWrap img{height:41px}.referenceShell>header{flex-wrap:nowrap}.referenceShell>header :global(nav[aria-label="Choose language"]){flex-shrink:0}}
