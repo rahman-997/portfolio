@@ -74,7 +74,12 @@ jobs:
           npm run verify
           npx cap add ios
           npx cap sync ios
-          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+          if [ -d ios/App/App.xcworkspace ]; then
+            xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+          else
+            test -d ios/App/App.xcodeproj
+            xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+          fi
   android-emulator-smoke:
     needs: android-debug
     runs-on: ubuntu-24.04
@@ -88,6 +93,7 @@ jobs:
         with:
           name: basma-android-debug-signed
           path: native-artifact
+      - uses: android-actions/setup-android@v3
       - name: Boot emulator and install app (NOT physical device)
         shell: bash
         run: |
