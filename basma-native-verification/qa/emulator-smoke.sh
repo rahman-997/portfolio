@@ -25,7 +25,7 @@ done
 adb install -r "$APK"
 adb shell input keyevent KEYCODE_WAKEUP || true
 adb shell wm dismiss-keyguard || true
-adb shell monkey -p "$APP_ID" -c android.intent.category.LAUNCHER 1
+adb shell am start -W -n "$APP_ID/.MainActivity"
 
 # Process-alive alone is insufficient: wait for actual, nonblank UI pixels.
 for attempt in $(seq 1 15); do
@@ -33,8 +33,12 @@ for attempt in $(seq 1 15); do
   adb shell pidof "$APP_ID" | grep -q '[0-9]' || { echo 'App process exited'; exit 1; }
   adb exec-out screencap -p > android-emulator.png
   if python3 "$SCRIPT_DIR/assert-visible-screen.py" android-emulator.png; then
-    echo "PASS: Android emulator rendered content on attempt $attempt. NOT a physical device."
-    exit 0
+    if adb shell uiautomator dump /sdcard/basma-ui.xml >/dev/null 2>&1 && adb exec-out cat /sdcard/basma-ui.xml > android-ui.xml; then
+      if python3 "$SCRIPT_DIR/assert-app-ui.py" android-ui.xml; then
+        echo "PASS: Android emulator rendered visible Basma content on attempt $attempt. NOT a physical device."
+        exit 0
+      fi
+    fi
   fi
   echo "Waiting for nonblank WebView (attempt $attempt/15)"
 done
