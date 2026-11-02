@@ -93,12 +93,14 @@ jobs:
         with:
           name: basma-android-debug-signed
           path: native-artifact
-      - uses: android-actions/setup-android@v3
       - name: Boot emulator and install app (NOT physical device)
         shell: bash
         run: |
           set -euo pipefail
           if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+          SDKM="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -n "$SDKM" && test -x "$SDKM"
+          export PATH="$(dirname "$SDKM"):$PATH"
           yes | sdkmanager --licenses > /dev/null || true
           sdkmanager --install 'platform-tools' 'emulator' 'system-images;android-35;google_apis;x86_64'
           echo no | avdmanager create avd -n basma-ci -k 'system-images;android-35;google_apis;x86_64' --force
