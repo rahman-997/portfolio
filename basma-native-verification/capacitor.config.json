@@ -1,0 +1,6 @@
+{
+  "appId": "dev.basma.portfolio.preview",
+  "appName": "Basma Preview",
+  "webDir": "web",
+  "bundledWebRuntime": false
+}
