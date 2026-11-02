@@ -1,0 +1,108 @@
+name: Basma native verification (debug only)
+on:
+  push:
+    branches: [basma-native-verification-20261102]
+    paths:
+      - 'basma-native-verification/**'
+      - '.github/workflows/basma-native-build.yml'
+permissions:
+  contents: read
+concurrency:
+  group: basma-native-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  android-debug:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Prepare mobile source
+        working-directory: basma-native-verification
+        run: |
+          npm install --no-audit --no-fund
+          npm run verify
+          npx cap add android
+          npx cap sync android
+      - name: Build debug-signed APK and AAB
+        working-directory: basma-native-verification/android
+        run: bash ./gradlew --no-daemon :app:assembleDebug :app:bundleDebug
+      - name: Cryptographically verify debug signatures
+        working-directory: basma-native-verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK=android/app/build/outputs/apk/debug/app-debug.apk
+          AAB=android/app/build/outputs/bundle/debug/app-debug.aab
+          test -s "$APK" && test -s "$AAB"
+          SIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          test -x "$SIGNER"
+          "$SIGNER" verify --verbose --print-certs "$APK"
+          jarsigner -verify "$AAB" | grep -q 'jar verified'
+          sha256sum "$APK" "$AAB" > native-sha256.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: basma-android-debug-signed
+          path: |
+            basma-native-verification/android/app/build/outputs/apk/debug/app-debug.apk
+            basma-native-verification/android/app/build/outputs/bundle/debug/app-debug.aab
+            basma-native-verification/native-sha256.txt
+          retention-days: 3
+  ios-unsigned-simulator:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Generate and compile unsigned iOS simulator app
+        working-directory: basma-native-verification
+        run: |
+          xcodebuild -version
+          npm install --no-audit --no-fund
+          npm run verify
+          npx cap add ios
+          npx cap sync ios
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+  android-emulator-smoke:
+    needs: android-debug
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: basma-android-debug-signed
+          path: native-artifact
+      - name: Boot emulator and install app (NOT physical device)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager --install 'platform-tools' 'emulator' 'system-images;android-35;google_apis;x86_64'
+          echo no | avdmanager create avd -n basma-ci -k 'system-images;android-35;google_apis;x86_64' --force
+          "$ANDROID_HOME/emulator/emulator" -avd basma-ci -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect > emulator.log 2>&1 &
+          bash basma-native-verification/qa/emulator-smoke.sh native-artifact/android/app/build/outputs/apk/debug/app-debug.apk
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: basma-emulator-evidence
+          path: |
+            emulator.log
+            android-emulator.png
+          retention-days: 3
