@@ -1,0 +1,10 @@
+import {readFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const config=JSON.parse(await readFile(new URL('../capacitor.config.json',import.meta.url),'utf8'));
+const html=await readFile(new URL('../web/index.html',import.meta.url),'utf8');
+assert.equal(config.webDir,'web');
+assert.equal(config.appId,'dev.basma.portfolio.preview');
+assert.match(html,/<html[^>]*lang="ar"[^>]*dir="rtl"/);
+for(const label of ['Eventify','BookHaven','FitFlow','Mizan Finance'])assert.ok(html.includes(label),'Missing '+label);
+assert.ok(html.includes('noindex,nofollow'));
+console.log('Verified public offline portfolio preview, non-store debug package');
