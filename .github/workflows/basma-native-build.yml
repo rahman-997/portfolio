@@ -83,8 +83,7 @@ jobs:
   android-emulator-smoke:
     needs: android-debug
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
-    continue-on-error: true
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -93,24 +92,23 @@ jobs:
         with:
           name: basma-android-debug-signed
           path: native-artifact
-      - name: Boot emulator and install app (NOT physical device)
-        shell: bash
+      - name: Configure KVM permissions
         run: |
-          set -euo pipefail
           if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
-          SDKM="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
-          test -n "$SDKM" && test -x "$SDKM"
-          export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$(dirname "$SDKM"):$PATH"
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager --install 'platform-tools' 'emulator' 'system-images;android-35;google_apis;x86_64'
-          echo no | avdmanager create avd -n basma-ci -k 'system-images;android-35;google_apis;x86_64' --force
-          "$ANDROID_HOME/emulator/emulator" -avd basma-ci -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect > emulator.log 2>&1 &
-          bash basma-native-verification/qa/emulator-smoke.sh native-artifact/android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Launch Android emulator and verify APK
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2 pinned
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_5
+          emulator-boot-timeout: 360
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none
+          disable-animations: true
+          script: bash basma-native-verification/qa/emulator-smoke.sh native-artifact/android/app/build/outputs/apk/debug/app-debug.apk
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: basma-emulator-evidence
-          path: |
-            emulator.log
-            android-emulator.png
+          path: android-emulator.png
           retention-days: 3
