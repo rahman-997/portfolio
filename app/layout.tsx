@@ -1,3 +1,4 @@
+import SiteSearch from "./site-search";
 import type { Metadata, Viewport } from "next";
 import {
   PORTFOLIO_UPDATED_AT,
@@ -7,19 +8,20 @@ import {
   THEME_COLOR,
 } from "./portfolio-data";
 import "./globals.css";
+import { serializeJsonLd } from "./json-ld.mjs";
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
   themeColor: THEME_COLOR,
-  colorScheme: "light dark",
+  colorScheme: "light",
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  applicationName: "Abdulrahman Hajar — Software Engineering Portfolio",
-  title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
+  applicationName: "HAJAR | Abdulrahman Hajar — Software Engineering Portfolio",
+  title: "HAJAR | Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
   description:
     "Software engineering portfolio of Abdulrahman Hajar: full-stack products, backend systems, APIs, databases, asynchronous workflows, testing, security, reliability, deployment, AI integrations, and interactive systems.",
   authors: [{ name: "Abdulrahman Hajar", url: SITE_URL }],
@@ -66,20 +68,20 @@ export const metadata: Metadata = {
     "Flutter",
     "Istanbul Software Engineer",
   ],
-  alternates: { canonical: "/", languages: { en: "/", ar: "/ar/", tr: "/tr/" } },
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
+    title: "HAJAR | Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
     description:
       "Production-minded full-stack software, backend systems, AI integrations, and interactive engineering across TypeScript, React/Next.js, Node.js, APIs, databases, reliability, and delivery.",
     type: "website",
     url: "/",
-    siteName: "Abdulrahman Hajar — Software Engineering Portfolio",
+    siteName: "HAJAR | Abdulrahman Hajar — Software Engineering Portfolio",
     locale: "en_US",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Abdulrahman Hajar — Software Engineer" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
+    title: "HAJAR | Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
     description:
       "Full-stack products, backend systems, APIs, data, AI integrations, interactive systems, reliability, CI/CD, and production delivery.",
     images: ["/twitter-image"],
@@ -119,6 +121,7 @@ const personJsonLd = {
   sameAs: [
     PROFILE_LINKS.github,
     PROFILE_LINKS.linkedin,
+    PROFILE_LINKS.instagram,
   ],
   affiliation: {
     "@type": "CollegeOrUniversity",
@@ -168,7 +171,7 @@ const websiteJsonLd = {
   "@type": "WebSite",
   "@id": `${SITE_URL}/#website`,
   url: SITE_URL,
-  name: "Abdulrahman Hajar — Software Engineering Portfolio",
+  name: "HAJAR | Abdulrahman Hajar — Software Engineering Portfolio",
   description: "Selected software engineering work, case studies, technical capabilities, and résumé for Abdulrahman Hajar.",
   author: { "@id": `${SITE_URL}/#person` },
   dateModified: PORTFOLIO_UPDATED_AT,
@@ -180,7 +183,7 @@ const profilePageJsonLd = {
   "@type": "ProfilePage",
   "@id": `${SITE_URL}/#profile-page`,
   url: SITE_URL,
-  name: "Abdulrahman Hajar — Software Engineering Portfolio",
+  name: "HAJAR | Abdulrahman Hajar — Software Engineering Portfolio",
   mainEntity: { "@id": `${SITE_URL}/#person` },
   isPartOf: { "@id": `${SITE_URL}/#website` },
   dateModified: PORTFOLIO_UPDATED_AT,
@@ -210,12 +213,13 @@ const deployCommit = process.env.RENDER_GIT_COMMIT ?? process.env.GITHUB_SHA ?? 
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body data-deploy-commit={deployCommit}>
         {[personJsonLd, websiteJsonLd, profilePageJsonLd, selectedWorkJsonLd].map((data, index) => (
-          <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+          <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }} />
         ))}
         {children}
+        <SiteSearch />
       </body>
     </html>
   );

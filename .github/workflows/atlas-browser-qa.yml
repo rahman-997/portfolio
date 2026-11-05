@@ -5,14 +5,42 @@ on:
     branches: [main]
     paths:
       - "app/ai-atlas.tsx"
+      - "app/site-search.tsx"
+      - "app/site-search-client.tsx"
+      - "app/layout.tsx"
+      - "app/portfolio-data.ts"
+      - "app/site-search.mjs"
+      - "app/site-search.d.mts"
+      - "app/site-search.module.css"
+      - "tests/v13-site-search.test.mjs"
+      - "app/atlas-navigation.mjs"
+      - "app/atlas-navigation.d.mts"
+      - "app/project-navigation.mjs"
+      - "app/project-navigation.d.mts"
+      - "app/work/[slug]/page.tsx"
+      - "app/work/[slug]/case-study.module.css"
       - "app/ai-atlas.module.css"
       - "app/home.module.css"
       - "app/page.tsx"
+      - "app/project-explorer.tsx"
+      - "app/project-filters.mjs"
+      - "app/project-filters.d.mts"
+      - "app/brief-studio.tsx"
+      - "app/nav-more-control.tsx"
+      - "tests/v12-finalization.test.mjs"
+      - "app/project-compare.tsx"
+      - "app/stack-lens.tsx"
+      - "app/interface-lab.tsx"
+      - "app/portfolio-lenses.mjs"
+      - "app/portfolio-lenses.d.mts"
+      - "tests/v11-new-sections.test.mjs"
+      - "app/brief-utils.mjs"
+      - "app/brief-utils.d.mts"
+      - "tests/v10-new-sections.test.mjs"
+      - "tests/v9-project-explorer.test.mjs"
       - "scripts/atlas-browser-qa.py"
-      - "scripts/v4-browser-qa.py"
-      - "app/experience/**"
-      - "app/ar/page.tsx"
-      - "app/tr/page.tsx"
+      - "scripts/preview-export.mjs"
+      - "tests/v15-build-preview.test.mjs"
       - ".github/workflows/atlas-browser-qa.yml"
       - "package.json"
       - "package-lock.json"
@@ -50,12 +78,15 @@ jobs:
       - name: Prepare headless browser
         run: python3 -m pip install --user --disable-pip-version-check playwright==1.56.0
 
+      - name: Install Playwright Chromium and system dependencies
+        run: python3 -m playwright install --with-deps chromium
+
       - name: Install disposable WCAG auditing engine
         run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund axe-core@4.10.3
 
       - name: Start local static server
         run: |
-          nohup python3 -m http.server 4173 --bind 127.0.0.1 --directory out > /tmp/atlas-server.log 2>&1 &
+          nohup npm run preview:export -- --port 4173 --dir out > /tmp/atlas-server.log 2>&1 &
           for attempt in {1..20}; do
             if curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then exit 0; fi
             sleep 1
@@ -65,9 +96,6 @@ jobs:
 
       - name: Browser acceptance and screenshots
         run: python3 scripts/atlas-browser-qa.py
-
-      - name: Browser QA for 3 languages and both themes
-        run: python3 scripts/v4-browser-qa.py
 
       - name: Upload browser evidence
         if: always()

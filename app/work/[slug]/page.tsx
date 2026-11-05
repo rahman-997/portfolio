@@ -1,3 +1,4 @@
+import BrandMark from "../../brand-mark";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +11,8 @@ import {
   type ProjectSlug,
 } from "../../portfolio-data";
 import styles from "./case-study.module.css";
+import { adjacentProjectSlugs } from "../../project-navigation.mjs";
+import { serializeJsonLd } from "../../json-ld.mjs";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -53,6 +56,9 @@ export default async function CaseStudyPage({ params }: PageProps) {
   if (!study) notFound();
 
   const canonicalUrl = `${SITE_URL}/work/${slug}/`;
+  const nearby = adjacentProjectSlugs(PROJECT_SLUGS, slug);
+  const previousStudy = nearby.previous ? PROJECTS[nearby.previous] : null;
+  const nextStudy = nearby.next ? PROJECTS[nearby.next] : null;
   const caseStudyJsonLd = {
     "@context": "https://schema.org",
     "@type": "TechArticle",
@@ -88,16 +94,17 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
   return (
     <main className={styles.page}>
+      <a className={styles.skip} href="#content">Skip to case study</a>
       {[caseStudyJsonLd, breadcrumbJsonLd].map((data, index) => (
-        <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+        <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }} />
       ))}
 
       <header className={styles.header}>
-        <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio"><span>AH</span><strong>Abdulrahman Hajar</strong></Link>
+        <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio"><span><BrandMark size={36}/></span><strong>Abdulrahman Hajar</strong></Link>
         <Link className={styles.back} href="/#work">← Selected work</Link>
       </header>
 
-      <article className={styles.article}>
+      <article className={styles.article} id="content" tabIndex={-1}>
         <section className={styles.hero}>
           <p className={styles.eyebrow}>{study.eyebrow}</p>
           <h1>{study.name}</h1>
@@ -108,7 +115,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
             <a href={study.source} target="_blank" rel="noreferrer">Inspect source ↗</a>
           </div>
           <div className={styles.stack}>{study.stack.map((item) => <span key={item}>{item}</span>)}</div>
-          {study.cover ? <figure className={styles.cover}><Image src={study.cover} alt={`${study.name} product interface preview`} width={1200} height={630} priority /></figure> : null}
+          {study.cover ? (
+            <figure className={styles.cover}>
+              <Image src={study.cover} alt={`${study.name} conceptual interface illustration`} width={1200} height={630} priority />
+              <figcaption className={styles.coverCaption}>Concept visual · not a live screenshot</figcaption>
+            </figure>
+          ) : null}
         </section>
 
         <section className={styles.splitSection}>
@@ -146,6 +158,23 @@ export default async function CaseStudyPage({ params }: PageProps) {
           <div><span>VERIFY IT</span><h2>The implementation is public.</h2><p>Review the live behavior, source code, tests, architecture, and deployment details directly.</p></div>
           <div className={styles.nextLinks}><a href={study.live} target="_blank" rel="noreferrer">Live system ↗</a><a href={study.source} target="_blank" rel="noreferrer">GitHub source ↗</a><Link href="/#work">More case studies →</Link></div>
         </section>
+
+        <nav className={styles.caseNav} aria-label="Browse case studies">
+          {previousStudy && (
+            <Link href={`/work/${previousStudy.slug}/`} className={styles.caseNavItem}>
+              <span className={styles.caseNavOverline}>← PREVIOUS CASE STUDY</span>
+              <strong>{previousStudy.name}</strong>
+              <small>{previousStudy.label}</small>
+            </Link>
+          )}
+          {nextStudy && (
+            <Link href={`/work/${nextStudy.slug}/`} className={`${styles.caseNavItem} ${styles.caseNavNext}`}>
+              <span className={styles.caseNavOverline}>NEXT CASE STUDY →</span>
+              <strong>{nextStudy.name}</strong>
+              <small>{nextStudy.label}</small>
+            </Link>
+          )}
+        </nav>
       </article>
     </main>
   );

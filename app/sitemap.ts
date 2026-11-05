@@ -14,18 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${SITE_URL}/ar/`,
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 0.92,
-    },
-    {
-      url: `${SITE_URL}/tr/`,
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 0.92,
-    },
-    {
       url: `${SITE_URL}/resume/`,
       lastModified,
       changeFrequency: "monthly",

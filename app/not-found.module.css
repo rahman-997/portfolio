@@ -1,11 +1,11 @@
 .page {
-  --paper: #f3f0e8;
-  --ink: #111214;
-  --muted: #6c6b66;
-  --orange: #ff5b36;
-  --orange-text: #b83b20;
-  --blue: #3154ff;
-  --lime: #d8ff43;
+  --paper: #F5F1E9;
+  --ink: #0E1416;
+  --muted: #5D625F;
+  --orange: #D9B895;
+  --orange-text: #745131;
+  --blue: #745131;
+  --lime: #72d7bb;
   min-height: 100vh;
   display: grid;
   place-items: center;
@@ -33,10 +33,10 @@
   width: min(820px, 100%);
   overflow: hidden;
   padding: clamp(30px, 6vw, 64px);
-  border: 1px solid var(--ink);
-  border-radius: 32px;
-  background: rgba(243,240,232,.96);
-  box-shadow: 18px 18px 0 var(--blue);
+  border: 1px solid #DDD6CC;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 16px 16px 0 #E6D9C8, 0 24px 60px #20274718;
 }
 
 .card::before {
@@ -44,7 +44,7 @@
   position: absolute;
   right: -26px;
   top: -46px;
-  color: rgba(17,18,20,.045);
+  color: #7451310a;
   font-size: clamp(9rem, 26vw, 18rem);
   line-height: .8;
   font-weight: 950;
@@ -68,9 +68,9 @@
   z-index: 2;
   display: inline-flex;
   padding: 7px 10px;
-  border: 1px solid var(--ink);
-  border-radius: 999px;
-  background: var(--ink);
+  border: 1px solid #CDC2B4;
+  border-radius: 11px;
+  background: var(--blue);
   color: white;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 10px;
@@ -104,7 +104,7 @@
   z-index: 2;
   max-width: 650px;
   margin: 26px 0 0;
-  color: #555650;
+  color: #5D625F;
   font-size: 16px;
   line-height: 1.75;
 }
@@ -125,8 +125,8 @@
   justify-content: center;
   min-height: 48px;
   padding: 0 19px;
-  border: 1px solid var(--ink);
-  border-radius: 999px;
+  border: 1px solid #CDC2B4;
+  border-radius: 11px;
   font-size: 13px;
   font-weight: 850;
   text-decoration: none;
@@ -134,13 +134,13 @@
 }
 
 .primary {
-  background: var(--ink);
+  background: var(--blue);
   color: white;
 }
 
 .primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 7px 0 var(--orange);
+  box-shadow: 0 7px 0 #D9B895;
 }
 
 .secondary { background: transparent; }
@@ -172,12 +172,12 @@
   height: 7px;
   border-radius: 999px;
   background: var(--lime);
-  box-shadow: 0 0 0 4px rgba(216,255,67,.2);
+  box-shadow: 0 0 0 4px #72d7bb24;
 }
 
 @media (max-width: 620px) {
   .page { padding: 18px; }
-  .card { border-radius: 24px; box-shadow: 9px 9px 0 var(--blue); }
+  .card { border-radius: 19px; box-shadow: 9px 9px 0 #E6D9C8; }
   .card::after { left: 30px; width: 100px; }
   .status { flex-direction: column; }
 }

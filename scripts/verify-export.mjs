@@ -1,5 +1,7 @@
+import brand from "../app/brand.json" with { type: "json" };
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, relative } from "node:path";
+import { auditStaticLinks } from "./check-static-links.mjs";
 
 const root = process.cwd();
 const outDir = join(root, "out");
@@ -55,20 +57,6 @@ function walk(directory) {
 
 const files = walk(outDir).filter((file) => statSync(file).isFile());
 const findings = [];
-const brokenInternalLinks = [];
-
-function internalTargetExists(href) {
-  const clean = href.split("#", 1)[0].split("?", 1)[0];
-  if (!clean || clean === "/") return existsSync(join(outDir, "index.html"));
-  if (!clean.startsWith("/")) return true;
-
-  const pathname = clean.replace(/^\/+/, "");
-  const candidates = [];
-  if (pathname.endsWith("/")) candidates.push(join(outDir, pathname, "index.html"));
-  else if (extname(pathname)) candidates.push(join(outDir, pathname));
-  else candidates.push(join(outDir, pathname, "index.html"), join(outDir, pathname));
-  return candidates.some(existsSync);
-}
 
 for (const file of files) {
   if (!textExtensions.has(extname(file))) continue;
@@ -76,14 +64,6 @@ for (const file of files) {
 
   for (const [label, value] of forbiddenOutput) {
     if (content.includes(value)) findings.push({ file: relative(root, file), label, value });
-  }
-
-  if (extname(file) === ".html") {
-    for (const match of content.matchAll(/href=["']([^"']+)["']/gi)) {
-      const href = match[1];
-      if (/^(?:https?:|mailto:|tel:|javascript:|data:)/i.test(href)) continue;
-      if (!internalTargetExists(href)) brokenInternalLinks.push({ file: relative(root, file), href });
-    }
   }
 }
 
@@ -93,9 +73,12 @@ if (findings.length) {
   process.exit(1);
 }
 
+const brokenInternalLinks = auditStaticLinks(outDir);
 if (brokenInternalLinks.length) {
-  console.error("Export verification found broken internal links:");
-  for (const finding of brokenInternalLinks) console.error(`- ${finding.file}: ${finding.href}`);
+  console.error("Export verification found broken local navigation or asset links:");
+  for (const { file, element, value, reason } of brokenInternalLinks) {
+    console.error(`- ${file}: <${element}> ${JSON.stringify(value)} (${reason})`);
+  }
   process.exit(1);
 }
 
@@ -108,7 +91,7 @@ if (!homeHtml.includes(`<link rel="canonical" href="${canonicalHost}/"`)) {
 // Guard against accidentally dropping the interactive atlas from the homepage.
 for (const marker of [
   'id="ai-lab"',
-  "AH / SYSTEMS ATLAS",
+  "HAJAR / SYSTEMS ATLAS",
   "DISCIPLINE INSPECTOR",
   "Explore Interface",
   "Neural portrait",
@@ -162,7 +145,7 @@ if (!fitflowHtml.includes("https://fitflow-gym.onrender.com")) {
 
 const manifest = JSON.parse(readFileSync(join(outDir, "manifest.webmanifest"), "utf8"));
 for (const key of ["background_color", "theme_color"]) {
-  if (manifest[key] !== "#07100f") throw new Error(`Manifest ${key} must match the portfolio theme color`);
+  if (manifest[key] !== brand.background) throw new Error(`Manifest ${key} must match the portfolio theme color`);
 }
 
 for (const expected of [

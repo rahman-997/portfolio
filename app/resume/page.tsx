@@ -1,3 +1,4 @@
+import BrandMark from "../brand-mark";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PROFILE_LINKS, PROJECT_LIST } from "../portfolio-data";
@@ -20,9 +21,10 @@ const skills = [
 export default function ResumePage() {
   return (
     <main className={styles.page}>
+      <a className={styles.skip} href="#content">Skip to résumé content</a>
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio">
-          <span>AH</span><strong>Abdulrahman Hajar</strong>
+          <span><BrandMark size={36}/></span><strong>Abdulrahman Hajar</strong>
         </Link>
         <div className={styles.headerActions}>
           <Link href="/#work">Selected work</Link>
@@ -31,7 +33,7 @@ export default function ResumePage() {
         </div>
       </header>
 
-      <section className={styles.hero}>
+      <section className={styles.hero} id="content" tabIndex={-1}>
         <div>
           <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK DEVELOPER · AI & INTERACTIVE SYSTEMS</p>
           <h1>Abdulrahman Hajar</h1>

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --page-bg: #08090b;
-  --page-fg: #f5f7fb;
+  --page-bg: #F5F1E9;
+  --page-fg: #0E1416;
 }
 
 *,
@@ -29,8 +29,8 @@ body {
 }
 
 ::selection {
-  background: rgba(134, 196, 255, 0.3);
-  color: #ffffff;
+  background: rgba(201, 167, 125, 0.2);
+  color: #0E1416;
 }
 
 a {
@@ -63,7 +63,7 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid #86c4ff;
+  outline: 2px solid #745131;
   outline-offset: 3px;
 }
 

@@ -5,8 +5,8 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Abdulrahman Hajar — Software Engineering Portfolio",
-    short_name: "Abdulrahman Hajar",
+    name: "HAJAR | Abdulrahman Hajar — Engineering Portfolio",
+    short_name: "HAJAR",
     description:
       "Software engineering portfolio featuring full-stack products, backend systems, APIs, data architecture, reliability, and AI-assisted workflows.",
     start_url: "/",

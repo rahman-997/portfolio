@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent } from "react";
 import Link from "next/link";
 import styles from "./ai-atlas.module.css";
-import type { Locale } from "./experience/locale";
-import { atlasCopy } from "./experience/atlas-locale";
+import BrandMark from "./brand-mark";
+import { nextNodeIndex, ensureSelection, adjacentSelection } from "./atlas-navigation.mjs";
 
 type Area = {
   id: string;
@@ -78,25 +78,40 @@ const journey = [
   { id: "quality", label: "05 / VERIFY", title: "Prove behavior", detail: "Check failure cases, integration contracts and observability." },
 ] as const;
 
-export default function AIAtlas({locale="en"}:{locale?:Locale}) {
-  const t=atlasCopy[locale];
+export default function AIAtlas() {
   const [activeId, setActiveId] = useState("architecture");
   const [view, setView] = useState<"network" | "portrait" | "flow">("network");
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncMotionPreference = () => setReduceMotion(media.matches);
+    syncMotionPreference();
+    media.addEventListener("change", syncMotionPreference);
+    return () => media.removeEventListener("change", syncMotionPreference);
+  }, []);
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const activeIndex = areas.findIndex((area) => area.id === activeId);
   const active = areas[activeIndex] ?? areas[0];
 
+  function setViewMode(mode: "network" | "portrait" | "flow") {
+    if (mode === "flow") {
+      setActiveId((current) => ensureSelection(current, journey.map((step) => step.id)) ?? areas[0].id);
+    }
+    setView(mode);
+  }
+
   function selectAdjacent(direction: number) {
-    setActiveId(areas[(activeIndex + direction + areas.length) % areas.length].id);
+    const visibleIds = view === "flow" ? journey.map((step) => step.id) : areas.map((area) => area.id);
+    const next = adjacentSelection(activeId, visibleIds, direction);
+    if (next) setActiveId(next);
   }
 
   function handleNodeKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
-    let next = index;
-    if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (index + 1) % areas.length;
-    else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (index + areas.length - 1) % areas.length;
-    else if (event.key === "Home") next = 0;
-    else if (event.key === "End") next = areas.length - 1;
-    else return;
+    const next = nextNodeIndex(event.key, index, areas.length, {
+      altKey: event.altKey, ctrlKey: event.ctrlKey, metaKey: event.metaKey, shiftKey: event.shiftKey,
+    });
+    if (next === null) return;
     event.preventDefault();
     setActiveId(areas[next].id);
     nodeRefs.current[next]?.focus();
@@ -106,37 +121,38 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
     <section className={styles.section} id="ai-lab" aria-labelledby="ai-lab-heading">
       <div className={styles.heading}>
         <div>
-          <p className={styles.eyebrow}>{t.eyebrow}</p>
-          <h2 id="ai-lab-heading">{t.title}</h2>
+          <p className={styles.eyebrow}>INTERACTIVE FEATURE / ENGINEERING ATLAS</p>
+          <h2 id="ai-lab-heading">Every system is a network of decisions.</h2>
         </div>
         <p className={styles.lead}>
-          {t.lead}
+          An interactive map of the disciplines behind my work. Explore a node
+          to inspect the engineering choices and related project evidence.
         </p>
       </div>
 
       <div className={styles.atlasFacts} aria-label="Atlas summary">
-        <span><strong>08</strong> {t.disciplines}</span>
-        <span><strong>03</strong> {t.modesLabel}</span>
-        <span><strong>04</strong> {t.systems}</span>
-        <span className={styles.factStatement}>{t.fact}</span>
+        <span><strong>08</strong> disciplines</span>
+        <span><strong>03</strong> exploration modes</span>
+        <span><strong>04</strong> documented systems</span>
+        <span className={styles.factStatement}>REAL ENGINEERING. NO ARTIFICIAL METRICS.</span>
       </div>
 
       <div className={styles.console}>
         <div className={styles.toolbar}>
           <div className={styles.consoleIdentity}>
             <span className={styles.pulseDot} aria-hidden="true" />
-            <span>AH / SYSTEMS ATLAS</span>
-            <span className={styles.visualTag}>{t.visualTag}</span>
+            <span>HAJAR / SYSTEMS ATLAS</span>
+            <span className={styles.visualTag}>INTERACTIVE VISUALIZATION</span>
           </div>
-          <div className={styles.switcher} role="group" aria-label={t.modeGroup}>
-            <button type="button" aria-pressed={view === "network"} className={view === "network" ? styles.modeActive : ""} onClick={() => setView("network")}>
-              {t.modeNetwork}
+          <div className={styles.switcher} role="group" aria-label="Visualization mode">
+            <button type="button" aria-pressed={view === "network"} className={view === "network" ? styles.modeActive : ""} onClick={() => setViewMode("network")}>
+              Network
             </button>
-            <button type="button" aria-pressed={view === "portrait"} className={view === "portrait" ? styles.modeActive : ""} onClick={() => setView("portrait")}>
-              {t.modePortrait}
+            <button type="button" aria-pressed={view === "portrait"} className={view === "portrait" ? styles.modeActive : ""} onClick={() => setViewMode("portrait")}>
+              Neural portrait
             </button>
-            <button type="button" aria-pressed={view === "flow"} className={view === "flow" ? styles.modeActive : ""} onClick={() => setView("flow")}>
-              {t.modeFlow}
+            <button type="button" aria-pressed={view === "flow"} className={view === "flow" ? styles.modeActive : ""} onClick={() => setViewMode("flow")}>
+              System flow
             </button>
           </div>
         </div>
@@ -144,33 +160,33 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
         <div className={styles.workspace}>
           <div className={`${styles.visual} ${view === "network" ? styles.visualNetwork : ""}`}>
             {view === "network" ? (
-              <div className={styles.network} role="group" aria-label={t.nodeGroup}>
+              <div className={styles.network} role="group" aria-label="Select an engineering discipline; use the arrow keys to move between nodes">
                 <svg className={styles.wires} viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
                     <linearGradient id="atlas-wire" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0" stopColor="#47d6f8" stopOpacity=".18" />
-                      <stop offset=".52" stopColor="#47d6f8" stopOpacity=".65" />
-                      <stop offset="1" stopColor="#e6bd6c" stopOpacity=".3" />
+                      <stop offset="0" stopColor="#84978D" stopOpacity=".18" />
+                      <stop offset=".52" stopColor="#84978D" stopOpacity=".65" />
+                      <stop offset="1" stopColor="#C9A77D" stopOpacity=".3" />
                     </linearGradient>
                   </defs>
                   {areas.map((area) => (
                     <g key={area.id}>
                       <line x1="500" y1="300" x2={area.x * 10} y2={area.y * 6} stroke="url(#atlas-wire)" strokeWidth={activeId === area.id ? 2.8 : 1.1} opacity={activeId === area.id ? 1 : .5} />
-                      {activeId === area.id && (
-                        <circle r="4" fill="#f6cc84" className={styles.signalParticle}>
+                      {!reduceMotion && activeId === area.id && (
+                        <circle r="4" fill="#E1C39C" className={styles.signalParticle}>
                           <animateMotion dur="3s" repeatCount="indefinite" path={`M500 300 L${area.x * 10} ${area.y * 6}`} />
                         </circle>
                       )}
-                      <circle cx={area.x * 10} cy={area.y * 6} r={activeId === area.id ? 5.5 : 3} fill={activeId === area.id ? "#e6bd6c" : "#47d6f8"} opacity=".8" />
+                      <circle cx={area.x * 10} cy={area.y * 6} r={activeId === area.id ? 5.5 : 3} fill={activeId === area.id ? "#C9A77D" : "#84978D"} opacity=".8" />
                     </g>
                   ))}
-                  <ellipse cx="500" cy="300" rx="246" ry="157" fill="none" stroke="#47d6f8" strokeOpacity=".08" />
-                  <ellipse cx="500" cy="300" rx="315" ry="207" fill="none" stroke="#e6bd6c" strokeOpacity=".055" />
+                  <ellipse cx="500" cy="300" rx="246" ry="157" fill="none" stroke="#84978D" strokeOpacity=".08" />
+                  <ellipse cx="500" cy="300" rx="315" ry="207" fill="none" stroke="#C9A77D" strokeOpacity=".055" />
                 </svg>
                 <div className={styles.core} aria-hidden="true">
                   <div className={styles.coreGlow} />
                   <div className={styles.coreRing} />
-                  <div className={styles.coreInner}><span>AH</span><small>SYSTEMS</small></div>
+                  <div className={styles.coreInner}><BrandMark size={72} /><small>SYSTEMS</small></div>
                 </div>
                 {areas.map((area, index) => (
                   <button
@@ -181,17 +197,18 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
                     style={{ "--node-x": `${area.x}%`, "--node-y": `${area.y}%` } as CSSProperties}
                     className={[styles.node, activeId === area.id ? styles.selected : ""].filter(Boolean).join(" ")}
                     aria-pressed={activeId === area.id}
-                    aria-label={t.explore + " " + t.nodes[area.id].name}
+                    tabIndex={activeId === area.id ? 0 : -1}
+                    aria-label={"Explore " + area.name}
                     onClick={() => setActiveId(area.id)}
                   >
                     <span className={styles.nodeIndex}>{area.short}</span>
-                    <span className={styles.nodeName}>{t.nodes[area.id].name}</span>
+                    <span className={styles.nodeName}>{area.name}</span>
                   </button>
                 ))}
-                <span className={styles.mapCorner}>{t.nodeHint}</span>
+                <span className={styles.mapCorner}>SELECT A NODE · ARROW KEYS TO NAVIGATE</span>
               </div>
             ) : view === "portrait" ? (
-              <div className={styles.portraitView} role="img" aria-label={t.portraitAlt}>
+              <div className={styles.portraitView} role="img" aria-label="Abstract cyan and gold digital head made from contour lines; decorative visualization only">
                 <svg viewBox="0 0 520 500" className={styles.portraitSvg} aria-hidden="true">
                   <defs>
                     <linearGradient id="portrait-contour" x1="0" y1="0" x2="0" y2="1">
@@ -229,16 +246,16 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
                   </g>
                 </svg>
                 <div className={styles.portraitCaption}>
-                  <strong>{t.portraitTitle}</strong>
-                  <span>{t.portraitDetail}</span>
+                  <strong>Human intelligence remains in control.</strong>
+                  <span>Conceptual motion study. No camera, biometric recognition, or live AI service.</span>
                 </div>
               </div>
             ) : (
               <div className={styles.flowView} aria-label="Illustrative five-stage engineering flow">
                 <div className={styles.flowHeading}>
-                  <span>{t.flowHeading}</span>
-                  <strong>{t.flowTitle}</strong>
-                  <p>{t.flowSummary}</p>
+                  <span>REFERENCE ARCHITECTURE / EVENTIFY INSPIRED</span>
+                  <strong>From request to reliable outcome.</strong>
+                  <p>An illustrative path, not a connection to a running production service.</p>
                 </div>
                 <div className={styles.flowSteps}>
                   {journey.map((step, index) => (
@@ -249,45 +266,45 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
                       aria-pressed={activeId === step.id}
                       onClick={() => setActiveId(step.id)}
                     >
-                      <span className={styles.flowNumber}>{t.stages[index].label}</span>
-                      <span className={styles.flowTitle}>{t.stages[index].title}</span>
-                      <span className={styles.flowDetail}>{t.stages[index].detail}</span>
+                      <span className={styles.flowNumber}>{step.label}</span>
+                      <span className={styles.flowTitle}>{step.title}</span>
+                      <span className={styles.flowDetail}>{step.detail}</span>
                       <span className={styles.flowArrow} aria-hidden="true">{index === journey.length - 1 ? "✓" : "↳"}</span>
                     </button>
                   ))}
                 </div>
-                <span className={styles.flowFootnote}>{t.flowFootnote}</span>
+                <span className={styles.flowFootnote}>SELECT A STAGE TO EXPLORE ITS ENGINEERING ROLE</span>
               </div>
             )}
           </div>
 
           <aside className={styles.inspector} aria-labelledby="atlas-inspector-title">
             <div className={styles.inspectorTop}>
-              <span>{t.inspector}</span>
+              <span>DISCIPLINE INSPECTOR</span>
               <span className={styles.inspectorCount}>{String(activeIndex + 1).padStart(2, "0")} / {String(areas.length).padStart(2, "0")}</span>
             </div>
             <div className={styles.inspectorContent} aria-live="polite" aria-atomic="true">
-              <span className={styles.inspectorKicker}>{t.focus}</span>
-              <h3 id="atlas-inspector-title">{t.nodes[active.id].name}</h3>
-              <p>{t.nodes[active.id].summary}</p>
-              <div className={styles.tagSet} aria-label={t.related}>
+              <span className={styles.inspectorKicker}>ENGINEERING FOCUS</span>
+              <h3 id="atlas-inspector-title">{active.name}</h3>
+              <p>{active.summary}</p>
+              <div className={styles.tagSet} aria-label="Related skills">
                 {active.stack.map((item) => <span key={item}>{item}</span>)}
               </div>
             </div>
-            <div className={styles.inspectorNavigation} aria-label={t.browse}>
-              <button type="button" onClick={() => selectAdjacent(-1)} aria-label={locale==="en"?"Previous discipline":t.previous+" "+t.disciplines}>← <span>{t.previous}</span></button>
+            <div className={styles.inspectorNavigation} aria-label="Browse disciplines">
+              <button type="button" onClick={() => selectAdjacent(-1)} aria-label="Previous discipline">← <span>Previous</span></button>
               <span>{String(activeIndex + 1).padStart(2, "0")} OF {String(areas.length).padStart(2, "0")}</span>
-              <button type="button" onClick={() => selectAdjacent(1)} aria-label={locale==="en"?"Next discipline":t.next+" "+t.disciplines}><span>{t.next}</span> →</button>
+              <button type="button" onClick={() => selectAdjacent(1)} aria-label="Next discipline"><span>Next</span> →</button>
             </div>
             <Link className={styles.inspectorLink} href={active.href}>
-              {t.nodes[active.id].proof} <span aria-hidden="true">↗</span>
+              {active.proof} <span aria-hidden="true">↗</span>
             </Link>
           </aside>
         </div>
 
         <div className={styles.statusBar}>
-          <span>{t.statusOne}</span>
-          <span>{t.statusTwo}</span>
+          <span>DESIGNED FOR EXPLORATION, NOT A LIVE AGENT CONTROL PANEL</span>
+          <span>LOCAL INTERACTIONS · NO TRACKING · REDUCED MOTION READY</span>
         </div>
       </div>
     </section>

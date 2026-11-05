@@ -1,9 +1,12 @@
+import brand from "./brand.json";
+
 export const SITE_URL = "https://abdulrahman-hajar-portfolio.onrender.com";
-export const PORTFOLIO_UPDATED_AT = "2026-09-03T14:12:35.000Z";
-export const THEME_COLOR = "#07100f";
+export const PORTFOLIO_UPDATED_AT = "2026-10-30T12:00:00Z";
+export const THEME_COLOR = brand.background;
 
 export const PROFILE_LINKS = {
   github: "https://github.com/rahman-997",
+  instagram: "https://www.instagram.com/eng.rahman97/",
   linkedin: "https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/",
 } as const;
 

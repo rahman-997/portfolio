@@ -1,6 +1,7 @@
 name: Portfolio CI
 
 on:
+  workflow_dispatch:
   push:
   pull_request:
     branches: [main]
@@ -16,7 +17,7 @@ jobs:
   quality:
     name: Quality gate
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 25
 
     steps:
       - name: Checkout repository
@@ -34,14 +35,14 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: UI and navigation regression tests
+        run: npm run test:ui
+
       - name: Lint
         run: npm run lint
 
       - name: Typecheck
         run: npm run typecheck
-
-      - name: Test live Atlas contract logic
-        run: node --test scripts/tests/atlas-production-contract.test.mjs
 
       - name: Production build
         run: npm run build
@@ -69,15 +70,68 @@ jobs:
 
           exit "$audit_status"
 
+      # A successful Next.js compile alone does not prove that interactive routes
+      # work. Release artifacts are allowed only after browser acceptance passes.
+      - name: Install Playwright test driver
+        run: python3 -m pip install --user --disable-pip-version-check playwright==1.56.0
+
+      - name: Install Playwright Chromium and system dependencies
+        run: python3 -m playwright install --with-deps chromium
+
+      - name: Install browser accessibility audit engine
+        run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund axe-core@4.10.3
+
+      - name: Start verified static export preview
+        shell: bash
+        run: |
+          nohup npm run preview:export -- --port 4173 --dir out > /tmp/atlas-server.log 2>&1 &
+          for attempt in {1..20}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/atlas-server.log
+          exit 1
+
+      - name: Browser interaction, accessibility, and responsive QA
+        run: python3 scripts/atlas-browser-qa.py
+
+      - name: Upload release browser evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: hajar-release-browser-evidence-${{ github.run_id }}
+          path: atlas-qa-artifacts/
+          if-no-files-found: warn
+          retention-days: 7
+
+      # Preview artifacts are never consumed by automatic production deployments.
+      # Manual runs and PRs can inspect a verified export without touching main.
+      - name: Upload verified preview export
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: hajar-nextjs-preview-${{ github.sha }}-${{ github.run_id }}
+          path: out/
+          if-no-files-found: error
+          retention-days: 7
+
+      # Only a push to main may produce artifacts used for deployment.
+      - name: Upload verified static export
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: hajar-nextjs-production-${{ github.sha }}
+          path: out/
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Upload deployable source
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: portfolio-deploy-source-${{ github.sha }}
           path: |
-            .
-            !node_modules/**
-            !.git/**
-            !.next/**
+            out/
+            netlify.toml
           if-no-files-found: error
           retention-days: 7

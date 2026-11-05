@@ -14,7 +14,7 @@
 }
 
 .eyebrow {
-  color:#a8ffbe;
+  color:#D9B895;
   font-size:.66rem;
   letter-spacing:.16em;
   font-weight:800
@@ -70,7 +70,7 @@
   height:7px;
   width:7px;
   border-radius:50%;
-  background:#a8ffbe;
+  background:#D9B895;
   box-shadow:0 0 12px rgba(168,255,190,.6)
 }
 
@@ -113,7 +113,7 @@
 }
 
 .switcher button:focus-visible,.node:focus-visible,.inspectorLink:focus-visible {
-  outline:2px solid #a8ffbe;
+  outline:2px solid #D9B895;
   outline-offset:3px
 }
 
@@ -721,7 +721,7 @@
 .inspectorNavigation button:focus-visible,
 .flowStep:focus-visible,
 .flowStepSelected:focus-visible {
-  outline: 2px solid #a8ffbe;
+  outline: 2px solid #D9B895;
   outline-offset: 3px;
 }
 .inspectorLink { padding: 1rem 0; }
@@ -907,3 +907,30 @@
     background: linear-gradient(0deg, rgba(7,21,33,.96), rgba(7,21,33,0));
   }
 }
+
+/* The atelier canvas stays light; only the interactive console is dark. */
+.section {
+  color: #0E1416;
+  scroll-margin-top: 110px;
+  width: min(1280px, calc(100% - 80px));
+}
+.eyebrow { color: #745131; }
+.lead { color: #5D625F; font-size: .94rem; }
+.heading h2 { font-weight: 760; line-height: 1.04; letter-spacing: -.065em; }
+.atlasFacts { border-color: #DDD6CC; background: #fff; border-radius: 13px; overflow: hidden; }
+.atlasFacts > span { color: #68738b; border-color: #e1e5f0; }
+.atlasFacts strong { color: #745131; }
+.atlasFacts .factStatement { color: #58647b; }
+.console { color: #edf6f4; border-color: #303958; box-shadow: 0 30px 70px #20244926; }
+@media (max-width: 760px) {
+  .section { width: calc(100% - 32px); }
+  .heading h2 { font-size: clamp(2.7rem, 10vw, 4rem); }
+}
+
+/* HAJAR V15: approved fold mark, centered inside the interactive atlas. */
+.coreInner img { display: block; width: min(72px,100%); height: auto; object-fit: contain; filter: drop-shadow(0 0 12px rgba(201,167,125,.27)); }
+.coreInner small { color: #D9B895; }
+.coreRing { border-color: rgba(201,167,125,.76); box-shadow: 0 0 20px rgba(201,167,125,.16), inset 0 0 16px rgba(132,151,141,.17); }
+.wires { filter: drop-shadow(0 0 4px rgba(132,151,141,.26)); }
+.coreGlow { background: radial-gradient(circle,rgba(201,167,125,.15),rgba(132,151,141,.13) 48%,transparent 75%); }
+@media(max-width:640px) { .coreInner img { width: 54px; } }
