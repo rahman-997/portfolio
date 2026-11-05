@@ -8,8 +8,8 @@ import styles from "./home.module.css";
 
 /** A direct comparison of documented case studies, without speculative scores. */
 export default function ProjectCompare() {
-  const [leftSlug, setLeftSlug] = useState(PROJECT_LIST[0].slug);
-  const [rightSlug, setRightSlug] = useState(PROJECT_LIST[1].slug);
+  const [leftSlug, setLeftSlug] = useState<string>(PROJECT_LIST[0].slug);
+  const [rightSlug, setRightSlug] = useState<string>(PROJECT_LIST[1].slug);
   const [left, right] = compareProjects(PROJECT_LIST, leftSlug, rightSlug);
 
   function chooseLeft(slug: string) {
