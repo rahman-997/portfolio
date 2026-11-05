@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "app/ai-atlas.tsx"
-      - "app/site-search.tsx"
+      - "app/site-search-panel.tsx"
       - "app/site-search-client.tsx"
       - "app/layout.tsx"
       - "app/portfolio-data.ts"

@@ -1,4 +1,4 @@
-import SiteSearch from "./site-search";
+import SiteSearch from "./site-search-panel";
 import type { Metadata, Viewport } from "next";
 import {
   PORTFOLIO_UPDATED_AT,

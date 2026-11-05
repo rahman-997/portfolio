@@ -73,7 +73,7 @@ test('browser QA and CI watch the command palette', () => {
   assert.match(qa, /Site search keyboard shortcut/);
   assert.match(qa, /get_by_role\("dialog", name="Search portfolio"\)/);
   const ci = readFileSync('.github/workflows/atlas-browser-qa.yml', 'utf8');
-  assert.ok(ci.includes('"app/site-search.tsx"'));
+  assert.ok(ci.includes('"app/site-search-panel.tsx"'));
   assert.ok(ci.includes('"app/site-search.mjs"'));
   assert.ok(ci.includes('"app/layout.tsx"'));
   assert.ok(ci.includes('"app/portfolio-data.ts"'));
@@ -101,7 +101,7 @@ test('browser QA can use local Chromium while CI defaults to installed Playwrigh
 });
 
 test('global search keeps large project details in the server bundle, not every client page', () => {
-  const server = readFileSync('app/site-search.tsx', 'utf8');
+  const server = readFileSync('app/site-search-panel.tsx', 'utf8');
   const client = readFileSync('app/site-search-client.tsx', 'utf8');
   assert.match(server, /buildSearchIndex\(PROJECT_LIST\)/);
   assert.match(server, /<SiteSearchClient/);
