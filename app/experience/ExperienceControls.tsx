@@ -11,7 +11,8 @@ const STORAGE_KEY = "portfolio-appearance";
 export default function ExperienceControls({locale}:{locale:Locale}) {
   const [theme,setTheme] = useState<Theme>("light");
   useEffect(()=>{
-    const stored = window.localStorage.getItem(STORAGE_KEY);
+    let stored: string | null = null;
+    try { stored = window.localStorage.getItem(STORAGE_KEY); } catch { /* use the default if storage is blocked */ }
     const preferred:Theme = stored==="dark" || stored==="light"
       ? stored
       : "light";
@@ -40,7 +41,7 @@ export default function ExperienceControls({locale}:{locale:Locale}) {
       aria-label={theme==="dark"?label.themeLight:label.themeDark}
       title={theme==="dark"?label.themeLight:label.themeDark}>
       <span aria-hidden="true">{theme==="dark"?"☀":"☾"}</span>
-      <span className={styles.themeText}>{theme==="dark"?"Light":"Dark"}</span>
+      <span className={styles.themeText}>{theme==="dark"?label.themeLightShort:label.themeDarkShort}</span>
     </button>
   </div>;
 }

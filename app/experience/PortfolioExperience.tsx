@@ -13,6 +13,7 @@ import { PROFILE_LINKS } from "../portfolio-data";
 import { ALL_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
 import ExperienceControls from "./ExperienceControls";
+import MobileNavigation from "./MobileNavigation";
 import { EvidenceSection, ProcessSection, CollaborateSection, FaqSection } from "./PortfolioExtraSections";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
@@ -39,15 +40,10 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
       </nav>
       <ExperienceControls locale={locale}/>
-      <details className={referenceShell.mobileMenu}>
-        <summary aria-label={locale==="ar"?"فتح القائمة":locale==="tr"?"Menüyü aç":"Open menu"}><span aria-hidden="true">☰</span></summary>
-        <nav aria-label={locale==="ar"?"قائمة الموبايل":locale==="tr"?"Mobil menü":"Mobile menu"}>
-          <a href="#featured">{t.navWork}</a><a href="#blueprint-lab">Blueprint Lab</a><a href="#ai-lab">{t.navAtlas}</a><a href="#about">{t.navAbout}</a><a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a>
-        </nav>
-      </details>
+      <MobileNavigation locale={locale}/>
     </header>
 
-    <main id="main">
+    <main id="main" tabIndex={-1}>
       <CinematicHero locale={locale}/>
       <FeaturedSystems locale={locale}/>
       <HomeEventifyStory locale={locale}/>
@@ -113,8 +109,8 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
       </section>
     </main>
     <footer className={styles.footer}>
-      <a className={referenceShell.footerBrand} href="#top"><Image src="/brand/hajar-emblem.svg" alt="" width={34} height={43} unoptimized/><span><strong>HAJAR</strong><small>SOFTWARE ENGINEER</small></span></a>
-      <nav className={referenceShell.footerNav} aria-label="Footer"><a href="#work">{t.navWork}</a><a href="#blueprint-lab">Blueprint Lab</a><a href="#ai-lab">{t.navAtlas}</a><a href="#about">{t.navAbout}</a><a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a></nav>
+      <a className={referenceShell.footerBrand} href="#top"><Image src="/brand/hajar-emblem.svg" alt="" width={34} height={43} unoptimized/><span><strong>HAJAR</strong><small>{locale==="ar"?"مهندس برمجيات":locale==="tr"?"YAZILIM MÜHENDİSİ":"SOFTWARE ENGINEER"}</small></span></a>
+      <nav className={referenceShell.footerNav} aria-label={locale==="ar"?"روابط التذييل":locale==="tr"?"Alt gezinme":"Footer links"}><a href="#work">{t.navWork}</a><a href="#blueprint-lab">{locale==="ar"?"مختبر الأنظمة":locale==="tr"?"Mimari Lab":"Blueprint Lab"}</a><a href="#ai-lab">{t.navAtlas}</a><a href="#about">{t.navAbout}</a><a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a></nav>
       <span>© 2026 Abdulrahman Hajar</span><a href="#top">{t.top} ↑</a>
     </footer>
   </div>;

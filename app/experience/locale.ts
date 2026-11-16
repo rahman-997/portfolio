@@ -16,9 +16,9 @@ export const TEXT = {
     projectEyebrow: "01 / WORK LIBRARY", projectTitle: "My projects, in one place.",
     projectLead: "Products, backend services, tools and websites. Explore each project and its stage, with public source links where available.",
     filterAll: "All projects", filterProduct: "Products", filterBackend: "Backend", filterTools: "Tools & open source",
-    filterWeb: "Websites", searchProjects: "Find a project", searchPlaceholder: "Search by name, technology or purpose", noProjects: "No projects match this search and category.", resetProjects: "Show all projects", privateSource: "Private source", discussProject: "Discuss project", clientWork: "Client work", projectStages: {demo:"Public demo",development:"In development",prototype:"Prototype","open-source":"Open-source fork"},
+    filterWeb: "Websites", searchProjects: "Find a project", searchPlaceholder: "Search by name, technology or purpose", noProjects: "No projects match this search and category.", resetProjects: "Show all projects", noScript: "All projects are shown. Enable JavaScript to use search and filters.", privateSource: "Private source", discussProject: "Discuss project", clientWork: "Client work", projectStages: {demo:"Public demo",development:"In development",prototype:"Prototype","open-source":"Open-source fork"},
     caseStudy: "Case study (EN)", live: "Live demo", source: "Source code", fork: "Open-source fork",
-    original: "Original project", noDemo: "Code repository", projectCount: "projects",
+    original: "Original project", noDemo: "Code repository", projectCount: "Projects",
     systemEyebrow: "02 / APPROACH", systemTitle: "Make the whole journey dependable.",
     systemLead: "A polished interface is only the beginning. I connect it to maintainable services, clear data ownership and useful automated tests.",
     systemCards: [
@@ -27,11 +27,11 @@ export const TEXT = {
       {title:"Verification",text:"Tests, security checks and production monitoring that keep work trustworthy."}
     ],
     aboutEyebrow: "03 / ABOUT", aboutTitle: "Curiosity meets engineering discipline.",
-    aboutText: "I'm Abdulrahman Hajar, a software engineer and Computer Engineering student at Nişantaşı University in Istanbul. I work across frontend, backend, AI integrations and reliability, with an emphasis on products that do more than look good.",
+    aboutText: "I'm Abdulrahman Hajar, a computer engineer, full-stack developer and UI/UX designer based in Istanbul. I work across frontend, backend, AI integrations and reliability, with an emphasis on products that do more than look good.",
     aboutNote: "Computer Engineering · Nişantaşı University",
     endTitle: "Have an idea worth building?", endText: "Explore the code, see the live products or connect to discuss engineering opportunities.",
     github: "GitHub profile", linkedIn: "Connect on LinkedIn", top: "Back to top",
-    themeLight: "Switch to light theme", themeDark: "Switch to dark theme",
+    themeLight: "Switch to light theme", themeDark: "Switch to dark theme", themeLightShort: "Light", themeDarkShort: "Dark",
     language: "Choose language", repoNotice: "Source links lead only to public repositories. Private projects are shown through descriptions without exposing their code or data.",
     otherLocaleNote: "Detailed legacy case studies and résumé remain available in English."
   },
@@ -48,9 +48,9 @@ export const TEXT = {
     projectEyebrow: "01 / مكتبة الأعمال", projectTitle: "مشاريعي في مكان واحد.",
     projectLead: "منتجات وخدمات خلفية وأدوات ومواقع. استعرض كل مشروع ومرحلة تطويره، مع روابط للكود العام حيث يتوفر.",
     filterAll: "كل المشاريع", filterProduct: "المنتجات", filterBackend: "الخلفية", filterTools: "الأدوات والمصادر المفتوحة",
-    filterWeb: "المواقع", searchProjects: "ابحث عن مشروع", searchPlaceholder: "ابحث بالاسم أو التقنية أو فكرة المشروع", noProjects: "لا توجد مشاريع تطابق البحث والتصنيف.", resetProjects: "عرض جميع المشاريع", privateSource: "الكود غير عام", discussProject: "ناقش المشروع", clientWork: "مشروع عميل", projectStages: {demo:"تجربة عامة",development:"قيد التطوير",prototype:"نموذج أولي","open-source":"نسخة متفرعة مفتوحة المصدر"},
+    filterWeb: "المواقع", searchProjects: "ابحث عن مشروع", searchPlaceholder: "ابحث بالاسم أو التقنية أو فكرة المشروع", noProjects: "لا توجد مشاريع تطابق البحث والتصنيف.", resetProjects: "عرض جميع المشاريع", noScript: "تُعرض جميع المشاريع. فعّل JavaScript لاستخدام البحث والتصنيفات.", privateSource: "الكود غير عام", discussProject: "ناقش المشروع", clientWork: "مشروع عميل", projectStages: {demo:"تجربة عامة",development:"قيد التطوير",prototype:"نموذج أولي","open-source":"نسخة متفرعة مفتوحة المصدر"},
     caseStudy: "دراسة المشروع (EN)", live: "التجربة الحية", source: "الكود المصدري", fork: "نسخة متفرعة مفتوحة المصدر",
-    original: "مشروع أصلي", noDemo: "مستودع المشروع", projectCount: "مشاريع",
+    original: "مشروع أصلي", noDemo: "مستودع المشروع", projectCount: "المشاريع",
     systemEyebrow: "02 / طريقة العمل", systemTitle: "أهتم برحلة المنتج كاملة.",
     systemLead: "الواجهة الجميلة مجرد البداية. أربطها بخدمات قابلة للصيانة وملكية واضحة للبيانات واختبارات تلقائية مفيدة.",
     systemCards: [
@@ -59,11 +59,11 @@ export const TEXT = {
       {title:"التحقق",text:"اختبارات وفحوص أمان ومراقبة للإنتاج تمنح النتائج مصداقية."}
     ],
     aboutEyebrow: "03 / نبذة", aboutTitle: "فضول تقني وانضباط هندسي.",
-    aboutText: "أنا عبدالرحمن حجار، مهندس برمجيات وطالب هندسة حاسوب في جامعة نيشانتاشي في إسطنبول. أعمل على الواجهات والخدمات الخلفية وتكاملات الذكاء الاصطناعي وموثوقية الأنظمة، مع التركيز على المنتجات التي تتجاوز المظهر الجميل.",
+    aboutText: "أنا عبدالرحمن حجار، مهندس كمبيوتر ومطوّر متكامل ومصمّم واجهات وتجربة مستخدم في إسطنبول. أعمل على الواجهات والخدمات الخلفية وتكاملات الذكاء الاصطناعي وموثوقية الأنظمة، مع التركيز على المنتجات التي تتجاوز المظهر الجميل.",
     aboutNote: "هندسة الحاسوب · جامعة نيشانتاشي",
     endTitle: "عندك فكرة تستحق التنفيذ؟", endText: "استكشف الكود، جرّب المنتجات أو تواصل معي لمناقشة فرص هندسة البرمجيات.",
     github: "حساب GitHub", linkedIn: "تواصل عبر LinkedIn", top: "العودة للأعلى",
-    themeLight: "تفعيل الوضع الفاتح", themeDark: "تفعيل الوضع الداكن",
+    themeLight: "تفعيل الوضع الفاتح", themeDark: "تفعيل الوضع الداكن", themeLightShort: "فاتح", themeDarkShort: "داكن",
     language: "اختر اللغة", repoNotice: "روابط الكود تقود إلى مستودعات عامة فقط. تُعرض المشاريع الخاصة بوصفها دون كشف شيفرتها أو بياناتها.",
     otherLocaleNote: "دراسات الحالة التقنية السابقة والسيرة الذاتية متوفرة بالإنجليزية."
   },
@@ -80,9 +80,9 @@ export const TEXT = {
     projectEyebrow: "01 / PROJE KÜTÜPHANESİ", projectTitle: "Projelerim, bir arada.",
     projectLead: "Ürünler, backend servisleri, araçlar ve web siteleri. Her projeyi ve geliştirme aşamasını keşfedin; varsa açık kaynak bağlantılarını inceleyin.",
     filterAll: "Tüm projeler", filterProduct: "Ürünler", filterBackend: "Backend", filterTools: "Araçlar ve açık kaynak",
-    filterWeb: "Web siteleri", searchProjects: "Proje bulun", searchPlaceholder: "Ad, teknoloji veya amaca göre arayın", noProjects: "Bu arama ve kategoriyle eşleşen proje yok.", resetProjects: "Tüm projeleri göster", privateSource: "Kaynak kod özel", discussProject: "Projeyi konuşalım", clientWork: "Müşteri projesi", projectStages: {demo:"Açık demo",development:"Geliştiriliyor",prototype:"Prototip","open-source":"Açık kaynak fork'u"},
+    filterWeb: "Web siteleri", searchProjects: "Proje bulun", searchPlaceholder: "Ad, teknoloji veya amaca göre arayın", noProjects: "Bu arama ve kategoriyle eşleşen proje yok.", resetProjects: "Tüm projeleri göster", noScript: "Tüm projeler gösteriliyor. Arama ve filtreler için JavaScript’i etkinleştirin.", privateSource: "Kaynak kod özel", discussProject: "Projeyi konuşalım", clientWork: "Müşteri projesi", projectStages: {demo:"Açık demo",development:"Geliştiriliyor",prototype:"Prototip","open-source":"Açık kaynak fork'u"},
     caseStudy: "Teknik inceleme (EN)", live: "Canlı demo", source: "Kaynak kod", fork: "Açık kaynak fork'u",
-    original: "Özgün proje", noDemo: "Kod deposu", projectCount: "proje",
+    original: "Özgün proje", noDemo: "Kod deposu", projectCount: "Proje",
     systemEyebrow: "02 / YAKLAŞIM", systemTitle: "Tüm sürecin güvenilir olmasını sağlıyorum.",
     systemLead: "İyi bir arayüz yalnızca başlangıç. Bakımı kolay servisleri, net veri sahipliğini ve anlamlı otomatik testleri bir araya getiriyorum.",
     systemCards: [
@@ -91,11 +91,11 @@ export const TEXT = {
       {title:"Doğrulama",text:"Güvenilir teslimatlar için testler, güvenlik denetimleri ve üretim izlemesi."}
     ],
     aboutEyebrow: "03 / HAKKIMDA", aboutTitle: "Merak, mühendislik disipliniyle buluşuyor.",
-    aboutText: "Ben Abdulrahman Hajar. İstanbul Nişantaşı Üniversitesi'nde Bilgisayar Mühendisliği öğrencisiyim ve yazılım geliştiriyorum. Ön yüz, backend, yapay zekâ entegrasyonları ve güvenilir sistemler üzerinde çalışıyor; güzel görünmenin ötesine geçen ürünlere odaklanıyorum.",
+    aboutText: "Ben Abdulrahman Hajar. İstanbul’da bilgisayar mühendisi, full-stack geliştirici ve UI/UX tasarımcısı olarak çalışıyorum. Ön yüz, backend, yapay zekâ entegrasyonları ve güvenilir sistemler üzerinde çalışıyor; güzel görünmenin ötesine geçen ürünlere odaklanıyorum.",
     aboutNote: "Bilgisayar Mühendisliği · Nişantaşı Üniversitesi",
     endTitle: "Geliştirilmeye değer bir fikriniz mi var?", endText: "Kodu inceleyin, canlı ürünleri deneyin veya yazılım mühendisliği fırsatlarını konuşmak için iletişime geçin.",
     github: "GitHub profili", linkedIn: "LinkedIn'de iletişim", top: "Başa dön",
-    themeLight: "Açık temaya geç", themeDark: "Koyu temaya geç",
+    themeLight: "Açık temaya geç", themeDark: "Koyu temaya geç", themeLightShort: "Açık", themeDarkShort: "Koyu",
     language: "Dil seçimi", repoNotice: "Kaynak bağlantıları yalnızca açık depolara yönelir. Özel projeler, kodları veya verileri paylaşılmadan açıklamalarıyla gösterilir.",
     otherLocaleNote: "Ayrıntılı önceki incelemeler ve özgeçmiş İngilizce olarak sunulmaktadır."
   },

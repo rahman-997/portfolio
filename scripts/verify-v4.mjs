@@ -17,6 +17,12 @@ for(const language of ["en","ar","tr"]){
   check((html.match(/data-project-id=/g)||[]).length===expectedProjectIds.length,"Wrong rendered project count: "+path);
   for(const id of expectedProjectIds)check(html.includes('data-project-id="'+id+'"'),"Missing catalog entry "+id+" in "+path);
   check(html.includes('id="project-search"'),"Missing accessible project search");
+  check(html.includes('id="mobile-navigation"'),"Missing accessible mobile navigation");
+  check(html.includes('id="appearance-init"'),"Missing safe pre-paint theme initialization");
+  check(html.includes('property="og:title"') && html.includes('property="og:image"'),"Missing social sharing metadata");
+  check(html.includes('name="twitter:title"') && html.includes('name="twitter:image"'),"Missing Twitter sharing metadata");
+  for(const stale of ["Six listed repositories", "ستة مستودعات", "Listelenen altı depo", "Private repositories are not displayed", "Computer Engineering student", "طالب هندسة", "öğrencisiyim"])
+    check(!html.includes(stale),"Stale public copy: "+stale);
   for(const id of ["eventify","bookbookhaven","fitflow-gym","venues-api","mizan-finance","portfolio","free-claude-code"]){
     check(html.includes("https://github.com/rahman-997/"+id),"Missing public project "+id+" in "+path);
   }

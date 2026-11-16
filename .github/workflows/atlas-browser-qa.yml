@@ -10,6 +10,9 @@ on:
       - "app/page.tsx"
       - "scripts/atlas-browser-qa.py"
       - "scripts/v4-browser-qa.py"
+      - "scripts/release-browser-qa.py"
+      - "app/layout.tsx"
+      - "app/portfolio-data.ts"
       - "app/experience/**"
       - "app/ar/page.tsx"
       - "app/tr/page.tsx"
@@ -68,6 +71,12 @@ jobs:
 
       - name: Browser QA for 3 languages and both themes
         run: python3 scripts/v4-browser-qa.py
+
+      - name: Release navigation, storage, reflow and full-page accessibility
+        run: python3 scripts/release-browser-qa.py
+
+      - name: Record public demo availability
+        run: python3 scripts/probe-public-links.py
 
       - name: Upload browser evidence
         if: always()

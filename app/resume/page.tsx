@@ -7,7 +7,7 @@ import styles from "./resume.module.css";
 export const metadata: Metadata = {
   title: "Résumé — Abdulrahman Hajar | Software Engineer",
   description:
-    "Recruiter-ready résumé for Abdulrahman Hajar: Software Engineer, Full-Stack Developer, and builder of AI & interactive systems; Computer Engineering student in Istanbul.",
+    "Recruiter-ready résumé for Abdulrahman Hajar: Software Engineer, Full-Stack Developer, and builder of AI & interactive systems; based in Istanbul.",
   alternates: { canonical: "/resume/" },
 };
 
@@ -37,7 +37,7 @@ export default function ResumePage() {
           <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK DEVELOPER · AI & INTERACTIVE SYSTEMS</p>
           <h1>Abdulrahman Hajar</h1>
           <p className={styles.lede}>
-            Software engineer and Computer Engineering student building complete production software systems across frontend, backend, APIs, data, asynchronous workflows, testing, security, reliability, AI integrations, interactive systems, and deployment.
+            Computer engineer and full-stack developer building complete production software systems across frontend, backend, APIs, data, asynchronous workflows, testing, security, reliability, AI integrations, interactive systems, and deployment.
           </p>
         </div>
         <aside className={styles.snapshot} aria-label="Professional snapshot">

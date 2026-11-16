@@ -19,6 +19,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
   ];
   const filtered=filterPortfolioProjects(filter,query);
   return <>
+    <noscript><p className={styles.repoNotice}>{t.noScript}</p></noscript>
     <label className={styles.projectSearch} htmlFor="project-search">
       <span>{t.searchProjects}</span>
       <input id="project-search" type="search" dir="auto" value={query} maxLength={120}
@@ -31,7 +32,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
           className={filter===item.id?styles.filterActive:styles.filter}
           aria-pressed={filter===item.id} onClick={()=>setFilter(item.id)}>{item.label}</button>)}
       </div>
-      <output className={styles.resultCount} aria-live="polite">{String(filtered.length).padStart(2,"0")} {t.projectCount}</output>
+      <output className={styles.resultCount} aria-live="polite">{t.projectCount}: <bdi dir="ltr">{String(filtered.length).padStart(2,"0")}</bdi></output>
     </div>
     <div id="project-grid" className={styles.projectGrid} data-project-total={ALL_PROJECT_COUNT}>
       {filtered.map(p=><article className={styles.project} key={p.id} data-project-id={p.id}

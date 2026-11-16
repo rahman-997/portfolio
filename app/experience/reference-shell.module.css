@@ -25,7 +25,7 @@
 .mobileMenu{display:none;position:relative;z-index:60}
 .mobileMenu summary{display:grid;place-items:center;cursor:pointer;width:44px;height:44px;border:1px solid var(--line);border-radius:4px;list-style:none;font-size:1.25rem;line-height:1;color:var(--ink);background:var(--surface)}
 .mobileMenu summary::-webkit-details-marker{display:none}
-.mobileMenu>nav{position:absolute;inset-inline-end:0;top:49px;min-width:205px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);box-shadow:0 17px 45px #0003;display:flex;flex-direction:column;gap:1px}
+.mobileMenu>nav{position:absolute;inset-inline-end:0;top:49px;min-width:205px;max-height:calc(100dvh - 5rem);overflow-y:auto;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);box-shadow:0 17px 45px #0003;display:flex;flex-direction:column;gap:1px}
 .mobileMenu>nav>a{display:flex;align-items:center;min-height:44px;padding:8px 12px;color:var(--ink);font-size:.85rem;font-weight:650}
 .mobileMenu>nav>a:hover{background:var(--surface2)}
 .referenceShell :global(#work){padding-top:72px}

@@ -212,7 +212,7 @@ with sync_playwright() as pw:
                     page.locator(f'html[data-theme="{theme}"]').wait_for(timeout=5000)
                     if label == "mobile":
                         page.add_script_tag(path=os.environ.get("ATLAS_AXE_SCRIPT", "node_modules/axe-core/axe.min.js"))
-                        for section_id in ("highlights", "process", "collaborate", "faq", "blueprint-lab", "mission-paths", "featured"):
+                        for section_id in ("highlights", "process", "collaborate", "faq", "blueprint-lab", "mission-paths", "featured", "work"):
                             violations = page.evaluate("""async (section) => {
                                 const issues = await axe.run(document.getElementById(section), {
                                     runOnly: {type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']},
