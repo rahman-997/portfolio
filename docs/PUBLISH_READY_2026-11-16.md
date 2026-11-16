@@ -1,6 +1,6 @@
 # Portfolio publication candidate
 
-The candidate contains 22 project entries in Arabic, English and Turkish, with search, categories, stages, public-source boundaries and the existing HAJAR identity. It corrects stale FAQ claims, biography wording, social-sharing metadata, mobile navigation, keyboard dismissal, storage-denied theme handling and the update date.
+The candidate contains 22 project entries in Arabic, English and Turkish, with search, categories, stages, public-source boundaries and the existing HAJAR identity. It corrects stale FAQ claims, biography wording, social-sharing metadata, mobile navigation, keyboard dismissal, storage-denied theme handling, contrast in the architecture overview/contact action and the update date.
 
 ## Existing production target
 

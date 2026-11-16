@@ -57,3 +57,6 @@
 :global(html[data-theme="dark"]) .logoWrap{background:#202724}
 .referenceShell>header>a:first-of-type small{letter-spacing:.11em}
 @media(max-width:720px){.logoWrap.logoWrap{width:35px;height:43px}.logoWrap img{height:41px}.referenceShell>header{flex-wrap:nowrap}.referenceShell>header :global(nav[aria-label="Choose language"]){flex-shrink:0}}
+
+/* Keep the primary contact action readable in both color schemes. */
+.referenceShell.referenceShell :global(#contact) a:first-child{background:#252e29!important;color:#fffaf2!important;border-color:#252e29}
