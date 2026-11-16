@@ -76,7 +76,7 @@ jobs:
         run: python3 scripts/release-browser-qa.py
 
       - name: Record public demo availability
-        run: python3 scripts/probe-public-links.py
+        run: node scripts/probe-public-links.mjs
 
       - name: Upload browser evidence
         if: always()
