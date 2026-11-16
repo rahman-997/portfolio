@@ -4,7 +4,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import expect, sync_playwright
 
 BASE = os.environ.get("ATLAS_BASE_URL", "http://127.0.0.1:4173").rstrip("/")
 OUT = Path(os.environ.get("ATLAS_QA_OUTPUT", "atlas-qa-artifacts")) / "v4"
@@ -54,8 +54,8 @@ with sync_playwright() as pw:
                         check(headline["height"] <= headline["lineHeight"] * 1.25,
                               f"{name}: Arabic cinematic headline wrapped awkwardly: {headline}")
                     work = page.locator("#work")
-                    check(work.locator("article").count() == 7,
-                          f"{name}: missing public repositories")
+                    check(work.locator("article").count() == 22,
+                          f"{name}: missing portfolio projects")
                     check(page.locator("#ai-lab").count() == 1, f"{name}: Atlas missing")
                     # Cinematic V6: real featured media and two new user-directed systems.
                     check(page.locator('[data-cinematic-scene="true"]').count() == 1,
@@ -145,10 +145,46 @@ with sync_playwright() as pw:
                     for link in repository_links:
                         repo_id = link.split("https://github.com/rahman-997/", 1)[1].split("/", 1)[0]
                         check(repo_id in allowed_public, f"{name}: unexpected GitHub repository link")
-                    for count,kind in [(1,"backend"),(2,"tools"),(7,"all")]:
+                    for count,kind in [(2,"backend"),(4,"tools"),(22,"all")]:
                         page.get_by_role("button", name=COPY[locale][kind], exact=True).click()
                         check(work.locator("article").count() == count,
                               f"{name}: {kind} filter expected {count} projects")
+                    # Full catalog discovery, including entries without a public repository.
+                    search = page.locator("#project-search")
+                    search.fill("LUMERA")
+                    expect(work.locator("article")).to_have_count(1)
+                    check(work.locator("article").count() == 1 and work.locator('[data-project-id="lumera"]').count() == 1,
+                          f"{name}: project name search failed")
+                    search.fill("SIRAhazir")
+                    expect(work.locator("article")).to_have_count(1)
+                    expect(work.locator('[data-project-id="sirahazir"]')).to_have_count(1)
+                    check(work.locator('[data-project-id="sirahazir"]').count() == 1 and work.locator("article").count() == 1,
+                          f"{name}: Turkish dotless-I search failed")
+                    search.fill("عيادات")
+                    expect(work.locator('[data-project-id="hajarcare"]')).to_have_count(1)
+                    check(work.locator('[data-project-id="hajarcare"]').count() == 1 and work.locator("article").count() == 1,
+                          f"{name}: Arabic concept search failed")
+                    check(work.locator('a[href^="https://github.com/"]').count() == 0,
+                          f"{name}: private project exposed a source link")
+                    search.fill("no-project-matches-7654321")
+                    expect(work.locator("article")).to_have_count(0)
+                    check(work.locator("article").count() == 0 and work.locator('[role="status"]').count() == 1,
+                          f"{name}: empty search feedback missing")
+                    work.locator('[role="status"] button').click()
+                    expect(work.locator("article")).to_have_count(22)
+                    check(search.input_value() == "" and work.locator("article").count() == 22,
+                          f"{name}: reset did not restore the complete catalog")
+                    search.fill("culture")
+                    web_label = {"en":"Websites","ar":"المواقع","tr":"Web siteleri"}[locale]
+                    work.get_by_role("button", name=web_label, exact=True).click()
+                    expect(work.locator("article")).to_have_count(1)
+                    check(work.locator("article").count() == 1 and work.locator('[data-project-id="culture-sy"]').count() == 1,
+                          f"{name}: category and text search were not combined")
+                    search.fill("")
+                    expect(work.locator("article")).to_have_count(2)
+                    check(work.locator("article").count() == 2, f"{name}: website category count")
+                    work.get_by_role("button", name=COPY[locale]["all"], exact=True).click()
+                    check(work.locator("article").count() == 22, f"{name}: all catalog restored")
                     page.locator("#ai-lab").scroll_into_view_if_needed()
                     page.get_by_role("button", name=COPY[locale]["flow"], exact=True).click()
                     check(page.get_by_label("Illustrative five-stage engineering flow").count() == 1,
@@ -206,7 +242,7 @@ with sync_playwright() as pw:
                     if label == "mobile":
                         page.screenshot(path=str(OUT / (name + ".png")), full_page=True,
                                         animations="disabled")
-                    report.append({"case":name,"status":"pass","projects":7,
+                    report.append({"case":name,"status":"pass","projects":22,
                                    "overflow":overflow,"themePersistence":"pass"})
                     print("PASS", name, "RTL", expected_dir, "filter / theme / Atlas", flush=True)
                 except Exception as exc:
@@ -227,7 +263,7 @@ with sync_playwright() as pw:
             check(page.locator("html").get_attribute("lang") == locale, f"{locale}: no-JS lang")
             check(page.locator("html").get_attribute("dir") == ("rtl" if locale == "ar" else "ltr"),
                   f"{locale}: no-JS dir")
-            check(page.locator("#work article").count() == 7, f"{locale}: no-JS projects")
+            check(page.locator("#work article").count() == 22, f"{locale}: no-JS projects")
         except Exception as exc:
             failures.append({"case":locale+"-no-js","error":str(exc)})
         finally:

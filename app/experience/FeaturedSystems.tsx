@@ -34,7 +34,7 @@ export default function FeaturedSystems({locale}:{locale:Locale}){
       <div className={styles.links}>
        {project.study?<a href={project.study}>{t.study} ↗</a>:null}
        {project.demo?<a href={project.demo} target="_blank" rel="noopener noreferrer">{t.demo} ↗</a>:null}
-       <a href={project.source} target="_blank" rel="noopener noreferrer">{t.source} ↗</a>
+       {project.source?<a href={project.source} target="_blank" rel="noopener noreferrer">{t.source} ↗</a>:null}
       </div>
       {cap?.publicPageStatus==="degraded"?<p className={styles.warning}>{t.notice}</p>:null}
     </article>;

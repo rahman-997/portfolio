@@ -75,7 +75,7 @@ for(const [locale,path] of cases) {
  assert(s.includes('data-blueprint-selector="true"'),`${locale}: missing architecture explorer controls`);
  assert(s.includes('id="mission-paths"'),`${locale}: missing audience navigation`);
  assert((s.match(/data-mission-path=/g)||[]).length===3,`${locale}: missing journey paths`);
- assert(s.includes('id="work"'),`${locale}: complete 7-project library missing`);
+ assert(s.includes('id="work"'),`${locale}: complete project library missing`);
  assert(s.includes('id="ai-lab"'),`${locale}: AI Atlas must remain`);
  assert(s.includes('id="highlights"'),`${locale}: case study evidence must remain`);
  assert(s.includes('id="faq"'),`${locale}: FAQ must remain`);
