@@ -14,6 +14,7 @@ import { ALL_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
 import ExperienceControls from "./ExperienceControls";
 import MobileNavigation from "./MobileNavigation";
+import ContactBrief from "./ContactBrief";
 import { EvidenceSection, ProcessSection, CollaborateSection, FaqSection } from "./PortfolioExtraSections";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
@@ -106,6 +107,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
           <a className={styles.primaryAction} href={PROFILE_LINKS.github} target="_blank" rel="noopener noreferrer">{t.github} ↗</a>
           <a className={styles.secondaryAction} href={PROFILE_LINKS.linkedin} target="_blank" rel="noopener noreferrer">{t.linkedIn} ↗</a>
         </div>
+        <ContactBrief locale={locale}/>
       </section>
     </main>
     <footer className={styles.footer}>

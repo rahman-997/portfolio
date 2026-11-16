@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type {Locale} from "./locale";
 import {PUBLIC_PROJECTS} from "./projects";
+import {projectPath} from "./project-paths";
 import evidence from "./project-captures.json";
 import styles from "./featured.module.css";
 
@@ -32,6 +33,7 @@ export default function FeaturedSystems({locale}:{locale:Locale}){
       <p className={styles.description}>{project.text[locale].headline}</p>
       <ul className={styles.tags}>{project.stack.slice(0,3).map(tech=><li key={tech}>{tech}</li>)}</ul>
       <div className={styles.links}>
+       <a href={projectPath(locale,project.id)}>{locale==="ar"?"تفاصيل المشروع":locale==="tr"?"Proje ayrıntıları":"Project details"} ↗</a>
        {project.study?<a href={project.study}>{t.study} ↗</a>:null}
        {project.demo?<a href={project.demo} target="_blank" rel="noopener noreferrer">{t.demo} ↗</a>:null}
        {project.source?<a href={project.source} target="_blank" rel="noopener noreferrer">{t.source} ↗</a>:null}

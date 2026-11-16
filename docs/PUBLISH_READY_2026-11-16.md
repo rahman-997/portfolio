@@ -26,3 +26,11 @@ The old hardcoded Netlify site could not be resolved through the current connect
 The portfolio's tests validate the gallery and site, not the production readiness of every product it lists. Private projects remain descriptions only. The browser reflow checks use emulated viewports and device scale rather than physical-device certification. Public demo availability is recorded separately because it depends on other deployments and may include cold starts. Historical product screenshots retain their provenance and are not represented as newly captured production states.
 
 No publication, merge, deletion, paid resource, credential change or data migration is part of this preparation.
+
+## Project overview and enquiry upgrade
+
+All 22 projects now have an overview in each of the three languages (66 static overview pages), with audience, scope, contribution, technology, stage and related work. The four earlier English technical case studies remain available. Public screenshot provenance, private-source boundaries, client contribution scope and the original upstream fork credit are retained.
+
+Gallery search/category state can be opened from a shared link. The contact brief builder can be opened with a selected project, prepares a localized message and copies it on the visitor’s action. It has no submission endpoint, does not send a message and does not persist the visitor’s brief. Clipboard denial leaves a selectable message/link available for manual copying.
+
+The export verifier now requires all 66 overview pages, their locale/canonical metadata, gallery links, sitemap entries and privacy boundaries. The additional browser flow checks exercise URL-state restoration, project-language continuity, clipboard success/denial, input bounds and absence of form submission or browser-storage writes. No publication is part of this upgrade.

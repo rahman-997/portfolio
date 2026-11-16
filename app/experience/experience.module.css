@@ -203,3 +203,8 @@
 .brandText strong{font-weight:900;letter-spacing:.105em;font-size:.86rem}
 .brandText small{font-size:.55rem;max-width:250px;line-height:1.35}
 @media(max-width:760px){.brandEmblem{width:43px;height:47px;padding:4px 6px}.brandEmblem img{height:36px}.brandText strong{font-size:.77rem}}
+
+.shareProjects{min-height:44px;padding:.65rem 1rem;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:.75rem;font-weight:700;cursor:pointer;max-width:100%}
+.shareProjects:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.shareFeedback{margin-bottom:1.5rem;padding:1rem;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-size:.8rem;line-height:1.7}
+.shareFeedback p{margin:0}.shareFeedback input{width:100%;min-width:0;min-height:44px;margin-top:.6rem;border:1px solid var(--line);padding:.6rem;color:var(--ink);background:var(--surface2)}

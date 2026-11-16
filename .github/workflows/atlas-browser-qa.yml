@@ -11,6 +11,13 @@ on:
       - "scripts/atlas-browser-qa.py"
       - "scripts/v4-browser-qa.py"
       - "scripts/release-browser-qa.py"
+      - "scripts/evolution-browser-qa.py"
+      - "scripts/verify-project-pages.mjs"
+      - "scripts/localize-static.mjs"
+      - "app/projects/**"
+      - "app/ar/projects/**"
+      - "app/tr/projects/**"
+      - "app/sitemap.ts"
       - "app/layout.tsx"
       - "app/portfolio-data.ts"
       - "app/experience/**"
@@ -74,6 +81,9 @@ jobs:
 
       - name: Release navigation, storage, reflow and full-page accessibility
         run: python3 scripts/release-browser-qa.py
+
+      - name: Project pages, shared discovery and enquiry clipboard
+        run: python3 scripts/evolution-browser-qa.py
 
       - name: Record public demo availability
         run: node scripts/probe-public-links.mjs
