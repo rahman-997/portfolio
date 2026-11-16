@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 660" role="img" aria-labelledby="mountain-title">
+<title id="mountain-title">HAJAR mountain landscape artwork</title><desc>Original layered mountain illustration in warm sandstone, ivory and dark charcoal, a decorative landscape for the HAJAR portfolio.</desc>
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#f6f0e5"/><stop offset=".55" stop-color="#eee5d7"/><stop offset="1" stop-color="#b6a391"/></linearGradient>
+<linearGradient id="back" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#d9cab8"/><stop offset=".48" stop-color="#b8a48d"/><stop offset="1" stop-color="#968779"/></linearGradient>
+<linearGradient id="middle" x1="0" y1="0" x2=".3" y2="1"><stop stop-color="#d4bca2"/><stop offset=".55" stop-color="#a48d79"/><stop offset="1" stop-color="#625e58"/></linearGradient>
+<linearGradient id="front" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ae8563"/><stop offset=".39" stop-color="#735f51"/><stop offset="1" stop-color="#1c2927"/></linearGradient>
+<linearGradient id="atmosphere" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f6f0e5" stop-opacity="0"/><stop offset=".58" stop-color="#faf4e8" stop-opacity=".54"/><stop offset=".84" stop-color="#faf4e8" stop-opacity="0"/></linearGradient>
+<linearGradient id="mist" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#f6efe2" stop-opacity=".9"/><stop offset=".56" stop-color="#f6efe2" stop-opacity=".16"/><stop offset="1" stop-color="#f6efe2" stop-opacity="0"/></linearGradient>
+<filter id="haze"><feGaussianBlur stdDeviation="19"/></filter>
+<filter id="soft"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+<rect width="1600" height="660" fill="url(#sky)"/>
+<circle cx="1204" cy="151" r="198" fill="#f9e4cc" opacity=".22" filter="url(#haze)"/>
+<path d="M0 495 L120 440 L213 468 L322 379 L398 414 L510 330 L640 418 L755 362 L835 423 L965 300 L1033 349 L1127 276 L1251 381 L1363 283 L1472 382 L1600 321 V660 H0Z" fill="url(#back)" opacity=".56"/>
+<path d="M0 546 L113 473 L193 518 L312 383 L373 455 L464 368 L532 420 L620 335 L735 434 L817 342 L898 428 L988 298 L1048 373 L1177 252 L1268 380 L1370 254 L1445 372 L1540 288 L1600 340 V660 H0Z" fill="url(#middle)" opacity=".65"/>
+<path d="M0 583 L85 510 L173 541 L255 487 L370 555 L452 425 L500 460 L566 386 L643 490 L727 417 L795 472 L879 344 L977 430 L1069 336 L1154 413 L1248 322 L1372 244 L1412 296 L1455 277 L1600 407 V660 H0Z" fill="url(#front)"/>
+<g fill="#debe9d" opacity=".65"><path d="M1372 244 L1412 296 L1390 284 L1378 275 L1354 294Z"/><path d="M1248 322 L1287 363 L1257 354 L1234 360Z"/><path d="M879 344 L929 397 L896 382 L861 394Z"/><path d="M566 386 L603 438 L571 429 L550 443Z"/></g>
+<g stroke="#342f2b" stroke-width="2.5" fill="none" opacity=".34"><path d="M1372 244 L1340 360 L1438 435 M1372 244 L1413 355 L1495 421 M1248 322 L1180 416 L1250 488 M879 344 L830 436 L904 516 M566 386 L540 475 L611 560 M988 298 L1015 404 L1112 488"/></g>
+<path d="M0 621 Q195 570 355 620 T690 598 Q836 560 1000 607 T1300 590 Q1472 566 1600 594 V660 H0Z" fill="#29332f" opacity=".68"/>
+<rect y="395" width="1600" height="240" fill="url(#atmosphere)"/>
+<rect x="0" y="290" width="1600" height="340" fill="url(#mist)"/>
+<path d="M0 622 Q400 615 755 629 Q1050 615 1600 635 V660 H0Z" fill="#111d1d" opacity=".66"/>
+</svg>

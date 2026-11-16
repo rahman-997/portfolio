@@ -1,5 +1,5 @@
 export const SITE_URL = "https://abdulrahman-hajar-portfolio.onrender.com";
-export const PORTFOLIO_UPDATED_AT = "2026-09-03T14:12:35.000Z";
+export const PORTFOLIO_UPDATED_AT = "2026-11-16T00:00:00.000Z";
 export const THEME_COLOR = "#07100f";
 
 export const PROFILE_LINKS = {

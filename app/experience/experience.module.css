@@ -78,6 +78,14 @@
 .sectionHeader h2,.about h2,.atlasIntro h2{max-width:800px;margin:0;font-size:clamp(2.6rem,5.2vw,5rem);font-weight:700;line-height:1.1;letter-spacing:-.066em}
 .sectionHeader p:not(.sectionLabel){max-width:710px;color:var(--muted);font-size:1rem;line-height:1.85;margin:1.1rem 0 0}
 .projectToolbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.projectSearch{display:grid;gap:.65rem;max-width:640px;margin:0 0 1.4rem;font-size:.8rem;font-weight:700;color:var(--ink)}
+.projectSearch input{width:100%;min-width:0;min-height:48px;border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem;font:inherit;color:var(--ink);background:var(--surface)}
+.projectSearch input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.projectSearch input::placeholder{color:var(--muted);opacity:1}
+.projectStage{display:block;align-self:flex-start;padding:.4rem .65rem;margin:0 0 .9rem;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:.67rem;line-height:1.5}
+.privateSource{font-size:.66rem;color:var(--muted);line-height:1.6}
+.emptyProjects{padding:2rem;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink)}
+.emptyProjects button{min-height:44px;padding:.65rem 1rem;border:1px solid var(--line);border-radius:10px;background:var(--surface2);color:var(--ink);font:inherit;cursor:pointer}
 .filterList{display:flex;gap:.45rem;flex-wrap:wrap}
 .filter,.filterActive{cursor:pointer;min-height:44px;border-radius:999px;border:1px solid var(--line);padding:.6rem 1rem;font-size:.73rem;font-weight:750;color:var(--muted);background:var(--surface)}
 .filterActive{background:var(--accent);color:var(--accentInk);border-color:var(--accent)}
@@ -188,3 +196,15 @@
   .visualRing{animation:none}
   .project,.primaryAction,.secondaryAction{transition:none}
 }
+
+/* User-provided HAJAR identity extracted from the Eventify cover. */
+.brandEmblem{width:49px;height:54px;flex:none;display:flex;align-items:center;justify-content:center;padding:5px 8px;border:1px solid rgba(205,173,140,.45);border-radius:13px;background:#0c1619;box-shadow:0 0 22px rgba(166,119,77,.10)}
+.brandEmblem img{display:block;width:auto;height:42px;object-fit:contain}
+.brandText strong{font-weight:900;letter-spacing:.105em;font-size:.86rem}
+.brandText small{font-size:.55rem;max-width:250px;line-height:1.35}
+@media(max-width:760px){.brandEmblem{width:43px;height:47px;padding:4px 6px}.brandEmblem img{height:36px}.brandText strong{font-size:.77rem}}
+
+.shareProjects{min-height:44px;padding:.65rem 1rem;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:.75rem;font-weight:700;cursor:pointer;max-width:100%}
+.shareProjects:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.shareFeedback{margin-bottom:1.5rem;padding:1rem;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-size:.8rem;line-height:1.7}
+.shareFeedback p{margin:0}.shareFeedback input{width:100%;min-width:0;min-height:44px;margin-top:.6rem;border:1px solid var(--line);padding:.6rem;color:var(--ink);background:var(--surface2)}

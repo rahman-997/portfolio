@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { PROFILE_LINKS, PROJECT_LIST } from "../portfolio-data";
 import styles from "./resume.module.css";
 
 export const metadata: Metadata = {
   title: "Résumé — Abdulrahman Hajar | Software Engineer",
   description:
-    "Recruiter-ready résumé for Abdulrahman Hajar: Software Engineer, Full-Stack Developer, and builder of AI & interactive systems; Computer Engineering student in Istanbul.",
+    "Recruiter-ready résumé for Abdulrahman Hajar: Software Engineer, Full-Stack Developer, and builder of AI & interactive systems; based in Istanbul.",
   alternates: { canonical: "/resume/" },
 };
 
@@ -22,7 +23,7 @@ export default function ResumePage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio">
-          <span>AH</span><strong>Abdulrahman Hajar</strong>
+          <span><Image src="/brand/hajar-emblem.svg" width={21} height={30} alt="" unoptimized /></span><strong>HAJAR</strong>
         </Link>
         <div className={styles.headerActions}>
           <Link href="/#work">Selected work</Link>
@@ -36,7 +37,7 @@ export default function ResumePage() {
           <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK DEVELOPER · AI & INTERACTIVE SYSTEMS</p>
           <h1>Abdulrahman Hajar</h1>
           <p className={styles.lede}>
-            Software engineer and Computer Engineering student building complete production software systems across frontend, backend, APIs, data, asynchronous workflows, testing, security, reliability, AI integrations, interactive systems, and deployment.
+            Computer engineer and full-stack developer building complete production software systems across frontend, backend, APIs, data, asynchronous workflows, testing, security, reliability, AI integrations, interactive systems, and deployment.
           </p>
         </div>
         <aside className={styles.snapshot} aria-label="Professional snapshot">
