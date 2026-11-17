@@ -43,3 +43,9 @@
 - **BookHaven:** checkout compensation and MongoDB connection-scoped transaction detection fixes committed on `fix/checkout-compensation-20261117`. Four new focused tests are committed but not yet executed with Jest/MongoDB. QA: `docs/QA_CHECKOUT_COMPENSATION_2026-11-17.md`.
 - **Safety:** no production deployment, main-branch merge, new GitHub Actions run or paid service was triggered.
 - **Next:** obtain dependency-complete disposable test environment; execute BookHaven Jest/typecheck/build and SalesPilot full pytest; only then consider a Draft PR after free CI quota checks.
+
+
+## Engineering checkpoint — 2026-11-18 (follow-up)
+- **BookHaven:** added missing-DB and cached-sharded-topology regression cases; branch contains **6 pending Jest integration cases**. Separately, 4 isolated VM behavior checks passed for the transaction capability module. No real MongoDB/Jest integration test executed. Branch: `fix/checkout-compensation-20261117`.
+- **SalesPilot AI:** prevented whitespace-only external API credentials from enabling remote AI. **5 isolated pytest tests passed** and Python compile check passed; full repository verification still pending. Branch: `work/portfolio-project-audit-20261116`.
+- No production actions, paid APIs, `main` merges or GitHub Actions triggered.
