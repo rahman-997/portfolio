@@ -37,3 +37,9 @@
 - Inventory compiled from connected GitHub README files on 2026-11-16.
 - First implementation target: `salespilot-ai` — defensive regression tests for external-AI opt-in.
 - Draft PR deferred pending consent/free CI limits verification; no CI runs requested.
+
+## Progress checkpoint — 2026-11-18
+- **SalesPilot AI:** external AI opt-in guard and regression tests committed on `work/portfolio-project-audit-20261116`. Four focused tests passed only in a local isolated reconstruction; repository-wide tests and CI have not been run for that branch.
+- **BookHaven:** checkout compensation and MongoDB connection-scoped transaction detection fixes committed on `fix/checkout-compensation-20261117`. Four new focused tests are committed but not yet executed with Jest/MongoDB. QA: `docs/QA_CHECKOUT_COMPENSATION_2026-11-17.md`.
+- **Safety:** no production deployment, main-branch merge, new GitHub Actions run or paid service was triggered.
+- **Next:** obtain dependency-complete disposable test environment; execute BookHaven Jest/typecheck/build and SalesPilot full pytest; only then consider a Draft PR after free CI quota checks.
