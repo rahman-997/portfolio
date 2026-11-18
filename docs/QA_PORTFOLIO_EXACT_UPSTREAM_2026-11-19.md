@@ -5,3 +5,13 @@
 - Unit regression in `scripts/tests/atlas-production-contract.test.mjs`, already covered by the existing CI Node test command.
 - Isolated Node helper security cases pass (25 assertions, including host and userinfo spoof, data-href spoof, fake marker and duplicate credits); rerun full CodeQL, npm audit, browser QA, static export on exact reviewed commit.
 - Existing npm dependency advisories and Turkish browser E2E remain blockers. No merge, no main edits, no production deploy or paid services. **NO-GO.**
+
+## Actual local Node execution against byte-verified GitHub source (2026-11-19)
+- Native `node --test` on a focused companion suite of the GitHub helper: **4/4 tests passed**. Test scenarios cover exact GitHub link, malicious/relative hosts, URL userinfo and path/query/fragment spoofing, duplicate/missing/fake markup.
+- Native Node `--check` **PASS**.
+- Exact helper and actual export-verifier source were reconstructed in an isolated scratch directory and matched Git blob SHAs:
+  - `scripts/project-link-security.mjs`: `950cd802c0261f1e8c5023b20f20490dd2f26d7e`
+  - `scripts/verify-project-pages.mjs`: `6cfb02900bc37d2e59a12b38b9c8d36d39b00ef7`
+- Generated **66 fictional localized HTML pages** (22 project pages × 3 locales) with no customer data. Executed the actual export verifier on this fixture: **PASS**.
+- Replaced one Arabic fork upstream URL with `https://evil.example/?next=https://github.com/Alishahryar1/free-claude-code`, reran the actual verifier: **correctly rejected**, with a nonzero exit and the expected fork provenance error.
+- The fixture is synthetic. This does not replace a full Next.js build/export, a rerun of CodeQL, npm audit or live AR/TR/EN Playwright QA. Keep **NO-GO**.
