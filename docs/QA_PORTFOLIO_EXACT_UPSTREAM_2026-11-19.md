@@ -15,3 +15,11 @@
 - Generated **66 fictional localized HTML pages** (22 project pages × 3 locales) with no customer data. Executed the actual export verifier on this fixture: **PASS**.
 - Replaced one Arabic fork upstream URL with `https://evil.example/?next=https://github.com/Alishahryar1/free-claude-code`, reran the actual verifier: **correctly rejected**, with a nonzero exit and the expected fork provenance error.
 - The fixture is synthetic. This does not replace a full Next.js build/export, a rerun of CodeQL, npm audit or live AR/TR/EN Playwright QA. Keep **NO-GO**.
+
+## Exact repository test suite run under native Node.js
+- Reconstructed the real repo's `scripts/atlas-production-contract.mjs` and `scripts/tests/atlas-production-contract.test.mjs` directly from GitHub content, and verified that local Git blob SHAs exactly match the connected repository:
+  - Atlas implementation: `bd097361597261f59dc7f01c8dc8a5ce2705354e`
+  - Committed Node suite: `2290ec3e33f4f58ee0eca5edd6e1e2f276d30a5e`
+  - Security helper: `950cd802c0261f1e8c5023b20f20490dd2f26d7e`
+- Executed **real `node --test scripts/tests/atlas-production-contract.test.mjs`** with those byte-identical source files and no mocks: **7/7 PASS** (six pre-existing Atlas contract checks and one new adversarial upstream URL check).
+- Scope remains the exact linked Node test module. It is not a full dependency-backed Next.js build, scanner rerun, or app E2E.
