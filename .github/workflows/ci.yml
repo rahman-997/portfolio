@@ -34,6 +34,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: Verify dependency lock integrity
+        run: node --test tests/dependency-lock-integrity.test.mjs
+
       - name: Lint
         run: npm run lint
 
