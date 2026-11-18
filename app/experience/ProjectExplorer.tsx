@@ -76,7 +76,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
       <button id="share-projects" type="button" className={styles.shareProjects} onClick={()=>void share()}>{t.shareProjects} ↗</button>
     </div>
     {shareStatus!=="idle"?<div className={styles.shareFeedback} role="status"><p>{shareStatus==="copied"?t.linkCopied:t.copyManually}</p>{shareStatus==="manual"?<input aria-label={t.galleryLink} value={shareUrl} readOnly dir="ltr" onFocus={event=>event.target.select()}/>:null}</div>:null}
-    <div id="project-grid" className={styles.projectGrid} data-project-total={ALL_PROJECT_COUNT}>
+    <div id="project-grid" className={styles.projectGrid} data-project-total={ALL_PROJECT_COUNT} data-gallery-ready={ready ? "true" : "false"}>
       {filtered.map(p=><article className={styles.project} key={p.id} data-project-id={p.id}
         data-project-group={p.group} data-project-stage={projectStage(p)} data-source-visibility={p.source?"public":"private"}>
         <div className={styles.cardTop}>

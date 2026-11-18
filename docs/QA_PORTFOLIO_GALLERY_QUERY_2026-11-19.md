@@ -17,3 +17,8 @@ New branch: `fix/portfolio-project-query-hydration-20261119`. Avoid main merge o
 - Current PR #47 CI found 14 high and one moderate npm audit warnings; CodeQL also reports an open high-severity alert. See issue #49.
 - Two Next.js advisories specify patched 16.4.5, but npm registry/lockfile regeneration is unavailable in the working container; DO NOT make a package.json-only update, force install, or weaken audit.
 - Full CI, Playwright AR/TR/EN, security audit and production release are **NO-GO** until actually executed on a complete isolated checkout.
+
+## Browser readiness contract (2026-11-19)
+- SSR renders `data-gallery-ready="false"` until the gallery's React state effect has run and committed. This is a QA synchronization signal, not a loading overlay or new network request.
+- Existing Playwright scripts wait for `#project-grid[data-gallery-ready="true"]` before interacting. The strict count expectation (1 matching article) stays unchanged.
+- Timeout on readiness distinguishes a hydration failure from a filter regression. Full Playwright rerun is still required.

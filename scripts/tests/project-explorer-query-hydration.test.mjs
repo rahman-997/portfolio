@@ -69,3 +69,16 @@ test("ProjectExplorer's queued initial frame leaves in-progress typing intact", 
   cleanup();
   assert.equal(listeners.has("popstate"),false);
 });
+
+
+test("browser QA waits for real gallery hydration while retaining strict one-card checks", () => {
+  const files = ["v4-browser-qa.py", "release-browser-qa.py", "evolution-browser-qa.py"];
+  for (const filename of files) {
+    const qa = readFileSync(new URL("../" + filename, import.meta.url), "utf8");
+    assert.match(qa, /#project-grid\[data-gallery-ready="true"\]/);
+    assert.match(qa, /to_have_count\(1\)/);
+  }
+  const source = readFileSync(new URL("../../app/experience/ProjectExplorer.tsx", import.meta.url), "utf8");
+  assert.match(source, /data-gallery-ready=\{ready \? "true" : "false"\}/);
+  assert.match(source, /setReady\(true\)/);
+});
