@@ -57,7 +57,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
     <label className={styles.projectSearch} htmlFor="project-search">
       <span>{t.searchProjects}</span>
       <input id="project-search" type="search" dir="auto" value={query} maxLength={120}
-        aria-controls="project-grid" placeholder={t.searchPlaceholder}
+        aria-controls="project-grid" placeholder={t.searchPlaceholder} disabled={!ready}
         onChange={event=>{setQuery(event.target.value);setShareStatus("idle");}} />
     </label>
     <div className={styles.projectToolbar}>
