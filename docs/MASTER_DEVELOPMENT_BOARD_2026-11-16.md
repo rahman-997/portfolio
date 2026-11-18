@@ -49,3 +49,11 @@
 - **BookHaven:** added missing-DB and cached-sharded-topology regression cases; branch contains **6 pending Jest integration cases**. Separately, 4 isolated VM behavior checks passed for the transaction capability module. No real MongoDB/Jest integration test executed. Branch: `fix/checkout-compensation-20261117`.
 - **SalesPilot AI:** prevented whitespace-only external API credentials from enabling remote AI. **5 isolated pytest tests passed** and Python compile check passed; full repository verification still pending. Branch: `work/portfolio-project-audit-20261116`.
 - No production actions, paid APIs, `main` merges or GitHub Actions triggered.
+
+
+## BookHaven PR consolidation checkpoint — 2026-11-18
+- **Validated existing Draft PR:** [#79](https://github.com/rahman-997/bookbookhaven/pull/79), head `74161114332b52a4d2ffbceb25b5a834eeb9cb59`, open, draft, mergeable. GitHub shows completed success for the exact head on [CI run 43963842774](https://github.com/rahman-997/bookbookhaven/actions/runs/43963842774) and [security run 43963842759](https://github.com/rahman-997/bookbookhaven/actions/runs/43963842759).
+- PR #79 already includes standalone-checkout inventory decrement and cart-unlock corrections alongside privacy safeguards and dependency lockfile updates. **Do not open a duplicate PR or assume those parts need reimplementation.**
+- The local working branch `fix/checkout-compensation-20261117` overlaps with #79 but additionally changes `backend/src/database/transactions.ts` to scope transaction capability checks to the connected database and fail closed on transient detection errors; its **seven** new Jest cases remain **unverified** in integrated CI.
+- Proposed review: compare unique topology fix against #79's dependency-updated source, integrate only non-duplicate fixes into one review branch, run free local Jest/TypeScript/build and/or verify no-cost CI eligibility before PR edits that trigger workflows. No merge or production deployment without explicit approval.
+- Full **BookHaven v5.4 source remains unverified/unavailable**; green v4.0 CI is not evidence for v5.4.
