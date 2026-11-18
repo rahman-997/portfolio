@@ -65,3 +65,13 @@ test("security: fork upstream must use the exact GitHub anchor destination", () 
   }
   assert.equal(hasVerifiedUpstreamCredit('<a href="https://github.com/Alishahryar1/free-claude-code">No marker</a>'), false);
 });
+
+test("security regression: ignore fake upstream attributes embedded in other attributes or comments", () => {
+  const trusted = "https://github.com/Alishahryar1/free-claude-code";
+  assert.equal(hasVerifiedUpstreamCredit(`<a title='fake data-upstream-credit="true"' href="${trusted}">Link</a>`), false);
+  assert.equal(hasVerifiedUpstreamCredit(`<a data-upstream-credit="true" title='fake href="${trusted}"' href="https://evil.example/hijack">Link</a>`), false);
+  assert.equal(hasVerifiedUpstreamCredit(`<!-- <a data-upstream-credit="true" href="${trusted}">Comment only</a> -->`), false);
+  assert.equal(hasVerifiedUpstreamCredit(`<script>const template = '<a data-upstream-credit="true" href="${trusted}">fake</a>';</script>`), false);
+  assert.equal(hasVerifiedUpstreamCredit(`<a data-upstream-credit="true" href="${trusted}" title="text with > sign">real</a>`), true);
+  assert.equal(hasVerifiedUpstreamCredit(`<a data-upstream-credit="true" href="https://evil.example" href="${trusted}">duplicate href</a>`), false);
+});
