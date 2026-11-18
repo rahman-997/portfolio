@@ -2,12 +2,16 @@
 """Release acceptance: real browser navigation, storage denial, reflow and WCAG."""
 import json
 import os
+import sys
+from subprocess import run
 from pathlib import Path
 from playwright.sync_api import expect, sync_playwright
 
 BASE = os.environ.get("ATLAS_BASE_URL", "http://127.0.0.1:4173").rstrip("/")
 OUT = Path(os.environ.get("ATLAS_QA_OUTPUT", "atlas-qa-artifacts")) / "release"
 OUT.mkdir(parents=True, exist_ok=True)
+# Check the server-rendered form before browser hydration can mask the race.
+run([sys.executable, "scripts/verify-search-hydration.py", "out"], check=True)
 passed, failed = [], []
 
 
@@ -76,7 +80,10 @@ with sync_playwright() as pw:
                         page.locator('a[href="#main"]').focus()
                         page.locator('a[href="#main"]').press("Enter")
                         expect(page.locator("#main")).to_be_focused()
-                        page.locator("#project-search").fill("HajarCare")
+                        search = page.locator("#project-search")
+                        expect(search).to_be_enabled()
+                        search.fill("HajarCare")
+                        expect(search).to_have_value("HajarCare")
                         expect(page.locator("#work article")).to_have_count(1)
                         page.locator("#work").screenshot(path=str(OUT/(name+"-project.png")), animations="disabled")
                         page.locator("#project-search").fill("")
