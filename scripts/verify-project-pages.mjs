@@ -1,4 +1,5 @@
 import { readFileSync, existsSync } from "node:fs";
+import { hasVerifiedUpstreamCredit } from "./project-link-security.mjs";
 const ids=["eventify","bookbookhaven","fitflow-gym","venues-api","mizan-finance","portfolio","free-claude-code","hajarcare","sirahazir","salespilot-ai","kivyro","digital-rug-max","aura","athrua","sham","smart-qr-pager","marketing-agents","hajar-studio","lumera","switchboard","venueflow","culture-sy"];
 const allowed=new Set(ids.slice(0,7));
 const check=(yes,message)=>{if(!yes)throw new Error(message);};
@@ -26,7 +27,7 @@ for(const locale of ["en","ar","tr"]){
       check(html.includes(`href="/${language}/projects/${id}/"`),`Language switch loses the project: ${file}`);
     }
     for(const match of html.matchAll(/https:\/\/github\.com\/rahman-997\/([A-Za-z0-9_.-]+)/g))check(allowed.has(match[1]),`Private source URL exposed: ${file}`);
-    if(id==="free-claude-code")check(html.includes('data-upstream-credit="true"')&&html.includes("https://github.com/Alishahryar1/free-claude-code"),`Fork provenance missing: ${file}`);
+    if(id==="free-claude-code")check(hasVerifiedUpstreamCredit(html),`Fork provenance missing or invalid URL: ${file}`);
     check(!html.includes("\ufffd"),`Broken Unicode: ${file}`);
     count++;
   }

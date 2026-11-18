@@ -38,3 +38,30 @@ test('rejects a missing alternate visualization mode', () => {
 test('rejects missing hero navigation to AI Lab', () => {
   assert.throws(() => assertAtlasProductionContract(homepage().replace('href="#ai-lab"', 'href="#elsewhere"')), /AI Lab navigation/);
 });
+
+import { isCanonicalUpstreamHref, hasVerifiedUpstreamCredit } from "../project-link-security.mjs";
+
+test("security: fork upstream must use the exact GitHub anchor destination", () => {
+  const good = '<a href="https://github.com/Alishahryar1/free-claude-code" data-upstream-credit="true">Upstream</a>';
+  assert.equal(hasVerifiedUpstreamCredit(good), true);
+  assert.equal(hasVerifiedUpstreamCredit(good + good), false);
+  assert.equal(hasVerifiedUpstreamCredit('<span data-upstream-credit="true">https://github.com/Alishahryar1/free-claude-code</span>'), false);
+  assert.equal(hasVerifiedUpstreamCredit('<a data-evil-data-upstream-credit="true" href="https://github.com/Alishahryar1/free-claude-code">Fake</a>'), false);
+  assert.equal(hasVerifiedUpstreamCredit('<a data-upstream-credit="true" data-href="https://github.com/Alishahryar1/free-claude-code">Fake</a>'), false);
+  for (const candidate of [
+    "https://evil.example/?next=https://github.com/Alishahryar1/free-claude-code",
+    "https://github.com.evil.example/Alishahryar1/free-claude-code",
+    "https://github.com@evil.example/Alishahryar1/free-claude-code",
+    "http://github.com/Alishahryar1/free-claude-code",
+    "//github.com/Alishahryar1/free-claude-code",
+    "https://github.com/Alishahryar1/free-claude-code/issues",
+    "https://github.com/Alishahryar1/free-claude-code?redirect=bad",
+    "https://github.com/Alishahryar1/free-claude-code#phishing",
+    "https://user@github.com/Alishahryar1/free-claude-code",
+    "https://github.com/Alishahryar1/free-claude-code.evil.example",
+  ]) {
+    assert.equal(isCanonicalUpstreamHref(candidate), false, candidate);
+    assert.equal(hasVerifiedUpstreamCredit('<a data-upstream-credit="true" href="'+candidate+'">Upstream</a>'), false, candidate);
+  }
+  assert.equal(hasVerifiedUpstreamCredit('<a href="https://github.com/Alishahryar1/free-claude-code">No marker</a>'), false);
+});
