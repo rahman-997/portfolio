@@ -64,10 +64,10 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
       <div className={styles.filterList} role="group" aria-label={t.projectEyebrow}>
         {filters.map(item=><button key={item.id} type="button"
           className={filter===item.id?styles.filterActive:styles.filter}
-          aria-pressed={filter===item.id} onClick={()=>{setFilter(item.id);setShareStatus("idle");}}>{item.label}</button>)}
+          aria-pressed={filter===item.id} disabled={!ready} onClick={()=>{setFilter(item.id);setShareStatus("idle");}}>{item.label}</button>)}
       </div>
       <output className={styles.resultCount} aria-live="polite">{t.projectCount}: <bdi dir="ltr">{String(filtered.length).padStart(2,"0")}</bdi></output>
-      <button id="share-projects" type="button" className={styles.shareProjects} onClick={()=>void share()}>{t.shareProjects} ↗</button>
+      <button id="share-projects" type="button" className={styles.shareProjects} disabled={!ready} onClick={()=>void share()}>{t.shareProjects} ↗</button>
     </div>
     {shareStatus!=="idle"?<div className={styles.shareFeedback} role="status"><p>{shareStatus==="copied"?t.linkCopied:t.copyManually}</p>{shareStatus==="manual"?<input aria-label={t.galleryLink} value={shareUrl} readOnly dir="ltr" onFocus={event=>event.target.select()}/>:null}</div>:null}
     <div id="project-grid" className={styles.projectGrid} data-project-total={ALL_PROJECT_COUNT}>
