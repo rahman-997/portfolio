@@ -13,6 +13,6 @@ Use a small, dependency-free scanner that skips HTML comments and script/style/t
 - Together with the focused independent security tests: **12/12 PASS**.
 - Existing synthetic 22 × 3 = **66 HTML project pages**: exported verifier **PASS**.
 - Four malicious fixture variants (attribute-name spoof, href spoof, comment-only credit, HTML script-only credit) each made the exact export verifier fail with a nonzero exit.
-- Helper Git blob after fix is expected to match local SHA `1be6abb404f033d92d09fad06e482f750589a7ac`; official Node suite after fix should match `812165c5ae09d39169a1db700aa16b2bc2c90975`.
+- Helper Git blob after fix is verified as GitHub blob SHA `cb90b1c9e3fde92349cbb618b4a10d14878619b2`; official Node suite after fix matches `812165c5ae09d39169a1db700aa16b2bc2c90975`.
 
 No full Next.js build, authenticated E2E or CodeQL rerun. Do not claim the high-severity alert has been closed. npm dependency audit and Turkish mobile browser regression remain release blockers. **Draft / NO-GO.**
