@@ -60,7 +60,7 @@ with sync_playwright() as pw:
                     response = page.goto(BASE+route, wait_until="networkidle")
                     assert response.status == 200
                     expect(page.locator("html")).to_have_attribute("data-theme", theme)
-                    page.locator('#project-grid[data-gallery-ready="true"]').wait_for(timeout=15000)
+                    page.locator('#project-grid[data-gallery-ready="true"]').wait_for(state="attached", timeout=15000)
                     expect(page.locator("#work article")).to_have_count(22)
                     assert_layout(page)
                     assert page.locator('meta[property="og:title"]').get_attribute("content") == page.title(), "sharing title differs from page title"
@@ -107,7 +107,7 @@ with sync_playwright() as pw:
             expect(page.locator("html")).to_have_attribute("lang", locale)
             expect(page.locator("html")).to_have_attribute("dir", "rtl" if locale=="ar" else "ltr")
             expect(page.locator("html")).to_have_attribute("data-theme", "light")
-            page.locator('#project-grid[data-gallery-ready="true"]').wait_for(timeout=15000)
+            page.locator('#project-grid[data-gallery-ready="true"]').wait_for(state="attached", timeout=15000)
             page.locator("header button").click()
             expect(page.locator("html")).to_have_attribute("data-theme", "dark")
             page.locator("#project-search").fill("LUMERA")

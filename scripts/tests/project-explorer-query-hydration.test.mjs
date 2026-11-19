@@ -82,3 +82,15 @@ test("browser QA waits for real gallery hydration while retaining strict one-car
   assert.match(source, /data-gallery-ready=\{ready \? "true" : "false"\}/);
   assert.match(source, /setReady\(true\)/);
 });
+
+
+test("Playwright hydration probes must wait for attachment, not visibility of an empty grid", () => {
+  for (const name of ["v4-browser-qa.py", "release-browser-qa.py", "evolution-browser-qa.py"]) {
+    const qa = readFileSync(new URL("../" + name, import.meta.url), "utf8");
+    const probes = qa.split("\n").filter(line => line.includes('#project-grid[data-gallery-ready="true"]'));
+    assert.ok(probes.length > 0, name + ": no hydration readiness check");
+    assert.ok(probes.every(line => line.includes('.wait_for(state="attached", timeout=15000)')),
+      name + ": an empty but hydrated gallery may be hidden and is still ready");
+    assert.match(qa, /to_have_count\(1\)/, name + ": strict search assertion must remain");
+  }
+});

@@ -38,7 +38,7 @@ with sync_playwright() as pw:
             page.on("request",lambda request:posts.append(request.url) if request.method not in ("GET","HEAD","OPTIONS") else None)
             try:
                 page.goto(BASE+prefix,wait_until="networkidle")
-                page.locator('#project-grid[data-gallery-ready="true"]').wait_for(timeout=15000)
+                page.locator('#project-grid[data-gallery-ready="true"]').wait_for(state="attached", timeout=15000)
                 page.locator("#work").get_by_role("button",name=PRODUCT[locale],exact=True).click()
                 page.locator("#project-search").fill("HajarCare")
                 expect(page.locator("#work article")).to_have_count(1)
@@ -48,7 +48,7 @@ with sync_playwright() as pw:
                 parsed=urlparse(shared)
                 assert parsed.path==prefix and parse_qs(parsed.query)=={"category":["product"],"q":["HajarCare"]} and parsed.fragment=="work",shared
                 page.goto(shared,wait_until="networkidle")
-                page.locator('#project-grid[data-gallery-ready="true"]').wait_for(timeout=15000)
+                page.locator('#project-grid[data-gallery-ready="true"]').wait_for(state="attached", timeout=15000)
                 expect(page.locator("#work article")).to_have_count(1)
                 expect(page.locator("#project-search")).to_have_value("HajarCare")
                 detail=prefix+"projects/hajarcare/"
@@ -113,7 +113,7 @@ with sync_playwright() as pw:
     page=context.new_page()
     try:
         page.goto(BASE+"/ar/?category=invalid&q="+"x"*130,wait_until="networkidle")
-        page.locator('#project-grid[data-gallery-ready="true"]').wait_for(timeout=15000)
+        page.locator('#project-grid[data-gallery-ready="true"]').wait_for(state="attached", timeout=15000)
         expect(page.locator("#project-search")).to_have_value("x"*120)
         page.locator("#project-search").fill("LUMERA")
         expect(page.locator("#work article")).to_have_count(1)
