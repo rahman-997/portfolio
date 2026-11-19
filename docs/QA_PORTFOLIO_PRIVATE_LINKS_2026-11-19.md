@@ -19,3 +19,17 @@ The existing static page verification checked raw text matching `https://github.
 
 ## Safety
 No main merge, no production change, no paid CI or services, no deletion or customer data access.
+
+## Full gallery plus detail verification (executed)
+- Extended the URL allowlist to all 3 localized **homepage galleries** as well as all 66 project-detail pages.
+- Node v22.16 native test suite: **13/13 PASS** on the final exact GitHub helper and tests.
+- Synthetic 66-page EN/AR/TR static export: **PASS** with unchanged `node scripts/verify-project-pages.mjs` entry point.
+- Negative homepage cases: injected private GitHub URL using an HTML numeric entity and a protocol-relative URL into Turkish gallery; **both correctly rejected**. Valid public repository URL remained accepted.
+- Negative project-detail cases: protocol-relative, percent-encoded, numeric-entity, mixed-case owner private URLs, and an evil lookalike GitHub hostname: **all five rejected**. Valid public link accepted.
+- Original fork attribution regression fixture still rejects all four prior spoof scenarios.
+- Verified GitHub blob SHA equals actual Node-tested local byte contents:
+  - `scripts/project-link-security.mjs` — `2bdd499264d8ef8a5074d75b47d59e7c1f3687d6`
+  - `scripts/verify-project-pages.mjs` — `a345fc54a860ea5c6d1dc8c05788f17955e5ea47`
+  - `scripts/tests/atlas-production-contract.test.mjs` — `68432a3cdf323048a3b78466cf94f0e715e1eece`
+
+Full Next.js build, exported production HTML, CodeQL scanner and 320px Playwright still **not executed on the new Commit**. The synthetic fixture is not proof of a production release. Keep Draft / NO-GO.
