@@ -1,0 +1,61 @@
+name: HAJAR Resume PDF (review branch only)
+
+on:
+  push:
+    branches: [review/portfolio-unified-candidate-20261119]
+    paths:
+      - "scripts/generate-resume-pdf.py"
+      - ".github/workflows/portfolio-resume-pdf-review.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  produce-verified-resume:
+    if: github.repository == 'rahman-997/portfolio' && github.ref == 'refs/heads/review/portfolio-unified-candidate-20261119' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout exact review branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Install free pinned PDF build and text-validation libraries
+        run: python3 -m pip install --user --disable-pip-version-check reportlab==4.4.9 pypdf==5.9.0
+
+      - name: Build deterministic ATS-readable one-page resume
+        run: python3 scripts/generate-resume-pdf.py
+
+      - name: Verify role, selectable text, clickable links and page count
+        run: |
+          python3 - <<'PY'
+          from pypdf import PdfReader
+          p="public/Abdulrahman-Hajar-Resume.pdf"
+          pdf=PdfReader(p)
+          if len(pdf.pages)!=1: raise ValueError("Resume must be exactly one page")
+          content=pdf.pages[0].extract_text() or ""
+          for phrase in ("Abdulrahman Hajar", "COMPUTER ENGINEER", "FULL-STACK DEVELOPER", "Eventify", "BookHaven", "FitFlow", "Venues API"):
+              if phrase not in content: raise ValueError("Missing selectable text: "+phrase)
+          if "Computer Engineer" not in (pdf.metadata.title or ""): raise ValueError("PDF metadata is outdated")
+          urls=[str(item.get_object().get("/A",{}).get("/URI","")) for item in (pdf.pages[0].get("/Annots") or [])]
+          if not any("github.com/rahman-997" in url for url in urls): raise ValueError("GitHub contact link missing")
+          if not any("linkedin.com/in/" in url for url in urls): raise ValueError("LinkedIn contact link missing")
+          print("PDF QA PASS: 1 page, searchable content, metadata, GitHub and LinkedIn links")
+          PY
+
+      - name: Update ONLY downloadable PDF on this review branch
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/review/portfolio-unified-candidate-20261119"
+          test "$GITHUB_REPOSITORY" = "rahman-997/portfolio"
+          if git diff --quiet -- public/Abdulrahman-Hajar-Resume.pdf; then
+            echo "PDF is already up to date"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -- public/Abdulrahman-Hajar-Resume.pdf
+            git commit -m "fix(resume): update downloadable PDF to Computer Engineer identity"
+            git push origin HEAD:refs/heads/review/portfolio-unified-candidate-20261119
+          fi
