@@ -11,8 +11,8 @@ export function readExplorerLocation(search) {
   };
 }
 
-// Delayed first-paint hydration must not overwrite search/filter edits already typed.
-// Explicit browser history navigation is authoritative even after the user edited.
-export function shouldApplyExplorerSnapshot(initial, userEdited) {
-  return !initial || !userEdited;
+// A queued initial/history callback must not overwrite a more recent user edit.
+// Back/forward remains authoritative when no new edit happened after the event.
+export function shouldApplyExplorerSnapshot(initial, userEdited, editedSinceScheduled = false) {
+  return !editedSinceScheduled && (!initial || !userEdited);
 }

@@ -27,9 +27,11 @@ test("a queued initial URL sync cannot overwrite a user's search or filter", () 
   assert.equal(shouldApplyExplorerSnapshot(true, true), false);
 });
 
-test("back/forward navigation still restores URL state after edits", () => {
+test("back/forward navigation restores URL state unless user edited since it was queued", () => {
   assert.equal(shouldApplyExplorerSnapshot(false, true), true);
   assert.equal(shouldApplyExplorerSnapshot(false, false), true);
+  assert.equal(shouldApplyExplorerSnapshot(false, true, true), false);
+  assert.equal(shouldApplyExplorerSnapshot(true, false, true), false);
 });
 
 // Exercise the actual hydration effect source with a deterministic animation-frame
@@ -44,6 +46,7 @@ test("ProjectExplorer's queued initial frame leaves in-progress typing intact", 
   let id = 0, cleanup = null;
   let current = {filter:"all",query:"",ready:false};
   const userInteracted = {current:false};
+  const userInteractionVersion = {current:0};
   const window = {
     location:{search:"?category=tools&q=FROM-URL"},
     addEventListener(name,listener) {listeners.set(name,listener);},
@@ -51,12 +54,12 @@ test("ProjectExplorer's queued initial frame leaves in-progress typing intact", 
   };
   const runFrame = () => {const callbacks=[...frames.values()];frames.clear();for(const callback of callbacks)callback();};
   new Function("useEffect","cancelAnimationFrame","requestAnimationFrame","window",
-    "readExplorerLocation","shouldApplyExplorerSnapshot","setFilter","setQuery","setReady","userInteracted",effect)(
+    "readExplorerLocation","shouldApplyExplorerSnapshot","setFilter","setQuery","setReady","userInteracted","userInteractionVersion",effect)(
     (callback) => {cleanup=callback();}, (frame) => frames.delete(frame),
     (callback) => {const frame=++id;frames.set(frame,callback);return frame;},
     window, readExplorerLocation, shouldApplyExplorerSnapshot,
     value => {current.filter=value;}, value => {current.query=value;},
-    value => {current.ready=value;}, userInteracted,
+    value => {current.ready=value;}, userInteracted, userInteractionVersion,
   );
   userInteracted.current = true;
   current.query = "LUMERA";
@@ -66,6 +69,21 @@ test("ProjectExplorer's queued initial frame leaves in-progress typing intact", 
   listeners.get("popstate")();
   runFrame();
   assert.deepEqual(current,{filter:"web",query:"Culture",ready:true});
+
+  // A queued #main/back navigation captured the old URL. Then the user types:
+  // a stale animation frame must never revert the latest controlled input.
+  window.location.search="?category=tools&q=STALE";
+  listeners.get("popstate")();
+  userInteractionVersion.current += 1;
+  current.query = "FRESH";
+  runFrame();
+  assert.deepEqual(current,{filter:"web",query:"FRESH",ready:true});
+
+  // A fresh history action with no newer user input remains authoritative.
+  window.location.search="?category=product&q=HajarCare";
+  listeners.get("popstate")();
+  runFrame();
+  assert.deepEqual(current,{filter:"product",query:"HajarCare",ready:true});
   cleanup();
   assert.equal(listeners.has("popstate"),false);
 });

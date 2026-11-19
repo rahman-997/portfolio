@@ -10,6 +10,7 @@ import styles from "./experience.module.css";
 type Filter = "all" | ProjectGroup;
 export default function ProjectExplorer({locale}:{locale:Locale}) {
   const userInteracted=useRef(false);
+  const userInteractionVersion=useRef(0);
   const [filter,setFilter] = useState<Filter>("all");
   const [query,setQuery] = useState("");
   const [ready,setReady] = useState(false);
@@ -20,9 +21,11 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
     const sync=(initial:boolean)=>{
       cancelAnimationFrame(frame);
       const snapshot=readExplorerLocation(window.location.search);
+      const scheduledAtVersion=userInteractionVersion.current;
       frame=requestAnimationFrame(()=>{
-        // A slow initial frame must not erase a search the visitor already typed.
-        if(shouldApplyExplorerSnapshot(initial,userInteracted.current)){
+        // Neither initial hydration nor a queued history frame may erase newer user input.
+        if(shouldApplyExplorerSnapshot(initial,userInteracted.current,
+            userInteractionVersion.current !== scheduledAtVersion)){
           setFilter(snapshot.filter);
           setQuery(snapshot.query);
         }
@@ -64,13 +67,13 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
       <span>{t.searchProjects}</span>
       <input id="project-search" type="search" dir="auto" value={query} maxLength={120}
         aria-controls="project-grid" placeholder={t.searchPlaceholder}
-        onChange={event=>{userInteracted.current=true;setQuery(event.target.value);setShareStatus("idle");}} />
+        onChange={event=>{userInteracted.current=true;userInteractionVersion.current+=1;setQuery(event.target.value);setShareStatus("idle");}} />
     </label>
     <div className={styles.projectToolbar}>
       <div className={styles.filterList} role="group" aria-label={t.projectEyebrow}>
         {filters.map(item=><button key={item.id} type="button"
           className={filter===item.id?styles.filterActive:styles.filter}
-          aria-pressed={filter===item.id} onClick={()=>{userInteracted.current=true;setFilter(item.id);setShareStatus("idle");}}>{item.label}</button>)}
+          aria-pressed={filter===item.id} onClick={()=>{userInteracted.current=true;userInteractionVersion.current+=1;setFilter(item.id);setShareStatus("idle");}}>{item.label}</button>)}
       </div>
       <output className={styles.resultCount} aria-live="polite">{t.projectCount}: <bdi dir="ltr">{String(filtered.length).padStart(2,"0")}</bdi></output>
       <button id="share-projects" type="button" className={styles.shareProjects} onClick={()=>void share()}>{t.shareProjects} ↗</button>
@@ -99,7 +102,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
       </article>)}
     </div>
     {filtered.length===0?<div className={styles.emptyProjects} role="status"><p>{t.noProjects}</p>
-      <button type="button" onClick={()=>{userInteracted.current=true;setQuery("");setFilter("all");setShareStatus("idle");}}>{t.resetProjects}</button></div>:null}
+      <button type="button" onClick={()=>{userInteracted.current=true;userInteractionVersion.current+=1;setQuery("");setFilter("all");setShareStatus("idle");}}>{t.resetProjects}</button></div>:null}
     <p className={styles.repoNotice}>{t.repoNotice} {t.otherLocaleNote}</p>
   </>;
 }
