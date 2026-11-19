@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   BROWSER_SUITES, REQUIRED_FULL_STEPS, isSafeReviewBranch, assessQa,
 } from "../qa-gate-policy.mjs";
@@ -26,4 +27,9 @@ test("browser coverage requires three existing suites", () => {
   assert.deepEqual(BROWSER_SUITES, [
     "v4-browser-qa.py", "release-browser-qa.py", "evolution-browser-qa.py"
   ]);
+});
+
+test("local QA evidence is ignored and cannot block a clean review checkout", () => {
+  const ignore = readFileSync(new URL("../../.gitignore", import.meta.url), "utf8");
+  assert.match(ignore, /^\/\.qa\/(?:\s|$)/m);
 });

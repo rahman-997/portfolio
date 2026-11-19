@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/.qa/ # Local release-gate evidence and logs (never commit)
 
 # next.js
 /.next/
