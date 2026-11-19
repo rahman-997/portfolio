@@ -65,6 +65,15 @@ async function browsers() {
     record("browser-precondition", "FAIL", "Missing out/index.html");
     return;
   }
+  const ssrScript = join("scripts", "offline-ssr-qa.py");
+  const ssrArgs = process.platform === "win32"
+    ? ["-3", ssrScript, "--root", root, "--output", join(out, "offline-ssr-report.json")]
+    : [ssrScript, "--root", root, "--output", join(out, "offline-ssr-report.json")];
+  if (!exec("ssr-css-layout", python, ssrArgs, 180000)) {
+    for (const file of BROWSER_SUITES)
+      record("browser:" + file, "BLOCKED", "Offline SSR/CSS smoke test failed");
+    return;
+  }
   const port = Number(process.env.PORTFOLIO_QA_PORT || "4173");
   if (!Number.isInteger(port) || port < 1024 || port > 65535) {
     record("browser-precondition", "FAIL", "Invalid PORTFOLIO_QA_PORT");

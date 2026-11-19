@@ -19,6 +19,7 @@ test("missing checks, skipped browsers, and failed npm audit cannot yield PASS",
   assert.equal(assessQa(allPass, true), "PASS");
   assert.equal(assessQa(allPass, false), "INCOMPLETE");
   assert.equal(assessQa(allPass.filter(s => s.name !== "npm-audit"), true), "INCOMPLETE");
+  assert.equal(assessQa(allPass.filter(s => s.name !== "ssr-css-layout"), true), "INCOMPLETE");
   assert.equal(assessQa(allPass.filter(s => s.name !== "browser:release-browser-qa.py"), true), "INCOMPLETE");
   assert.equal(assessQa(allPass.map(s => s.name === "npm-audit" ? {...s,status:"FAIL"} : s), true), "FAILED");
   assert.equal(assessQa(allPass.map(s => s.name === "npm-audit" ? {...s,status:"BLOCKED"} : s), true), "INCOMPLETE");

@@ -13,6 +13,7 @@ export const REQUIRED_FULL_STEPS = [
   "npm-build",
   "npm-verify:export",
   "npm-audit",
+  "ssr-css-layout",
   ...BROWSER_SUITES.map(name => "browser:" + name),
 ];
 export function isSafeReviewBranch(branch, head, clean) {
