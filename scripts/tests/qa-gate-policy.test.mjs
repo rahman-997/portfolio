@@ -31,5 +31,5 @@ test("browser coverage requires three existing suites", () => {
 
 test("local QA evidence is ignored and cannot block a clean review checkout", () => {
   const ignore = readFileSync(new URL("../../.gitignore", import.meta.url), "utf8");
-  assert.match(ignore, /^\/\.qa\/(?:\s|$)/m);
+  assert.match(ignore, /^\/\.qa\/\s*$/m);
 });
