@@ -10,6 +10,7 @@ import {
   type ProjectSlug,
 } from "../../portfolio-data";
 import styles from "./case-study.module.css";
+import EventifyStory from "./EventifyStory";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -93,7 +94,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       ))}
 
       <header className={styles.header}>
-        <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio"><span>AH</span><strong>Abdulrahman Hajar</strong></Link>
+        <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio"><span><Image src="/brand/hajar-emblem.svg" width={24} height={30} alt="" unoptimized /></span><strong>HAJAR</strong></Link>
         <Link className={styles.back} href="/#work">← Selected work</Link>
       </header>
 
@@ -141,6 +142,8 @@ export default async function CaseStudyPage({ params }: PageProps) {
             <div className={styles.signalList}>{study.evidence.map((item) => <div key={item}><i>↗</i><span>{item}</span></div>)}</div>
           </div>
         </section>
+
+        {slug === "eventify" ? <EventifyStory /> : null}
 
         <section className={styles.next}>
           <div><span>VERIFY IT</span><h2>The implementation is public.</h2><p>Review the live behavior, source code, tests, architecture, and deployment details directly.</p></div>

@@ -1,0 +1,104 @@
+name: Portfolio Dependency Security Remediation (Preview Only)
+
+# This branch is public, standard ubuntu-latest hosted Actions are free.
+# Never run on main, use production credentials, or deploy.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: portfolio-next-fix-review
+  cancel-in-progress: false
+
+jobs:
+  npm-security-review:
+    if: github.repository == 'rahman-997/portfolio' && github.ref == 'refs/heads/fix/portfolio-next-16-4-6-20261119'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout isolated review branch only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+
+      - name: Use pinned Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Use project npm toolchain
+        run: npm install --global npm@11.19.1
+
+      - name: Resolve patched Next.js 16.4.6 and its ESLint config
+        run: |
+          npm install --save-exact --package-lock-only --ignore-scripts --no-audit --no-fund next@16.4.6 eslint-config-next@16.4.6
+          node --input-type=module -e '
+            import { readFileSync } from "node:fs";
+            const pkg=JSON.parse(readFileSync("package.json","utf8"));
+            const lock=JSON.parse(readFileSync("package-lock.json","utf8"));
+            for(const [name,expected] of [["next","16.4.6"],["eslint-config-next","16.4.6"]]) {
+              const direct=pkg.dependencies?.[name] ?? pkg.devDependencies?.[name];
+              const resolved=lock.packages?.["node_modules/"+name]?.version;
+              const root=lock.packages?.[""]?.dependencies?.[name] ?? lock.packages?.[""]?.devDependencies?.[name];
+              if (direct!==expected || resolved!==expected || root!==expected) {
+                throw new Error("Mismatched dependency and lock for "+name+": "+JSON.stringify({direct,resolved,root}));
+              }
+            }
+            console.log("Verified Next and eslint-config-next 16.4.6 in package.json and package-lock.json");
+          '
+
+      - name: Install exactly the regenerated lockfile
+        run: npm ci --no-audit --no-fund
+
+      - name: Commit only dependency metadata to the review branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/fix/portfolio-next-16-4-6-20261119"
+          test "$GITHUB_REPOSITORY" = "rahman-997/portfolio"
+          if git diff --quiet -- package.json package-lock.json; then
+            echo "No dependency metadata differences to commit"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -- package.json package-lock.json
+            git commit -m "fix(deps): align Next.js and ESLint config at 16.4.6 [skip ci]"
+            git push origin HEAD:refs/heads/fix/portfolio-next-16-4-6-20261119
+          fi
+          echo "REVIEWED_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "Review branch commit: $(git rev-parse HEAD)"
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Run all native Node contract and security tests
+        run: node --test scripts/tests/*.test.mjs
+
+      - name: Build production static candidate (never deploy)
+        env:
+          PORTFOLIO_BUILD_SHA: ${{ env.REVIEWED_COMMIT }}
+        run: npm run build
+
+      - name: Verify static export, identities, links, and privacy
+        run: npm run verify:export
+
+      - name: Audit dependencies at moderate severity and fail closed
+        run: npm run audit
+
+      - name: Upload lockfile and dependency review manifest (no build payload)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: portfolio-dependency-review-${{ github.run_id }}
+          path: |
+            package.json
+            package-lock.json
+          if-no-files-found: error
+          retention-days: 3

@@ -4,7 +4,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import expect, sync_playwright
 
 BASE = os.environ.get("ATLAS_BASE_URL", "http://127.0.0.1:4173").rstrip("/")
 OUT = Path(os.environ.get("ATLAS_QA_OUTPUT", "atlas-qa-artifacts")) / "v4"
@@ -46,10 +46,79 @@ with sync_playwright() as pw:
                     expected_dir = "rtl" if locale == "ar" else "ltr"
                     check(page.locator("html").get_attribute("dir") == expected_dir,
                           f"{name}: wrong document direction")
+                    if locale == "ar":
+                        headline = page.locator("#cinematic-heading span").first.evaluate("""el => {
+                            const cs = getComputedStyle(el);
+                            return {height:el.getBoundingClientRect().height, lineHeight:parseFloat(cs.lineHeight)};
+                        }""")
+                        check(headline["height"] <= headline["lineHeight"] * 1.25,
+                              f"{name}: Arabic cinematic headline wrapped awkwardly: {headline}")
                     work = page.locator("#work")
-                    check(work.locator("article").count() == 7,
-                          f"{name}: missing public repositories")
+                    # SSR + networkidle do not prove that React hydrated its event handlers.
+                    work.locator('#project-grid[data-gallery-ready="true"]').wait_for(state="attached", timeout=15000)
+                    check(work.locator("article").count() == 22,
+                          f"{name}: missing portfolio projects")
                     check(page.locator("#ai-lab").count() == 1, f"{name}: Atlas missing")
+                    # Cinematic V6: real featured media and two new user-directed systems.
+                    check(page.locator('[data-cinematic-scene="true"]').count() == 1,
+                          f"{name}: cinematic scene missing")
+                    check(page.locator("#featured [data-featured-system]").count() == 3,
+                          f"{name}: three visual project stories missing")
+                    check(page.locator("#eventify-feature-story [data-eventify-slide]").count() == 5,
+                          f"{name}: missing 5 Eventify case story chapters")
+                    story_controls = page.locator('#eventify-feature-story button[aria-label]')
+                    check(story_controls.count() == 2, f"{name}: carousel arrows are missing")
+                    story_controls.nth(1).click()
+                    check(page.locator('#eventify-feature-story [data-eventify-slide="02"]').get_attribute("aria-pressed") == "true",
+                          f"{name}: Eventify next chapter failed")
+                    page.locator('#eventify-feature-story [data-eventify-slide="05"]').click()
+                    check(page.locator('#eventify-feature-story [data-eventify-slide="05"]').get_attribute("aria-pressed") == "true",
+                          f"{name}: fifth chapter selection failed")
+                    page.locator('#eventify-feature-story [data-eventify-slide="01"]').click()
+                    check(page.locator('#system-overview .__missing__').count() == 0 and
+                          page.locator('#system-overview li').count() == 4,
+                          f"{name}: four-layer reference architecture missing")
+                    # Never confuse a marketing illustration with an actual product capture.
+                    media = page.locator('#featured [data-visual-source="live-screenshot"] img').evaluate_all("""async images => {
+                        return await Promise.all(images.map(async img => {
+                            img.loading = 'eager';
+                            await img.decode().catch(() => {});
+                            return {src: img.currentSrc || img.src, naturalWidth: img.naturalWidth};
+                        }));
+                    }""")
+                    real_count = page.locator('#featured [data-visual-source="live-screenshot"]').count()
+                    absent_count = page.locator('#featured [data-visual-source="unverified"]').count()
+                    check(real_count + absent_count == 3,
+                          f"{name}: every project needs a truthful visual state")
+                    check(len(media) == real_count and all(m["naturalWidth"] > 0 for m in media),
+                          f"{name}: broken real project screenshot {media}")
+                    check(all("/projects/live/" in m["src"] for m in media),
+                          f"{name}: non-evidence image presented as a live screenshot")
+                    for card in page.locator('#featured [data-visual-source="unverified"]').all():
+                        check(card.locator("img").count() == 0,
+                              f"{name}: an unverified project contains fake preview imagery")
+                        check(card.get_by_role("link").count() >= 1,
+                              f"{name}: missing direct source evidence link")
+                    for slug in ("eventify", "bookhaven", "fitflow"):
+                        check(page.locator(f'#featured a[href="/work/{slug}/"]').count() == 1,
+                              f"{name}: featured case study {slug} missing")
+                    check(page.locator('#mission-paths [data-mission-path]').count() == 3,
+                          f"{name}: guided mission paths missing")
+                    blueprints = page.locator("#blueprint-lab [data-blueprint-selector]")
+                    check(blueprints.get_by_role("button").count() == 3,
+                          f"{name}: missing architecture choices")
+                    for project in ("BookHaven", "FitFlow", "Eventify"):
+                        button = blueprints.get_by_role("button", name=project)
+                        button.click()
+                        check(button.get_attribute("aria-pressed") == "true",
+                              f"{name}: selection didn't update for {project}")
+                        check(page.locator("#blueprint-lab [role='img']").count() == 1,
+                              f"{name}: accessible diagram missing for {project}")
+                    check(page.locator("#blueprint-lab [aria-live='polite']").count() == 1,
+                          f"{name}: inspector has no announcement region")
+                    # Semantic deep links must lead to real on-page navigation destinations.
+                    for section in ("featured", "blueprint-lab", "work", "collaborate", "contact"):
+                        check(page.locator("#" + section).count() == 1, f"{name}: missing #{section}")
                     # V5: new sections must stay navigable and complete in all locales/themes.
                     for section in ("highlights", "process", "collaborate", "faq"):
                         check(page.locator("#" + section).count() == 1,
@@ -78,10 +147,46 @@ with sync_playwright() as pw:
                     for link in repository_links:
                         repo_id = link.split("https://github.com/rahman-997/", 1)[1].split("/", 1)[0]
                         check(repo_id in allowed_public, f"{name}: unexpected GitHub repository link")
-                    for count,kind in [(1,"backend"),(2,"tools"),(7,"all")]:
+                    for count,kind in [(2,"backend"),(4,"tools"),(22,"all")]:
                         page.get_by_role("button", name=COPY[locale][kind], exact=True).click()
                         check(work.locator("article").count() == count,
                               f"{name}: {kind} filter expected {count} projects")
+                    # Full catalog discovery, including entries without a public repository.
+                    search = page.locator("#project-search")
+                    search.fill("LUMERA")
+                    expect(work.locator("article")).to_have_count(1)
+                    check(work.locator("article").count() == 1 and work.locator('[data-project-id="lumera"]').count() == 1,
+                          f"{name}: project name search failed")
+                    search.fill("SIRAhazir")
+                    expect(work.locator("article")).to_have_count(1)
+                    expect(work.locator('[data-project-id="sirahazir"]')).to_have_count(1)
+                    check(work.locator('[data-project-id="sirahazir"]').count() == 1 and work.locator("article").count() == 1,
+                          f"{name}: Turkish dotless-I search failed")
+                    search.fill("عيادات")
+                    expect(work.locator('[data-project-id="hajarcare"]')).to_have_count(1)
+                    check(work.locator('[data-project-id="hajarcare"]').count() == 1 and work.locator("article").count() == 1,
+                          f"{name}: Arabic concept search failed")
+                    check(work.locator('a[href^="https://github.com/"]').count() == 0,
+                          f"{name}: private project exposed a source link")
+                    search.fill("no-project-matches-7654321")
+                    expect(work.locator("article")).to_have_count(0)
+                    check(work.locator("article").count() == 0 and work.locator('[role="status"]').count() == 1,
+                          f"{name}: empty search feedback missing")
+                    work.locator('[role="status"] button').click()
+                    expect(work.locator("article")).to_have_count(22)
+                    check(search.input_value() == "" and work.locator("article").count() == 22,
+                          f"{name}: reset did not restore the complete catalog")
+                    search.fill("culture")
+                    web_label = {"en":"Websites","ar":"المواقع","tr":"Web siteleri"}[locale]
+                    work.get_by_role("button", name=web_label, exact=True).click()
+                    expect(work.locator("article")).to_have_count(1)
+                    check(work.locator("article").count() == 1 and work.locator('[data-project-id="culture-sy"]').count() == 1,
+                          f"{name}: category and text search were not combined")
+                    search.fill("")
+                    expect(work.locator("article")).to_have_count(2)
+                    check(work.locator("article").count() == 2, f"{name}: website category count")
+                    work.get_by_role("button", name=COPY[locale]["all"], exact=True).click()
+                    check(work.locator("article").count() == 22, f"{name}: all catalog restored")
                     page.locator("#ai-lab").scroll_into_view_if_needed()
                     page.get_by_role("button", name=COPY[locale]["flow"], exact=True).click()
                     check(page.get_by_label("Illustrative five-stage engineering flow").count() == 1,
@@ -109,7 +214,7 @@ with sync_playwright() as pw:
                     page.locator(f'html[data-theme="{theme}"]').wait_for(timeout=5000)
                     if label == "mobile":
                         page.add_script_tag(path=os.environ.get("ATLAS_AXE_SCRIPT", "node_modules/axe-core/axe.min.js"))
-                        for section_id in ("highlights", "process", "collaborate", "faq"):
+                        for section_id in ("highlights", "process", "collaborate", "faq", "blueprint-lab", "mission-paths", "featured", "work"):
                             violations = page.evaluate("""async (section) => {
                                 const issues = await axe.run(document.getElementById(section), {
                                     runOnly: {type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']},
@@ -123,10 +228,23 @@ with sync_playwright() as pw:
                     overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
                     check(overflow <= 2, f"{name}: horizontal overflow {overflow}px")
                     check(not errors, f"{name}: browser exceptions {errors}")
+                    # Keep the real sticky header during functional checks; omit its
+                    # overlay only for clean section-by-section preview captures.
+                    page.add_style_tag(content="header { position: relative !important; }")
+                    if label == "desktop":
+                        for section_id, shot in (
+                            ("top", "hero"), ("featured", "features"),
+                            ("eventify-feature-story", "eventify-story"), ("system-overview", "overview"),
+                            ("blueprint-lab", "blueprint"), ("mission-paths", "paths")
+                        ):
+                            page.locator("#" + section_id).screenshot(
+                                path=str(OUT / (name + "-" + shot + ".png")),
+                                animations="disabled", timeout=30000
+                            )
                     if label == "mobile":
                         page.screenshot(path=str(OUT / (name + ".png")), full_page=True,
                                         animations="disabled")
-                    report.append({"case":name,"status":"pass","projects":7,
+                    report.append({"case":name,"status":"pass","projects":22,
                                    "overflow":overflow,"themePersistence":"pass"})
                     print("PASS", name, "RTL", expected_dir, "filter / theme / Atlas", flush=True)
                 except Exception as exc:
@@ -147,9 +265,40 @@ with sync_playwright() as pw:
             check(page.locator("html").get_attribute("lang") == locale, f"{locale}: no-JS lang")
             check(page.locator("html").get_attribute("dir") == ("rtl" if locale == "ar" else "ltr"),
                   f"{locale}: no-JS dir")
-            check(page.locator("#work article").count() == 7, f"{locale}: no-JS projects")
+            check(page.locator("#work article").count() == 22, f"{locale}: no-JS projects")
         except Exception as exc:
             failures.append({"case":locale+"-no-js","error":str(exc)})
+        finally:
+            context.close()
+    # Brand and Eventify case-study acceptance at desktop and mobile widths.
+    for label, width, height in [("desktop", 1280, 900), ("mobile", 375, 812)]:
+        context = browser.new_context(viewport={"width":width, "height":height},
+                                      reduced_motion="reduce")
+        page = context.new_page()
+        case_name = "eventify-brand-" + label
+        try:
+            response = page.goto(BASE+"/work/eventify/",wait_until="networkidle",timeout=60000)
+            check(response is not None and response.status == 200, case_name+": case study HTTP")
+            check(page.locator("#eventify-story").count() == 1,case_name+": story missing")
+            check(page.locator("#eventify-story article[id^='eventify-frame-']").count() == 5,
+                  case_name+": should render 5 frames")
+            mark = page.locator("header img[src='/brand/hajar-emblem.svg']")
+            check(mark.count() == 1,case_name+": real HAJAR mark missing from header")
+            loaded = mark.evaluate("""async img => {
+                await img.decode().catch(() => {});
+                return img.naturalWidth > 0;
+            }""")
+            check(loaded,case_name+": HAJAR SVG did not load")
+            last = page.locator("#eventify-frame-5")
+            page.locator('a[href="#eventify-frame-5"]').click()
+            check(last.count()==1 and last.is_visible(),case_name+": final slide unreachable")
+            page.screenshot(path=str(OUT/(case_name+".png")),full_page=True,
+                            animations="disabled",timeout=30000)
+            report.append({"case":case_name,"status":"pass","slides":5,"brand":"HAJAR"})
+            print("PASS",case_name,"logo and 5 semantic story panels",flush=True)
+        except Exception as exc:
+            failures.append({"case":case_name,"error":str(exc)})
+            print("FAIL",case_name,exc,file=sys.stderr,flush=True)
         finally:
             context.close()
     browser.close()

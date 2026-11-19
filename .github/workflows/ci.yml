@@ -40,34 +40,31 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Test live Atlas contract logic
-        run: node --test scripts/tests/atlas-production-contract.test.mjs
+      - name: Test Atlas contracts and project gallery query state
+        run: node --test scripts/tests/*.test.mjs
 
       - name: Production build
+        env:
+          PORTFOLIO_BUILD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: npm run build
 
       - name: Verify static export, identity, links, and résumé PDF
         run: npm run verify:export
 
-      - name: Dependency audit
-        shell: bash
-        run: |
-          set +e
-          audit_output="$(timeout 120s npm run audit 2>&1)"
-          audit_status=$?
-          set -e
-          printf '%s\n' "$audit_output"
+      - name: Dependency audit (fail closed on moderate+ or service errors)
+        run: npm run audit
 
-          if [ "$audit_status" -eq 0 ]; then
-            exit 0
-          fi
-
-          if [ "$audit_status" -eq 124 ] || printf '%s\n' "$audit_output" | grep -Eq 'Service Unavailable|audit endpoint returned an error|ECONNRESET|ETIMEDOUT|EAI_AGAIN'; then
-            echo '::warning::npm audit service is temporarily unavailable; CodeQL, Semgrep and Dependabot remain active, so CI will not fail on this external outage.'
-            exit 0
-          fi
-
-          exit "$audit_status"
+      - name: Upload verified static release candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: portfolio-static-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            out/
+            netlify.toml
+            render.yaml
+            docs/PUBLISH_READY_2026-11-16.md
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Upload deployable source
         if: github.ref == 'refs/heads/main'

@@ -1,0 +1,53 @@
+/* V6 cinematic art direction: shared UI stays theme-aware; scenes keep deep-space contrast. */
+.shell.shell{
+ --canvas:#06101c;--surface:#0d2031;--surface2:#102b3f;
+ --ink:#edfaff;--muted:#afc8d6;--line:rgba(102,201,231,.22);
+ --accent:#76e7ec;--accentInk:#031925;
+ --cardShadow:0 18px 64px rgba(0,0,0,.23);--softGlow:rgba(35,139,196,.2);
+ background:var(--canvas);
+}
+:global(html[data-theme="dark"]) .shell.shell{
+ --canvas:#06101c;--surface:#0d2031;--surface2:#102b3f;
+ --ink:#edfaff;--muted:#afc8d6;--line:rgba(102,201,231,.22);
+ --accent:#76e7ec;--accentInk:#031925;
+ --cardShadow:0 18px 64px rgba(0,0,0,.23);--softGlow:rgba(35,139,196,.2);
+}
+:global(html[data-theme="light"]) .shell.shell{
+ --canvas:#eef4f7;--surface:#fff;--surface2:#e2edf3;
+ --ink:#0b2635;--muted:#486475;--line:rgba(17,74,97,.2);
+ --accent:#076880;--accentInk:#fff;
+ --cardShadow:0 20px 60px rgba(7,37,58,.07);--softGlow:rgba(39,132,174,.12);
+}
+@media(prefers-color-scheme:light){
+ .shell.shell{
+  --canvas:#eef4f7;--surface:#fff;--surface2:#e2edf3;
+  --ink:#0b2635;--muted:#486475;--line:rgba(17,74,97,.2);
+  --accent:#076880;--accentInk:#fff;
+  --cardShadow:0 20px 60px rgba(7,37,58,.07);--softGlow:rgba(39,132,174,.12);
+ }
+}
+.shell>header{background:var(--canvas);border-color:var(--line);box-shadow:0 8px 45px rgba(0,8,23,.12)}
+.shell>header a:focus-visible,.shell button:focus-visible,.shell main a:focus-visible{outline-color:#faaf77}
+.shell>header [aria-current="page"]{box-shadow:0 0 0 1px var(--accent)}
+.shell :is(#work,#highlights,#systems,#about,#process,#collaborate,#faq){scroll-margin-top:9rem}
+.shell #work{padding-top:95px}
+.shell #work h2{font-weight:820;letter-spacing:-.065em}
+.shell #highlights{padding-top:90px}
+.shell #highlights h2{font-weight:800}
+.shell #systems{padding-top:85px}
+.shell #about{padding-top:65px}
+.shell #contact{background:linear-gradient(135deg,#7bdfe8,#57afdf 65%,#f2c297);color:#032337}
+.shell #contact a:first-child{background:#052738;color:#d9ffff!important;border-color:#052738}
+.shell #contact a:nth-child(2){color:#062e40;border-color:currentColor}
+.shell #contact a:focus-visible{outline-color:#07304b}
+.shell .metrics{margin-top:60px;margin-bottom:90px}
+.shell .metrics>div strong{color:var(--ink)}
+.shell #faq{padding-bottom:80px}
+@media(max-width:760px){
+ .shell #work{padding-top:58px}
+ .shell #highlights,.shell #systems{padding-top:52px}
+ .shell #about{padding-top:50px}
+ .shell .metrics{margin-top:30px;margin-bottom:60px}
+ .shell #faq{padding-bottom:40px}
+}
+@media(prefers-reduced-motion:reduce){.shell *{scroll-behavior:auto}}

@@ -18,10 +18,10 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  applicationName: "Abdulrahman Hajar — Software Engineering Portfolio",
-  title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
+  applicationName: "Abdulrahman Hajar — Computer Engineering Portfolio",
+  title: "Abdulrahman Hajar | Computer Engineer & Full-Stack Developer",
   description:
-    "Software engineering portfolio of Abdulrahman Hajar: full-stack products, backend systems, APIs, databases, asynchronous workflows, testing, security, reliability, deployment, AI integrations, and interactive systems.",
+    "Computer engineer Abdulrahman Hajar builds full-stack products, backend systems, APIs, databases, AI integrations and software with rigorous testing, security, reliability and delivery.",
   authors: [{ name: "Abdulrahman Hajar", url: SITE_URL }],
   creator: "Abdulrahman Hajar",
   publisher: "Abdulrahman Hajar",
@@ -31,6 +31,7 @@ export const metadata: Metadata = {
   formatDetection: { email: false, address: false, telephone: false },
   keywords: [
     "Abdulrahman Hajar",
+    "Computer Engineer",
     "Software Engineer",
     "Full-Stack Developer",
     "Full-Stack Engineer",
@@ -68,18 +69,18 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/", languages: { en: "/", ar: "/ar/", tr: "/tr/" } },
   openGraph: {
-    title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
+    title: "Abdulrahman Hajar | Computer Engineer & Full-Stack Developer",
     description:
       "Production-minded full-stack software, backend systems, AI integrations, and interactive engineering across TypeScript, React/Next.js, Node.js, APIs, databases, reliability, and delivery.",
     type: "website",
     url: "/",
-    siteName: "Abdulrahman Hajar — Software Engineering Portfolio",
+    siteName: "Abdulrahman Hajar — Computer Engineering Portfolio",
     locale: "en_US",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Abdulrahman Hajar — Software Engineer" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Abdulrahman Hajar — Computer Engineer" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
+    title: "Abdulrahman Hajar | Computer Engineer & Full-Stack Developer",
     description:
       "Full-stack products, backend systems, APIs, data, AI integrations, interactive systems, reliability, CI/CD, and production delivery.",
     images: ["/twitter-image"],
@@ -113,9 +114,9 @@ const personJsonLd = {
   name: "Abdulrahman Hajar",
   url: SITE_URL,
   image: `${SITE_URL}/opengraph-image`,
-  jobTitle: "Software Engineer · Full-Stack Developer · AI & Interactive Systems",
+  jobTitle: "Computer Engineer · Full-Stack Developer · Software Engineer",
   description:
-    "Software Engineer and Computer Engineering student building full-stack products, backend systems, APIs, data systems, AI integrations, interactive systems, and production delivery.",
+    "Computer engineer, full-stack developer and UI/UX designer building full-stack products, backend systems, APIs, data systems, AI integrations, interactive systems, and production delivery.",
   sameAs: [
     PROFILE_LINKS.github,
     PROFILE_LINKS.linkedin,
@@ -172,7 +173,7 @@ const websiteJsonLd = {
   description: "Selected software engineering work, case studies, technical capabilities, and résumé for Abdulrahman Hajar.",
   author: { "@id": `${SITE_URL}/#person` },
   dateModified: PORTFOLIO_UPDATED_AT,
-  inLanguage: "en",
+  inLanguage: ["en", "ar", "tr"],
 };
 
 const profilePageJsonLd = {
@@ -184,7 +185,7 @@ const profilePageJsonLd = {
   mainEntity: { "@id": `${SITE_URL}/#person` },
   isPartOf: { "@id": `${SITE_URL}/#website` },
   dateModified: PORTFOLIO_UPDATED_AT,
-  inLanguage: "en",
+  inLanguage: ["en", "ar", "tr"],
 };
 
 const selectedWorkJsonLd = {
@@ -206,11 +207,15 @@ const selectedWorkJsonLd = {
   })),
 };
 
-const deployCommit = process.env.RENDER_GIT_COMMIT ?? process.env.GITHUB_SHA ?? "local";
+const deployCommit = process.env.PORTFOLIO_BUILD_SHA ?? process.env.RENDER_GIT_COMMIT ?? process.env.GITHUB_SHA ?? "local";
+const appearanceInit = "(function(){try{var t=localStorage.getItem('portfolio-appearance');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch{document.documentElement.dataset.theme='light'}})()";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script id="appearance-init" dangerouslySetInnerHTML={{ __html: appearanceInit }} />
+      </head>
       <body data-deploy-commit={deployCommit}>
         {[personJsonLd, websiteJsonLd, profilePageJsonLd, selectedWorkJsonLd].map((data, index) => (
           <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />

@@ -1,6 +1,8 @@
 name: Atlas Browser QA
 
 on:
+  push:
+    branches: [fix/portfolio-next-16-4-6-20261119]
   pull_request:
     branches: [main]
     paths:
@@ -10,6 +12,16 @@ on:
       - "app/page.tsx"
       - "scripts/atlas-browser-qa.py"
       - "scripts/v4-browser-qa.py"
+      - "scripts/release-browser-qa.py"
+      - "scripts/evolution-browser-qa.py"
+      - "scripts/verify-project-pages.mjs"
+      - "scripts/localize-static.mjs"
+      - "app/projects/**"
+      - "app/ar/projects/**"
+      - "app/tr/projects/**"
+      - "app/sitemap.ts"
+      - "app/layout.tsx"
+      - "app/portfolio-data.ts"
       - "app/experience/**"
       - "app/ar/page.tsx"
       - "app/tr/page.tsx"
@@ -68,6 +80,15 @@ jobs:
 
       - name: Browser QA for 3 languages and both themes
         run: python3 scripts/v4-browser-qa.py
+
+      - name: Release navigation, storage, reflow and full-page accessibility
+        run: python3 scripts/release-browser-qa.py
+
+      - name: Project pages, shared discovery and enquiry clipboard
+        run: python3 scripts/evolution-browser-qa.py
+
+      - name: Record public demo availability
+        run: node scripts/probe-public-links.mjs
 
       - name: Upload browser evidence
         if: always()

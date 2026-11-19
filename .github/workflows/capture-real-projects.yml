@@ -1,0 +1,73 @@
+name: Capture authentic project previews
+
+# Runs only for the designated same-repo design preview branch.
+# It must never modify main or deploy user-facing code.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/capture-real-projects.py"
+      - "scripts/build-brand-icons.py"
+      - "public/brand/hajar-emblem.svg"
+      - ".github/workflows/capture-real-projects.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capture-real-projects-v6
+  cancel-in-progress: true
+
+jobs:
+  public-homepage-evidence:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'feature/cinematic-portfolio-v6-preview-20261029'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout only approved feature branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+
+      - name: Install browser and image check dependencies
+        run: python3 -m pip install --user --disable-pip-version-check playwright==1.56.0 pillow==11.3.0 cairosvg==2.7.1
+
+      - name: Capture genuine public landing pages, without sign-in
+        run: |
+          # Do not refresh already verified, dated screenshots on every PR sync.
+          if [ -f public/projects/live/eventify-actual.jpg ] && \
+             [ -f public/projects/live/bookbookhaven-actual.jpg ] && \
+             [ -f public/projects/live/fitflow-gym-actual.jpg ]; then
+            echo "All three authentic dated screenshots are already checked into this preview."
+            cp app/experience/project-captures.json capture-report.json
+            exit 0
+          fi
+          python3 scripts/capture-real-projects.py
+
+      - name: Render real HAJAR app icons at PWA and Apple dimensions
+        run: python3 scripts/build-brand-icons.py
+
+      - name: Upload capture report and actual screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: real-project-screenshots
+          path: |
+            capture-report.json
+            public/projects/live/
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Commit valid captures only to design preview branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/experience/project-captures.json public/projects/live/ public/icons/
+          if git diff --cached --quiet; then
+            echo "No new authentic evidence to commit"
+            exit 0
+          fi
+          git commit -m "feat(brand): update real HAJAR PWA icons and verified imagery [skip ci]"
+          git push origin "HEAD:feature/cinematic-portfolio-v6-preview-20261029"
