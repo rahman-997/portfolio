@@ -17,227 +17,82 @@ endobj
 endobj
 4 0 obj
 <<
-/Contents 8 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 7 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
+/A <<
+/S /URI /Type /Action /URI (https://github.com/rahman-997)
+>> /Border [ 0 0 0 ] /Rect [ 194 706.8898 336 719.8898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 5 0 obj
 <<
-/PageMode /UseNone /Pages 7 0 R /Type /Catalog
+/A <<
+/S /URI /Type /Action /URI (https://abdulrahman-hajar-portfolio.onrender.com)
+>> /Border [ 0 0 0 ] /Rect [ 46 690.8898 310 703.8898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 6 0 obj
 <<
-/Author (Abdulrahman Hajar) /CreationDate (D:20260903140556+00'00') /Creator (anonymous) /Keywords (Software Engineer, Full-Stack Developer, AI, Interactive Systems, TypeScript, React, Next.js, Node.js, Express, PostgreSQL, MongoDB, Redis, CI/CD) /ModDate (D:20260903140556+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (Software Engineer - Full-Stack Developer - AI & Interactive Systems) /Title (Abdulrahman Hajar - Software Engineer Resume) /Trapped /False
+/A <<
+/S /URI /Type /Action /URI (https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/)
+>> /Border [ 0 0 0 ] /Rect [ 324 690.8898 431 703.8898 ] /Subtype /Link /Type /Annot
 >>
 endobj
 7 0 obj
 <<
-/Count 1 /Kids [ 4 0 R ] /Type /Pages
+/Annots [ 4 0 R 5 0 R 6 0 R ] /Contents 11 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 10 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
 >>
 endobj
 8 0 obj
 <<
-/Length 7596
+/PageMode /UseNone /Pages 10 0 R /Type /Catalog
+>>
+endobj
+9 0 obj
+<<
+/Author (Abdulrahman Hajar) /CreationDate (D:20000101000000+00'00') /Creator (anonymous) /Keywords (Computer Engineer, Software Engineer, Full-Stack Developer, TypeScript, React, Next.js, Node.js, PostgreSQL, CI/CD) /ModDate (D:20000101000000+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (Computer Engineer - Full-Stack Developer - Software Engineer) /Title (Abdulrahman Hajar - Computer Engineer Resume) /Trapped /False
+>>
+endobj
+10 0 obj
+<<
+/Count 1 /Kids [ 7 0 R ] /Type /Pages
+>>
+endobj
+11 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2637
 >>
 stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-BT /F2 25 Tf 30 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 796.5354 Tm (Abdulrahman Hajar) Tj T* ET
-BT /F2 10.1 Tf 12.12 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 777.5354 Tm (Software Engineer - Full-Stack Developer - AI & Interactive Systems) Tj T* ET
-BT /F1 8.6 Tf 10.32 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 764.5354 Tm (Computer Engineering - Nisantasi University - Istanbul, Turkiye) Tj T* ET
-BT /F1 7.5 Tf 9 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 752.5354 Tm (Portfolio: abdulrahman-hajar-portfolio.onrender.com   |   GitHub: github.com/rahman-997) Tj T* ET
-BT /F1 7.5 Tf 9 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 742.5354 Tm (LinkedIn: linkedin.com/in/abdulrahman-hajjar-5430281a1) Tj T* ET
-.066667 .094118 .078431 RG
-1.1 w
-n 48.18898 733.5354 m 547.0866 733.5354 l S
-BT /F2 8 Tf 9.6 TL ET
-.098039 .443137 .231373 rg
-BT 1 0 0 1 48.18898 717.5354 Tm (PROFILE) Tj T* ET
-.85098 .87451 .858824 RG
-.55 w
-n 48.18898 714.5354 m 547.0866 714.5354 l S
-BT /F1 9.1 Tf 10.92 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 704.5354 Tm (Product-minded software engineer building complete production software systems across TypeScript interfaces, backend) Tj T* ET
-BT /F1 9.1 Tf 10.92 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 693.3354 Tm (APIs, relational and document data, caching, queues, authentication, validation, automated tests, runtime health, security) Tj T* ET
-BT /F1 9.1 Tf 10.92 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 682.1354 Tm (checks, CI/CD, reliability, AI/LLM integrations, interactive systems, and deployment. Focused on clear boundaries, reliable) Tj T* ET
-BT /F1 9.1 Tf 10.92 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 670.9354 Tm (failure handling, maintainable systems, and evidence-backed delivery.) Tj T* ET
-BT /F2 8 Tf 9.6 TL ET
-.098039 .443137 .231373 rg
-BT 1 0 0 1 48.18898 651.7354 Tm (EDUCATION) Tj T* ET
-.85098 .87451 .858824 RG
-.55 w
-n 48.18898 648.7354 m 547.0866 648.7354 l S
-BT /F2 9.4 Tf 11.28 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 638.7354 Tm (Computer Engineering) Tj T* ET
-BT /F1 8.9 Tf 10.68 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 172.9134 638.7354 Tm (Nisantasi University - Istanbul, Turkiye) Tj T* ET
-BT /F2 8 Tf 9.6 TL ET
-.098039 .443137 .231373 rg
-BT 1 0 0 1 48.18898 620.7354 Tm (TECHNICAL CAPABILITIES) Tj T* ET
-.85098 .87451 .858824 RG
-.55 w
-n 48.18898 617.7354 m 547.0866 617.7354 l S
-BT /F2 8.2 Tf 9.84 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 607.7354 Tm (Core:) Tj T* ET
-BT /F1 8.15 Tf 9.78 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 136.063 607.7354 Tm (TypeScript, JavaScript, React, Next.js, Node.js, Express 5, REST APIs, GraphQL, WebSockets, gRPC, OpenAPI,) Tj T* ET
-BT /F1 8.15 Tf 9.78 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 136.063 597.9354 Tm (Zod) Tj T* ET
-BT /F2 8.2 Tf 9.84 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 587.1354 Tm (Data & async:) Tj T* ET
-BT /F1 8.15 Tf 9.78 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 136.063 587.1354 Tm (PostgreSQL, Prisma, MongoDB, Mongoose, Redis, BullMQ) Tj T* ET
-BT /F2 8.2 Tf 9.84 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 576.3354 Tm (Quality & delivery:) Tj T* ET
-BT /F1 8.15 Tf 9.78 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 136.063 576.3354 Tm (Jest, Supertest, Docker, GitHub Actions, CI/CD, Security, Observability, Accessibility, PWA) Tj T* ET
-BT /F2 8.2 Tf 9.84 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 565.5354 Tm (Extended:) Tj T* ET
-BT /F1 8.15 Tf 9.78 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 136.063 565.5354 Tm (AI / LLM / MCP, FastAPI, Flutter) Tj T* ET
-BT /F2 8 Tf 9.6 TL ET
-.098039 .443137 .231373 rg
-BT 1 0 0 1 48.18898 549.7354 Tm (SELECTED ENGINEERING WORK) Tj T* ET
-.85098 .87451 .858824 RG
-.55 w
-n 48.18898 546.7354 m 547.0866 546.7354 l S
-BT /F2 6.8 Tf 8.16 TL ET
-.098039 .443137 .231373 rg
-BT 1 0 0 1 48.18898 536.7354 Tm (DISTRIBUTED EVENT PLATFORM) Tj T* ET
-BT /F2 9.2 Tf 11.04 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 526.7354 Tm (Eventify) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 515.7354 Tm (Express/TypeScript system with PostgreSQL/Prisma, Redis, BullMQ,) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 506.7354 Tm (durable outbox workflows, authentication, bookings/waitlists, metrics,) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 497.7354 Tm (health/readiness checks, and security-focused CI.) Tj T* ET
-BT /F2 6.8 Tf 8.16 TL ET
-.098039 .443137 .231373 rg
-BT 1 0 0 1 310.3937 536.7354 Tm (FULL-STACK COMMERCE) Tj T* ET
-BT /F2 9.2 Tf 11.04 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 310.3937 526.7354 Tm (BookHaven) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 310.3937 515.7354 Tm (Next.js + Express + MongoDB commerce system with HttpOnly) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 310.3937 506.7354 Tm (sessions, RBAC, concurrency-safe cart/checkout flows, adaptive) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 310.3937 497.7354 Tm (transactions, inventory safeguards, admin operations, validation, and) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 310.3937 488.7354 Tm (CI-backed supply-chain hardening.) Tj T* ET
-BT /F2 6.8 Tf 8.16 TL ET
-.098039 .443137 .231373 rg
-BT 1 0 0 1 48.18898 481.7354 Tm (INSTALLABLE FITNESS PWA) Tj T* ET
-BT /F2 9.2 Tf 11.04 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 471.7354 Tm (FitFlow) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 460.7354 Tm (Responsive training product with personalized plans, guided intervals,) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 451.7354 Tm (weekly progress, device-local persistence, accessibility, installability,) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 442.7354 Tm (and offline-ready behavior.) Tj T* ET
-BT /F2 6.8 Tf 8.16 TL ET
-.098039 .443137 .231373 rg
-BT 1 0 0 1 310.3937 481.7354 Tm (BACKEND REST SERVICE) Tj T* ET
-BT /F2 9.2 Tf 11.04 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 310.3937 471.7354 Tm (Venues API) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 310.3937 460.7354 Tm (Express 5 + TypeScript + Zod API with routes to controllers to) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 310.3937 451.7354 Tm (services, strict validation, centralized errors, UUID resources,) Tj T* ET
-BT /F1 7.55 Tf 9.06 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 310.3937 442.7354 Tm (persistence, and HTTP contract tests.) Tj T* ET
-BT /F2 8 Tf 9.6 TL ET
-.098039 .443137 .231373 rg
-BT 1 0 0 1 48.18898 420.7354 Tm (ENGINEERING FOCUS) Tj T* ET
-.85098 .87451 .858824 RG
-.55 w
-n 48.18898 417.7354 m 547.0866 417.7354 l S
-BT /F1 8.5 Tf 10.2 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 407.7354 Tm (Backend systems and APIs; data reliability; asynchronous workflows; full-stack product engineering; testing, security, accessibility,) Tj T* ET
-BT /F1 8.5 Tf 10.2 TL ET
-.066667 .094118 .078431 rg
-BT 1 0 0 1 48.18898 397.2354 Tm (CI/CD, deployment, AI integrations, and interactive systems.) Tj T* ET
-.85098 .87451 .858824 RG
-n 48.18898 42.51969 m 547.0866 42.51969 l S
-BT /F1 7.2 Tf 8.64 TL ET
-.360784 .411765 .388235 rg
-BT 1 0 0 1 48.18898 28.34646 Tm (Abdulrahman Hajar - Software Engineer - Full-Stack Developer - AI & Interactive Systems) Tj T* ET
- 
-endstream
+Gau0E>BAN>&q9"Fo[Bf+/samj3r=Rr[Zt5C+=C1d2Fmou()![+*EVWh5<U6*1k=u3=\`5,V+0b)o[c$$(uUItItp+9WrOcU<DYOYet<q=!PnoOTVna"XdLLaL?_qE#8Gu3kcP-cVO-;CNijmmj#USZVP;b@"V0T-f"^r=6Od;GDkK'!5:!:hBYso+Fm@S2*IP@;IN0s?/ciWLNBd*KKg38%q.pXJcR/YX2[I,`n2j]d@,X<h'NMOmKDj=o_dtkd;Dg(-2dR/5\t.L4.]SZ%Cj..Y>Omd7P+[Q#3oF%P0/I*I>%XP_h>BJ+(;^2lch76IEj6%-UJET;^3Gjp]_Pqq]+2Ob(S5kV2H$k%6W_[qec;oC0=+Xn<iY(-okCDJ^j'!>k4ht7^F2[bWffOK<W3Oo;ZQRts)6n;>HO,DgKiB:\8YaNcj(1VbE].TSa.o:b]Oa!/2,UX&nah&jtr'2c58L'-?8lI,<pm1Suq%+b/V..ArE.MMQur0_8_/_FtJ(HGi!SU$!IDR\"`PnimBOKcFWg\G3r'f=\B!fW>6mWF#6W4LT%%YRmKcc4k6j70eNFn8Kpm@EG2l"&)N7]<FFAt-p#h^NWP^)A29',N3_9R.VTALh8Cb]$^*u`Y*.iIcTcf-Ld'64gZ&P)/?B0s6'fBfMN]G`2u)VY:Q;Fgapol#_Qm"RLSl\Q!#"Es;8@dHYe6LSn"oTWBV"`<:/U5DKXAPiHJ[+^R)aQ$/;ko?#/e!4+"TWP\2k3ohU/]`Lm2F=$MG)]T$qYJB5(B]9K$o@:np2_I:18X3@Wu>/c%eE6,P15bND'"X+KJpA/-KiQA#1tqN_L7<LN5FM8i"AM'$I2bcH+98O[&XO?NU+7[#si`[));.]7\#'2$VI,YmhE[`Bn+.L?P$C\el<1_&]g$GD?!>/0*MMA/+Dn`Se!VeJ_Ap;Zj%@GoJ/muC2me5#"%co?o3P[73SUX"[QnVX?X"=+SC?K[gP-+_^aU:[Gb\D!(`Bj;33e09YEPT=ta!eKI+P9fo:3U!B%B-:n"Gba#m58m:)1n5)[r.uNjhX]K8A[nYK7*sRh]qX1UjUoMiOja'/*fn2QY2u.NSl)W+TpRGqo\h$?,jdHb/:D1e$XV>nUCZ5UI?&g^';+f\6'G"Ab+d?WrQBYoXA6SdAgR4JSWV4b#[,G8/':R]0e;s+T#\g1o\hDq2qdu+\]>-#r"?t^mhP!S]?b+HfoUN`cP9m1o%_g=,!OEV:NorMkpcGi9jHOU.i="`?AFYm3?$ok,-B0$e,%\Dn-0p+Fa-@tk]0/k?F#S;3k#c5)-G*8@5>C2hfki@+3#06NP#eRUaRt!nKOsTP#6+;ZJVt/pe"U\p/Hl$g+;B]1M/1JTQR7d]nnZT]^\;^rH5RDo^8NO[lpIMZil@)(tUGHGceL>blP+k:!9e`5#h/J"#S2;)"]XTB3%&6/O>i-?nKkhRYFh8H-0+qb;LW'h+T5*:XF2V(VDetUZe_49O$qrXZ"s=*<[[!>)KqfLK9kPD07,dKpEms(/!MU:at@IXi`4/@?p29Yda#Y<;#8b[hXgl\Z<A"Y*^j*VM*'r^C1nWeNH.j0A\O9q.,<Af&H*\e(2XfGU-.QVCh6Kqn@;,B:>tD`eW5m]Xo38GsATM!6OV0Fl!TeV;nk^3Ud8qH2"U=]0+-><`/L4Fh1T2.a&m;+<pTP86dK]_/L5k3H#_?Wa',mH$d2!Z6uV3h,9E#>6q\pI,KsWD-&I<SMZ(>i;mHP#Q[#G5.--1KF60^(!Ca\n8[3<RL&4-*@Nt%G+aq19anMT7=YaT,YSJ<-"Q5l'\TLF(4BR1+\na;[002*91Nb,'&82gVqsHFEcfiLFHl;?%JDdWhg(-BG:qfq!bM/2BY5XITbm5DhDmBLR[+AUe$`_8[#GFNGe^#!8Du#;GV@_-FYKXDY(i]8:2gX9=oJg5=jp)6nd&ZW"'?Q5Z&U&>j>TGjGZd^Umf<iOK.9@[Y(-eH<'UR\PQB=aNs^]smKB<eU)EYr!RYk>3\2BjDFXju:j<!QG?k4],ZYacL@!WuV#hi?9'SM:Y^d"[A5A_tJ7s\e2#(".rlJ\q2=]VY&#S3(H.8PdgZkJH\qIQ&]Z*)2>4GF+o:07(TZ%s^)']^8SAZj\OGH%i*UhY)(0QN'bSDZ)KZK:jWFG3@lSgNG1#DYM[c-^AG2WP\DOg&C`9Z*&S_uJNO])lU_k+*@0J.aUF@^WfM-IhaS)'pVBaTBH/W!r/PR\!0*Nb<-;3suJW,tRDkgFX0M(Z?J[&sD9bWAE%&4)Lf,16%XdNOQ5p"#O(`rU37/Um8fj*IG*HAaHUs.OTUJEI;7/':q5D\nHjUI\)I=>UNA0HB#=1B3W^5R3l79?TFj'#`BJRf[*6=U_Qkj:0gVSnC%c'jL,@-/66Vi9*!(k.oX][`(B#/l'qsWMu.0VX)q!rr%0b[65pPA.l85S[$FD&Bse83?de?SadFF\u\8I7Q9a;Hcm0I3S%LkHiIAK(-?o1.PGO*kPM0iA!XU&ImUWB'l-ok88Jr9*+_F@$"u6DX?APqn8^CHf"rftqmtPJ-0X8prAgh>dN=PI29`0=@m[Y2r^)HkeT8#!XhP`_:0Vb:NSDGM/)S%M"3#@u+m#h#-M79B16]_$~>endstream
 endobj
 xref
-0 9
+0 12
 0000000000 65535 f 
 0000000061 00000 n 
 0000000102 00000 n 
 0000000209 00000 n 
 0000000321 00000 n 
-0000000524 00000 n 
-0000000592 00000 n 
-0000001098 00000 n 
-0000001157 00000 n 
+0000000492 00000 n 
+0000000681 00000 n 
+0000000880 00000 n 
+0000001115 00000 n 
+0000001184 00000 n 
+0000001652 00000 n 
+0000001712 00000 n 
 trailer
 <<
 /ID 
-[<f9d6b2ea2617c015fe32517b7c7f2c9d><f9d6b2ea2617c015fe32517b7c7f2c9d>]
+[<f2fec28a4c3dc08343108bb04ad8a383><f2fec28a4c3dc08343108bb04ad8a383>]
 % ReportLab generated PDF document -- digest (opensource)
 
-/Info 6 0 R
-/Root 5 0 R
-/Size 9
+/Info 9 0 R
+/Root 8 0 R
+/Size 12
 >>
 startxref
-8804
+4441
 %%EOF
