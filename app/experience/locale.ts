@@ -4,7 +4,7 @@ export const localeHome = (locale: Locale) => locale === "en" ? "/" : `/${locale
 
 export const TEXT = {
   en: {
-    skip: "Skip to content", role: "Software Engineer · Full-Stack Developer",
+    skip: "Skip to content", role: "Computer Engineer · Full-Stack Developer", brandRole: "COMPUTER ENGINEER",
     navWork: "Projects", navAtlas: "AI Lab", navAbout: "About", navResume: "Résumé",
     hello: "Independent software engineering / Istanbul, Türkiye", heroTop: "Ideas built into",
     heroBottom: "working systems.", heroLead: "I design, build and ship complete digital products, from thoughtful interfaces to reliable APIs, data and production operations.",
@@ -37,7 +37,7 @@ export const TEXT = {
     otherLocaleNote: "Detailed legacy case studies and résumé remain available in English."
   },
   ar: {
-    skip: "تخطَّ إلى المحتوى", role: "مهندس برمجيات · مطوّر متكامل",
+    skip: "تخطَّ إلى المحتوى", role: "مهندس كمبيوتر · مطوّر برمجيات متكامل", brandRole: "مهندس كمبيوتر",
     navWork: "المشاريع", navAtlas: "مختبر الذكاء الاصطناعي", navAbout: "عني", navResume: "السيرة الذاتية",
     hello: "هندسة برمجيات مستقلة / إسطنبول، تركيا", heroTop: "أحوّل الأفكار إلى",
     heroBottom: "أنظمة تعمل فعلاً.", heroLead: "أصمّم وأطوّر وأطلق منتجات رقمية متكاملة، من الواجهات المدروسة إلى واجهات البرمجة والبيانات والأنظمة الإنتاجية الموثوقة.",
@@ -61,7 +61,7 @@ export const TEXT = {
       {title:"التحقق",text:"اختبارات وفحوص أمان ومراقبة للإنتاج تمنح النتائج مصداقية."}
     ],
     aboutEyebrow: "03 / نبذة", aboutTitle: "فضول تقني وانضباط هندسي.",
-    aboutText: "أنا عبدالرحمن حجار، مهندس كمبيوتر ومطوّر متكامل ومصمّم واجهات وتجربة مستخدم في إسطنبول. أعمل على الواجهات والخدمات الخلفية وتكاملات الذكاء الاصطناعي وموثوقية الأنظمة، مع التركيز على المنتجات التي تتجاوز المظهر الجميل.",
+    aboutText: "أنا عبد الرحمن حجار، مهندس كمبيوتر ومطوّر متكامل ومصمّم واجهات وتجربة مستخدم في إسطنبول. أعمل على الواجهات والخدمات الخلفية وتكاملات الذكاء الاصطناعي وموثوقية الأنظمة، مع التركيز على المنتجات التي تتجاوز المظهر الجميل.",
     aboutNote: "هندسة الحاسوب · جامعة نيشانتاشي",
     endTitle: "عندك فكرة تستحق التنفيذ؟", endText: "استكشف الكود، جرّب المنتجات أو تواصل معي لمناقشة فرص هندسة البرمجيات.",
     github: "حساب GitHub", linkedIn: "تواصل عبر LinkedIn", top: "العودة للأعلى",
@@ -70,7 +70,7 @@ export const TEXT = {
     otherLocaleNote: "دراسات الحالة التقنية السابقة والسيرة الذاتية متوفرة بالإنجليزية."
   },
   tr: {
-    skip: "İçeriğe geç", role: "Yazılım Mühendisi · Full-Stack Geliştirici",
+    skip: "İçeriğe geç", role: "Bilgisayar Mühendisi · Full-Stack Geliştirici", brandRole: "BİLGİSAYAR MÜHENDİSİ",
     navWork: "Projeler", navAtlas: "Yapay Zekâ Lab", navAbout: "Hakkımda", navResume: "Özgeçmiş",
     hello: "Bağımsız yazılım mühendisliği / İstanbul, Türkiye", heroTop: "Fikirleri çalışan",
     heroBottom: "sistemlere dönüştürüyorum.", heroLead: "Düşünülmüş arayüzlerden güvenilir API'lere, veri altyapılarına ve canlı operasyonlara kadar uçtan uca dijital ürünler tasarlıyor, geliştiriyor ve yayımlıyorum.",

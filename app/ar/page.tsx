@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import PortfolioExperience from "../experience/PortfolioExperience";
 import { SITE_URL } from "../portfolio-data";
-const title = "عبدالرحمن حجار | مهندس كمبيوتر ومطوّر متكامل";
-const description = "معرض أعمال عبدالرحمن حجار: منتجات رقمية ومواقع وخدمات خلفية وأدوات، مع مراحل التطوير ودراسات تقنية وتجارب تفاعلية.";
+const title = "عبد الرحمن حجار | مهندس كمبيوتر ومطوّر متكامل";
+const description = "معرض أعمال عبد الرحمن حجار: منتجات رقمية ومواقع وخدمات خلفية وأدوات، مع مراحل التطوير ودراسات تقنية وتجارب تفاعلية.";
 export const metadata: Metadata = {
   title, description,
   alternates: {canonical:`${SITE_URL}/ar/`,languages:{en:`${SITE_URL}/`,ar:`${SITE_URL}/ar/`,tr:`${SITE_URL}/tr/`}},

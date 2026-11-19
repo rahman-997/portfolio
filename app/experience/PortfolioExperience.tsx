@@ -29,7 +29,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
     <header className={styles.header}>
       <a className={styles.brand} href="#top" aria-label="Abdulrahman Hajar">
         <span className={`${styles.brandEmblem} ${referenceShell.logoWrap}`}><Image src="/brand/hajar-emblem.svg" width={37} height={47} alt="" unoptimized /></span>
-        <span className={styles.brandText}><strong>HAJAR</strong><small>{locale==="ar"?"مهندس برمجيات":locale==="tr"?"YAZILIM MÜHENDİSİ":"SOFTWARE ENGINEER"}</small></span>
+        <span className={styles.brandText}><strong>HAJAR</strong><small>{t.brandRole}</small></span>
       </a>
       <nav className={styles.nav} aria-label={locale==="ar"?"التنقل الرئيسي":locale==="tr"?"Ana gezinme":"Primary navigation"}>
         <a href="#work">{t.navWork}</a>
@@ -111,7 +111,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
       </section>
     </main>
     <footer className={styles.footer}>
-      <a className={referenceShell.footerBrand} href="#top"><Image src="/brand/hajar-emblem.svg" alt="" width={34} height={43} unoptimized/><span><strong>HAJAR</strong><small>{locale==="ar"?"مهندس برمجيات":locale==="tr"?"YAZILIM MÜHENDİSİ":"SOFTWARE ENGINEER"}</small></span></a>
+      <a className={referenceShell.footerBrand} href="#top"><Image src="/brand/hajar-emblem.svg" alt="" width={34} height={43} unoptimized/><span><strong>HAJAR</strong><small>{t.brandRole}</small></span></a>
       <nav className={referenceShell.footerNav} aria-label={locale==="ar"?"روابط التذييل":locale==="tr"?"Alt gezinme":"Footer links"}><a href="#work">{t.navWork}</a><a href="#blueprint-lab">{locale==="ar"?"مختبر الأنظمة":locale==="tr"?"Mimari Lab":"Blueprint Lab"}</a><a href="#ai-lab">{t.navAtlas}</a><a href="#about">{t.navAbout}</a><a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a></nav>
       <span>© 2026 Abdulrahman Hajar</span><a href="#top">{t.top} ↑</a>
     </footer>
