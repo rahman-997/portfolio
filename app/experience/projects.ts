@@ -87,6 +87,8 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
 ] as const;
 
 export const PUBLIC_PROJECT_COUNT = PUBLIC_PROJECTS.length;
+/** Count only public projects with a published case-study URL. */
+export const PUBLIC_CASE_STUDY_COUNT = PUBLIC_PROJECTS.filter(project => Boolean(project.study)).length;
 
 export const ALL_PROJECTS: readonly PortfolioProject[] = [...PUBLIC_PROJECTS, ...ADDITIONAL_PROJECTS];
 export const ALL_PROJECT_COUNT = ALL_PROJECTS.length;
