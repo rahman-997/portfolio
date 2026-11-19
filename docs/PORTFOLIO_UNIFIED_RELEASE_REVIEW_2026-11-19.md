@@ -28,3 +28,28 @@ Windows Desktop Commander devices OFFLINE; this container cannot resolve github.
 - Changed the audit threshold on the unified review branch to `moderate` and removed the CI shell wrapper that treated some npm audit service outages as success. The existing audit retry script remains and **fails after bounded retry exhaustion**.
 - New `scripts/tests/qa-security-gates.test.mjs` requires these properties, preventing accidental weakening in future review changes.
 - Consequently the unified branch is intentionally **NO-GO** until the Next.js advisory is fixed with a consistent regenerated lockfile and the exact commit passes audit and all other gates.
+
+
+## Exact GitHub Actions artifacts used for evidence
+- **Old baseline only:** downloaded static release artifact #14472984552 from [successful CI run 44405606755](https://github.com/rahman-997/portfolio/actions/runs/44405606755), SHA \`db70cec767c16222794f4f4220e5aea9c2b8bb4c\`. It contains 517 entries, including full static output and 66 localized project detail pages.
+- Ran the **security verifier code byte-identical to Draft PR #51** against this real static output: PASS for 66 pages, three locales, sitemap, RTL, project-source boundaries, fork provenance.
+- Injected five malicious GitHub source-href cases into copies of the **real exported** pages (private canonical URL, protocol-relative private URL, numeric-entity-encoded private URL, percent-encoded private URL, and spoofed upstream credit) and re-ran the verifier: all five were rejected; original files restored and baseline PASS again.
+- Read historical [Atlas Browser QA run 43933499530](https://github.com/rahman-997/portfolio/actions/runs/43933499530) release report and screenshot: 23 scenarios PASS; only \`tr-dark-320\` FAIL, expected one search result but found 22.
+- Tried to run an actual local Playwright Chromium probe against the extracted static baseline, but this container blocks navigation to \`localhost\` **and** \`file://\` with \`ERR_BLOCKED_BY_ADMINISTRATOR\`. This is an environment policy blocker, not evidence that Portfolio succeeded or failed new mobile E2E.
+- Read latest **old-baseline** audit log from CI run 44405606755: one **moderate** Next.js advisory remained. That CI marked audit PASS because the script originally used \`--audit-level=high\`. Our new integrated branch hardens the threshold to \`moderate\` and refuses to waive npm audit service failures. No newer audit on this branch has been run.
+
+## Zero-cost reproduction on the user's isolated Windows checkout
+The checked source contains no mandatory paid APIs; run these commands from a new **non-main** QA branch:
+\`\`\`powershell
+npm ci --no-audit --no-fund
+node --test scripts/tests/*.test.mjs
+npm run lint
+npm run typecheck
+npm run build
+npm run verify:export
+npm run audit
+python -m http.server 4173 --bind 127.0.0.1 --directory out
+\`\`\`
+Run the three existing Playwright scripts in a separate terminal against \`ATLAS_BASE_URL=http://127.0.0.1:4173\` and require every case to pass. Separate hosted CodeQL/Semgrep checks must validate the **same** reviewed commit. Recreate the lockfile from supported secure Next.js package versions before release; do not hand-edit lock integrity metadata.
+
+None of this happened on production; **NO-GO** until exact-commit validation and separate publication approval.
