@@ -10,6 +10,7 @@ for(const locale of ["en","ar","tr"]){
   const home=readFileSync(`out/${prefix}index.html`,"utf8");
   check(home.includes('id="contact-brief"'),`${locale}: enquiry composer missing`);
   check(home.includes('id="share-projects"'),`${locale}: share control missing`);
+  check(hasOnlyApprovedPortfolioRepoAnchors(home,allowed),`${locale}: private or disguised GitHub source in gallery`);
   for(const id of ids){
     const path=`/${prefix}projects/${id}/`;
     const file=`out${path}index.html`;
