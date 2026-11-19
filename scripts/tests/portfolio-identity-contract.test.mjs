@@ -44,3 +44,14 @@ test("CI export verification inspects localized published role and résumé", ()
   for (const language of ["en", "ar", "tr"]) assert.ok(verification.includes('locale:"' + language + '"'));
   assert.ok(verification.includes('roleCount === 2'));
 });
+
+
+test("downloadable PDF metadata matches the verified Computer Engineer identity", () => {
+  const data = readFileSync(new URL("../../public/Abdulrahman-Hajar-Resume.pdf", import.meta.url));
+  const pdf = data.toString("latin1");
+  assert.equal(data.subarray(0, 5).toString("latin1"), "%PDF-");
+  assert.match(pdf, /\/Title \(Abdulrahman Hajar - Computer Engineer Resume\)/);
+  assert.doesNotMatch(pdf, /\/Title \(Abdulrahman Hajar - Software Engineer Resume\)/);
+  assert.match(pdf, /\/URI \(https:\/\/github\.com\/rahman-997\)/);
+  assert.match(pdf, /\/URI \(https:\/\/www\.linkedin\.com\/in\//);
+});

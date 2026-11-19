@@ -25,3 +25,20 @@ const resume = readFileSync("out/resume/index.html","utf8");
 assert(resume.includes("COMPUTER ENGINEER · FULL-STACK DEVELOPER · SOFTWARE ENGINEER"), "resume hero role not updated");
 assert(resume.includes("Computer Engineer · Full-Stack Developer · Software Engineer"), "resume professional snapshot not updated");
 console.log("Professional identity export verified: 3 languages, 2 brand placements each and online résumé.");
+
+// Compare the *downloadable* binary with the web résumé identity. Source-level
+// checks alone would miss an old PDF asset left behind after an HTML redesign.
+const pdfPath = "out/Abdulrahman-Hajar-Resume.pdf";
+assert(existsSync(pdfPath), "downloadable PDF is missing from static export");
+const pdfBytes = readFileSync(pdfPath);
+const pdfHeader = pdfBytes.subarray(0, 5).toString("latin1");
+const pdfStructure = pdfBytes.toString("latin1");
+assert(pdfHeader === "%PDF-", "downloadable PDF header is invalid");
+assert(pdfStructure.includes("/Title (Abdulrahman Hajar - Computer Engineer Resume)"),
+  "downloadable PDF still has the old software-engineer title or missing metadata");
+assert(pdfStructure.includes("/URI (https://github.com/rahman-997)"),
+  "downloadable PDF lacks the expected clickable GitHub contact");
+assert(pdfStructure.includes("/URI (https://www.linkedin.com/in/"),
+  "downloadable PDF lacks a clickable LinkedIn contact");
+console.log("Downloadable résumé PDF contract verified: primary title, binary header and contact links.");
+
