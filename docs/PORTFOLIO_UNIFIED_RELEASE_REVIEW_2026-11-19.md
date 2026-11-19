@@ -22,3 +22,9 @@ This does NOT automatically clear prior `npm audit` results; rerun audit online 
 Windows Desktop Commander devices OFFLINE; this container cannot resolve github.com or registry.npmjs.org. No complete checkout, npm install, full build or Playwright against actual bundle was possible in this session. Tests of exact JS modules, isolated state harness and synthetic pages do not constitute a full product release test.
 
 **NO-GO. Draft only; $0 additional costs, no main changes, no production deployment.**
+
+## Audit fail-closed hardening (19 Nov 2026)
+- The successful 18 Nov [CI run #44405606755](https://github.com/rahman-997/portfolio/actions/runs/44405606755), **on the old PR #47 base SHA**, logged **1 moderate Next.js advisory** but exited 0 because `npm audit --audit-level=high` only rejects high/critical. This is not a clean vulnerability-free bill of health.
+- Changed the audit threshold on the unified review branch to `moderate` and removed the CI shell wrapper that treated some npm audit service outages as success. The existing audit retry script remains and **fails after bounded retry exhaustion**.
+- New `scripts/tests/qa-security-gates.test.mjs` requires these properties, preventing accidental weakening in future review changes.
+- Consequently the unified branch is intentionally **NO-GO** until the Next.js advisory is fixed with a consistent regenerated lockfile and the exact commit passes audit and all other gates.
