@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { readExplorerLocation, shouldApplyExplorerSnapshot } from "./project-query-sync.mjs";
 import type { Locale } from "./locale";
 import { TEXT, localeHome } from "./locale";
 import { projectPath, projectInquiryPath } from "./project-paths";
@@ -8,6 +9,7 @@ import styles from "./experience.module.css";
 
 type Filter = "all" | ProjectGroup;
 export default function ProjectExplorer({locale}:{locale:Locale}) {
+  const userInteracted=useRef(false);
   const [filter,setFilter] = useState<Filter>("all");
   const [query,setQuery] = useState("");
   const [ready,setReady] = useState(false);
@@ -15,18 +17,22 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
   const [shareUrl,setShareUrl] = useState("");
   useEffect(()=>{
     let frame=0;
-    const sync=()=>{
-      const params=new URLSearchParams(window.location.search);
-      const category=params.get("category")??"all";
-      const allowed:Filter[]=["all","product","backend","tools","web"];
+    const sync=(initial:boolean)=>{
+      cancelAnimationFrame(frame);
+      const snapshot=readExplorerLocation(window.location.search);
       frame=requestAnimationFrame(()=>{
-        setFilter(allowed.includes(category as Filter)?category as Filter:"all");
-        setQuery((params.get("q")??"").slice(0,120));
+        // A slow initial frame must not erase a search the visitor already typed.
+        if(shouldApplyExplorerSnapshot(initial,userInteracted.current)){
+          setFilter(snapshot.filter);
+          setQuery(snapshot.query);
+        }
         setReady(true);
       });
     };
-    sync();window.addEventListener("popstate",sync);
-    return ()=>{cancelAnimationFrame(frame);window.removeEventListener("popstate",sync);};
+    const onPopState=()=>sync(false);
+    sync(true);
+    window.addEventListener("popstate",onPopState);
+    return ()=>{cancelAnimationFrame(frame);window.removeEventListener("popstate",onPopState);};
   },[]);
   useEffect(()=>{
     if(!ready)return;
@@ -58,19 +64,19 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
       <span>{t.searchProjects}</span>
       <input id="project-search" type="search" dir="auto" value={query} maxLength={120}
         aria-controls="project-grid" placeholder={t.searchPlaceholder}
-        onChange={event=>{setQuery(event.target.value);setShareStatus("idle");}} />
+        onChange={event=>{userInteracted.current=true;setQuery(event.target.value);setShareStatus("idle");}} />
     </label>
     <div className={styles.projectToolbar}>
       <div className={styles.filterList} role="group" aria-label={t.projectEyebrow}>
         {filters.map(item=><button key={item.id} type="button"
           className={filter===item.id?styles.filterActive:styles.filter}
-          aria-pressed={filter===item.id} onClick={()=>{setFilter(item.id);setShareStatus("idle");}}>{item.label}</button>)}
+          aria-pressed={filter===item.id} onClick={()=>{userInteracted.current=true;setFilter(item.id);setShareStatus("idle");}}>{item.label}</button>)}
       </div>
       <output className={styles.resultCount} aria-live="polite">{t.projectCount}: <bdi dir="ltr">{String(filtered.length).padStart(2,"0")}</bdi></output>
       <button id="share-projects" type="button" className={styles.shareProjects} onClick={()=>void share()}>{t.shareProjects} ↗</button>
     </div>
     {shareStatus!=="idle"?<div className={styles.shareFeedback} role="status"><p>{shareStatus==="copied"?t.linkCopied:t.copyManually}</p>{shareStatus==="manual"?<input aria-label={t.galleryLink} value={shareUrl} readOnly dir="ltr" onFocus={event=>event.target.select()}/>:null}</div>:null}
-    <div id="project-grid" className={styles.projectGrid} data-project-total={ALL_PROJECT_COUNT}>
+    <div id="project-grid" className={styles.projectGrid} data-project-total={ALL_PROJECT_COUNT} data-gallery-ready={ready ? "true" : "false"}>
       {filtered.map(p=><article className={styles.project} key={p.id} data-project-id={p.id}
         data-project-group={p.group} data-project-stage={projectStage(p)} data-source-visibility={p.source?"public":"private"}>
         <div className={styles.cardTop}>
@@ -93,7 +99,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
       </article>)}
     </div>
     {filtered.length===0?<div className={styles.emptyProjects} role="status"><p>{t.noProjects}</p>
-      <button type="button" onClick={()=>{setQuery("");setFilter("all");setShareStatus("idle");}}>{t.resetProjects}</button></div>:null}
+      <button type="button" onClick={()=>{userInteracted.current=true;setQuery("");setFilter("all");setShareStatus("idle");}}>{t.resetProjects}</button></div>:null}
     <p className={styles.repoNotice}>{t.repoNotice} {t.otherLocaleNote}</p>
   </>;
 }
