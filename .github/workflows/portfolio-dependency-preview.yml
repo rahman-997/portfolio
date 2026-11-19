@@ -3,9 +3,7 @@ name: Portfolio Dependency Security Remediation (Preview Only)
 # This branch is public, standard ubuntu-latest hosted Actions are free.
 # Never run on main, use production credentials, or deploy.
 on:
-  push:
-    branches:
-      - fix/portfolio-next-16-4-6-20261119
+  workflow_dispatch:
 
 permissions:
   contents: write

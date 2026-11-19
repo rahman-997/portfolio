@@ -1,6 +1,8 @@
 name: Atlas Browser QA
 
 on:
+  push:
+    branches: [fix/portfolio-next-16-4-6-20261119]
   pull_request:
     branches: [main]
     paths:
