@@ -2,7 +2,7 @@ name: Security scanners
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix/portfolio-next-16-4-6-20261119]
   pull_request:
     branches: [main]
   workflow_dispatch:

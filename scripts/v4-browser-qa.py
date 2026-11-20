@@ -55,7 +55,7 @@ with sync_playwright() as pw:
                               f"{name}: Arabic cinematic headline wrapped awkwardly: {headline}")
                     work = page.locator("#work")
                     # SSR + networkidle do not prove that React hydrated its event handlers.
-                    work.locator('#project-grid[data-gallery-ready="true"]').wait_for(timeout=15000)
+                    work.locator('#project-grid[data-gallery-ready="true"]').wait_for(state="attached", timeout=15000)
                     check(work.locator("article").count() == 22,
                           f"{name}: missing portfolio projects")
                     check(page.locator("#ai-lab").count() == 1, f"{name}: Atlas missing")

@@ -60,7 +60,7 @@ with sync_playwright() as pw:
                     response = page.goto(BASE+route, wait_until="networkidle")
                     assert response.status == 200
                     expect(page.locator("html")).to_have_attribute("data-theme", theme)
-                    page.locator('#project-grid[data-gallery-ready="true"]').wait_for(timeout=15000)
+                    page.locator('#project-grid[data-gallery-ready="true"]').wait_for(state="attached", timeout=15000)
                     expect(page.locator("#work article")).to_have_count(22)
                     assert_layout(page)
                     assert page.locator('meta[property="og:title"]').get_attribute("content") == page.title(), "sharing title differs from page title"
@@ -77,8 +77,46 @@ with sync_playwright() as pw:
                         page.locator('a[href="#main"]').focus()
                         page.locator('a[href="#main"]').press("Enter")
                         expect(page.locator("#main")).to_be_focused()
+                        # Diagnostic-only capture; never retries or overrides user-facing input.
+                        page.evaluate("""() => {
+                          const samples = [];
+                          const initialInput = document.querySelector('#project-search');
+                          const sample = (label) => {
+                            if(samples.length >= 160) return;
+                            const input = document.querySelector('#project-search');
+                            const grid = document.querySelector('#project-grid');
+                            samples.push({
+                              label, t: Math.round(performance.now()),
+                              value: input?.value ?? null,
+                              sameInput: input === initialInput,
+                              ready: grid?.getAttribute('data-gallery-ready') ?? null,
+                              projects: document.querySelectorAll('#work article').length,
+                              query: location.search, hash: location.hash
+                            });
+                          };
+                          document.addEventListener('input', event => {
+                            if(event.target?.id === 'project-search') sample('native-input');
+                          }, true);
+                          window.addEventListener('popstate', () => sample('popstate'));
+                          window.addEventListener('hashchange', () => sample('hashchange'));
+                          const work = document.querySelector('#work');
+                          if(work) new MutationObserver(() => {
+                            if(document.querySelector('#project-search') !== initialInput)
+                              sample('input-node-replaced');
+                          }).observe(work, {childList:true, subtree:true});
+                          window.__portfolioGalleryQA = {sample, samples};
+                          sample('installed');
+                        }""")
                         page.locator("#project-search").fill("HajarCare")
-                        expect(page.locator("#work article")).to_have_count(1)
+                        page.evaluate("window.__portfolioGalleryQA?.sample('after-fill')")
+                        try:
+                            expect(page.locator("#work article")).to_have_count(1)
+                        finally:
+                            trace = page.evaluate("""() => {
+                              window.__portfolioGalleryQA?.sample('after-assertion');
+                              return window.__portfolioGalleryQA?.samples || [];
+                            }""")
+                            (OUT/(name+"-gallery-trace.json")).write_text(json.dumps(trace, indent=2))
                         page.locator("#work").screenshot(path=str(OUT/(name+"-project.png")), animations="disabled")
                         page.locator("#project-search").fill("")
                         expect(page.locator("#work article")).to_have_count(22)
@@ -107,7 +145,7 @@ with sync_playwright() as pw:
             expect(page.locator("html")).to_have_attribute("lang", locale)
             expect(page.locator("html")).to_have_attribute("dir", "rtl" if locale=="ar" else "ltr")
             expect(page.locator("html")).to_have_attribute("data-theme", "light")
-            page.locator('#project-grid[data-gallery-ready="true"]').wait_for(timeout=15000)
+            page.locator('#project-grid[data-gallery-ready="true"]').wait_for(state="attached", timeout=15000)
             page.locator("header button").click()
             expect(page.locator("html")).to_have_attribute("data-theme", "dark")
             page.locator("#project-search").fill("LUMERA")
