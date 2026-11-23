@@ -9,7 +9,7 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
 {
     id:"fitflow-gym", name:"FitFlow", group:"product", original:true,
     stack:["Next.js","React","TypeScript","PWA"],
-    cover:"/projects/fitflow-cover.svg",
+    cover:"/projects/fitflow-real-interface.webp",
     source:"https://github.com/rahman-997/fitflow-gym",
     demo:"https://fitflow-gym.onrender.com",study:"/work/fitflow/",
     text:{
