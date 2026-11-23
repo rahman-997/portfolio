@@ -89,6 +89,10 @@
 .projectNumber{font-size:.67rem;letter-spacing:.1em;color:var(--muted);font-weight:800}
 .originalTag,.forkTag{font-size:.57rem;letter-spacing:.07em;text-transform:uppercase;font-weight:750;border:1px solid var(--line);padding:.43rem .65rem;border-radius:999px;color:var(--muted)}
 .forkTag{color:var(--accent);border-color:var(--accent)}
+.projectPreview{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;margin:1.55rem 0 1.35rem;border:1px solid var(--line);border-radius:15px;background:var(--surface2)}
+.projectPreview::after{content:"";position:absolute;inset:50% 0 0;background:linear-gradient(transparent,rgba(4,15,22,.16));pointer-events:none}
+.projectPreviewImage{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .35s ease}
+.project:hover .projectPreviewImage{transform:scale(1.035)}
 .cardGlyph{font-size:2rem;margin:1.8rem 0 1.25rem;color:var(--accent);font-weight:700}
 .project h3{font-size:clamp(1.65rem,2.2vw,2.15rem);letter-spacing:-.05em;margin:0 0 .5rem}
 .projectHeadline{font-size:.91rem;line-height:1.5;display:block;margin-bottom:.5rem}
