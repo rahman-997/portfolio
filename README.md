@@ -40,7 +40,14 @@ Every featured project links to **live proof, source code, and an engineering ca
 
 ## Frontend-first update · 2026-11-23\n\n- FitFlow and Mizan now lead the public project library; the upstream fork remains explicitly identified.\n- Mizan has a standalone engineering case study and appears in the three-language evidence section.
 - Mizan preview is an authentic screenshot captured from a freshly cloned app in an isolated browser profile, showing bundled demo transactions; no personal account data.
-- FitFlow preview uses an optimized WebP screenshot from its locally built static production output, with no development browser overlay.\n- Mizan's historical demo URL is **not treated as verified**; no public demo button appears in its case study.\n- English, Arabic RTL, and Turkish copy leads with frontend experience, accessibility, UI/UX and React.\n- A one-page Frontend résumé PDF and accessible printable HTML are now included and linked from the résumé page; the older engineering PDF remains available at its original URL.\n- Every change is intended for review on a feature branch; no production deployment is part of this change.\n\n## Visual direction
+- FitFlow preview uses an optimized WebP screenshot from its locally built static production output, with no development browser overlay.\n- Mizan's historical demo URL is **not treated as verified**; no public demo button appears in its case study.\n- English, Arabic RTL, and Turkish copy leads with frontend experience, accessibility, UI/UX and React.\n- A one-page Frontend résumé PDF and accessible printable HTML are now included and linked from the résumé page; the older engineering PDF remains available at its original URL.\n- Every change is intended for review on a feature branch; no production deployment is part of this change.\n\n## Image verification — 2026-11-23
+
+- GitHub Actions browser testing verified that FitFlow and Mizan screenshots load from local static assets in the five-case-study gallery.
+- Historical `bookhaven-cover.jpg` and `eventify-cover.jpg` files are present but do not decode successfully in the browser. Their previews are temporarily suppressed; the original files remain untouched for possible recovery.
+- Do not replace these with invented screenshots or imply that the unavailable public demo sites are verified. Restore artwork only after capturing actual project interfaces and validating the exported images.
+- Case-study titles are tested across 320px, 390px and 820px viewports, including text bounds and horizontal overflow.
+
+## Visual direction
 
 The active design uses a restrained dark engineering identity rather than a generic developer template:
 
