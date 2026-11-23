@@ -6,7 +6,7 @@ export const TEXT = {
   en: {
     skip: "Skip to content", role: "Frontend Engineer · UI/UX Designer",
     navWork: "Projects", navAtlas: "AI Lab", navAbout: "About", navResume: "Résumé",
-    hello: "Abdulrahman Hajar / Frontend & product design", heroTop: "Distinctive interfaces."
+    hello: "Abdulrahman Hajar / Frontend & product design", heroTop: "Distinctive interfaces.",
     heroBottom: "Thoughtful engineering.", heroLead: "I create fast, accessible React and Next.js experiences with considered UI/UX, responsive layouts and multilingual RTL support. Explore the real products and the code behind them.",
     workButton: "Explore selected work", contactButton: "Let's connect", scrollLabel: "SCROLL TO EXPLORE",
     dashboard: "DESIGN + ENGINEERING", visualTitle: "Interfaces with purpose",
