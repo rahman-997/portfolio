@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
@@ -9,6 +9,21 @@ import styles from "./experience.module.css";
 type Filter = "all" | ProjectGroup;
 export default function ProjectExplorer({locale}:{locale:Locale}) {
   const [filter,setFilter] = useState<Filter>("all");
+  const [query,setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const focusSearch = (event: KeyboardEvent) => {
+      if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) return;
+      const target = event.target;
+      if (target instanceof HTMLElement && (
+        target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)
+      )) return;
+      event.preventDefault();
+      inputRef.current?.focus();
+    };
+    window.addEventListener("keydown", focusSearch);
+    return () => window.removeEventListener("keydown", focusSearch);
+  }, []);
   const t=TEXT[locale];
   const filters: {id:Filter; label:string}[] = [
     {id:"all",label:t.filterAll},
@@ -16,7 +31,20 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
     {id:"backend",label:t.filterBackend},
     {id:"tools",label:t.filterTools}
   ];
-  const filtered=filter==="all"?PUBLIC_PROJECTS:PUBLIC_PROJECTS.filter(p=>p.group===filter);
+  const searchCopy = {
+    en: { label: "Search projects or technologies", placeholder: "Try React, Mizan or API…", clear: "Clear search", empty: "No matching projects. Try another keyword or reset the filters.", reset: "Show all projects", hint: "Press / to search" },
+    ar: { label: "ابحث عن مشروع أو تقنية", placeholder: "جرّب React أو Mizan أو API…", clear: "مسح البحث", empty: "ما لقينا مشاريع مطابقة. جرّب كلمة ثانية أو امسح الفلاتر.", reset: "عرض كل المشاريع", hint: "اضغط / للبحث" },
+    tr: { label: "Proje veya teknoloji ara", placeholder: "React, Mizan veya API deneyin…", clear: "Aramayı temizle", empty: "Eşleşen proje bulunamadı. Başka bir kelime deneyin veya filtreleri sıfırlayın.", reset: "Tüm projeleri göster", hint: "Aramak için / tuşuna basın" },
+  }[locale];
+  const normalizedQuery = query.trim().toLocaleLowerCase(locale);
+  const filtered = PUBLIC_PROJECTS.filter(p => {
+    if (filter !== "all" && p.group !== filter) return false;
+    if (!normalizedQuery) return true;
+    const searchable = [p.name, p.id, ...p.stack, p.text[locale].headline, p.text[locale].description]
+      .join(" ").toLocaleLowerCase(locale);
+    return searchable.includes(normalizedQuery);
+  });
+  const resetSearch = () => { setQuery(""); setFilter("all"); inputRef.current?.focus(); };
   return <>
     <div className={styles.projectToolbar}>
       <div className={styles.filterList} role="group" aria-label={t.projectEyebrow}>
@@ -26,7 +54,23 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
       </div>
       <output className={styles.resultCount} aria-live="polite">{String(filtered.length).padStart(2,"0")} {t.projectCount}</output>
     </div>
-    <div className={styles.projectGrid}>
+    <div className={styles.projectSearchBar}>
+      <div className={styles.projectSearchField}>
+        <label htmlFor="portfolio-project-search">{searchCopy.label}</label>
+        <div className={styles.projectSearchInput}>
+          <span aria-hidden="true" className={styles.projectSearchSymbol}>⌕</span>
+          <input id="portfolio-project-search" ref={inputRef} type="search" autoComplete="off"
+            value={query} placeholder={searchCopy.placeholder}
+            onChange={event => setQuery(event.target.value)}
+            onKeyDown={event => { if (event.key === "Escape" && query) { event.preventDefault(); setQuery(""); } }}
+            aria-controls="portfolio-project-results" />
+          {query ? <button type="button" aria-label={searchCopy.clear}
+            onClick={() => { setQuery(""); inputRef.current?.focus(); }}>×</button> : <kbd aria-hidden="true">/</kbd>}
+        </div>
+      </div>
+      <span className={styles.projectSearchHint}>{searchCopy.hint}</span>
+    </div>
+    <div className={styles.projectGrid} id="portfolio-project-results">
       {filtered.map((p,index)=><article className={styles.project} key={p.id}>
         <div className={styles.cardTop}>
           <span className={styles.projectNumber}>{String(index+1).padStart(2,"0")} / {String(filtered.length).padStart(2,"0")}</span>
@@ -44,6 +88,10 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
         </div>
       </article>)}
     </div>
+    {filtered.length === 0 ? <div className={styles.projectEmpty} data-empty-project-results role="status">
+      <p>{searchCopy.empty}</p>
+      <button type="button" onClick={resetSearch}>{searchCopy.reset} ↗</button>
+    </div> : null}
     <p className={styles.repoNotice}>{t.repoNotice} {t.otherLocaleNote}</p>
   </>;
 }
