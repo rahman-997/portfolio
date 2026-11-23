@@ -25,10 +25,10 @@ export default function MobileNavigation({locale}:{locale:Locale}) {
       <span aria-hidden="true" className={styles.menuBars}><i/><i/></span>
       <span>{open ? (locale==="ar"?"إغلاق":locale==="tr"?"Kapat":"Close") : (locale==="ar"?"القائمة":locale==="tr"?"Menü":"Menu")}</span>
     </button>
-    {open && <nav id="portfolio-mobile-links" className={styles.mobilePanel} aria-label={menuLabel} onKeyDown={event=>{if(event.key==="Escape")setOpen(false);}}>
+    <nav id="portfolio-mobile-links" className={styles.mobilePanel} aria-label={menuLabel} hidden={!open} onKeyDown={event=>{if(event.key==="Escape")setOpen(false);}}>
       {links.map((item,i)=><a href={item.href} key={item.href} onClick={()=>setOpen(false)}>
         <span>{String(i+1).padStart(2,"0")}</span>{item.label}<span aria-hidden="true">↗</span>
       </a>)}
-    </nav>}
+    </nav>
   </div>;
 }
