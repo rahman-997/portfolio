@@ -8,6 +8,7 @@ from playwright.sync_api import sync_playwright
 from atlas_live_marker import assert_expected_deploy
 
 BASE = os.environ.get("ATLAS_BASE_URL", "http://127.0.0.1:4173").rstrip("/")
+IS_LOCAL_EXPORT = BASE.startswith("http://127.0.0.1:") or BASE.startswith("http://localhost:")
 EXPECTED_SHA = os.environ.get("ATLAS_EXPECTED_SHA", "").strip()
 AXE_SCRIPT = os.environ.get("ATLAS_AXE_SCRIPT", "node_modules/axe-core/axe.min.js")
 OUTPUT = Path(os.environ.get("ATLAS_QA_OUTPUT", "atlas-qa-artifacts"))
@@ -127,9 +128,10 @@ with sync_playwright() as playwright:
                 page.screenshot(path=str(OUTPUT / "desktop-full-page.png"), full_page=True,
                     animations="disabled")
 
-            if name == "desktop":
+            if name == "desktop" or not IS_LOCAL_EXPORT:
+                # Live production stays on the old navigation until this PR is approved and deployed.
                 check(page.get_by_role("link", name="Explore AI Lab").count() == 1,
-                      f"{name}: missing desktop AI Lab navigation")
+                      f"{name}: missing published/desktop AI Lab navigation")
             else:
                 menu = page.get_by_role("button", name="Navigation menu")
                 check(menu.count() == 1 and menu.get_attribute("aria-expanded") == "false",
