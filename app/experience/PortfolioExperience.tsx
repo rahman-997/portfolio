@@ -24,7 +24,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
       <nav className={styles.nav} aria-label={locale==="ar"?"التنقل الرئيسي":locale==="tr"?"Ana gezinme":"Primary navigation"}>
         <a href="#work">{t.navWork}</a>
         <a href="#highlights">{more.navHighlights}</a>
-        <a href="#ai-lab">{t.navAtlas}</a>
+        <a href="#ai-lab">{locale==="en"?"Explore AI Lab":t.navAtlas}</a>
         <a href="#collaborate">{locale==="ar"?"الخدمات":locale==="tr"?"Hizmetler":"Services"}</a>
         <a href="#about">{t.navAbout}</a>
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
