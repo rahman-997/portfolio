@@ -1,5 +1,5 @@
 export const SITE_URL = "https://abdulrahman-hajar-portfolio.onrender.com";
-export const PORTFOLIO_UPDATED_AT = "2026-09-03T14:12:35.000Z";
+export const PORTFOLIO_UPDATED_AT = "2026-11-23T11:44:00.000Z";
 export const THEME_COLOR = "#07100f";
 
 export const PROFILE_LINKS = {
@@ -200,9 +200,74 @@ export const PROJECTS = {
       "GitHub Actions CI",
     ],
   },
+  mizan: {
+    slug: "mizan",
+    index: "04",
+    name: "Mizan Finance",
+    label: "Privacy-first finance dashboard",
+    eyebrow: "Frontend product · Accessibility · RTL",
+    thesis: "A financial dashboard that respects users, languages, and their data.",
+    summary:
+      "A responsive, local-first personal finance application with transaction management, monthly budgets, spending visualizations, accessible interactions, Arabic/English localization, and right-to-left layouts.",
+    stack: ["React", "TypeScript", "Recharts", "Zod", "PWA", "RTL", "Responsive CSS"],
+    languages: ["TypeScript", "JavaScript", "CSS"],
+    proof: [
+      "Responsive finance dashboards and visualizations",
+      "Arabic / English interface and RTL layout",
+      "Validated transaction and budget forms",
+      "Offline-capable installable application",
+      "No public demo verified; source code available",
+    ],
+    live: null,
+    runtime: null,
+    source: "https://github.com/rahman-997/mizan-finance",
+    cover: null,
+    visual: "product",
+    problem:
+      "Financial dashboards must make dense information understandable across screens and writing directions. Users should be able to track spending and budgets without having to provide bank credentials or rely on a hosted account.",
+    solution:
+      "Mizan combines responsive transaction and budget flows with accessible charting, clear loading and error states, local browser persistence, and language-aware layout. JSON backup and restore provide a user-controlled way to move personal data.",
+    architecture: [
+      "Responsive React / TypeScript application with client-side navigation",
+      "Shared finance state and isolated interface state for filters and dialogs",
+      "Validated forms with Zod and React Hook Form",
+      "Browser storage + JSON backup and restore; no connected bank account",
+      "Installable PWA shell with Arabic RTL and English LTR presentation",
+    ],
+    decisions: [
+      [
+        "Privacy is a product constraint",
+        "Transaction and budget data stays in the browser by default instead of requiring banking integrations or a remote user account.",
+      ],
+      [
+        "Multilingual layout, not just translation",
+        "Arabic right-to-left interfaces and English left-to-right interfaces are handled alongside responsive navigation, labels, and form feedback.",
+      ],
+      [
+        "Data portability over lock-in",
+        "Validated JSON export and restore allow users to keep a backup and explicitly confirm data replacement.",
+      ],
+    ],
+    reliability: [
+      "Device-local transaction and budget persistence",
+      "Validated forms and recoverable errors",
+      "Validated JSON restore with confirmation",
+      "Offline app-shell caching",
+      "Accessible keyboard navigation and reduced-motion support",
+      "OTP screen is a UI preview, not authentication",
+    ],
+    evidence: [
+      "Transaction filtering, sorting, creation, and editing",
+      "Budget progress and six-month cash-flow charts",
+      "English and Arabic interface with RTL support",
+      "Project-documented automated behavior tests",
+      "Documented lint, typecheck, build, and UI verification commands",
+      "Production release checklist with explicitly unresolved gates",
+    ],
+  },
   "venues-api": {
     slug: "venues-api",
-    index: "04",
+    index: "05",
     name: "Venues API",
     label: "Backend engineering · REST",
     eyebrow: "Backend service · REST API",
