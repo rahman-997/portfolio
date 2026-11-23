@@ -100,6 +100,11 @@ with sync_playwright() as pw:
                         header_box = page.locator("header").bounding_box()
                         check(header_box is not None and header_box["height"] <= 90,
                               f"{name}: mobile header still takes multiple rows")
+                        github_metric = page.locator('section[class*="metrics"] > a[href="https://github.com/rahman-997"]')
+                        github_box = github_metric.bounding_box()
+                        check(github_box is not None and github_box["height"] <= 76 and
+                              github_metric.evaluate("(el) => getComputedStyle(el).whiteSpace") == "nowrap",
+                              f"{name}: GitHub metric URL wraps on mobile")
                         check(page.locator("header button[title]").first.is_visible(),
                               f"{name}: theme toggle hidden on mobile")
                         menu = page.locator('button[aria-controls="portfolio-mobile-links"]')
