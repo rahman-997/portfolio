@@ -657,3 +657,134 @@
   .metrics>div span{font-size:.57rem}
   .metrics>a{font-size:.68rem}
 }
+
+
+/* Fast, accessible project discovery for visitors and hiring managers. */
+.projectSearchBar{
+  display:flex;
+  gap:1rem;
+  align-items:end;
+  justify-content:space-between;
+  min-width:0;
+  margin:1rem 0 1.35rem;
+}
+.projectSearchField{
+  min-width:0;
+  width:min(100%,560px);
+}
+.projectSearchField label{
+  display:block;
+  margin-bottom:.55rem;
+  color:var(--muted);
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+.projectSearchInput{
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  width:100%;
+  min-height:52px;
+  padding:.32rem .55rem .32rem 1rem;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--surface);
+  color:var(--ink);
+  transition:border-color .18s ease,box-shadow .18s ease;
+}
+.projectSearchInput:focus-within{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--softGlow);
+}
+.projectSearchSymbol{
+  flex:none;
+  color:var(--accent);
+  font-size:1.5rem;
+  font-weight:700;
+  line-height:1;
+}
+.projectSearchInput input{
+  display:block;
+  width:100%;
+  min-width:0;
+  flex:1;
+  padding:.7rem 0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--ink);
+  font:500 .87rem/1.4 inherit;
+  font-size:.87rem;
+}
+.projectSearchInput input::placeholder{color:var(--muted);opacity:.83}
+.projectSearchInput input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+.projectSearchInput kbd{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-width:28px;
+  min-height:28px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:var(--surface2);
+  color:var(--muted);
+  font-size:.73rem;
+}
+.projectSearchInput button{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:33px;
+  min-height:33px;
+  padding:0;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--surface2);
+  color:var(--ink);
+  cursor:pointer;
+  font-size:1.3rem;
+}
+.projectSearchInput button:hover{border-color:var(--accent)}
+.projectSearchHint{
+  color:var(--muted);
+  font-size:.66rem;
+  white-space:nowrap;
+  margin-bottom:.8rem;
+}
+.projectEmpty{
+  padding:clamp(2rem,6vw,4rem);
+  text-align:center;
+  border:1px dashed var(--line);
+  border-radius:20px;
+  background:var(--surface);
+}
+.projectEmpty p{
+  max-width:44ch;
+  margin:0 auto 1rem;
+  font-size:.94rem;
+  line-height:1.65;
+  color:var(--muted);
+}
+.projectEmpty button{
+  min-height:46px;
+  padding:.75rem 1.1rem;
+  border-radius:10px;
+  background:var(--accent);
+  border:1px solid var(--accent);
+  color:var(--accentInk);
+  cursor:pointer;
+  font-size:.79rem;
+  font-weight:800;
+}
+.page[dir="rtl"] .projectSearchInput{padding-inline:1rem .55rem}
+@media(max-width:680px){
+  .projectSearchBar{display:block;margin:.85rem 0 1rem}
+  .projectSearchInput{min-height:51px}
+  .projectSearchHint{display:none}
+  .projectSearchField label{font-size:.71rem}
+  .projectEmpty{padding:2rem 1rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .projectSearchInput{transition:none}
+}
