@@ -28,6 +28,7 @@ const requiredPaths = [
   "projects/eventify-cover.jpg",
   "projects/bookhaven-cover.jpg",
   "projects/fitflow-cover.svg",
+  "projects/fitflow-real-interface.webp",
   "projects/mizan-live-dashboard.png",
 ];
 
@@ -158,7 +159,7 @@ for (const marker of ["Mizan Finance", "RTL", "/projects/mizan-live-dashboard.pn
 if (mizanHtml.includes("Open live system")) throw new Error("Mizan must not advertise an unverified live demo");
 
 const fitflowHtml = readFileSync(join(outDir, "work/fitflow/index.html"), "utf8");
-if (!fitflowHtml.includes("/projects/fitflow-cover.svg")) {
+if (!fitflowHtml.includes("/projects/fitflow-real-interface.webp")) {
   throw new Error("FitFlow case study must render the first-party local cover asset");
 }
 if (fitflowHtml.includes(`<meta property="og:image" content="${canonicalHost}/projects/fitflow-cover.svg"`)) {
