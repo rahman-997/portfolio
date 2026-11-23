@@ -12,7 +12,7 @@ type FeaturedProject = {
   href: string;
   image: string;
   stack: string;
-  alt: string;
+  alt: Record<Locale, string>;
   description: Record<Locale, string>;
   imageNote: Record<Locale, string>;
 };
@@ -24,7 +24,11 @@ const FEATURED: readonly FeaturedProject[] = [
     href: "/work/fitflow/",
     image: "/projects/fitflow-real-interface.webp",
     stack: "Next.js / PWA / Responsive UI",
-    alt: "Screenshot of the FitFlow fitness application built from the project source",
+    alt: {
+      en: "Screenshot of the real FitFlow fitness interface",
+      ar: "لقطة شاشة من واجهة تطبيق FitFlow الحقيقية",
+      tr: "Gerçek FitFlow fitness arayüzü ekran görüntüsü",
+    },
     description: {
       en: "Fitness flows that turn training plans and progress into a focused, installable experience.",
       ar: "تجربة لياقة تجمع الخطط والتقدّم بمسارات واضحة وتطبيق قابل للتثبيت.",
@@ -42,7 +46,11 @@ const FEATURED: readonly FeaturedProject[] = [
     href: "/work/mizan/",
     image: "/projects/mizan-live-dashboard.png",
     stack: "React / Data Visualization / RTL",
-    alt: "Screenshot of the Mizan Finance dashboard using the project's demo data",
+    alt: {
+      en: "Mizan Finance interface screenshot using sample data",
+      ar: "لقطة شاشة من واجهة Mizan Finance ببيانات تجريبية",
+      tr: "Mizan Finance örnek verilerle ekran görüntüsü",
+    },
     description: {
       en: "A private, bilingual finance dashboard designed for clear spending decisions and RTL reading.",
       ar: "لوحة مالية خاصة وثنائية اللغة لفهم المصروفات والميزانيات، مع دعم RTL.",
@@ -59,18 +67,24 @@ const FEATURED: readonly FeaturedProject[] = [
 const COPY = {
   en: {
     label: "SELECTED PRODUCT / INTERACTIVE PREVIEW",
+    capture: "Full screenshot",
+    work: "FEATURED WORK",
     choose: "Choose a featured project",
     view: "Read the case study",
     note: "Real product interfaces, not generated mockups",
   },
   ar: {
     label: "أعمال مختارة / معاينة تفاعلية",
+    capture: "الصورة كاملة",
+    work: "عمل مختار",
     choose: "اختر مشروعاً مميزاً",
     view: "استعرض دراسة المشروع",
     note: "واجهات حقيقية من المشاريع، وليست تصاميم تخيلية",
   },
   tr: {
     label: "SEÇİLİ ÜRÜNLER / ETKİLEŞİMLİ ÖNİZLEME",
+    capture: "Tam ekran",
+    work: "SEÇİLİ ÇALIŞMA",
     choose: "Öne çıkan projeyi seçin",
     view: "Proje incelemesini aç",
     note: "Yapay görseller değil, gerçek ürün arayüzleri",
@@ -99,19 +113,21 @@ export default function FeaturedShowcase({ locale }: { locale: Locale }) {
           key={project.id}
           unoptimized
           src={project.image}
-          alt={project.alt}
+          alt={project.alt[locale]}
           width={1440}
           height={960}
           sizes="(max-width: 820px) 100vw, 620px"
           className={styles.screenImage}
           priority={selected === "fitflow"}
         />
-        <div className={styles.screenChrome} aria-hidden="true">
-          <span className={styles.windowDots}><i/><i/><i/></span>
-          <span>AH / PRODUCT INTERFACE</span>
+        <div className={styles.screenChrome}>
+          <span className={styles.windowDots} aria-hidden="true"><i/><i/><i/></span>
+          <a className={styles.captureLink} href={project.image} target="_blank" rel="noopener noreferrer">
+            {copy.capture}<span aria-hidden="true">↗</span>
+          </a>
         </div>
         <div className={styles.screenCaption}>
-          <span className={styles.indexLabel}>0{selected === "fitflow" ? "1" : "2"} — FEATURED WORK</span>
+          <span className={styles.indexLabel}>0{selected === "fitflow" ? "1" : "2"} — {copy.work}</span>
           <h2>{project.name}</h2>
           <p>{project.description[locale]}</p>
           <Link className={styles.studyLink} href={project.href}>
