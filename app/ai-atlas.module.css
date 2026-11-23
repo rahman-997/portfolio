@@ -907,3 +907,34 @@
     background: linear-gradient(0deg, rgba(7,21,33,.96), rgba(7,21,33,0));
   }
 }
+
+
+/* QA fix: at tablet/mobile widths the eight Atlas nodes live in normal grid
+   flow instead of overlapping absolute coordinates intended for wide screens. */
+@media (max-width:1000px){
+  .visualNetwork{min-height:0;overflow:visible}
+  .network{
+    position:relative;inset:auto;display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    align-content:start;align-items:stretch;gap:12px;
+    padding:138px 18px 24px;min-width:0;min-height:0;
+    background:radial-gradient(circle at 50% 66px,rgba(16,173,224,.15),transparent 145px)
+  }
+  .network > .node{
+    position:relative;left:auto;right:auto;top:auto;bottom:auto;
+    transform:none;width:100%;min-width:0;min-height:64px;
+    grid-column:auto;grid-row:auto;margin:0
+  }
+  .wires{display:none}
+  .core{left:50%;top:64px;width:104px;height:104px}
+  .core::before{inset:-14px}
+  .mapCorner{position:static;grid-column:1/-1;justify-self:center;margin:.5rem 0 0}
+}
+@media (max-width:600px){
+  .network{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:134px 12px 18px}
+  .network > .node{min-height:60px}
+}
+@media (max-width:390px){
+  .network{gap:9px;padding:126px 10px 18px}
+  .network > .node{min-height:58px}
+}
