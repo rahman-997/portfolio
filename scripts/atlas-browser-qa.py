@@ -153,14 +153,25 @@ with sync_playwright() as playwright:
             nodes = page.locator("#ai-lab button[aria-label^='Explore ']")
             check(nodes.count() == 8, f"{name}: expected 8 disciplines")
             network = page.locator("#ai-lab [role='group'][aria-label^='Select an engineering discipline']")
-            rect = network.bounding_box()
-            check(rect is not None, f"{name}: network geometry missing")
-            boxes = []
-            for i in range(8):
-                box = nodes.nth(i).bounding_box()
-                check(box is not None, f"{name}: node {i} has no geometry")
+            # Measure the whole graph in one browser frame: separate bounding_box
+            # calls can straddle scroll/layout updates and create false overlaps.
+            geometry = network.evaluate("""root => {
+                const rect = root.getBoundingClientRect();
+                const box = r => ({
+                    x:r.left, y:r.top, width:r.width, height:r.height
+                });
+                const nodes = Array.from(root.querySelectorAll(
+                    'button[aria-label^="Explore "]'
+                )).map(el => box(el.getBoundingClientRect()));
+                return {root:box(rect),nodes};
+            }""")
+            rect = geometry["root"]
+            boxes = geometry["nodes"]
+            check(len(boxes) == 8, f"{name}: geometry missing nodes")
+            for i, box in enumerate(boxes):
+                check(box["width"] > 0 and box["height"] > 0,
+                      f"{name}: node {i} has no geometry")
                 assert_in_visual(box, rect, f"{name}: node {i}")
-                boxes.append(box)
             for i in range(8):
                 for j in range(i + 1, 8):
                     check(not overlaps(boxes[i], boxes[j]),
