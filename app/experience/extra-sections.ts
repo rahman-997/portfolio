@@ -12,15 +12,16 @@ export const extraSections: Record<Locale, {
   en: {
     navHighlights:"Evidence",navProcess:"Process",
     evidence: {
-      eyebrow:"ENGINEERING RECEIPTS / FOUR DEEP DIVES",
+      eyebrow:"DESIGN + ENGINEERING / FIVE DEEP DIVES",
       title:"Engineering evidence, not vanity numbers.",
       lead:"Instead of claiming imaginary KPIs, these are concrete architecture choices and behaviors you can inspect in the source.",
       link:"Read the English case study",
       cards:[
-        {project:"Eventify",code:"01 / DISTRIBUTED STATE",result:"Booking integrity & durable background work",detail:"PostgreSQL owns durable booking state; an outbox records async intent before BullMQ workers process it.",proof:"Transactions · Outbox · Queue",href:"/work/eventify/"},
-        {project:"BookHaven",code:"02 / COMMERCE",result:"Order and inventory behavior",detail:"A full-stack bookstore where checkout locking, authorization and guarded order transitions are designed together.",proof:"RBAC · Checkout · Inventory",href:"/work/bookhaven/"},
-        {project:"FitFlow",code:"03 / PRODUCT STATE",result:"Local-first, installable experience",detail:"Guided sessions, weekly progress and device-local persistence in an accessible fitness PWA.",proof:"PWA · Local storage · A11y",href:"/work/fitflow/"},
-        {project:"Venues API",code:"04 / API CONTRACTS",result:"Backend boundaries you can test",detail:"Input validation, separated controllers/services and predictable errors backed by HTTP contract tests.",proof:"Express · Zod · HTTP tests",href:"/work/venues-api/"}
+        {project:"Mizan Finance",code:"01 / FRONTEND + RTL",result:"A privacy-first dashboard across two writing directions",detail:"Responsive transactions, budgets, spending charts, accessible controls and Arabic/English RTL behavior, with device-local data and validated backups.",proof:"React · Charts · RTL · PWA",href:"/work/mizan/"},
+        {project:"Eventify",code:"02 / DISTRIBUTED STATE",result:"Booking integrity & durable background work",detail:"PostgreSQL owns durable booking state; an outbox records async intent before BullMQ workers process it.",proof:"Transactions · Outbox · Queue",href:"/work/eventify/"},
+        {project:"BookHaven",code:"03 / COMMERCE",result:"Order and inventory behavior",detail:"A full-stack bookstore where checkout locking, authorization and guarded order transitions are designed together.",proof:"RBAC · Checkout · Inventory",href:"/work/bookhaven/"},
+        {project:"FitFlow",code:"04 / PRODUCT STATE",result:"Local-first, installable experience",detail:"Guided sessions, weekly progress and device-local persistence in an accessible fitness PWA.",proof:"PWA · Local storage · A11y",href:"/work/fitflow/"},
+        {project:"Venues API",code:"05 / API CONTRACTS",result:"Backend boundaries you can test",detail:"Input validation, separated controllers/services and predictable errors backed by HTTP contract tests.",proof:"Express · Zod · HTTP tests",href:"/work/venues-api/"}
       ]
     },
     process:{
@@ -49,7 +50,7 @@ export const extraSections: Record<Locale, {
       items:[
         {q:"Is every repository your original work?",a:"Six listed repositories are original projects. The free-claude-code repository is an upstream fork and is explicitly marked as such. Private repositories are not displayed."},
         {q:"Can I try every project online?",a:"Live demos are linked where a public deployment exists. Some free-tier deployments may need time to wake up. For projects without a public demo, the source repository is the primary reference."},
-        {q:"Where can I see deeper technical decisions?",a:"Eventify, BookHaven, FitFlow and Venues API have dedicated architecture and implementation case studies. These detailed pages are currently written in English; source links accompany every project."},
+        {q:"Where can I see deeper technical decisions?",a:"FitFlow, Mizan Finance, BookHaven, Eventify and Venues API have dedicated architecture and implementation case studies. These detailed pages are currently written in English; source links accompany every project."},
         {q:"Does the AI Atlas run actual agents or analyze visitors?",a:"No. The AI Systems Atlas is an interactive visualization of engineering disciplines, not a live agent service, camera tool or visitor-tracking system."}
       ]
     }
@@ -57,14 +58,15 @@ export const extraSections: Record<Locale, {
   ar:{
     navHighlights:"الأدلة",navProcess:"آلية العمل",
     evidence:{
-      eyebrow:"أدلة هندسية / أربع دراسات تقنية",title:"أدلة هندسية بلا أرقام دعائية.",
+      eyebrow:"تصميم وهندسة / خمس دراسات تقنية",title:"أدلة هندسية بلا أرقام دعائية.",
       lead:"بدلاً من ادعاء أرقام نجاح غير موثّقة، هنا قرارات معمارية ووظائف يمكنك مراجعتها في الكود المصدري.",
       link:"اقرأ الدراسة التقنية (بالإنجليزية)",
       cards:[
-        {project:"Eventify",code:"01 / حالة موزعة",result:"حجوزات متماسكة ومهام خلفية موثوقة",detail:"يحفظ PostgreSQL حالة الحجوزات الدائمة، ويسجّل Outbox نية تنفيذ المهام قبل معالجتها عبر BullMQ.",proof:"معاملات · Outbox · طوابير",href:"/work/eventify/"},
-        {project:"BookHaven",code:"02 / تجارة إلكترونية",result:"سلوك الطلبات والمخزون",detail:"متجر كتب متكامل يجمع حماية الدفع والصلاحيات وانتقالات حالة الطلب ضمن نظام واحد.",proof:"صلاحيات · دفع · مخزون",href:"/work/bookhaven/"},
-        {project:"FitFlow",code:"03 / حالة المنتج",result:"تجربة قابلة للتثبيت وتحفظ التقدم محلياً",detail:"جلسات موجهة وتقدم أسبوعي وحفظ محلي على الجهاز ضمن تطبيق لياقة يراعي إمكانية الوصول.",proof:"PWA · تخزين محلي · وصول",href:"/work/fitflow/"},
-        {project:"Venues API",code:"04 / عقود API",result:"حدود خلفية قابلة للاختبار",detail:"التحقق من المدخلات وفصل المتحكمات عن الخدمات وأخطاء متوقعة تدعمها اختبارات HTTP.",proof:"Express · Zod · اختبارات",href:"/work/venues-api/"}
+        {project:"Mizan Finance",code:"01 / واجهات وRTL",result:"لوحة مالية تحترم خصوصية المستخدم واتجاه اللغة",detail:"واجهات متجاوبة للمصروفات والميزانيات والرسوم البيانية مع دعم العربية والإنجليزية وإمكانية الوصول والحفظ المحلي والنسخ الاحتياطي.",proof:"React · رسوم بيانية · RTL · PWA",href:"/work/mizan/"},
+        {project:"Eventify",code:"02 / حالة موزعة",result:"حجوزات متماسكة ومهام خلفية موثوقة",detail:"يحفظ PostgreSQL حالة الحجوزات الدائمة، ويسجّل Outbox نية تنفيذ المهام قبل معالجتها عبر BullMQ.",proof:"معاملات · Outbox · طوابير",href:"/work/eventify/"},
+        {project:"BookHaven",code:"03 / تجارة إلكترونية",result:"سلوك الطلبات والمخزون",detail:"متجر كتب متكامل يجمع حماية الدفع والصلاحيات وانتقالات حالة الطلب ضمن نظام واحد.",proof:"صلاحيات · دفع · مخزون",href:"/work/bookhaven/"},
+        {project:"FitFlow",code:"04 / حالة المنتج",result:"تجربة قابلة للتثبيت وتحفظ التقدم محلياً",detail:"جلسات موجهة وتقدم أسبوعي وحفظ محلي على الجهاز ضمن تطبيق لياقة يراعي إمكانية الوصول.",proof:"PWA · تخزين محلي · وصول",href:"/work/fitflow/"},
+        {project:"Venues API",code:"05 / عقود API",result:"حدود خلفية قابلة للاختبار",detail:"التحقق من المدخلات وفصل المتحكمات عن الخدمات وأخطاء متوقعة تدعمها اختبارات HTTP.",proof:"Express · Zod · اختبارات",href:"/work/venues-api/"}
       ]
     },
     process:{
@@ -93,7 +95,7 @@ export const extraSections: Record<Locale, {
       items:[
         {q:"هل جميع المستودعات من تطويرك الأصلي؟",a:"ستة مستودعات معروضة هي مشاريع أصلية. مستودع free-claude-code نسخة متفرعة من مشروع خارجي ومميّزة بذلك بوضوح. لا أعرض المستودعات الخاصة."},
         {q:"هل يمكن تجربة كل مشروع على الإنترنت؟",a:"أضع رابط العرض الحي عندما يكون متاحاً. بعض خدمات الاستضافة المجانية قد تحتاج إلى وقت لتستيقظ. إن لم يتوفر عرض عام، يبقى مستودع الكود المرجع الأساسي."},
-        {q:"أين أقرأ التفاصيل الهندسية للمشاريع؟",a:"تتضمن مشاريع Eventify وBookHaven وFitFlow وVenues API دراسات منفصلة للمعمارية والتنفيذ. صفحات التفاصيل حالياً بالإنجليزية، وروابط الكود موجودة لكل مشروع."},
+        {q:"أين أقرأ التفاصيل الهندسية للمشاريع؟",a:"تتضمن مشاريع FitFlow وMizan Finance وBookHaven وEventify وVenues API دراسات منفصلة للمعمارية والتنفيذ. صفحات التفاصيل حالياً بالإنجليزية، وروابط الكود موجودة لكل مشروع."},
         {q:"هل يشغّل AI Atlas وكلاء حقيقيين أو يتتبع الزوار؟",a:"لا. AI Systems Atlas عرض تفاعلي لتخصصات الهندسة، وليس خدمة وكلاء حية أو أداة كاميرا أو نظام تتبع زوار."}
       ]
     }
@@ -101,14 +103,15 @@ export const extraSections: Record<Locale, {
   tr:{
     navHighlights:"Kanıtlar",navProcess:"Süreç",
     evidence:{
-      eyebrow:"MÜHENDİSLİK KANITLARI / DÖRT İNCELEME",title:"Gösteriş değil, mühendislik kanıtı.",
+      eyebrow:"TASARIM + MÜHENDİSLİK / BEŞ İNCELEME",title:"Gösteriş değil, mühendislik kanıtı.",
       lead:"Doğrulanmamış başarı rakamları yerine kaynak kodda inceleyebileceğiniz mimari kararları ve gerçek ürün davranışları.",
       link:"İngilizce incelemeyi oku",
       cards:[
-        {project:"Eventify",code:"01 / DAĞITIK DURUM",result:"Tutarlı rezervasyonlar ve dayanıklı arka plan işleri",detail:"PostgreSQL kalıcı rezervasyon durumunu tutar; Outbox, BullMQ işçileri çalışmadan önce iş niyetini kaydeder.",proof:"İşlem · Outbox · Kuyruk",href:"/work/eventify/"},
-        {project:"BookHaven",code:"02 / E-TİCARET",result:"Sipariş ve stok davranışı",detail:"Ödeme kilidi, yetkilendirme ve güvenli sipariş geçişlerini bir arada ele alan tam kapsamlı kitapçı.",proof:"RBAC · Ödeme · Stok",href:"/work/bookhaven/"},
-        {project:"FitFlow",code:"03 / ÜRÜN DURUMU",result:"Cihazda saklanan, kurulabilir deneyim",detail:"Erişilebilir fitness PWA'sında yönlendirmeli seanslar, haftalık ilerleme ve yerel veri saklama.",proof:"PWA · Yerel veri · Erişim",href:"/work/fitflow/"},
-        {project:"Venues API",code:"04 / API SÖZLEŞMELERİ",result:"Test edilebilir backend sınırları",detail:"HTTP testleriyle desteklenen şema doğrulama, ayrılmış controller/service katmanları ve tutarlı hatalar.",proof:"Express · Zod · HTTP testleri",href:"/work/venues-api/"}
+        {project:"Mizan Finance",code:"01 / FRONTEND + RTL",result:"İki yazı yönüne uyumlu, gizlilik odaklı finans paneli",detail:"Duyarlı bütçe ve işlem arayüzleri, harcama grafikleri, erişilebilir kontroller, Arapça/İngilizce RTL ve cihazda veri saklama.",proof:"React · Grafikler · RTL · PWA",href:"/work/mizan/"},
+        {project:"Eventify",code:"02 / DAĞITIK DURUM",result:"Tutarlı rezervasyonlar ve dayanıklı arka plan işleri",detail:"PostgreSQL kalıcı rezervasyon durumunu tutar; Outbox, BullMQ işçileri çalışmadan önce iş niyetini kaydeder.",proof:"İşlem · Outbox · Kuyruk",href:"/work/eventify/"},
+        {project:"BookHaven",code:"03 / E-TİCARET",result:"Sipariş ve stok davranışı",detail:"Ödeme kilidi, yetkilendirme ve güvenli sipariş geçişlerini bir arada ele alan tam kapsamlı kitapçı.",proof:"RBAC · Ödeme · Stok",href:"/work/bookhaven/"},
+        {project:"FitFlow",code:"04 / ÜRÜN DURUMU",result:"Cihazda saklanan, kurulabilir deneyim",detail:"Erişilebilir fitness PWA'sında yönlendirmeli seanslar, haftalık ilerleme ve yerel veri saklama.",proof:"PWA · Yerel veri · Erişim",href:"/work/fitflow/"},
+        {project:"Venues API",code:"05 / API SÖZLEŞMELERİ",result:"Test edilebilir backend sınırları",detail:"HTTP testleriyle desteklenen şema doğrulama, ayrılmış controller/service katmanları ve tutarlı hatalar.",proof:"Express · Zod · HTTP testleri",href:"/work/venues-api/"}
       ]
     },
     process:{
@@ -137,7 +140,7 @@ export const extraSections: Record<Locale, {
       items:[
         {q:"Tüm depolar özgün çalışmanız mı?",a:"Listelenen altı depo özgün projedir. free-claude-code üçüncü taraf bir projeden fork'lanmıştır ve açıkça bu şekilde etiketlenir. Özel depolar gösterilmez."},
         {q:"Tüm projeleri çevrim içi deneyebilir miyim?",a:"Herkese açık dağıtımı olan projelerde canlı demo bağlantısı bulunur. Bazı ücretsiz sunucuların uyanması zaman alabilir. Canlı demo yoksa temel kaynak kod deposudur."},
-        {q:"Teknik kararları nereden görebilirim?",a:"Eventify, BookHaven, FitFlow ve Venues API için özel mimari ve uygulama incelemeleri vardır. Bu ayrıntılı sayfalar şu anda İngilizcedir; her projenin kaynak bağlantısı da bulunur."},
+        {q:"Teknik kararları nereden görebilirim?",a:"FitFlow, Mizan Finance, BookHaven, Eventify ve Venues API için özel mimari ve uygulama incelemeleri vardır. Bu ayrıntılı sayfalar şu anda İngilizcedir; her projenin kaynak bağlantısı da bulunur."},
         {q:"AI Atlas gerçekten ajan çalıştırıyor veya ziyaretçileri izliyor mu?",a:"Hayır. AI Systems Atlas mühendislik alanlarını anlatan etkileşimli bir görseldir; canlı ajan servisi, kamera aracı veya ziyaretçi takip sistemi değildir."}
       ]
     }
