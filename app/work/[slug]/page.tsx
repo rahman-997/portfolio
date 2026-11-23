@@ -119,7 +119,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
             <a href={study.source} target="_blank" rel="noreferrer">Inspect source ↗</a>
           </div>
           <div className={styles.stack}>{study.stack.map((item) => <span key={item}>{item}</span>)}</div>
-          {study.cover ? <figure className={styles.cover}><Image src={study.cover} alt={`${study.name} project preview`} width={coverDimensions.width} height={coverDimensions.height} sizes="(max-width: 1240px) calc(100vw - 48px), 1240px" priority /><figcaption className={styles.coverCaption}>{coverCaption}</figcaption></figure> : null}
+          {study.cover ? <figure className={styles.cover}><Image unoptimized src={study.cover} alt={`${study.name} project preview`} width={coverDimensions.width} height={coverDimensions.height} sizes="(max-width: 1240px) calc(100vw - 48px), 1240px" priority /><figcaption className={styles.coverCaption}>{coverCaption}</figcaption></figure> : null}
         </section>
 
         <section className={styles.splitSection}>
