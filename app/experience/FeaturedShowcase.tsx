@@ -120,19 +120,21 @@ export default function FeaturedShowcase({ locale }: { locale: Locale }) {
           className={styles.screenImage}
           priority={selected === "fitflow"}
         />
-        <div className={styles.screenChrome}>
-          <span className={styles.windowDots} aria-hidden="true"><i/><i/><i/></span>
-          <a className={styles.captureLink} href={project.image} target="_blank" rel="noopener noreferrer">
-            {copy.capture}<span aria-hidden="true">↗</span>
-          </a>
-        </div>
-        <div className={styles.screenCaption}>
+      </div>
+
+      <div className={styles.projectDetails}>
+        <div className={styles.detailsBody}>
           <span className={styles.indexLabel}>0{selected === "fitflow" ? "1" : "2"} — {copy.work}</span>
           <h2>{project.name}</h2>
           <p>{project.description[locale]}</p>
+        </div>
+        <div className={styles.detailsActions}>
           <Link className={styles.studyLink} href={project.href}>
             {copy.view}<span aria-hidden="true">↗</span>
           </Link>
+          <a className={styles.captureLink} href={project.image} target="_blank" rel="noopener noreferrer">
+            {copy.capture}<span aria-hidden="true">↗</span>
+          </a>
         </div>
       </div>
 
