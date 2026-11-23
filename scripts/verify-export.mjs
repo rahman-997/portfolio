@@ -25,6 +25,8 @@ const requiredPaths = [
   "opengraph-image",
   "twitter-image",
   "Abdulrahman-Hajar-Resume.pdf",
+  "Abdulrahman-Hajar-Frontend-Resume.pdf",
+  "Abdulrahman-Hajar-Frontend-Resume.html",
   "projects/eventify-cover.jpg",
   "projects/bookhaven-cover.jpg",
   "projects/fitflow-cover.svg",
@@ -212,6 +214,15 @@ if (!pdf.subarray(0, 5).equals(Buffer.from("%PDF-"))) {
 if (pdf.length < 4000) {
   console.error(`Résumé PDF verification failed: suspiciously small file (${pdf.length} bytes).`);
   process.exit(1);
+}
+
+const frontendPdf = readFileSync(join(outDir, "Abdulrahman-Hajar-Frontend-Resume.pdf"));
+if (!frontendPdf.subarray(0, 5).equals(Buffer.from("%PDF-")) || frontendPdf.length < 12000) {
+  throw new Error("Frontend résumé must be a non-empty PDF document");
+}
+const frontendPrint = readFileSync(join(outDir, "Abdulrahman-Hajar-Frontend-Resume.html"), "utf8");
+for (const fragment of ['name="robots" content="noindex,follow"', "Frontend Engineer", "Mizan Finance", "FitFlow"]) {
+  if (!frontendPrint.includes(fragment)) throw new Error("Frontend résumé print view is incomplete: " + fragment);
 }
 
 const netlifyConfig = readFileSync(join(root, "netlify.toml"), "utf8");
