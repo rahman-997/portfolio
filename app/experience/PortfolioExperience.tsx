@@ -25,7 +25,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <a href="#work">{t.navWork}</a>
         <a href="#highlights">{more.navHighlights}</a>
         <a href="#ai-lab">{t.navAtlas}</a>
-        <a href="#process">{more.navProcess}</a>
+        <a href="#collaborate">{locale==="ar"?"الخدمات":locale==="tr"?"Hizmetler":"Services"}</a>
         <a href="#about">{t.navAbout}</a>
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
       </nav>
@@ -42,7 +42,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
           <div className={styles.actions}>
             <a className={styles.primaryAction} href="#work">{t.workButton} <span aria-hidden="true">↗</span></a>
             <a className={styles.secondaryAction} href={PROFILE_LINKS.linkedin} target="_blank" rel="noopener noreferrer">{t.contactButton} ↗</a>
-            <a className={styles.secondaryAction} href="#ai-lab">{locale==="en"?"Explore AI Lab":t.navAtlas} ↗</a>
+            <a className={styles.secondaryAction} href="#collaborate">{locale==="ar"?"الخدمات":locale==="tr"?"Hizmetler":"Services"} ↗</a>
           </div>
           <div className={styles.heroFoot}><span>01—03</span><span>{t.scrollLabel}</span></div>
         </div>
