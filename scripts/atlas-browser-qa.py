@@ -125,6 +125,10 @@ with sync_playwright() as playwright:
                       f"{name}: mode {i} text spills out of its button")
             atlas.screenshot(path=str(OUTPUT / f"{name}-network.png"), animations="disabled")
             if name == "desktop":
+                # Full-page screenshots must begin at y=0: this page has a sticky
+                # header that otherwise appears displaced in the resulting image.
+                page.evaluate("window.scrollTo({top: 0, left: 0, behavior: 'instant'})")
+                page.wait_for_timeout(100)
                 page.screenshot(path=str(OUTPUT / "desktop-full-page.png"), full_page=True,
                     animations="disabled")
 
