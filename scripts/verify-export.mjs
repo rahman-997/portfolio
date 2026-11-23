@@ -12,6 +12,7 @@ const requiredPaths = [
   "work/eventify/index.html",
   "work/bookhaven/index.html",
   "work/fitflow/index.html",
+  "work/mizan/index.html",
   "work/venues-api/index.html",
   "robots.txt",
   "sitemap.xml",
@@ -143,11 +144,17 @@ for (const expected of [
 }
 
 const sitemapText = readFileSync(join(outDir, "sitemap.xml"), "utf8");
-for (const path of ["/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/work/fitflow/", "/work/venues-api/"]) {
+for (const path of ["/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/work/fitflow/", "/work/mizan/", "/work/venues-api/"]) {
   if (!sitemapText.includes(`<loc>${canonicalHost}${path}</loc>`)) {
     throw new Error(`sitemap.xml is missing canonical route: ${path}`);
   }
 }
+
+const mizanHtml = readFileSync(join(outDir, "work/mizan/index.html"), "utf8");
+for (const marker of ["Mizan Finance", "RTL", "https://github.com/rahman-997/mizan-finance"]) {
+  if (!mizanHtml.includes(marker)) throw new Error("Mizan case study missing expected proof: " + marker);
+}
+if (mizanHtml.includes("Open live system")) throw new Error("Mizan must not advertise an unverified live demo");
 
 const fitflowHtml = readFileSync(join(outDir, "work/fitflow/index.html"), "utf8");
 if (!fitflowHtml.includes("/projects/fitflow-cover.svg")) {
