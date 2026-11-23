@@ -6,9 +6,9 @@ export const TEXT = {
   en: {
     skip: "Skip to content", role: "Frontend Engineer · UI/UX Designer",
     navWork: "Projects", navAtlas: "AI Lab", navAbout: "About", navResume: "Résumé",
-    hello: "Frontend engineering & product design / Istanbul, Türkiye", heroTop: "Digital experiences,",
-    heroBottom: "thoughtfully engineered.", heroLead: "I design responsive, accessible interfaces with React, Next.js and TypeScript. My full-stack background helps me build polished experiences that work beyond the screen.",
-    workButton: "Explore all projects", contactButton: "Let's connect", scrollLabel: "SCROLL TO EXPLORE",
+    hello: "Abdulrahman Hajar / Frontend & product design", heroTop: "Distinctive interfaces."
+    heroBottom: "Thoughtful engineering.", heroLead: "I create fast, accessible React and Next.js experiences with considered UI/UX, responsive layouts and multilingual RTL support. Explore the real products and the code behind them.",
+    workButton: "Explore selected work", contactButton: "Let's connect", scrollLabel: "SCROLL TO EXPLORE",
     dashboard: "DESIGN + ENGINEERING", visualTitle: "Interfaces with purpose",
     visualDetail: "Discover → Design → Build → Verify", availability: "OPEN TO FRONTEND OPPORTUNITIES",
     metricProjects: "Public repositories", metricStudies: "Deep-dive case studies", metricLanguages: "Languages",
@@ -37,9 +37,9 @@ export const TEXT = {
   ar: {
     skip: "تخطَّ إلى المحتوى", role: "مهندس واجهات أمامية · مصمّم UI/UX",
     navWork: "المشاريع", navAtlas: "مختبر الذكاء الاصطناعي", navAbout: "عني", navResume: "السيرة الذاتية",
-    hello: "تطوير واجهات وتجارب رقمية / إسطنبول، تركيا", heroTop: "أصمّم واجهات جميلة،",
-    heroBottom: "وأبني تجارب تعمل بذكاء.", heroLead: "أطوّر واجهات سريعة ومتجاوبة وسهلة الوصول باستخدام React وNext.js وTypeScript، مع خبرة Full-Stack تضمن تجربة متكاملة لا تقتصر على المظهر.",
-    workButton: "استعرض جميع المشاريع", contactButton: "لنتواصل", scrollLabel: "اكتشف المزيد",
+    hello: "عبد الرحمن حجار / تطوير الواجهات وتجربة المستخدم", heroTop: "واجهات مختلفة.",
+    heroBottom: "وتجارب مدروسة.", heroLead: "أبني تجارب React وNext.js سريعة ومتجاوبة مع اهتمام فعلي بالتفاصيل وإمكانية الوصول ودعم العربية وRTL. استكشف المشاريع الحقيقية والكود الذي يقف خلفها.",
+    workButton: "استكشف أعمالي المختارة", contactButton: "لنتواصل", scrollLabel: "اكتشف المزيد",
     dashboard: "تصميم + هندسة", visualTitle: "واجهات لها هدف",
     visualDetail: "اكتشاف ← تصميم ← تطوير ← تحقق", availability: "متاح لفرص تطوير الواجهات",
     metricProjects: "مستودعات عامة", metricStudies: "دراسات تقنية مفصلة", metricLanguages: "لغات",
@@ -68,9 +68,9 @@ export const TEXT = {
   tr: {
     skip: "İçeriğe geç", role: "Frontend Mühendisi · UI/UX Tasarımcısı",
     navWork: "Projeler", navAtlas: "Yapay Zekâ Lab", navAbout: "Hakkımda", navResume: "Özgeçmiş",
-    hello: "Frontend geliştirme ve ürün tasarımı / İstanbul, Türkiye", heroTop: "Özenle tasarlanmış",
-    heroBottom: "dijital deneyimler.", heroLead: "React, Next.js ve TypeScript ile duyarlı, erişilebilir arayüzler geliştiriyorum. Full-stack deneyimimle tasarımın arkasındaki sistemi de sağlam kuruyorum.",
-    workButton: "Tüm projeleri keşfet", contactButton: "İletişime geç", scrollLabel: "KEŞFETMEK İÇİN KAYDIR",
+    hello: "Abdulrahman Hajar / Frontend ve ürün tasarımı", heroTop: "Özgün arayüzler.",
+    heroBottom: "Özenli mühendislik.", heroLead: "React ve Next.js ile hızlı, erişilebilir ve duyarlı deneyimler geliştiriyorum. Çok dilli RTL tasarıma önem veriyor, ürünleri gerçek kod ve teknik kararlarla sunuyorum.",
+    workButton: "Seçili projeleri keşfet", contactButton: "İletişime geç", scrollLabel: "KEŞFETMEK İÇİN KAYDIR",
     dashboard: "TASARIM + MÜHENDİSLİK", visualTitle: "Amaca yönelik arayüzler",
     visualDetail: "Keşfet → Tasarla → Geliştir → Doğrula", availability: "FRONTEND FIRSATLARINA AÇIK",
     metricProjects: "Herkese açık depolar", metricStudies: "Teknik proje incelemeleri", metricLanguages: "Dil",
