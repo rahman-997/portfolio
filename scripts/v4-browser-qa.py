@@ -120,6 +120,15 @@ with sync_playwright() as pw:
                         page.locator("#portfolio-mobile-links a[href='#work']").click()
                         check(menu.get_attribute("aria-expanded") == "false",
                               f"{name}: mobile navigation remains open after selection")
+                        menu.click()
+                        page.keyboard.press("Escape")
+                        check(menu.get_attribute("aria-expanded") == "false" and
+                              menu.evaluate("(el) => document.activeElement === el"),
+                              f"{name}: Escape failed to dismiss mobile menu and return focus")
+                        menu.click()
+                        page.mouse.click(width / 2, height - 20)
+                        check(menu.get_attribute("aria-expanded") == "false",
+                              f"{name}: outside click failed to close mobile menu")
                     expected_dir = "rtl" if locale == "ar" else "ltr"
                     check(page.locator("html").get_attribute("dir") == expected_dir,
                           f"{name}: wrong document direction")
@@ -159,6 +168,23 @@ with sync_playwright() as pw:
                         page.get_by_role("button", name=COPY[locale][kind], exact=True).click()
                         check(work.locator("article").count() == count,
                               f"{name}: {kind} filter expected {count} projects")
+                    search = page.get_by_role("searchbox")
+                    check(search.count() == 1 and search.is_visible(),
+                          f"{name}: project search unavailable")
+                    page.keyboard.press("/")
+                    check(search.evaluate("(el) => document.activeElement === el"),
+                          f"{name}: slash shortcut did not focus project search")
+                    search.fill("Mizan")
+                    check(work.locator("article").count() == 1 and
+                          work.locator("article h3").first.inner_text() == "Mizan Finance",
+                          f"{name}: project search failed to find Mizan")
+                    search.fill("not-a-real-project-928364")
+                    check(work.locator("article").count() == 0 and
+                          work.locator("[data-empty-project-results]").is_visible(),
+                          f"{name}: empty-state search regression")
+                    work.locator("[data-empty-project-results] button").click()
+                    check(work.locator("article").count() == 7 and search.input_value() == "",
+                          f"{name}: clearing project search failed")
                     page.locator("#ai-lab").scroll_into_view_if_needed()
                     page.get_by_role("button", name=COPY[locale]["flow"], exact=True).click()
                     check(page.get_by_label("Illustrative five-stage engineering flow").count() == 1,
