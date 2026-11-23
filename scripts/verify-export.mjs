@@ -28,6 +28,7 @@ const requiredPaths = [
   "projects/eventify-cover.jpg",
   "projects/bookhaven-cover.jpg",
   "projects/fitflow-cover.svg",
+  "projects/mizan-live-dashboard.png",
 ];
 
 const missing = requiredPaths.filter((path) => !existsSync(join(outDir, path)));
@@ -151,7 +152,7 @@ for (const path of ["/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/wo
 }
 
 const mizanHtml = readFileSync(join(outDir, "work/mizan/index.html"), "utf8");
-for (const marker of ["Mizan Finance", "RTL", "https://github.com/rahman-997/mizan-finance"]) {
+for (const marker of ["Mizan Finance", "RTL", "/projects/mizan-live-dashboard.png", "https://github.com/rahman-997/mizan-finance"]) {
   if (!mizanHtml.includes(marker)) throw new Error("Mizan case study missing expected proof: " + marker);
 }
 if (mizanHtml.includes("Open live system")) throw new Error("Mizan must not advertise an unverified live demo");
