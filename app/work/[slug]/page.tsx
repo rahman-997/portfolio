@@ -143,7 +143,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </section>
 
         <section className={styles.next}>
-          <div><span>VERIFY IT</span><h2>The implementation is public.</h2><p>Review the live behavior, source code, tests, architecture, and deployment details directly.</p></div>
+          <div><span>VERIFY IT</span><h2>The implementation is public.</h2><p>{study.live ? "Review the live behavior, source code, tests, architecture, and deployment details directly." : "Review the source code, tests, and implementation details. A public deployment has not been verified for this project."}</p></div>
           <div className={styles.nextLinks}>{study.live ? <a href={study.live} target="_blank" rel="noreferrer">Live system ↗</a> : null}<a href={study.source} target="_blank" rel="noreferrer">GitHub source ↗</a><Link href="/#work">More case studies →</Link></div>
         </section>
       </article>
