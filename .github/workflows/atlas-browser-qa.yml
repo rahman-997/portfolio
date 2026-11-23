@@ -51,7 +51,12 @@ jobs:
         run: python3 -m pip install --user --disable-pip-version-check playwright==1.56.0
 
       - name: Install disposable WCAG auditing engine
-        run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund axe-core@4.10.3
+        run: |
+          # Install the browser-only auditor in an isolated prefix. Running
+          # npm install in the project root can re-resolve unrelated lint peers.
+          mkdir -p "$RUNNER_TEMP/portfolio-qa-tools"
+          npm install --prefix "$RUNNER_TEMP/portfolio-qa-tools" --no-save --no-package-lock --ignore-scripts --no-audit --no-fund axe-core@4.10.3
+          echo "ATLAS_AXE_SCRIPT=$RUNNER_TEMP/portfolio-qa-tools/node_modules/axe-core/axe.min.js" >> "$GITHUB_ENV"
 
       - name: Start local static server
         run: |
