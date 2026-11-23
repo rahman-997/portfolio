@@ -27,8 +27,6 @@ const requiredPaths = [
   "Abdulrahman-Hajar-Resume.pdf",
   "Abdulrahman-Hajar-Frontend-Resume.pdf",
   "Abdulrahman-Hajar-Frontend-Resume.html",
-  "projects/eventify-cover.jpg",
-  "projects/bookhaven-cover.jpg",
   "projects/fitflow-cover.svg",
   "projects/fitflow-real-interface.webp",
   "projects/mizan-live-dashboard.png",
@@ -159,6 +157,18 @@ for (const marker of ["Mizan Finance", "RTL", "/projects/mizan-live-dashboard.pn
   if (!mizanHtml.includes(marker)) throw new Error("Mizan case study missing expected proof: " + marker);
 }
 if (mizanHtml.includes("Open live system")) throw new Error("Mizan must not advertise an unverified live demo");
+
+// Historical JPEG preview assets fail to decode in browsers. Keep the source files
+// for forensic recovery but do not advertise broken covers in current pages.
+for (const [slug, badCover] of [
+  ["bookhaven", "/projects/bookhaven-cover.jpg"],
+  ["eventify", "/projects/eventify-cover.jpg"],
+]) {
+  const projectHtml = readFileSync(join(outDir, "work", slug, "index.html"), "utf8");
+  if (projectHtml.includes(badCover) || homeHtml.includes(badCover)) {
+    throw new Error("Invalid legacy image remains referenced: " + badCover);
+  }
+}
 
 const fitflowHtml = readFileSync(join(outDir, "work/fitflow/index.html"), "utf8");
 if (!fitflowHtml.includes("/projects/fitflow-real-interface.webp")) {
