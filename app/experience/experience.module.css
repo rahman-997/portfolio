@@ -621,3 +621,39 @@
   .hero h1{font-size:clamp(2.1rem,8.2vw,2.5rem)}
   .mobileMenuButton{padding:.45rem .52rem}
 }
+
+
+/* Final mobile visual review: three balanced stats, full-width source link. */
+@media(max-width:680px){
+  .metrics{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  .metrics>div{
+    min-width:0;
+    padding:.9rem .6rem;
+    min-height:104px;
+    align-items:center;
+    text-align:center;
+  }
+  .metrics>div strong{font-size:1.72rem;line-height:1.1}
+  .metrics>div span{font-size:.61rem;line-height:1.45;overflow-wrap:break-word}
+  .metrics>a{
+    grid-column:1 / -1;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    min-height:58px;
+    padding:.8rem 1rem;
+    font-size:.72rem;
+    white-space:nowrap;
+    overflow-wrap:normal;
+    border-top:1px solid var(--line);
+  }
+  .metrics>a span{font-size:1rem}
+}
+@media(max-width:360px){
+  .metrics>div{padding:.85rem .35rem}
+  .metrics>div span{font-size:.57rem}
+  .metrics>a{font-size:.68rem}
+}
