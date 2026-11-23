@@ -1,4 +1,6 @@
 import AIAtlas from "../ai-atlas";
+import Image from "next/image";
+import MobileNavigation from "./MobileNavigation";
 import { PROFILE_LINKS, PROJECT_SLUGS } from "../portfolio-data";
 import { PUBLIC_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
@@ -29,7 +31,10 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <a href="#about">{t.navAbout}</a>
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
       </nav>
-      <ExperienceControls locale={locale}/>
+      <div className={styles.headerTools}>
+        <ExperienceControls locale={locale}/>
+        <MobileNavigation locale={locale}/>
+      </div>
     </header>
 
     <main id="main">
@@ -37,25 +42,30 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <div className={styles.heroBackdrop} aria-hidden="true"/>
         <div className={styles.heroText}>
           <p className={styles.heroEyebrow}><span className={styles.liveDot}/>{t.hello}</p>
-          <h1>{t.heroTop}<br/><em>{t.heroBottom}</em></h1>
+          <h1><span>{t.heroTop}</span> <em>{t.heroBottom}</em></h1>
           <p className={styles.lead}>{t.heroLead}</p>
           <div className={styles.actions}>
             <a className={styles.primaryAction} href="#work">{t.workButton} <span aria-hidden="true">↗</span></a>
-            <a className={styles.secondaryAction} href={PROFILE_LINKS.linkedin} target="_blank" rel="noopener noreferrer">{t.contactButton} ↗</a>
-            <a className={styles.secondaryAction} href="#collaborate">{locale==="ar"?"الخدمات":locale==="tr"?"Hizmetler":"Services"} ↗</a>
+            <a className={styles.secondaryAction} href="/Abdulrahman-Hajar-Frontend-Resume.pdf" download>
+              {locale==="ar"?"تحميل السيرة الذاتية":locale==="tr"?"CV İndir":"Download CV"} <span aria-hidden="true">↓</span>
+            </a>
           </div>
-          <div className={styles.heroFoot}><span>01—03</span><span>{t.scrollLabel}</span></div>
+          <div className={styles.heroFoot} aria-label={t.visualDetail}>
+            <span>React / Next.js</span><span>TypeScript</span><span>UI/UX · RTL</span>
+          </div>
         </div>
         <div className={styles.heroVisual} aria-label={t.visualTitle}>
-          <div className={styles.visualRing} aria-hidden="true"/>
-          <div className={styles.visualOrbit} aria-hidden="true"><i/><i/><i/></div>
-          <div className={styles.visualPanel}>
-            <div className={styles.panelEyebrow}><span className={styles.liveDot}/>{t.dashboard}</div>
-            <div className={styles.visualSymbol} aria-hidden="true"><span>⌘</span><span>∞</span><span>↗</span></div>
-            <h2>{t.visualTitle}</h2>
-            <p>{t.visualDetail}</p>
-            <div className={styles.panelFooter}><span>AH / ENGINEERING</span><span>2026</span></div>
+          <div className={styles.featuredHeader}>
+            <span>{t.dashboard}</span><span>01 / 02</span>
           </div>
+          <a href="/work/fitflow/" className={styles.featureMain} aria-label={locale==="ar"?"استعرض مشروع FitFlow":locale==="tr"?"FitFlow projesini incele":"Explore FitFlow case study"}>
+            <Image unoptimized src="/projects/fitflow-real-interface.webp" alt="Real FitFlow desktop interface" width={1200} height={800} className={styles.featureImage} priority/>
+            <span className={styles.featureInfo}><strong>FitFlow</strong><span>Next.js · PWA <b aria-hidden="true">↗</b></span></span>
+          </a>
+          <a href="/work/mizan/" className={styles.featureSecondary} aria-label={locale==="ar"?"استعرض مشروع Mizan Finance":locale==="tr"?"Mizan Finance projesini incele":"Explore Mizan Finance case study"}>
+            <Image unoptimized src="/projects/mizan-live-dashboard.png" alt="Real Mizan Finance demo dashboard" width={1440} height={960} className={styles.featureImage}/>
+            <span className={styles.featureInfo}><strong>Mizan Finance</strong><span>React · RTL <b aria-hidden="true">↗</b></span></span>
+          </a>
           <div className={styles.floatingStatus}><span className={styles.liveDot}/>{t.availability}</div>
         </div>
       </section>
