@@ -32,7 +32,6 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
   {
     id:"bookbookhaven", name:"BookHaven", group:"product", original:true,
     stack:["Next.js","React","Express","MongoDB"],
-    cover:"/projects/bookhaven-cover.jpg",
     source:"https://github.com/rahman-997/bookbookhaven",
     demo:"https://bookbookhaven-free.onrender.com", study:"/work/bookhaven/",
     text:{
@@ -44,7 +43,6 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
     {
     id:"eventify", name:"Eventify", group:"product", original:true,
     stack:["React","TypeScript","PostgreSQL","Redis","BullMQ"],
-    cover:"/projects/eventify-cover.jpg",
     source:"https://github.com/rahman-997/eventify",
     demo:"https://eventify-web.onrender.com", study:"/work/eventify/",
     text:{
