@@ -1,5 +1,5 @@
 import AIAtlas from "../ai-atlas";
-import { PROFILE_LINKS } from "../portfolio-data";
+import { PROFILE_LINKS, PROJECT_SLUGS } from "../portfolio-data";
 import { PUBLIC_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
 import ExperienceControls from "./ExperienceControls";
@@ -9,7 +9,7 @@ import type { Locale } from "./locale";
 import { TEXT } from "./locale";
 import styles from "./experience.module.css";
 
-const stack = ["React", "Next.js", "TypeScript", "Node.js", "Express", "PostgreSQL", "MongoDB", "Redis", "PWA", "AI / MCP", "GitHub Actions", "WCAG"];
+const stack = ["React", "Next.js", "TypeScript", "UI/UX", "Responsive Design", "Accessibility", "RTL / i18n", "PWA", "Node.js", "Express", "PostgreSQL", "GitHub Actions"];
 
 export default function PortfolioExperience({locale}:{locale:Locale}) {
   const t=TEXT[locale];
@@ -62,7 +62,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
 
       <section className={styles.metrics} aria-label={t.projectEyebrow}>
         <div><strong>{String(PUBLIC_PROJECT_COUNT).padStart(2,"0")}</strong><span>{t.metricProjects}</span></div>
-        <div><strong>04</strong><span>{t.metricStudies}</span></div>
+        <div><strong>{String(PROJECT_SLUGS.length).padStart(2,"0")}</strong><span>{t.metricStudies}</span></div>
         <div><strong>03</strong><span>{t.metricLanguages}</span></div>
         <a href={PROFILE_LINKS.github} target="_blank" rel="noopener noreferrer">github.com/rahman-997 <span aria-hidden="true">↗</span></a>
       </section>
