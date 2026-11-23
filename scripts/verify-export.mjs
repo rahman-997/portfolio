@@ -108,6 +108,33 @@ if (!homeHtml.includes(`<link rel="canonical" href="${canonicalHost}/"`)) {
   throw new Error("Homepage canonical URL must use the primary Render portfolio hostname");
 }
 
+// Premium product theatre must remain fully static-exportable and source-backed.
+for (const marker of [
+  "data-featured-showcase",
+  "/projects/fitflow-real-interface.webp",
+  "FitFlow",
+  "Mizan Finance",
+  "Choose a featured project",
+]) {
+  if (!homeHtml.includes(marker)) {
+    throw new Error("Featured project theatre regression: " + marker);
+  }
+}
+const spotlightSource = readFileSync(join(root, "app/experience/FeaturedShowcase.tsx"), "utf8");
+for (const marker of [
+  'aria-pressed={selected === item.id}',
+  'onClick={() => setSelected(item.id)}',
+  "/projects/mizan-live-dashboard.png",
+  "prefers-reduced-motion",
+]) {
+  const source = marker === "prefers-reduced-motion"
+    ? readFileSync(join(root, "app/experience/FeaturedShowcase.module.css"), "utf8")
+    : spotlightSource;
+  if (!source.includes(marker)) {
+    throw new Error("Featured showcase interaction/accessibility contract missing: " + marker);
+  }
+}
+
 // Guard against accidentally dropping the interactive atlas from the homepage.
 for (const marker of [
   'id="ai-lab"',
