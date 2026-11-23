@@ -1,10 +1,10 @@
-# Abdulrahman Hajar — Software Engineering Portfolio
+# Abdulrahman Hajar — Frontend Engineering & Product Design Portfolio
 
 [![Portfolio CI](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml)
 
-A recruiter-facing engineering portfolio for **Abdulrahman Hajar** — **Software Engineer · Full-Stack Developer · AI & Interactive Systems**, and Computer Engineering student at Nişantaşı University in Istanbul, Türkiye.
+A recruiter-facing frontend engineering and product design portfolio for **Abdulrahman Hajar** — **Frontend Engineer · UI/UX Designer · Full-Stack Developer**, and Computer Engineering student at Nişantaşı University in Istanbul, Türkiye.
 
-The portfolio is built around **engineering evidence, not a generic skills wall**: complete products, backend architecture, API design, data systems, background work, validation, testing, security, reliability, deployment, AI integrations, and selected interactive engineering.
+The portfolio leads with **real frontend product experiences**: responsive React/Next.js interfaces, accessible and multilingual RTL workflows, installable PWAs, and honest case studies. Full-stack architecture, testing and reliability remain supporting evidence, not inflated marketing claims.
 
 **Live:** [abdulrahman-hajar-portfolio.onrender.com](https://abdulrahman-hajar-portfolio.onrender.com) · **GitHub:** [rahman-997](https://github.com/rahman-997) · **LinkedIn:** [Abdulrahman Hajar](https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/)
 
@@ -31,14 +31,14 @@ The portfolio presents the engineering layers demonstrated by the selected work:
 
 | Project | Engineering focus | Evidence |
 | --- | --- | --- |
-| **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, durable background work, health/readiness, metrics, CI/security |
+| **Mizan Finance** | Privacy-first finance UI | Responsive React dashboard, spending charts, validated forms, Arabic/English RTL, local storage, PWA; demo availability unverified — source and case study linked |\n| **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, durable background work, health/readiness, metrics, CI/security |
 | **BookHaven** | Full-stack commerce | Next.js + Express + MongoDB, HttpOnly BFF sessions, optimistic concurrency, conditional inventory, adaptive transactions with compensation fallback, paginated catalog/reviews/orders, admin operations, ISBN validation, dynamic SEO, Node 24.20.0 pinning, digest-pinned Node/Mongo containers, Compose validation, Dependabot supply-chain coverage |
 | **FitFlow** | Installable fitness PWA | Personalized plans, guided intervals, local-first progress, accessibility, responsive UX, offline readiness, Render static delivery |
 | **Venues API** | Focused backend service | Express 5, TypeScript, Zod 4, layered architecture, centralized errors, UUID resources, persistence, contract tests, live health proof |
 
 Every featured project links to **live proof, source code, and an engineering case study**. Render-hosted demos explicitly disclose free-tier wake-up behavior where applicable so cold starts are not mistaken for broken software.
 
-## Visual direction
+## Frontend-first update · 2026-11-23\n\n- FitFlow and Mizan now lead the public project library; the upstream fork remains explicitly identified.\n- Mizan has a standalone engineering case study and appears in the three-language evidence section.\n- Mizan's historical demo URL is **not treated as verified**; no public demo button appears in its case study.\n- English, Arabic RTL, and Turkish copy leads with frontend experience, accessibility, UI/UX and React.\n- The existing printable résumé and downloadable engineering PDF are retained as broader engineering documents; a separate frontend-specialized PDF remains a follow-up.\n- Every change is intended for review on a feature branch; no production deployment is part of this change.\n\n## Visual direction
 
 The active design uses a restrained dark engineering identity rather than a generic developer template:
 
@@ -52,7 +52,7 @@ The active design uses a restrained dark engineering identity rather than a gene
 
 ## Recruiter-facing content
 
-- clear **Software Engineer · Full-Stack Developer · AI & Interactive Systems** positioning
+- clear **Frontend Engineer · UI/UX Designer · Full-Stack Developer** positioning
 - selected projects with architecture and reliability evidence
 - engineering capability map
 - Computer Engineering education
