@@ -6,15 +6,25 @@ export type PortfolioProject = {
   text: Record<Locale, { headline: string; description: string }>;
 };
 export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
-  {
-    id:"eventify", name:"Eventify", group:"product", original:true,
-    stack:["React","TypeScript","PostgreSQL","Redis","BullMQ"],
-    source:"https://github.com/rahman-997/eventify",
-    demo:"https://eventify-web.onrender.com", study:"/work/eventify/",
+{
+    id:"fitflow-gym", name:"FitFlow", group:"product", original:true,
+    stack:["Next.js","React","TypeScript","PWA"],
+    source:"https://github.com/rahman-997/fitflow-gym",
+    demo:"https://fitflow-gym.onrender.com",study:"/work/fitflow/",
     text:{
-      en:{headline:"Events. Bookings. Reliability.",description:"Full-stack event platform and PWA with organizer flows, booking, waitlists and durable async work."},
-      ar:{headline:"الفعاليات والحجوزات والموثوقية",description:"منصة فعاليات متكاملة وتطبيق PWA مع إدارة المنظمين والحجوزات وقوائم الانتظار والمهام الخلفية الموثوقة."},
-      tr:{headline:"Etkinlikler, rezervasyonlar, güvenilirlik.",description:"Organizatör akışları, rezervasyonlar, bekleme listeleri ve kalıcı asenkron işlemler içeren tam kapsamlı etkinlik platformu."}
+      en:{headline:"A fitness experience built to stay with you.",description:"Installable fitness PWA with guided intervals, personal plans, weekly tracking and local-first persistence."},
+      ar:{headline:"تجربة لياقة تستمر معك",description:"تطبيق لياقة قابل للتثبيت، مع خطط مخصصة ومؤقتات تدريب وتتبع أسبوعي وحفظ محلي للتقدم."},
+      tr:{headline:"Sizinle kalan bir fitness deneyimi.",description:"Kişiselleştirilmiş planlar, zamanlayıcılar, haftalık takip ve cihazda kayıt sunan kurulabilir fitness PWA."}
+    }
+  },
+  {
+    id:"mizan-finance", name:"Mizan Finance", group:"product", original:true,
+    stack:["React","TypeScript","RTL","Local-first"],
+    source:"https://github.com/rahman-997/mizan-finance", study:"/work/mizan/",
+    text:{
+      en:{headline:"Privacy-first personal finance.",description:"Bilingual local-first budgeting and expense-planning interface with spending insights and RTL support."},
+      ar:{headline:"تنظيم مالي يحترم الخصوصية",description:"واجهة ثنائية اللغة للميزانيات والمصروفات وتحليل الإنفاق، تحفظ البيانات محلياً وتدعم الكتابة من اليمين."},
+      tr:{headline:"Gizliliğe öncelik veren kişisel finans.",description:"Yerel veri saklama, bütçe, gider analizi ve RTL desteği sunan iki dilli finans planlayıcısı."}
     }
   },
   {
@@ -28,15 +38,15 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
       tr:{headline:"Ödeme ekranının ötesindeki e-ticaret.",description:"Ürün keşfi, sepet, oturum, sipariş, stok ve yönetim akışları içeren tam kapsamlı kitapçı."}
     }
   },
-  {
-    id:"fitflow-gym", name:"FitFlow", group:"product", original:true,
-    stack:["Next.js","React","TypeScript","PWA"],
-    source:"https://github.com/rahman-997/fitflow-gym",
-    demo:"https://fitflow-gym.onrender.com",study:"/work/fitflow/",
+    {
+    id:"eventify", name:"Eventify", group:"product", original:true,
+    stack:["React","TypeScript","PostgreSQL","Redis","BullMQ"],
+    source:"https://github.com/rahman-997/eventify",
+    demo:"https://eventify-web.onrender.com", study:"/work/eventify/",
     text:{
-      en:{headline:"A fitness experience built to stay with you.",description:"Installable fitness PWA with guided intervals, personal plans, weekly tracking and local-first persistence."},
-      ar:{headline:"تجربة لياقة تستمر معك",description:"تطبيق لياقة قابل للتثبيت، مع خطط مخصصة ومؤقتات تدريب وتتبع أسبوعي وحفظ محلي للتقدم."},
-      tr:{headline:"Sizinle kalan bir fitness deneyimi.",description:"Kişiselleştirilmiş planlar, zamanlayıcılar, haftalık takip ve cihazda kayıt sunan kurulabilir fitness PWA."}
+      en:{headline:"Events. Bookings. Reliability.",description:"Full-stack event platform and PWA with organizer flows, booking, waitlists and durable async work."},
+      ar:{headline:"الفعاليات والحجوزات والموثوقية",description:"منصة فعاليات متكاملة وتطبيق PWA مع إدارة المنظمين والحجوزات وقوائم الانتظار والمهام الخلفية الموثوقة."},
+      tr:{headline:"Etkinlikler, rezervasyonlar, güvenilirlik.",description:"Organizatör akışları, rezervasyonlar, bekleme listeleri ve kalıcı asenkron işlemler içeren tam kapsamlı etkinlik platformu."}
     }
   },
   {
@@ -48,16 +58,6 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
       en:{headline:"A small API with serious boundaries.",description:"Layered REST service with schema validation, predictable errors, UUID resources and HTTP tests."},
       ar:{headline:"واجهة برمجة صغيرة بحدود هندسية واضحة",description:"خدمة REST متعددة الطبقات مع التحقق من المدخلات وأخطاء موحّدة ومعرّفات UUID واختبارات HTTP."},
       tr:{headline:"Net sınırları olan kompakt bir API.",description:"Şema doğrulama, öngörülebilir hatalar, UUID kaynakları ve HTTP testleri içeren katmanlı REST servisi."}
-    }
-  },
-  {
-    id:"mizan-finance", name:"Mizan Finance", group:"product", original:true,
-    stack:["React","TypeScript","RTL","Local-first"],
-    source:"https://github.com/rahman-997/mizan-finance",
-    text:{
-      en:{headline:"Privacy-first personal finance.",description:"Bilingual local-first budgeting and expense-planning interface with spending insights and RTL support."},
-      ar:{headline:"تنظيم مالي يحترم الخصوصية",description:"واجهة ثنائية اللغة للميزانيات والمصروفات وتحليل الإنفاق، تحفظ البيانات محلياً وتدعم الكتابة من اليمين."},
-      tr:{headline:"Gizliliğe öncelik veren kişisel finans.",description:"Yerel veri saklama, bütçe, gider analizi ve RTL desteği sunan iki dilli finans planlayıcısı."}
     }
   },
   {
