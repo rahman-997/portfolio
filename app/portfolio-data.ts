@@ -221,7 +221,7 @@ export const PROJECTS = {
     live: null,
     runtime: null,
     source: "https://github.com/rahman-997/mizan-finance",
-    cover: null,
+    cover: "/projects/mizan-live-dashboard.png",
     visual: "product",
     problem:
       "Financial dashboards must make dense information understandable across screens and writing directions. Users should be able to track spending and budgets without having to provide bank credentials or rely on a hosted account.",
