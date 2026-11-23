@@ -22,7 +22,7 @@ for (const locale of locales) {
   const html = readFileSync(locale.file, "utf8");
   for (const heading of locale.titles) check(html.includes(heading), locale.id + ": missing translated heading " + heading);
   const evidence = section(html, "highlights", "ai-lab");
-  for (const slug of ["eventify", "bookhaven", "fitflow", "venues-api"]) {
+  for (const slug of ["eventify", "bookhaven", "fitflow", "mizan", "venues-api"]) {
     check(evidence.includes('/work/' + slug + '/'), locale.id + ": missing sourced case study " + slug);
   }
   const process = section(html, "process", "systems");
