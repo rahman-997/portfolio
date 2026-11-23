@@ -29,8 +29,8 @@ export default function ResumePage() {
         </Link>
         <div className={styles.headerActions}>
           <Link href="/#work">Selected work</Link>
-          <a href="/resume.html" target="_blank" rel="noreferrer">Engineering print view ↗</a>
-          <a href="/Abdulrahman-Hajar-Resume.pdf" download>Engineering résumé PDF ↓</a>
+          <a href="/Abdulrahman-Hajar-Frontend-Resume.html" target="_blank" rel="noreferrer">Frontend print view ↗</a>
+          <a href="/Abdulrahman-Hajar-Frontend-Resume.pdf" download>Download Frontend CV ↓</a>
         </div>
       </header>
 
