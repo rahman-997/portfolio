@@ -11,7 +11,9 @@ const STORAGE_KEY = "portfolio-appearance";
 export default function ExperienceControls({locale}:{locale:Locale}) {
   const [theme,setTheme] = useState<Theme>("dark");
   useEffect(()=>{
-    const stored = window.localStorage.getItem(STORAGE_KEY);
+    let stored: string | null = null;
+    try { stored = window.localStorage.getItem(STORAGE_KEY); }
+    catch { /* Browser privacy settings can block persistent storage. */ }
     const preferred:Theme = stored==="dark" || stored==="light" ? stored : "dark";
     // Defer state synchronization until after mount to avoid effect render loops.
     const frame = window.requestAnimationFrame(() => setTheme(preferred));
@@ -27,6 +29,11 @@ export default function ExperienceControls({locale}:{locale:Locale}) {
     try { window.localStorage.setItem(STORAGE_KEY,next); } catch { /* storage may be disabled */ }
   };
   const label=TEXT[locale];
+  const themeText = locale==="ar"
+    ? (theme==="dark" ? "فاتح" : "داكن")
+    : locale==="tr"
+      ? (theme==="dark" ? "Açık" : "Koyu")
+      : (theme==="dark" ? "Light" : "Dark");
   return <div className={styles.controls}>
     <nav aria-label={label.language} className={styles.languages} dir="ltr">
       <Link href="/" lang="en" aria-current={locale==="en"?"page":undefined} title="English">EN</Link>
@@ -38,7 +45,7 @@ export default function ExperienceControls({locale}:{locale:Locale}) {
       aria-label={theme==="dark"?label.themeLight:label.themeDark}
       title={theme==="dark"?label.themeLight:label.themeDark}>
       <span aria-hidden="true">{theme==="dark"?"☀":"☾"}</span>
-      <span className={styles.themeText}>{theme==="dark"?"Light":"Dark"}</span>
+      <span className={styles.themeText}>{themeText}</span>
     </button>
   </div>;
 }
