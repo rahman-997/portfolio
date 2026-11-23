@@ -43,6 +43,30 @@ with sync_playwright() as pw:
                     page.locator(f'html[data-theme="{theme}"]').wait_for(timeout=15000)
                     check(page.locator("html").get_attribute("lang") == locale,
                           f"{name}: wrong html lang")
+                    stage = page.locator('[data-featured-showcase]')
+                    check(stage.count() == 1, f"{name}: interactive project theatre missing")
+                    fitflow_tab = stage.get_by_role("button", name="FitFlow", exact=True)
+                    mizan_tab = stage.get_by_role("button", name="Mizan Finance", exact=True)
+                    check(fitflow_tab.count() == 1 and mizan_tab.count() == 1,
+                          f"{name}: project preview controls missing")
+                    check(fitflow_tab.get_attribute("aria-pressed") == "true",
+                          f"{name}: featured project initial state missing")
+                    mizan_tab.click()
+                    check(mizan_tab.get_attribute("aria-pressed") == "true" and
+                          fitflow_tab.get_attribute("aria-pressed") == "false",
+                          f"{name}: featured tab did not switch")
+                    check(stage.locator('[data-active-project="mizan"]').count() == 1 and
+                          stage.locator('img[src="/projects/mizan-live-dashboard.png"]').count() == 1 and
+                          stage.locator('a[href="/work/mizan/"]').count() == 1,
+                          f"{name}: Mizan featured preview missing screenshot or study")
+                    fitflow_tab.focus()
+                    fitflow_tab.press("Enter")
+                    check(stage.locator('[data-active-project="fitflow"]').count() == 1 and
+                          stage.locator('img[src="/projects/fitflow-real-interface.webp"]').count() == 1 and
+                          stage.locator('a[href="/work/fitflow/"]').count() == 1,
+                          f"{name}: keyboard could not restore FitFlow preview")
+                    check(fitflow_tab.get_attribute("aria-pressed") == "true",
+                          f"{name}: featured tab state not restored")
                     if label == "mobile":
                         vw = page.evaluate("window.innerWidth")
                         bounds = page.locator("#top h1").evaluate("""(el) => {
