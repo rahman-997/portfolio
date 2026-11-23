@@ -157,7 +157,7 @@ export const PROJECTS = {
     live: "https://fitflow-gym.onrender.com",
     runtime: null,
     source: "https://github.com/rahman-997/fitflow-gym",
-    cover: "/projects/fitflow-cover.svg",
+    cover: "/projects/fitflow-real-interface.webp",
     visual: "pwa",
     problem:
       "A static fitness landing page does not demonstrate product behavior. The challenge was to create an end-to-end training flow with real application state, timing behavior, persistence, responsive edge cases, accessibility requirements, and offline considerations without adding unnecessary account infrastructure.",
