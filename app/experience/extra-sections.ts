@@ -39,9 +39,9 @@ export const extraSections: Record<Locale, {
       lead:"Areas I actively build and explore. Every project starts with a discussion of requirements, scope and constraints.",
       button:"Discuss an idea",
       cards:[
-        {icon:"◇",title:"Product websites & PWAs",detail:"Responsive interfaces, practical design systems, installable experiences and accessible user journeys.",tags:["React","Next.js","TypeScript"]},
-        {icon:"⌘",title:"APIs & full-stack systems",detail:"Backend architecture, authentication, persistence, integrations and reliable workflows.",tags:["Node.js","Express","Data"]},
-        {icon:"✳",title:"Quality & engineering reviews",detail:"Improve test coverage, accessibility, deployment checks and maintainability of existing React or API projects.",tags:["CI/CD","A11y","Testing"]}
+        {icon:"◇",title:"Frontend engineering",detail:"Fast, accessible React and Next.js interfaces, responsive dashboards, installable PWAs, and polished interaction states.",tags:["React","Next.js","TypeScript"]},
+        {icon:"⌘",title:"UI/UX & design systems",detail:"Turn product requirements into coherent journeys, reusable component systems, multilingual layouts and developer-ready interfaces.",tags:["UI/UX","RTL","Accessibility"]},
+        {icon:"✳",title:"Full-stack delivery & QA",detail:"Connect frontend flows to APIs, databases and automated tests with maintainable, well-documented delivery.",tags:["APIs","CI/CD","Testing"]}
       ]
     },
     faq:{
@@ -84,9 +84,9 @@ export const extraSections: Record<Locale, {
       lead:"مجالات أعمل عليها وأطوّر مهاراتي فيها. يبدأ أي مشروع بمناقشة احتياجاته ونطاقه وحدوده.",
       button:"ناقش فكرة معي",
       cards:[
-        {icon:"◇",title:"مواقع وتطبيقات PWA",detail:"واجهات متجاوبة وأنظمة تصميم عملية وتجارب قابلة للتثبيت وسهلة الوصول.",tags:["React","Next.js","TypeScript"]},
-        {icon:"⌘",title:"واجهات API وأنظمة متكاملة",detail:"هندسة الخدمات الخلفية والحسابات والتخزين والتكاملات وسير العمل الموثوق.",tags:["Node.js","Express","البيانات"]},
-        {icon:"✳",title:"الجودة ومراجعة المشاريع",detail:"تحسين الاختبارات وإمكانية الوصول وفحوص النشر وقابلية صيانة مشاريع React وAPI.",tags:["CI/CD","إمكانية الوصول","اختبارات"]}
+        {icon:"◇",title:"تطوير واجهات Frontend",detail:"واجهات React وNext.js متجاوبة وسريعة وسهلة الوصول، مع لوحات بيانات وتطبيقات PWA وتفاعلات مدروسة.",tags:["React","Next.js","TypeScript"]},
+        {icon:"⌘",title:"تصميم UI/UX وأنظمة التصميم",detail:"تحويل الأفكار إلى مسارات استخدام واضحة ومكونات قابلة لإعادة الاستخدام، مع دعم لغات متعددة وRTL.",tags:["UI/UX","RTL","Accessibility"]},
+        {icon:"✳",title:"تطوير Full-Stack وضمان الجودة",detail:"ربط الواجهات بالخدمات وقواعد البيانات والاختبارات، وتسليم كود واضح وقابل للصيانة.",tags:["APIs","CI/CD","اختبارات"]}
       ]
     },
     faq:{
@@ -129,9 +129,9 @@ export const extraSections: Record<Locale, {
       lead:"Üzerinde çalıştığım ve kendimi geliştirdiğim alanlar. Her iş, gereksinimlerin ve kapsamın birlikte değerlendirilmesiyle başlar.",
       button:"Bir fikri konuşalım",
       cards:[
-        {icon:"◇",title:"Ürün siteleri ve PWA'lar",detail:"Duyarlı arayüzler, kullanışlı tasarım sistemleri, kurulabilir deneyimler ve erişilebilir akışlar.",tags:["React","Next.js","TypeScript"]},
-        {icon:"⌘",title:"API ve uçtan uca sistemler",detail:"Backend mimarisi, kimlik doğrulama, veri saklama, entegrasyon ve güvenilir iş akışları.",tags:["Node.js","Express","Veri"]},
-        {icon:"✳",title:"Kalite ve kod incelemesi",detail:"Mevcut React ve API projelerinde test kapsamı, erişilebilirlik, dağıtım kontrolü ve bakımı iyileştirme.",tags:["CI/CD","Erişilebilirlik","Test"]}
+        {icon:"◇",title:"Frontend geliştirme",detail:"Hızlı ve erişilebilir React/Next.js arayüzleri, duyarlı panolar, PWA uygulamaları ve özenli etkileşimler.",tags:["React","Next.js","TypeScript"]},
+        {icon:"⌘",title:"UI/UX ve tasarım sistemleri",detail:"Ürün fikirlerini anlaşılır yolculuklara, yeniden kullanılabilir bileşenlere ve çok dilli, RTL uyumlu arayüzlere dönüştürme.",tags:["UI/UX","RTL","Erişilebilirlik"]},
+        {icon:"✳",title:"Full-stack teslim ve QA",detail:"Arayüzleri API, veri ve testlerle birleştirerek sürdürülebilir ve belgelenmiş ürünler geliştirme.",tags:["API","CI/CD","Test"]}
       ]
     },
     faq:{
