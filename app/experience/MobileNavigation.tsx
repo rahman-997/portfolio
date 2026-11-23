@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
@@ -8,6 +8,33 @@ import styles from "./experience.module.css";
 
 export default function MobileNavigation({locale}:{locale:Locale}) {
   const [open,setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !rootRef.current?.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    const closeOnResize = () => {
+      if (window.innerWidth > 1220) setOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    window.addEventListener("resize", closeOnResize);
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+      window.removeEventListener("resize", closeOnResize);
+    };
+  }, [open]);
   const t = TEXT[locale];
   const extra = extraSections[locale];
   const menuLabel = locale==="ar" ? "قائمة التنقل" : locale==="tr" ? "Gezinme menüsü" : "Navigation menu";
@@ -19,14 +46,14 @@ export default function MobileNavigation({locale}:{locale:Locale}) {
     {href:"#about",label:t.navAbout},
     {href:"/resume/",label:t.navResume},
   ];
-  return <div className={styles.mobileNavigation}>
-    <button className={styles.mobileMenuButton} type="button" aria-label={menuLabel}
+  return <div className={styles.mobileNavigation} ref={rootRef}>
+    <button ref={triggerRef} className={styles.mobileMenuButton} type="button" aria-label={menuLabel}
       aria-expanded={open} aria-controls="portfolio-mobile-links"
       onClick={()=>setOpen(value=>!value)}>
       <span aria-hidden="true" className={styles.menuBars}><i/><i/></span>
       <span>{open ? (locale==="ar"?"إغلاق":locale==="tr"?"Kapat":"Close") : (locale==="ar"?"القائمة":locale==="tr"?"Menü":"Menu")}</span>
     </button>
-    <nav id="portfolio-mobile-links" className={styles.mobilePanel} aria-label={menuLabel} hidden={!open} onKeyDown={event=>{if(event.key==="Escape")setOpen(false);}}>
+    <nav id="portfolio-mobile-links" className={styles.mobilePanel} aria-label={menuLabel} hidden={!open}>
       {links.map((item,i)=><a href={item.href} key={item.href} onClick={()=>setOpen(false)}>
         <span>{String(i+1).padStart(2,"0")}</span>{item.label}<span aria-hidden="true">↗</span>
       </a>)}
