@@ -451,3 +451,28 @@
 }
 
 .mobilePanel[hidden]{display:none}
+
+
+/* Product theatre integration: component controls its own intrinsic size.
+   This overrides the legacy fixed-height screenshot stack across viewports. */
+.heroVisual{
+  display:block;
+  height:auto;
+  min-height:0;
+  align-self:center;
+  overflow:visible;
+}
+@media(max-width:1220px){
+  .heroVisual{height:auto;min-height:0;width:100%}
+}
+@media(max-width:820px){
+  .hero{align-items:stretch}
+  .heroVisual{height:auto;min-height:0;max-width:650px;width:100%;margin-inline:auto}
+}
+@media(max-width:680px){
+  .heroVisual{height:auto;min-height:0;max-width:100%}
+  .hero{gap:2rem}
+}
+@media(max-width:360px){
+  .heroVisual{height:auto;min-height:0}
+}
