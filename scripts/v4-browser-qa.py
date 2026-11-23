@@ -45,6 +45,13 @@ with sync_playwright() as pw:
                           f"{name}: wrong html lang")
                     stage = page.locator('[data-featured-showcase]')
                     check(stage.count() == 1, f"{name}: interactive project theatre missing")
+                    visual_layout = stage.evaluate("""el => {
+                        const screen = el.querySelector('[data-active-project]').getBoundingClientRect();
+                        const details = el.querySelector('[class*="projectDetails"]').getBoundingClientRect();
+                        return {screenBottom: screen.bottom, detailsTop: details.top};
+                    }""")
+                    check(visual_layout["detailsTop"] >= visual_layout["screenBottom"] - 2,
+                          f"{name}: project copy obscures the real application screenshot")
                     fitflow_tab = stage.get_by_role("button", name="FitFlow", exact=True)
                     mizan_tab = stage.get_by_role("button", name="Mizan Finance", exact=True)
                     check(fitflow_tab.count() == 1 and mizan_tab.count() == 1,
@@ -90,6 +97,11 @@ with sync_playwright() as pw:
                         }""")
                         check(bounds["left"] >= -2 and bounds["right"] <= vw + 2,
                               f"{name}: visible hero heading text spills outside mobile viewport ({bounds}, width={vw})")
+                        header_box = page.locator("header").bounding_box()
+                        check(header_box is not None and header_box["height"] <= 90,
+                              f"{name}: mobile header still takes multiple rows")
+                        check(page.locator("header button[title]").first.is_visible(),
+                              f"{name}: theme toggle hidden on mobile")
                         menu = page.locator('button[aria-controls="portfolio-mobile-links"]')
                         check(menu.is_visible() and menu.get_attribute("aria-expanded") == "false",
                               f"{name}: mobile navigation trigger unavailable")
@@ -97,6 +109,9 @@ with sync_playwright() as pw:
                         check(menu.get_attribute("aria-expanded") == "true" and
                               page.locator("#portfolio-mobile-links a[href='#work']").count() == 1,
                               f"{name}: mobile navigation did not reveal project link")
+                        check(page.locator("#portfolio-mobile-links a[href='/ar/']").count() == 1 and
+                              page.locator("#portfolio-mobile-links a[href='/tr/']").count() == 1,
+                              f"{name}: mobile language switcher missing")
                         page.locator("#portfolio-mobile-links a[href='#work']").click()
                         check(menu.get_attribute("aria-expanded") == "false",
                               f"{name}: mobile navigation remains open after selection")
@@ -181,6 +196,10 @@ with sync_playwright() as pw:
                     check(overflow <= 2, f"{name}: horizontal overflow {overflow}px")
                     check(not errors, f"{name}: browser exceptions {errors}")
                     if label == "mobile":
+                        # Scroll to top before a full-page capture. Sticky headers otherwise
+                        # appear at the previous scrolled viewport, misleading visual review.
+                        page.evaluate("window.scrollTo({top: 0, left: 0, behavior: 'instant'})")
+                        page.wait_for_timeout(100)
                         page.screenshot(path=str(OUT / (name + ".png")), full_page=True,
                                         animations="disabled")
                     report.append({"case":name,"status":"pass","projects":7,
