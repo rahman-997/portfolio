@@ -29,7 +29,7 @@ export const PROJECTS = {
     live: "https://eventify-web.onrender.com",
     runtime: "https://backend2-api.onrender.com/health",
     source: "https://github.com/rahman-997/eventify",
-    cover: "/projects/eventify-cover.jpg",
+    cover: null,
     visual: "product",
     problem:
       "Event booking stops being simple once capacity, cancellation, waitlists, retries, authentication, shared cache state, and background side effects all have to remain coherent. The project needed to demonstrate those failure modes rather than hiding them behind a CRUD interface.",
@@ -93,7 +93,7 @@ export const PROJECTS = {
     live: "https://bookbookhaven-free.onrender.com",
     runtime: null,
     source: "https://github.com/rahman-997/bookbookhaven",
-    cover: "/projects/bookhaven-cover.jpg",
+    cover: null,
     visual: "product",
     problem:
       "A bookstore portfolio project becomes credible only when customer and operational workflows agree on the same business rules. Cart state, checkout, order transitions, inventory, reviews, and admin actions need to behave as one system rather than isolated screens.",
