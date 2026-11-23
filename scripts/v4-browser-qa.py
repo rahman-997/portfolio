@@ -67,6 +67,19 @@ with sync_playwright() as pw:
                           f"{name}: keyboard could not restore FitFlow preview")
                     check(fitflow_tab.get_attribute("aria-pressed") == "true",
                           f"{name}: featured tab state not restored")
+                    for project_id, screenshot in [
+                        ("fitflow", "/projects/fitflow-real-interface.webp"),
+                        ("mizan", "/projects/mizan-live-dashboard.png"),
+                    ]:
+                        if project_id == "mizan":
+                            mizan_tab.click()
+                        cover = stage.locator(f'img[src="{screenshot}"]')
+                        check(cover.count() == 1 and cover.evaluate(
+                            "(el) => el.complete && el.naturalWidth > 0"),
+                            f"{name}: {project_id} real screenshot not loaded")
+                        check(stage.locator(f'a[href="{screenshot}"]').count() == 1,
+                            f"{name}: {project_id} full-resolution capture link missing")
+                    fitflow_tab.click()
                     if label == "mobile":
                         vw = page.evaluate("window.innerWidth")
                         bounds = page.locator("#top h1").evaluate("""(el) => {
