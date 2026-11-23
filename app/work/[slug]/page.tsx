@@ -70,7 +70,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       codeRepository: study.source,
       runtimePlatform: "Web",
       programmingLanguage: study.languages,
-      targetProduct: { "@type": "SoftwareApplication", name: study.name, applicationCategory: "WebApplication", operatingSystem: "Web", url: study.live },
+      targetProduct: { "@type": "SoftwareApplication", name: study.name, applicationCategory: "WebApplication", operatingSystem: "Web", ...(study.live ? { url: study.live } : {}) },
     },
     dateModified: PORTFOLIO_UPDATED_AT,
     inLanguage: "en",
@@ -103,7 +103,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           <h1>{study.name}</h1>
           <p className={styles.summary}>{study.summary}</p>
           <div className={styles.actions}>
-            <a href={study.live} target="_blank" rel="noreferrer">Open live system ↗</a>
+            {study.live ? <a href={study.live} target="_blank" rel="noreferrer">Open live system ↗</a> : null}
             {study.runtime ? <a href={study.runtime} target="_blank" rel="noreferrer">Runtime health ↗</a> : null}
             <a href={study.source} target="_blank" rel="noreferrer">Inspect source ↗</a>
           </div>
@@ -144,7 +144,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
         <section className={styles.next}>
           <div><span>VERIFY IT</span><h2>The implementation is public.</h2><p>Review the live behavior, source code, tests, architecture, and deployment details directly.</p></div>
-          <div className={styles.nextLinks}><a href={study.live} target="_blank" rel="noreferrer">Live system ↗</a><a href={study.source} target="_blank" rel="noreferrer">GitHub source ↗</a><Link href="/#work">More case studies →</Link></div>
+          <div className={styles.nextLinks}>{study.live ? <a href={study.live} target="_blank" rel="noreferrer">Live system ↗</a> : null}<a href={study.source} target="_blank" rel="noreferrer">GitHub source ↗</a><Link href="/#work">More case studies →</Link></div>
         </section>
       </article>
     </main>
