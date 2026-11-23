@@ -21,6 +21,8 @@ for (const locale of locales) {
   check(existsSync(locale.file), "Missing " + locale.file);
   const html = readFileSync(locale.file, "utf8");
   for (const heading of locale.titles) check(html.includes(heading), locale.id + ": missing translated heading " + heading);
+  const role = locale.id === "en" ? "Frontend Engineer" : locale.id === "ar" ? "مهندس واجهات" : "Frontend Mühendisi";
+  check(html.includes(role), locale.id + ": missing frontend-first recruiter positioning");
   const evidence = section(html, "highlights", "ai-lab");
   for (const slug of ["eventify", "bookhaven", "fitflow", "mizan", "venues-api"]) {
     check(evidence.includes('/work/' + slug + '/'), locale.id + ": missing sourced case study " + slug);
