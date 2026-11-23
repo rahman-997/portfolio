@@ -1,7 +1,6 @@
 import AIAtlas from "../ai-atlas";
-import Image from "next/image";
-import Link from "next/link";
 import MobileNavigation from "./MobileNavigation";
+import FeaturedShowcase from "./FeaturedShowcase";
 import { PROFILE_LINKS, PROJECT_SLUGS } from "../portfolio-data";
 import { PUBLIC_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
@@ -55,19 +54,8 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
             <span>React / Next.js</span><span>TypeScript</span><span>UI/UX · RTL</span>
           </div>
         </div>
-        <div className={styles.heroVisual} aria-label={t.visualTitle}>
-          <div className={styles.featuredHeader}>
-            <span>{t.dashboard}</span><span>01 / 02</span>
-          </div>
-          <Link href="/work/fitflow/" className={styles.featureMain} aria-label={locale==="ar"?"استعرض مشروع FitFlow":locale==="tr"?"FitFlow projesini incele":"Explore FitFlow case study"}>
-            <Image unoptimized src="/projects/fitflow-real-interface.webp" alt="Real FitFlow desktop interface" width={1200} height={800} className={styles.featureImage} priority/>
-            <span className={styles.featureInfo}><strong>FitFlow</strong><span>Next.js · PWA <b aria-hidden="true">↗</b></span></span>
-          </Link>
-          <Link href="/work/mizan/" className={styles.featureSecondary} aria-label={locale==="ar"?"استعرض مشروع Mizan Finance":locale==="tr"?"Mizan Finance projesini incele":"Explore Mizan Finance case study"}>
-            <Image unoptimized src="/projects/mizan-live-dashboard.png" alt="Real Mizan Finance demo dashboard" width={1440} height={960} className={styles.featureImage}/>
-            <span className={styles.featureInfo}><strong>Mizan Finance</strong><span>React · RTL <b aria-hidden="true">↗</b></span></span>
-          </Link>
-          <div className={styles.floatingStatus}><span className={styles.liveDot}/>{t.availability}</div>
+        <div className={styles.heroVisual}>
+          <FeaturedShowcase locale={locale}/>
         </div>
       </section>
 
