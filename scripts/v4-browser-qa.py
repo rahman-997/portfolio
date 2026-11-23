@@ -43,6 +43,26 @@ with sync_playwright() as pw:
                     page.locator(f'html[data-theme="{theme}"]').wait_for(timeout=15000)
                     check(page.locator("html").get_attribute("lang") == locale,
                           f"{name}: wrong html lang")
+                    if label == "mobile":
+                        vw = page.evaluate("window.innerWidth")
+                        bounds = page.locator("#top h1").evaluate("""(el) => {
+                            const range = document.createRange();
+                            range.selectNodeContents(el);
+                            const r = range.getBoundingClientRect();
+                            return {left:r.left,right:r.right};
+                        }""")
+                        check(bounds["left"] >= -2 and bounds["right"] <= vw + 2,
+                              f"{name}: visible hero heading text spills outside mobile viewport ({bounds}, width={vw})")
+                        menu = page.locator('button[aria-controls="portfolio-mobile-links"]')
+                        check(menu.is_visible() and menu.get_attribute("aria-expanded") == "false",
+                              f"{name}: mobile navigation trigger unavailable")
+                        menu.click()
+                        check(menu.get_attribute("aria-expanded") == "true" and
+                              page.locator("#portfolio-mobile-links a[href='#work']").count() == 1,
+                              f"{name}: mobile navigation did not reveal project link")
+                        page.locator("#portfolio-mobile-links a[href='#work']").click()
+                        check(menu.get_attribute("aria-expanded") == "false",
+                              f"{name}: mobile navigation remains open after selection")
                     expected_dir = "rtl" if locale == "ar" else "ltr"
                     check(page.locator("html").get_attribute("dir") == expected_dir,
                           f"{name}: wrong document direction")
