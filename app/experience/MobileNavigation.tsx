@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
 import { extraSections } from "./extra-sections";
@@ -29,6 +30,12 @@ export default function MobileNavigation({locale}:{locale:Locale}) {
       {links.map((item,i)=><a href={item.href} key={item.href} onClick={()=>setOpen(false)}>
         <span>{String(i+1).padStart(2,"0")}</span>{item.label}<span aria-hidden="true">↗</span>
       </a>)}
+      <div className={styles.mobileLanguagePicker} role="group"
+        aria-label={t.language} dir="ltr">
+        <Link href="/" lang="en" aria-current={locale==="en"?"page":undefined} onClick={()=>setOpen(false)}>EN</Link>
+        <Link href="/ar/" lang="ar" aria-current={locale==="ar"?"page":undefined} onClick={()=>setOpen(false)}>العربية</Link>
+        <Link href="/tr/" lang="tr" aria-current={locale==="tr"?"page":undefined} onClick={()=>setOpen(false)}>TR</Link>
+      </div>
     </nav>
   </div>;
 }
