@@ -449,3 +449,5 @@
   .featureMain,.featureSecondary,.projectPreviewImage{transition:none}
   .featureMain:hover,.featureSecondary:hover{transform:none}
 }
+
+.mobilePanel[hidden]{display:none}
