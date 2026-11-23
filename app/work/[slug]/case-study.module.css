@@ -40,3 +40,12 @@
   .next{padding:1.5rem 1rem}
   .splitSection>p{font-size:1.18rem}
 }
+
+.coverCaption{
+  display:block;
+  margin:.75rem .35rem .1rem;
+  color:var(--muted);
+  font-size:.7rem;
+  line-height:1.5;
+  letter-spacing:.01em;
+}
