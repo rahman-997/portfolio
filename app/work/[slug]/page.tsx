@@ -52,6 +52,17 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const study = PROJECTS[slug as ProjectSlug];
   if (!study) notFound();
 
+  const coverDimensions = slug === "mizan"
+    ? {width:1440,height:960}
+    : slug === "fitflow"
+      ? {width:1200,height:800}
+      : {width:1200,height:630};
+  const coverCaption = slug === "mizan"
+    ? "Screenshot of the local application with sample data."
+    : slug === "fitflow"
+      ? "Screenshot captured from the local production build."
+      : "Project preview.";
+
   const canonicalUrl = `${SITE_URL}/work/${slug}/`;
   const caseStudyJsonLd = {
     "@context": "https://schema.org",
@@ -108,7 +119,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
             <a href={study.source} target="_blank" rel="noreferrer">Inspect source ↗</a>
           </div>
           <div className={styles.stack}>{study.stack.map((item) => <span key={item}>{item}</span>)}</div>
-          {study.cover ? <figure className={styles.cover}><Image src={study.cover} alt={`${study.name} product interface preview`} width={1200} height={630} priority /></figure> : null}
+          {study.cover ? <figure className={styles.cover}><Image src={study.cover} alt={`${study.name} project preview`} width={coverDimensions.width} height={coverDimensions.height} sizes="(max-width: 1240px) calc(100vw - 48px), 1240px" priority /><figcaption className={styles.coverCaption}>{coverCaption}</figcaption></figure> : null}
         </section>
 
         <section className={styles.splitSection}>
