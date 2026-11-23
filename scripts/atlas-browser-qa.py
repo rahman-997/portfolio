@@ -127,8 +127,27 @@ with sync_playwright() as playwright:
                 page.screenshot(path=str(OUTPUT / "desktop-full-page.png"), full_page=True,
                     animations="disabled")
 
-            check(page.get_by_role("link", name="Explore AI Lab").count() == 1,
-                  f"{name}: missing hero CTA")
+            if name == "desktop":
+                check(page.get_by_role("link", name="Explore AI Lab").count() == 1,
+                      f"{name}: missing desktop AI Lab navigation")
+            else:
+                menu = page.get_by_role("button", name="Navigation menu")
+                check(menu.count() == 1 and menu.get_attribute("aria-expanded") == "false",
+                      f"{name}: mobile menu missing or improperly initialized")
+                menu.click()
+                check(menu.get_attribute("aria-expanded") == "true",
+                      f"{name}: mobile menu did not open")
+                menu_nav = page.get_by_role("navigation", name="Navigation menu")
+                check(menu_nav.get_by_role("link", name="AI Lab").count() == 1,
+                      f"{name}: AI Lab missing from mobile navigation")
+                menu_nav.get_by_role("link", name="AI Lab").click()
+                check(menu.get_attribute("aria-expanded") == "false",
+                      f"{name}: mobile navigation did not close after selection")
+                vw = page.evaluate("window.innerWidth")
+                title_box = page.locator("#top h1").bounding_box()
+                check(title_box is not None and title_box["x"] >= -2 and
+                      title_box["x"] + title_box["width"] <= vw + 2,
+                      f"{name}: hero heading box exceeds viewport width")
             nodes = page.locator("#ai-lab button[aria-label^='Explore ']")
             check(nodes.count() == 8, f"{name}: expected 8 disciplines")
             network = page.locator("#ai-lab [role='group'][aria-label^='Select an engineering discipline']")
