@@ -371,3 +371,115 @@
   .screen{aspect-ratio:3/2;min-height:0}
   .detailsActions a{font-size:.66rem}
 }
+
+
+/* Genuine screenshot lightbox. Native dialog traps focus and supports Escape.
+   The preview never overlays the screenshot inside the hero card. */
+.detailsActions button.captureLink{
+  font:inherit;
+  cursor:pointer;
+  text-align:start;
+}
+.detailsActions a,.detailsActions button{
+  min-height:42px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:.55rem;
+  padding:.65rem .8rem;
+  font-size:.71rem;
+  font-weight:800;
+  border-radius:10px;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.previewDialog{
+  position:fixed;
+  margin:auto;
+  inset:0;
+  width:min(1100px,calc(100vw - 32px));
+  max-width:1100px;
+  max-height:calc(100dvh - 32px);
+  overflow:auto;
+  padding:clamp(.7rem,1.5vw,1.2rem);
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:var(--canvas);
+  color:var(--ink);
+  box-shadow:0 34px 100px rgba(0,0,0,.5);
+}
+.previewDialog::backdrop{
+  background:rgba(2,8,11,.88);
+  backdrop-filter:blur(7px);
+}
+.previewDialogHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  margin-bottom:1rem;
+}
+.previewDialogHeader strong{
+  font-size:clamp(.9rem,1.5vw,1.1rem);
+  font-weight:780;
+}
+.previewDialogControls{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.5rem;
+}
+.previewDialogControls a,
+.previewDialogControls button{
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:.7rem;
+  min-height:44px;
+  padding:.56rem .85rem;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:var(--surface);
+  color:var(--ink);
+  cursor:pointer;
+  font:700 .77rem/1.4 system-ui,sans-serif;
+  white-space:nowrap;
+  text-decoration:none;
+}
+.previewDialogControls button:hover,
+.previewDialogControls a:hover,
+.previewDialogControls button:focus-visible,
+.previewDialogControls a:focus-visible{
+  background:var(--surface2);
+  border-color:var(--accent);
+}
+.previewDialogImage{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:calc(100dvh - 175px);
+  object-fit:contain;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:var(--surface);
+}
+.previewDialogNote{
+  margin:.7rem .1rem 0;
+  color:var(--muted);
+  font-size:.73rem;
+  line-height:1.5;
+}
+@media(max-width:680px){
+  .detailsActions button{min-height:43px;padding:.56rem .7rem;font-size:.69rem;flex:1}
+  .previewDialog{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);padding:.7rem;border-radius:14px}
+  .previewDialogHeader{align-items:stretch;flex-direction:column;gap:.6rem}
+  .previewDialogControls{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+  .previewDialogControls a,.previewDialogControls button{
+    min-width:0;min-height:46px;padding:.52rem .45rem;font-size:.66rem;
+    white-space:normal;
+  }
+  .previewDialogImage{max-height:calc(100dvh - 225px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .previewDialog::backdrop{backdrop-filter:none}
+}
