@@ -87,6 +87,27 @@ with sync_playwright() as pw:
                         check(stage.locator(f'a[href="{screenshot}"]').count() == 1,
                             f"{name}: {project_id} full-resolution capture link missing")
                     fitflow_tab.click()
+                    enlarge = {
+                        "en": "Enlarge screenshot",
+                        "ar": "تكبير الصورة",
+                        "tr": "Görseli büyüt",
+                    }[locale]
+                    enlarge_button = stage.get_by_role("button", name=enlarge, exact=True)
+                    enlarge_button.click()
+                    dialog = stage.locator("dialog")
+                    check(dialog.count() == 1 and dialog.evaluate("(el) => el.open"),
+                          f"{name}: full-image preview did not open")
+                    full_image = dialog.locator('img[src="/projects/fitflow-real-interface.webp"]')
+                    full_image.wait_for(state="visible", timeout=5000)
+                    page.wait_for_function("""() => {
+                      const img = document.querySelector('dialog[open] img');
+                      return Boolean(img && img.complete && img.naturalWidth > 0);
+                    }""", timeout=5000)
+                    check(dialog.locator('a[href="/projects/fitflow-real-interface.webp"]').count() == 1,
+                          f"{name}: lightbox missing original image link")
+                    page.keyboard.press("Escape")
+                    check(not dialog.evaluate("(el) => el.open"),
+                          f"{name}: native Escape did not close full-image preview")
                     if label == "mobile":
                         vw = page.evaluate("window.innerWidth")
                         bounds = page.locator("#top h1").evaluate("""(el) => {
