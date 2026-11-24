@@ -1,0 +1,70 @@
+name: One-time Next.js patch for portfolio draft
+
+# Runs only for this explicit feature-branch trigger, never for main.
+on:
+  push:
+    branches: [feat/frontend-first-mizan-case-study-2026-11-23]
+    paths:
+      - scripts/next-16-4-6-update.trigger
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Checkout current feature branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+      - name: Pinned Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Use exact npm
+        run: npm install --global npm@11.19.1
+      - name: Regenerate lockfile using official npm registry metadata
+        run: |
+          npm install --package-lock-only --save-exact --ignore-scripts --no-audit --no-fund next@16.4.6 eslint-config-next@16.4.6
+          node --input-type=module -e '
+            import {readFileSync} from "node:fs";
+            const p=JSON.parse(readFileSync("package.json","utf8"));
+            const l=JSON.parse(readFileSync("package-lock.json","utf8"));
+            for (const key of ["next","eslint-config-next"]) {
+              if ((p.dependencies?.[key] ?? p.devDependencies?.[key])!=="16.4.6" || l.packages["node_modules/"+key]?.version!=="16.4.6" || (l.packages[""].dependencies?.[key] ?? l.packages[""].devDependencies?.[key])!=="16.4.6") throw Error("Mismatch for "+key);
+            }
+          '
+      - name: Install fresh from updated lockfile
+        run: npm ci --no-audit --no-fund
+      - name: Lint
+        run: npm run lint
+      - name: Types
+        run: npm run typecheck
+      - name: Production static export
+        run: npm run build
+      - name: Verify static export and contracts
+        run: npm run verify:export
+      - name: Audit for high and critical advisories
+        run: npm run audit
+      - name: Record remaining moderate advisories
+        run: |
+          set +e
+          npm audit --audit-level=moderate
+          code=$?
+          echo "npm audit moderate threshold exit code: $code"
+          exit 0
+      - name: Commit only verified dependency manifest and lockfile to draft branch
+        run: |
+          test "${GITHUB_REF}" = "refs/heads/feat/frontend-first-mizan-case-study-2026-11-23"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "No dependency changes to commit"
+          else
+            git commit -m "fix(deps): patch Next.js and ESLint config to 16.4.6"
+            git push origin HEAD:refs/heads/feat/frontend-first-mizan-case-study-2026-11-23
+          fi
