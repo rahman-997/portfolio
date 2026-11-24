@@ -131,7 +131,6 @@ export default function FeaturedShowcase({ locale }: { locale: Locale }) {
           height={960}
           sizes="(max-width: 820px) 100vw, 620px"
           className={styles.screenImage}
-          loading={selected === "fitflow" ? "eager" : "lazy"}
           fetchPriority={selected === "fitflow" ? "high" : "auto"}
           priority={selected === "fitflow"}
         />
