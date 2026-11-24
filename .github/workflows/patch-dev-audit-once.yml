@@ -1,0 +1,61 @@
+name: One-time moderate dependency advisory fix
+
+on:
+  push:
+    branches: [feat/frontend-first-mizan-case-study-2026-11-23]
+    paths:
+      - scripts/dev-audit-fix.trigger
+
+permissions:
+  contents: write
+
+jobs:
+  fix-verify-and-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Checkout this feature branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+      - name: Pinned Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Pinned npm
+        run: npm install --global npm@11.19.1
+      - name: Fix only npm-compatible advisories in lockfile
+        run: |
+          npm audit fix --package-lock-only --ignore-scripts --no-fund
+          node --input-type=module -e '
+            import {readFileSync} from "node:fs";
+            const p=JSON.parse(readFileSync("package.json","utf8"));
+            const l=JSON.parse(readFileSync("package-lock.json","utf8"));
+            for (const k of ["next","eslint-config-next"]) {
+              if ((p.dependencies?.[k]??p.devDependencies?.[k])!=="16.4.6") throw Error("Next.js direct pin drift: "+k);
+              if (l.packages["node_modules/"+k]?.version!=="16.4.6") throw Error("Next.js lock drift: "+k);
+            }
+          '
+      - name: Fresh install from patched lockfile
+        run: npm ci --no-audit --no-fund
+      - name: Check dependency tree at moderate threshold
+        run: npm audit --audit-level=moderate
+      - name: Lint, types, export and contracts
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run build
+          npm run verify:export
+      - name: Commit verified dependency repair only
+        run: |
+          test "${GITHUB_REF}" = "refs/heads/feat/frontend-first-mizan-case-study-2026-11-23"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "No advisory repair needed"
+          else
+            git commit -m "fix(deps): remediate audited minimatch and ESLint transitive advisories"
+            git push origin HEAD:refs/heads/feat/frontend-first-mizan-case-study-2026-11-23
+          fi
