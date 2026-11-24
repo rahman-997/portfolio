@@ -36,6 +36,11 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
     ar: { label: "ابحث عن مشروع أو تقنية", placeholder: "جرّب React أو Mizan أو API…", clear: "مسح البحث", empty: "ما لقينا مشاريع مطابقة. جرّب كلمة ثانية أو امسح الفلاتر.", reset: "عرض كل المشاريع", hint: "اضغط / للبحث" },
     tr: { label: "Proje veya teknoloji ara", placeholder: "React, Mizan veya API deneyin…", clear: "Aramayı temizle", empty: "Eşleşen proje bulunamadı. Başka bir kelime deneyin veya filtreleri sıfırlayın.", reset: "Tüm projeleri göster", hint: "Aramak için / tuşuna basın" },
   }[locale];
+  const previewLabel = {
+    en: "Real project interface preview",
+    ar: "معاينة من واجهة المشروع الحقيقية",
+    tr: "Gerçek proje arayüzü önizlemesi",
+  }[locale];
   const normalizedQuery = query.trim().toLocaleLowerCase(locale);
   const filtered = PUBLIC_PROJECTS.filter(p => {
     if (filter !== "all" && p.group !== filter) return false;
@@ -76,7 +81,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
           <span className={styles.projectNumber}>{String(index+1).padStart(2,"0")} / {String(filtered.length).padStart(2,"0")}</span>
           <span className={p.original?styles.originalTag:styles.forkTag}>{p.original?t.original:t.fork}</span>
         </div>
-        {p.cover ? <div className={styles.projectPreview}><Image unoptimized src={p.cover} alt={`${p.name} project preview`} width={1280} height={720} className={styles.projectPreviewImage}/></div> : <div className={styles.projectPlaceholder} aria-hidden="true"><span>{p.group}</span><strong>{p.name}</strong></div>}
+        {p.cover ? <div className={styles.projectPreview}><Image unoptimized src={p.cover} alt={`${p.name} — ${previewLabel}`} width={1280} height={720} sizes="(max-width: 680px) calc(100vw - 40px), (max-width: 1020px) 45vw, 420px" className={styles.projectPreviewImage}/></div> : <div className={styles.projectPlaceholder} aria-hidden="true"><span>{p.group}</span><strong>{p.name}</strong></div>}
         <h3>{p.name}</h3>
         <strong className={styles.projectHeadline}>{p.text[locale].headline}</strong>
         <p>{p.text[locale].description}</p>
