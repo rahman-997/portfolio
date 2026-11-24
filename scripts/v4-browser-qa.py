@@ -170,6 +170,16 @@ with sync_playwright() as pw:
                     work = page.locator("#work")
                     check(work.locator("article").count() == 7,
                           f"{name}: missing public repositories")
+                    bookhaven_card = work.locator('[data-project-id="bookbookhaven"]')
+                    check(bookhaven_card.locator('img[src="/projects/bookhaven-real-interface.webp"]').count() == 1,
+                          f"{name}: reviewed BookHaven screenshot missing from project card")
+                    eventify_card = work.locator('[data-project-id="eventify"]')
+                    notice = eventify_card.locator("[data-demo-notice]")
+                    check(notice.count() == 1 and len(notice.inner_text()) > 35,
+                          f"{name}: Eventify degraded backend disclosure missing")
+                    limited_label = {"en":"limited", "ar":"محدودة", "tr":"sınırlı"}[locale]
+                    check(limited_label in eventify_card.locator('a[href="https://eventify-web.onrender.com"]').inner_text().lower(),
+                          f"{name}: Eventify demo link falsely implies full availability")
                     check(page.locator("#ai-lab").count() == 1, f"{name}: Atlas missing")
                     # V5: new sections must stay navigable and complete in all locales/themes.
                     for section in ("highlights", "process", "collaborate", "faq"):
@@ -327,7 +337,7 @@ with sync_playwright() as pw:
                       f"{name}: clipped case study heading {text_bounds}")
                 check(page.locator('a[href^="https://github.com/rahman-997/"]').count() >= 1,
                       f"{name}: no verifiable source link")
-                if slug in ("mizan", "fitflow"):
+                if slug in ("mizan", "fitflow", "bookhaven"):
                     img = page.locator("article figure img")
                     check(img.count() == 1 and img.evaluate("(el) => el.complete && el.naturalWidth > 0"),
                           f"{name}: project image did not load")
@@ -337,12 +347,12 @@ with sync_playwright() as pw:
                     caption = page.locator("article figure figcaption")
                     check(caption.count() == 1 and len(caption.inner_text().strip()) > 12,
                           f"{name}: missing project image description")
-                if slug in ("bookhaven", "eventify"):
+                if slug == "eventify":
                     check(page.locator("article figure img").count() == 0,
                           f"{name}: unverified preview image should stay hidden")
                 overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
                 check(overflow <= 2, f"{name}: horizontal overflow {overflow}px")
-                if width == 390 and slug in ("mizan", "fitflow"):
+                if width == 390 and slug in ("mizan", "fitflow", "bookhaven"):
                     page.screenshot(path=str(OUT/(name+".png")), animations="disabled")
                 report.append({"case":name,"status":"pass","overflow":overflow})
                 print("PASS", name, flush=True)

@@ -56,6 +56,7 @@ export function ProcessSection({locale}:Props){
 export function CollaborateSection({locale}:Props){
   const t=extraSections[locale].collaborate;
   const brief=INQUIRY_COPY[locale];
+  const serviceEvidence = ["/work/fitflow/", "/work/mizan/", "/work/bookhaven/"] as const;
   return <section id="collaborate" className={styles.collaborate} aria-labelledby="collaborate-heading">
     <div className={styles.intro}>
       <div className={styles.eyebrow}>{t.eyebrow}</div>
@@ -68,6 +69,7 @@ export function CollaborateSection({locale}:Props){
         <div><span className={styles.mono}>{String(index+1).padStart(2,"0")} / {locale==="ar"?"مجال":locale==="tr"?"YETKİNLİK":"CAPABILITY"}</span>
           <h3>{card.title}</h3><p>{card.detail}</p></div>
         <ul className={styles.collabTags}>{card.tags.map(tag=><li key={tag}>{tag}</li>)}</ul>
+        <a className={styles.serviceEvidence} href={serviceEvidence[index]} data-service-evidence="true" aria-label={`${brief.evidenceLabel} · ${card.title}`}>{brief.evidenceLabel}<span aria-hidden="true"> ↗</span></a>
       </article>)}
     </div>
     <section className={styles.inquiryPanel} aria-labelledby="inquiry-heading" data-project-brief="true">
@@ -81,6 +83,7 @@ export function CollaborateSection({locale}:Props){
       <div className={styles.inquiryContact}>
         <a className={styles.collabCta} href={PROFILE_LINKS.linkedin} rel="noopener noreferrer"
           target="_blank" aria-describedby="inquiry-note">{t.button}<span aria-hidden="true">↗</span></a>
+        <a className={styles.briefDownload} href={`/briefs/project-brief-${locale}.txt`} download data-brief-download="true">{brief.downloadLabel}<span aria-hidden="true"> ↓</span></a>
         <p id="inquiry-note">{brief.note}</p>
       </div>
     </section>

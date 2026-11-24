@@ -320,3 +320,11 @@
   .inquiryPanel{grid-template-columns:minmax(0,1fr)}
   .inquiryContact{border-inline-start:0;padding-inline-start:0;border-top:1px solid var(--line);padding-top:1rem}
 }
+
+/* Service proof and offline brief download reuse existing theme tokens. */
+.serviceEvidence,.briefDownload{
+  display:inline-flex;align-items:center;gap:.45rem;min-height:44px;
+  align-self:flex-start;font-size:.78rem;font-weight:750;color:var(--accent);
+  text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere;
+}
+.briefDownload{display:flex;margin-bottom:.5rem}

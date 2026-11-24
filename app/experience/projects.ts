@@ -3,6 +3,8 @@ export type ProjectGroup = "product" | "backend" | "tools";
 export type PortfolioProject = {
   id: string; name: string; group: ProjectGroup; original: boolean;
   stack: readonly string[]; source: string; demo?: string; study?: string; cover?: string;
+  demoNotice?: Record<Locale, string>;
+
   text: Record<Locale, { headline: string; description: string }>;
 };
 export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
@@ -31,6 +33,7 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
   },
   {
     id:"bookbookhaven", name:"BookHaven", group:"product", original:true,
+    cover:"/projects/bookhaven-real-interface.webp",
     stack:["Next.js","React","Express","MongoDB"],
     source:"https://github.com/rahman-997/bookbookhaven",
     demo:"https://bookbookhaven-free.onrender.com", study:"/work/bookhaven/",
@@ -45,6 +48,11 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
     stack:["React","TypeScript","PostgreSQL","Redis","BullMQ"],
     source:"https://github.com/rahman-997/eventify",
     demo:"https://eventify-web.onrender.com", study:"/work/eventify/",
+    demoNotice:{
+      en:"Checked 24 Nov 2026: the public interface loaded, but the event catalog reported a degraded backend connection.",
+      ar:"فحص 24 تشرين الثاني 2026: واجهة الموقع فتحت، لكن بيانات الفعاليات لم تُحمّل بسبب مشكلة اتصال بالخادم الخلفي.",
+      tr:"24 Kasım 2026 kontrolü: arayüz açıldı, ancak arka uç bağlantısı nedeniyle etkinlik listesi yüklenemedi.",
+    },
     text:{
       en:{headline:"Events. Bookings. Reliability.",description:"Full-stack event platform and PWA with organizer flows, booking, waitlists and durable async work."},
       ar:{headline:"الفعاليات والحجوزات والموثوقية",description:"منصة فعاليات متكاملة وتطبيق PWA مع إدارة المنظمين والحجوزات وقوائم الانتظار والمهام الخلفية الموثوقة."},

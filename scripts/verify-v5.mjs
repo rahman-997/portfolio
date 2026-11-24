@@ -42,6 +42,18 @@ for (const locale of locales) {
   check(collaboration.includes('data-project-brief="true"'), locale.id + ": missing project brief panel");
   check((collaboration.match(/data-brief-item="true"/g) ?? []).length === 4, locale.id + ": expected four brief prompts");
   check(collaboration.includes('aria-describedby="inquiry-note"') && collaboration.includes('id="inquiry-note"'), locale.id + ": missing contact privacy disclosure");
+  const serviceLinks = [...collaboration.matchAll(/<a\b[^>]*data-service-evidence="true"[^>]*>/g)];
+  check(serviceLinks.length === 3, locale.id + ": expected three service evidence links");
+  for (const slug of ["fitflow", "mizan", "bookhaven"]) {
+    check(serviceLinks.some(link => link[0].includes('href="/work/' + slug + '/"')), locale.id + ": missing service evidence " + slug);
+    check(existsSync("out/work/" + slug + "/index.html"), locale.id + ": service evidence target missing");
+  }
+  const briefPath = "/briefs/project-brief-" + locale.id + ".txt";
+  const download = collaboration.match(/<a\b[^>]*data-brief-download="true"[^>]*>/);
+  check(download && download[0].includes('href="' + briefPath + '"') && /\bdownload(?:[\s=>])/.test(download[0]), locale.id + ": missing brief download");
+  check(existsSync("out" + briefPath), locale.id + ": missing exported brief file");
+  const briefText = readFileSync("out" + briefPath, "utf8");
+  check(briefText.length > 180 && briefText.includes("linkedin.com/in/") && ["1.", "2.", "3.", "4.", "5."].every(marker => briefText.includes(marker)), locale.id + ": incomplete brief template");
   const faq = section(html, "faq", undefined);
   check((faq.match(/<details\b/g) ?? []).length >= 3, locale.id + ": expected native, keyboard-friendly FAQ");
   check(/<summary\b/.test(faq), locale.id + ": FAQ is not semantic");

@@ -796,3 +796,16 @@
    in both themes; transparency/backdrop blur made contrast non-deterministic. */
 .header{background:var(--canvas)}
 .brandText strong{color:var(--ink)}
+
+
+/* Clearly disclose dated demo degradation without presenting a false success
+   badge or making the project card inaccessible. */
+.projectDemoNotice {
+  margin:.75rem 0 0;
+  padding:.8rem 0 0;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:.69rem;
+  line-height:1.65;
+  overflow-wrap:break-word;
+}
