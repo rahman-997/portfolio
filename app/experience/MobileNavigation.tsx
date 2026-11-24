@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import Link from "next/link";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
@@ -47,7 +47,7 @@ export default function MobileNavigation({locale}:{locale:Locale}) {
     {href:"#about",label:t.navAbout},
     {href:"/resume/",label:t.navResume},
   ];
-  const focusFirstLink = (event: KeyboardEvent<HTMLButtonElement>) => {
+  const focusFirstLink = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
     if (event.key !== "ArrowDown") return;
     event.preventDefault();
     setOpen(true);
