@@ -9,6 +9,7 @@ import { EvidenceSection, ProcessSection, CollaborateSection, FaqSection } from 
 import { extraSections } from "./extra-sections";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
+import { STUDIO_HERO } from "./studio-hero";
 import styles from "./experience.module.css";
 
 const stack = ["React", "Next.js", "TypeScript", "UI/UX", "Responsive Design", "Accessibility", "RTL / i18n", "PWA", "Node.js", "Express", "PostgreSQL", "GitHub Actions"];
@@ -16,6 +17,7 @@ const stack = ["React", "Next.js", "TypeScript", "UI/UX", "Responsive Design", "
 export default function PortfolioExperience({locale}:{locale:Locale}) {
   const t=TEXT[locale];
   const more=extraSections[locale];
+  const studio=STUDIO_HERO[locale];
   return <div className={styles.page} lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
     <a className={styles.skip} href="#main">{t.skip}</a>
     <header className={styles.header}>
@@ -44,18 +46,21 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
           <p className={styles.heroEyebrow}><span className={styles.liveDot}/>{t.hello}</p>
           <h1><span>{t.heroTop}</span> <em>{t.heroBottom}</em></h1>
           <p className={styles.lead}>{t.heroLead}</p>
-          <div className={styles.actions}>
-            <a className={styles.primaryAction} href="#work">{t.workButton} <span aria-hidden="true">↗</span></a>
-            <a className={styles.secondaryAction} href="/Abdulrahman-Hajar-Frontend-Resume.pdf" download>
-              {locale==="ar"?"تحميل السيرة الذاتية":locale==="tr"?"CV İndir":"Download CV"} <span aria-hidden="true">↓</span>
-            </a>
+          <div className={styles.heroActions} role="group" aria-label={studio.actionLabel} data-hero-actions>
+            <a className={styles.primaryAction} href="#work" data-hero-work>{t.workButton} <span aria-hidden="true">↗</span></a>
             <a className={styles.secondaryAction} href="#collaborate" data-studio-cta="hero">
-              {locale==="ar"?"ناقش مشروعك":locale==="tr"?"Projenizi konuşalım":"Discuss your project"} <span aria-hidden="true">↗</span>
+              {studio.client} <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <div className={styles.heroFoot} aria-label={t.visualDetail}>
-            <span>React / Next.js</span><span>TypeScript</span><span>UI/UX · RTL</span>
+          <div className={styles.heroResume}>
+            <span id="hero-cv-context">{studio.cvContext}</span>
+            <a href="/Abdulrahman-Hajar-Frontend-Resume.pdf" download aria-describedby="hero-cv-context" data-hero-cv>
+              {studio.cv} <span aria-hidden="true">↓</span>
+            </a>
           </div>
+          <ul className={styles.heroProof} aria-label={studio.proofLabel}>
+            {studio.proof.map((item)=><li key={item} data-hero-proof>{item}</li>)}
+          </ul>
         </div>
         <div className={styles.heroVisual}>
           <FeaturedShowcase locale={locale}/>

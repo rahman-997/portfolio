@@ -34,6 +34,10 @@ for (const locale of locales) {
   const inquiryLabel = { en: "Discuss your project", ar: "ناقش مشروعك", tr: "Projenizi konuşalım" }[locale.id];
   const inquiryLink = hero.match(/<a\b[^>]*data-studio-cta="hero"[^>]*>[\s\S]*?<\/a>/);
   check(inquiryLink && inquiryLink[0].includes('href="#collaborate"') && inquiryLink[0].includes(inquiryLabel), locale.id + ": missing localized project inquiry link in hero");
+  check(hero.includes("data-hero-actions") && hero.includes("data-hero-work"), locale.id + ": missing distinct hero visitor paths");
+  const cvLink = hero.match(/<a\b[^>]*data-hero-cv[^>]*>/);
+  check(cvLink && cvLink[0].includes('href="/Abdulrahman-Hajar-Frontend-Resume.pdf"') && cvLink[0].includes('aria-describedby="hero-cv-context"') && /\bdownload(?:[\s=>])/.test(cvLink[0]), locale.id + ": missing accessible CV download");
+  check((hero.match(/<li\b[^>]*data-hero-proof/g) ?? []).length === 3, locale.id + ": expected three hero capability labels");
   const collaboration = section(html, "collaborate", "faq");
   check(collaboration.includes("linkedin.com/in/"), locale.id + ": missing direct collaboration CTA");
   check((collaboration.match(/data-collaboration-card=/g) ?? []).length === 3, locale.id + ": expected 3 collaboration capabilities");

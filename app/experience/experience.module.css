@@ -818,3 +818,40 @@
 .projectAvailability{display:block;align-self:flex-start;color:var(--muted);font-size:.68rem;font-weight:750;line-height:1.5;margin:0 0 .6rem}
 .projectAvailability[data-availability="limited"]{color:var(--accent)}
 @media(max-width:760px){.availabilityBar{grid-template-columns:minmax(0,1fr)}}
+
+/* Studio entry: distinct visitor paths, restrained editorial styling,
+   compact mobile rhythm. No additional animation or font request. */
+.heroActions{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;
+  margin-top:clamp(1.2rem,3vw,2rem);max-width:32rem
+}
+.heroActions a{
+  min-width:0;min-height:52px;justify-content:space-between;
+  padding:.85rem 1rem;text-align:start;line-height:1.4;overflow-wrap:anywhere
+}
+.heroActions .secondaryAction{border-color:var(--gold)}
+.heroActions .secondaryAction:hover{background:var(--surface)}
+.heroResume{
+  display:flex;flex-wrap:wrap;align-items:center;gap:0 .8rem;
+  color:var(--muted);font-size:.73rem;line-height:1.55;margin-top:.55rem
+}
+.heroResume a{
+  display:inline-flex;align-items:center;gap:.45rem;min-height:44px;
+  color:var(--ink);font-weight:750;text-decoration:underline;text-underline-offset:4px
+}
+.heroProof{
+  display:flex;flex-wrap:wrap;gap:.45rem 1rem;list-style:none;
+  margin:1.1rem 0 0;padding:1rem 0 0;border-top:1px solid var(--line);
+  color:var(--muted);font-size:.7rem;line-height:1.5;font-weight:650
+}
+.heroProof li{display:inline-flex;align-items:center;gap:.5rem;min-width:0}
+.heroProof li::before{content:"";flex:none;width:5px;height:5px;background:var(--gold);transform:rotate(45deg)}
+.header{backdrop-filter:none}
+@media(min-width:821px){.hero{min-height:620px;padding-block:clamp(56px,5vw,86px)}}
+@media(max-width:680px){
+  .heroActions{gap:.5rem;margin-top:1.1rem}
+  .heroActions a{font-size:.73rem;min-height:48px;padding:.65rem .7rem}
+  .heroResume{font-size:.69rem;margin-top:.15rem}
+  .heroProof{font-size:.65rem;margin-top:.45rem;padding-top:.7rem;gap:.35rem .8rem}
+}
+@media(max-width:340px){.heroActions{grid-template-columns:minmax(0,1fr)}}

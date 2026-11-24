@@ -192,6 +192,17 @@ with sync_playwright() as pw:
                           f"{name}: wrong process step count")
                     check(page.locator("#collaborate [data-collaboration-card]").count() == 3,
                           f"{name}: wrong collaboration card count")
+                    hero_actions = page.locator("#top [data-hero-actions]")
+                    check(hero_actions.locator("a").count() == 2, f"{name}: hero paths not distinct")
+                    for link in hero_actions.locator("a").all():
+                        bounds = link.bounding_box()
+                        check(bounds is not None and bounds["height"] >= 44 and
+                              bounds["x"] >= -2 and bounds["x"] + bounds["width"] <= width + 2,
+                              f"{name}: clipped or undersized hero action")
+                    check(page.locator("#top [data-hero-proof]").count() == 3,
+                          f"{name}: hero capability labels missing")
+                    check(page.locator("#top [data-hero-cv]").get_attribute("aria-describedby") == "hero-cv-context",
+                          f"{name}: CV link context missing")
                     hero_cta = page.locator('[data-studio-cta="hero"]')
                     check(hero_cta.count() == 1 and hero_cta.get_attribute("href") == "#collaborate",
                           f"{name}: project inquiry entry point missing")
