@@ -31,6 +31,7 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
   },
   {
     id:"bookbookhaven", name:"BookHaven", group:"product", original:true,
+    cover:"/projects/bookhaven-real-interface.webp",
     stack:["Next.js","React","Express","MongoDB"],
     source:"https://github.com/rahman-997/bookbookhaven",
     demo:"https://bookbookhaven-free.onrender.com", study:"/work/bookhaven/",
