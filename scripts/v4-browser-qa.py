@@ -129,6 +129,20 @@ with sync_playwright() as pw:
                         page.mouse.click(width / 2, height - 20)
                         check(menu.get_attribute("aria-expanded") == "false",
                               f"{name}: outside click failed to close mobile menu")
+                        # Keyboard-only disclosure: ArrowDown opens and moves focus
+                        # to the first link, then Shift+Tab out should dismiss it.
+                        menu.focus()
+                        menu.press("ArrowDown")
+                        first_link = page.locator("#portfolio-mobile-links a[href='#work']")
+                        check(menu.get_attribute("aria-expanded") == "true" and
+                              first_link.evaluate("(el) => document.activeElement === el"),
+                              f"{name}: ArrowDown did not open menu and focus first link")
+                        page.keyboard.press("Shift+Tab")
+                        check(menu.evaluate("(el) => document.activeElement === el"),
+                              f"{name}: tab navigation could not return to menu")
+                        page.keyboard.press("Shift+Tab")
+                        check(menu.get_attribute("aria-expanded") == "false",
+                              f"{name}: menu remained open after focus left navigation")
                     expected_dir = "rtl" if locale == "ar" else "ltr"
                     check(page.locator("html").get_attribute("dir") == expected_dir,
                           f"{name}: wrong document direction")
@@ -212,9 +226,10 @@ with sync_playwright() as pw:
                     page.locator(f'html[data-theme="{theme}"]').wait_for(timeout=5000)
                     if label == "mobile":
                         page.add_script_tag(path=os.environ.get("ATLAS_AXE_SCRIPT", "node_modules/axe-core/axe.min.js"))
-                        for section_id in ("highlights", "process", "collaborate", "faq"):
+                        for section_id in ("header", "top", "work", "highlights", "process", "collaborate", "faq"):
                             violations = page.evaluate("""async (section) => {
-                                const issues = await axe.run(document.getElementById(section), {
+                                const root = section === "header" ? document.querySelector("header") : document.getElementById(section);
+                                const issues = await axe.run(root, {
                                     runOnly: {type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']},
                                     rules: {'region': {enabled: false}},
                                 });
