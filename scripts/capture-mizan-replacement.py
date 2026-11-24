@@ -44,4 +44,4 @@ with sync_playwright() as pw:
         results.append({"capture":"mizan-budgets-review.png","budgetTiles":page.locator(".budget-tile").count()})
     context.close()
     browser.close()
-(OUT/"capture.json").write_text(json.dumps({"sourceCommit":"8e33fededbdfc4144b22b6c2608cd066378e44ed","source":"public mizan-finance source; local production preview","scope":"Bundled demo data in new browser context; no real account or deployment","review":"Manual visual approval required","results":results},indent=2),encoding="utf-8")
+(OUT/"capture.json").write_text(json.dumps({"sourceCommit":"8e33fededbdfc4144b22b6c2608cd066378e44ed","source":"public mizan-finance source; local development runtime (production build passed separately)","scope":"Bundled demo data in new browser context; no real account or deployment","review":"Manual visual approval required","results":results},indent=2),encoding="utf-8")

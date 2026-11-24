@@ -52,6 +52,21 @@ with sync_playwright() as pw:
                     }""")
                     check(visual_layout["detailsTop"] >= visual_layout["screenBottom"] - 2,
                           f"{name}: project copy obscures the real application screenshot")
+                    # Actual rendered text must stay inside its action, not only
+                    # the outer button rectangle (the old nowrap rule clipped text).
+                    action_bounds = stage.evaluate("""el => {
+                      const actions = [...el.querySelectorAll('[class*="detailsActions"] > a, [class*="detailsActions"] > button')];
+                      return actions.map(action => {
+                        const rect = action.getBoundingClientRect();
+                        const range = document.createRange();
+                        range.selectNodeContents(action);
+                        const text = [...range.getClientRects()];
+                        return {left:rect.left,right:rect.right,height:rect.height,
+                          contained:text.every(r => r.left >= rect.left-1 && r.right <= rect.right+1 && r.top >= rect.top-1 && r.bottom <= rect.bottom+1)};
+                      });
+                    }""")
+                    check(len(action_bounds) == 2 and all(a["contained"] and a["height"] >= 44 and a["left"] >= -2 and a["right"] <= width + 2 for a in action_bounds),
+                          f"{name}: featured action text clipped or out of bounds: {action_bounds}")
                     fitflow_tab = stage.get_by_role("button", name="FitFlow", exact=True)
                     mizan_tab = stage.get_by_role("button", name="Mizan Finance", exact=True)
                     check(fitflow_tab.count() == 1 and mizan_tab.count() == 1,

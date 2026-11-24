@@ -30,13 +30,17 @@ jobs:
       - name: Capture only fully rendered chart and real budget view
         run: |
           python3 -m pip install --disable-pip-version-check playwright==1.58.0
-          (cd mizan-review-source && node scripts/run-tool.mjs vite preview --host 127.0.0.1 --port 4173 --strictPort) > /tmp/mizan-preview.log 2>&1 &
+          (cd mizan-review-source && node scripts/run-tool.mjs vite dev --host 127.0.0.1 --port 4173 --strictPort) > /tmp/mizan-preview.log 2>&1 &
           preview_pid=$!
           trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
           for attempt in {1..30}; do
             if curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then break; fi
             sleep 1
           done
+          if ! curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then
+            cat /tmp/mizan-preview.log
+            exit 1
+          fi
           python3 scripts/capture-mizan-replacement.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
