@@ -16,6 +16,24 @@ if (pkg.engines?.node !== ">=22.13.0 <23") {
 if (pkg.packageManager !== "npm@11.19.1") {
   throw new Error(`packageManager must stay pinned to npm@11.19.1: ${pkg.packageManager ?? "missing"}`);
 }
+const lock = JSON.parse(read("package-lock.json"));
+for (const key of ["next", "eslint-config-next"]) {
+  const specified = pkg.dependencies?.[key] ?? pkg.devDependencies?.[key];
+  const rootLocked = lock.packages?.[""]?.dependencies?.[key] ?? lock.packages?.[""]?.devDependencies?.[key];
+  const installed = lock.packages?.["node_modules/" + key];
+  if (!/^\\d+\\.\\d+\\.\\d+$/.test(specified ?? "") ||
+      specified !== rootLocked || specified !== installed?.version ||
+      !installed?.integrity?.startsWith("sha512-")) {
+    throw new Error(`Dependency or integrity mismatch for ${key}: package=${specified} root=${rootLocked} locked=${installed?.version}`);
+  }
+}
+const nextParts = pkg.dependencies.next.split(".").map(Number);
+if (nextParts[0] < 16 || (nextParts[0] === 16 && (
+  nextParts[1] < 4 || (nextParts[1] === 4 && nextParts[2] < 5)
+))) {
+  throw new Error(`Unsupported Next.js security baseline: ${pkg.dependencies.next} (minimum 16.4.5)`);
+}
+
 
 const ci = read(".github/workflows/ci.yml");
 for (const required of [
