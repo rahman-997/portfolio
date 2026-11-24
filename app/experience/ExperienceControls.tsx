@@ -36,9 +36,9 @@ export default function ExperienceControls({locale}:{locale:Locale}) {
       : (theme==="dark" ? "Light" : "Dark");
   return <div className={styles.controls}>
     <nav aria-label={label.language} className={styles.languages} dir="ltr">
-      <Link href="/" lang="en" aria-current={locale==="en"?"page":undefined} title="English">EN</Link>
-      <Link href="/ar/" lang="ar" aria-current={locale==="ar"?"page":undefined} title="العربية">عربي</Link>
-      <Link href="/tr/" lang="tr" aria-current={locale==="tr"?"page":undefined} title="Türkçe">TR</Link>
+      <Link prefetch={false} href="/" lang="en" aria-current={locale==="en"?"page":undefined} title="English">EN</Link>
+      <Link prefetch={false} href="/ar/" lang="ar" aria-current={locale==="ar"?"page":undefined} title="العربية">عربي</Link>
+      <Link prefetch={false} href="/tr/" lang="tr" aria-current={locale==="tr"?"page":undefined} title="Türkçe">TR</Link>
     </nav>
     <button className={styles.themeButton} type="button"
       onClick={changeTheme}

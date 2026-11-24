@@ -303,7 +303,7 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
               <span>{String(activeIndex + 1).padStart(2, "0")} OF {String(areas.length).padStart(2, "0")}</span>
               <button type="button" onClick={() => selectAdjacent(1)} aria-label={locale==="en"?"Next discipline":t.next+" "+t.disciplines}><span>{t.next}</span> →</button>
             </div>
-            <Link className={styles.inspectorLink} href={active.href}>
+            <Link prefetch={false} className={styles.inspectorLink} href={active.href}>
               {t.nodes[active.id].proof} <span aria-hidden="true">↗</span>
             </Link>
           </aside>

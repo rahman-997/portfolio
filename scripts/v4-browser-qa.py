@@ -345,6 +345,27 @@ with sync_playwright() as pw:
         failures.append({"case":"atlas-motion-visibility","error":str(exc)})
     finally:
         context.close()
+    # Locale navigation must not download other routes before a visitor chooses them.
+    context = browser.new_context(viewport={"width":1280,"height":800})
+    page = context.new_page()
+    requests = []
+    page.on("request", lambda request: requests.append(request.url))
+    try:
+        page.goto(BASE + "/", wait_until="networkidle", timeout=60000)
+        page.wait_for_timeout(1500)
+        from urllib.parse import urlsplit
+        paths = [urlsplit(url).path for url in requests if url.startswith(BASE + "/")]
+        unexpected = [path for path in paths if path == "/ar" or path == "/tr" or
+                      path.startswith(("/ar/", "/tr/", "/ar.txt", "/tr.txt", "/ar.rsc", "/tr.rsc"))]
+        check(not unexpected, f"Unrequested locale routes downloaded: {unexpected}")
+        page.locator('header a[href="/ar/"]:visible').first.click()
+        page.wait_for_url(BASE + "/ar/", timeout=15000)
+        page.locator('html[lang="ar"][dir="rtl"]').wait_for(timeout=15000)
+        report.append({"case":"locale-navigation-no-prefetch","status":"pass"})
+    except Exception as exc:
+        failures.append({"case":"locale-navigation-no-prefetch","error":str(exc)})
+    finally:
+        context.close()
     # True no-JavaScript test: verify localized direction is present on raw static HTML.
     for locale in ("ar","tr"):
         context = browser.new_context(java_script_enabled=False)

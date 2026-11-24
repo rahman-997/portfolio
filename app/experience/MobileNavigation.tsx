@@ -84,9 +84,9 @@ export default function MobileNavigation({locale}:{locale:Locale}) {
       </a>)}
       <div className={styles.mobileLanguagePicker} role="group"
         aria-label={t.language} dir="ltr">
-        <Link href="/" lang="en" aria-current={locale==="en"?"page":undefined} onClick={()=>setOpen(false)}>EN</Link>
-        <Link href="/ar/" lang="ar" aria-current={locale==="ar"?"page":undefined} onClick={()=>setOpen(false)}>العربية</Link>
-        <Link href="/tr/" lang="tr" aria-current={locale==="tr"?"page":undefined} onClick={()=>setOpen(false)}>TR</Link>
+        <Link prefetch={false} href="/" lang="en" aria-current={locale==="en"?"page":undefined} onClick={()=>setOpen(false)}>EN</Link>
+        <Link prefetch={false} href="/ar/" lang="ar" aria-current={locale==="ar"?"page":undefined} onClick={()=>setOpen(false)}>العربية</Link>
+        <Link prefetch={false} href="/tr/" lang="tr" aria-current={locale==="tr"?"page":undefined} onClick={()=>setOpen(false)}>TR</Link>
       </div>
     </nav>
   </div>;

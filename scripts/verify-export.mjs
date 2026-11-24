@@ -222,6 +222,24 @@ if (bookhavenImage.length < 6000 || bookhavenImage.length > 100000 ||
   throw new Error("Reviewed BookHaven cover missing, malformed, too large or unreferenced");
 }
 
+// LCP and gallery image transfer budgets: static export has no image
+// optimizer at request time, so accidental PNG/WebP size spikes matter.
+// These ceilings protect measured assets without suggesting LCP is solved.
+for (const [file, maxBytes, format] of [
+  ["projects/fitflow-real-interface.webp", 45000, "webp"],
+  ["projects/mizan-live-dashboard.png", 100000, "png"],
+]) {
+  const bytes = readFileSync(join(outDir, file));
+  const looksWebp = bytes.toString("ascii", 0, 4) === "RIFF" &&
+    bytes.toString("ascii", 8, 12) === "WEBP";
+  const looksPng = bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+  if (bytes.length < 5000 || bytes.length > maxBytes ||
+      (format === "webp" && !looksWebp) ||
+      (format === "png" && !looksPng)) {
+    throw new Error(`Static hero/gallery asset ${file} exceeds ${maxBytes} bytes or has invalid ${format} signature`);
+  }
+}
+
 const fitflowHtml = readFileSync(join(outDir, "work/fitflow/index.html"), "utf8");
 if (!fitflowHtml.includes("/projects/fitflow-real-interface.webp")) {
   throw new Error("FitFlow case study must render the first-party local cover asset");
