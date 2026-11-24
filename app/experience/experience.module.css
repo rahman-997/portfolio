@@ -796,14 +796,3 @@
    in both themes; transparency/backdrop blur made contrast non-deterministic. */
 .header{background:var(--canvas)}
 .brandText strong{color:var(--ink)}
-
-
-/* Defer layout/paint for the below-the-fold interactive Atlas only.
-   DOM, SEO content and keyboard navigation remain present; the browser
-   renders the section normally when it approaches the viewport. */
-@supports (content-visibility: auto) {
-  .atlasSection {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 1120px;
-  }
-}
