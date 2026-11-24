@@ -1,0 +1,22 @@
+name: Review replacement project captures
+on:
+  push:
+    branches: [feat/digital-studio-conversion-2026-11-24]
+    paths: [".github/workflows/review-replacement-captures.yml", "scripts/capture-fitflow-replacement.py"]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - run: python3 -m pip install --disable-pip-version-check playwright==1.58.0
+      - run: python3 scripts/capture-fitflow-replacement.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: replacement-captures-review-only
+          path: replacement-evidence/
+          retention-days: 7
+          if-no-files-found: error
