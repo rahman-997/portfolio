@@ -56,6 +56,7 @@ const requiredPaths = [
   "/work/eventify/",
   "/work/bookhaven/",
   "/work/fitflow/",
+  "/work/mizan/",
   "/work/venues-api/",
   "/robots.txt",
   "/sitemap.xml",
@@ -68,9 +69,13 @@ const requiredPaths = [
   "/opengraph-image",
   "/twitter-image",
   "/Abdulrahman-Hajar-Resume.pdf",
-  "/projects/eventify-cover.jpg",
-  "/projects/bookhaven-cover.jpg",
-  "/projects/fitflow-cover.svg",
+  "/Abdulrahman-Hajar-Frontend-Resume.pdf",
+  "/projects/fitflow-real-interface.webp",
+  "/projects/mizan-live-dashboard.png",
+  "/projects/bookhaven-real-interface.webp",
+  "/briefs/project-brief-en.txt",
+  "/briefs/project-brief-ar.txt",
+  "/briefs/project-brief-tr.txt",
 ];
 
 for (const path of requiredPaths) {
@@ -97,12 +102,12 @@ for (const [path, lang, dir] of [["/", "en", "ltr"], ["/ar/", "ar", "rtl"], ["/t
   if (lang !== "en" && !new RegExp(`<html[^>]*dir="${dir}"`).test(html)) {
     throw new Error(`Deployed ${path} has the wrong text direction ${dir}`);
   }
-  for (const id of ["highlights", "process", "collaborate", "faq"]) {
+  for (const id of ["highlights", "process", "collaborate", "faq", "hero-cv-context"]) {
     if (!html.includes(`id="${id}"`)) {
       throw new Error(`Deployed ${path} is missing section #${id}`);
     }
   }
-  for (const slug of ["eventify", "bookhaven", "fitflow", "venues-api"]) {
+  for (const slug of ["eventify", "bookhaven", "fitflow", "mizan", "venues-api"]) {
     if (!html.includes(`/work/${slug}/`)) {
       throw new Error(`Deployed ${path} is missing case study evidence ${slug}`);
     }
@@ -134,12 +139,12 @@ if (!robots.includes(`Host: ${baseUrl}`) || !robots.includes(`Sitemap: ${baseUrl
 }
 
 const sitemap = await (await request("/sitemap.xml")).text();
-for (const path of ["/", "/ar/", "/tr/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/work/fitflow/", "/work/venues-api/"]) {
+for (const path of ["/", "/ar/", "/tr/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/work/fitflow/", "/work/mizan/", "/work/venues-api/"]) {
   if (!sitemap.includes(`<loc>${baseUrl}${path}</loc>`)) throw new Error(`Production sitemap missing ${path}`);
 }
 
 const fitflow = await (await request("/work/fitflow/")).text();
-if (!fitflow.includes("/projects/fitflow-cover.svg")) throw new Error("FitFlow production case study lost its local cover");
+if (!fitflow.includes("/projects/fitflow-real-interface.webp")) throw new Error("FitFlow production case study lost its local cover");
 if (fitflow.includes(`property="og:image" content="${baseUrl}/projects/fitflow-cover.svg"`)) {
   throw new Error("FitFlow production OpenGraph metadata must not use SVG");
 }

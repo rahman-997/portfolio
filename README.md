@@ -37,7 +37,7 @@ The portfolio presents the engineering layers demonstrated by the selected work:
 | **FitFlow** | Installable fitness PWA | Personalized plans, guided intervals, local-first progress, accessibility, responsive UX, offline readiness, Render static delivery |
 | **Venues API** | Focused backend service | Express 5, TypeScript, Zod 4, layered architecture, centralized errors, UUID resources, persistence, contract tests, live health proof |
 
-Every featured project links to **live proof, source code, and an engineering case study**. Render-hosted demos explicitly disclose free-tier wake-up behavior where applicable so cold starts are not mistaken for broken software.
+Featured projects link to source code and engineering case studies where available; public demo links and limited previews are explicitly distinguished. Render-hosted demos explicitly disclose free-tier wake-up behavior where applicable so cold starts are not mistaken for broken software.
 
 ## Frontend-first update · 2026-11-23
 
@@ -161,12 +161,16 @@ scripts/
   ci.yml                             lint + typecheck + build + export + audit gate
 ```
 
+## Commercial studio release review
+
+See [the Arabic release review guide](docs/RELEASE_REVIEW_AR.md) for pinned Windows setup, reproducible static artifact integrity, known limitations and explicit deployment approval gates. The review-only CI artifact is not a production deployment.
+
 ## Local development
 
 ```bash
 git clone https://github.com/rahman-997/portfolio.git
 cd portfolio
-npm install
+npm ci
 npm run dev
 ```
 
