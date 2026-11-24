@@ -49,6 +49,9 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
             <a className={styles.secondaryAction} href="/Abdulrahman-Hajar-Frontend-Resume.pdf" download>
               {locale==="ar"?"تحميل السيرة الذاتية":locale==="tr"?"CV İndir":"Download CV"} <span aria-hidden="true">↓</span>
             </a>
+            <a className={styles.secondaryAction} href="#collaborate" data-studio-cta="hero">
+              {locale==="ar"?"ناقش مشروعك":locale==="tr"?"Projenizi konuşalım":"Discuss your project"} <span aria-hidden="true">↗</span>
+            </a>
           </div>
           <div className={styles.heroFoot} aria-label={t.visualDetail}>
             <span>React / Next.js</span><span>TypeScript</span><span>UI/UX · RTL</span>
