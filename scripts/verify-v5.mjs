@@ -30,6 +30,10 @@ for (const locale of locales) {
   const process = section(html, "process", "systems");
   const steps = [...process.matchAll(/data-workflow-step="\d"/g)];
   check(steps.length === 4, locale.id + ": expected four process stages");
+  const hero = section(html, "top", "work");
+  const inquiryLabel = { en: "Discuss your project", ar: "ناقش مشروعك", tr: "Projenizi konuşalım" }[locale.id];
+  const inquiryLink = hero.match(/<a\b[^>]*data-studio-cta="hero"[^>]*>[\s\S]*?<\/a>/);
+  check(inquiryLink && inquiryLink[0].includes('href="#collaborate"') && inquiryLink[0].includes(inquiryLabel), locale.id + ": missing localized project inquiry link in hero");
   const collaboration = section(html, "collaborate", "faq");
   check(collaboration.includes("linkedin.com/in/"), locale.id + ": missing direct collaboration CTA");
   check((collaboration.match(/data-collaboration-card=/g) ?? []).length === 3, locale.id + ": expected 3 collaboration capabilities");
