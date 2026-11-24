@@ -213,12 +213,21 @@ with sync_playwright() as pw:
                         page.get_by_role("button", name=COPY[locale][kind], exact=True).click()
                         check(work.locator("article").count() == count,
                               f"{name}: {kind} filter expected {count} projects")
+                    availability = work.locator("#portfolio-availability")
+                    for kind, count in [("demo", 3), ("limited", 1), ("source", 2), ("api", 1)]:
+                        availability.select_option(kind)
+                        check(work.locator("article").count() == count and
+                              work.locator(f'[data-availability="{kind}"]').count() == count,
+                              f"{name}: availability filter {kind} mismatch")
+                    availability.select_option("all")
+                    check(work.locator("article").count() == 7, f"{name}: availability reset failed")
                     search = page.get_by_role("searchbox")
                     check(search.count() == 1 and search.is_visible(),
                           f"{name}: project search unavailable")
                     page.keyboard.press("/")
                     check(search.evaluate("(el) => document.activeElement === el"),
                           f"{name}: slash shortcut did not focus project search")
+                    availability.select_option("source")
                     search.fill("Mizan")
                     check(work.locator("article").count() == 1 and
                           work.locator("article h3").first.inner_text() == "Mizan Finance",
@@ -228,7 +237,7 @@ with sync_playwright() as pw:
                           work.locator("[data-empty-project-results]").is_visible(),
                           f"{name}: empty-state search regression")
                     work.locator("[data-empty-project-results] button").click()
-                    check(work.locator("article").count() == 7 and search.input_value() == "",
+                    check(work.locator("article").count() == 7 and search.input_value() == "" and availability.input_value() == "all",
                           f"{name}: clearing project search failed")
                     page.locator("#ai-lab").scroll_into_view_if_needed()
                     page.get_by_role("button", name=COPY[locale]["flow"], exact=True).click()

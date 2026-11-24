@@ -5,11 +5,13 @@ import type { Locale } from "./locale";
 import { TEXT } from "./locale";
 import { PUBLIC_PROJECTS, type ProjectGroup } from "./projects";
 import styles from "./experience.module.css";
+import { AVAILABILITY_COPY, availabilityOf, type AvailabilityFilter } from "./availability";
 
 type Filter = "all" | ProjectGroup;
 export default function ProjectExplorer({locale}:{locale:Locale}) {
   const [filter,setFilter] = useState<Filter>("all");
   const [query,setQuery] = useState("");
+  const [availability,setAvailability] = useState<AvailabilityFilter>("all");
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     const focusSearch = (event: KeyboardEvent) => {
@@ -25,6 +27,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
     return () => window.removeEventListener("keydown", focusSearch);
   }, []);
   const t=TEXT[locale];
+  const access=AVAILABILITY_COPY[locale];
   const filters: {id:Filter; label:string}[] = [
     {id:"all",label:t.filterAll},
     {id:"product",label:t.filterProduct},
@@ -44,12 +47,13 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
   const normalizedQuery = query.trim().toLocaleLowerCase(locale);
   const filtered = PUBLIC_PROJECTS.filter(p => {
     if (filter !== "all" && p.group !== filter) return false;
+    if (availability !== "all" && availabilityOf(p) !== availability) return false;
     if (!normalizedQuery) return true;
     const searchable = [p.name, p.id, ...p.stack, p.text[locale].headline, p.text[locale].description]
       .join(" ").toLocaleLowerCase(locale);
     return searchable.includes(normalizedQuery);
   });
-  const resetSearch = () => { setQuery(""); setFilter("all"); inputRef.current?.focus(); };
+  const resetSearch = () => { setQuery(""); setFilter("all"); setAvailability("all"); inputRef.current?.focus(); };
   return <>
     <div className={styles.projectToolbar}>
       <div className={styles.filterList} role="group" aria-label={t.projectEyebrow}>
@@ -75,6 +79,16 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
       </div>
       <span className={styles.projectSearchHint}>{searchCopy.hint}</span>
     </div>
+    <div className={styles.availabilityBar}>
+      <label htmlFor="portfolio-availability">{access.label}</label>
+      <select id="portfolio-availability" value={availability}
+        aria-describedby="portfolio-availability-note" aria-controls="portfolio-project-results"
+        onChange={event=>setAvailability(event.target.value as AvailabilityFilter)}>
+        <option value="all">{access.all}</option>
+        {(["demo","limited","source","api"] as const).map(value=><option key={value} value={value}>{access.status[value]}</option>)}
+      </select>
+      <p id="portfolio-availability-note">{access.note}</p>
+    </div>
     <div className={styles.projectGrid} id="portfolio-project-results">
       {filtered.map((p,index)=><article className={styles.project} key={p.id} data-project-id={p.id}>
         <div className={styles.cardTop}>
@@ -83,6 +97,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
         </div>
         {p.cover ? <div className={styles.projectPreview}><Image unoptimized src={p.cover} alt={`${p.name} — ${previewLabel}`} width={1280} height={720} sizes="(max-width: 680px) calc(100vw - 40px), (max-width: 1020px) 45vw, 420px" loading="lazy" fetchPriority="low" decoding="async" className={styles.projectPreviewImage}/></div> : <div className={styles.projectPlaceholder} aria-hidden="true"><span>{p.group}</span><strong>{p.name}</strong></div>}
         <h3>{p.name}</h3>
+        <span className={styles.projectAvailability} data-availability={availabilityOf(p)}>{access.status[availabilityOf(p)]}</span>
         <strong className={styles.projectHeadline}>{p.text[locale].headline}</strong>
         <p>{p.text[locale].description}</p>
         <div className={styles.pillRow}>{p.stack.map(v=><span key={v}>{v}</span>)}</div>

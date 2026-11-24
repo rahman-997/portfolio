@@ -13,6 +13,10 @@ for(const language of ["en","ar","tr"]){
   if(language==="ar")check(/<html[^>]*dir="rtl"/.test(html),"Missing document RTL direction");
   check(html.includes('id="ai-lab"'),"Missing AI Atlas: "+path);
   check(html.includes('id="work"'),"Missing project gallery: "+path);
+  check(html.includes('id="portfolio-availability"') && html.includes('id="portfolio-availability-note"'),"Missing availability filter and disclosure: "+path);
+  for (const [kind,count] of [["demo",3],["limited",1],["source",2],["api",1]]) {
+    check((html.match(new RegExp('data-availability="'+kind+'"','g'))??[]).length===count,"Wrong availability count for "+kind+": "+path);
+  }
   for(const id of ["eventify","bookbookhaven","fitflow-gym","venues-api","mizan-finance","portfolio","free-claude-code"]){
     check(html.includes("https://github.com/rahman-997/"+id),"Missing public project "+id+" in "+path);
   }

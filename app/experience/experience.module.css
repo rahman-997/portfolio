@@ -809,3 +809,12 @@
   line-height:1.65;
   overflow-wrap:break-word;
 }
+
+/* Availability describes the evidence type, not real-time service health. */
+.availabilityBar{display:grid;grid-template-columns:minmax(0,auto) minmax(0,18rem) 1fr;gap:.65rem 1rem;align-items:center;margin:0 0 1.25rem}
+.availabilityBar label{font-size:.78rem;font-weight:750}
+.availabilityBar select{width:100%;min-width:0;min-height:44px;padding:.55rem .75rem;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:.78rem}
+.availabilityBar p{margin:0;color:var(--muted);font-size:.72rem;line-height:1.6}
+.projectAvailability{display:block;align-self:flex-start;color:var(--muted);font-size:.68rem;font-weight:750;line-height:1.5;margin:0 0 .6rem}
+.projectAvailability[data-availability="limited"]{color:var(--accent)}
+@media(max-width:760px){.availabilityBar{grid-template-columns:minmax(0,1fr)}}
