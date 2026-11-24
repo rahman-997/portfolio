@@ -1,7 +1,7 @@
 import type { Locale } from "./locale";
 type NodeCopy = { name:string; summary:string; proof:string };
 type StageCopy = { label:string; title:string; detail:string };
-type AtlasCopy = {
+export type AtlasCopy = {
  eyebrow:string; title:string; lead:string; disciplines:string; modesLabel:string;
  systems:string; fact:string; modeGroup:string; modeNetwork:string; modePortrait:string; modeFlow:string;
  visualTag:string; nodeGroup:string; nodeHint:string; portraitAlt:string; portraitTitle:string; portraitDetail:string;

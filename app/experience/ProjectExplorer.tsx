@@ -2,13 +2,13 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { Locale } from "./locale";
-import { TEXT } from "./locale";
+import type { CatalogLabels } from "./client-labels";
 import { PUBLIC_PROJECTS, type ProjectGroup } from "./projects";
 import styles from "./experience.module.css";
 import { AVAILABILITY_COPY, availabilityOf, type AvailabilityFilter } from "./availability";
 
 type Filter = "all" | ProjectGroup;
-export default function ProjectExplorer({locale}:{locale:Locale}) {
+export default function ProjectExplorer({locale,labels:t}:{locale:Locale;labels:CatalogLabels}) {
   const [filter,setFilter] = useState<Filter>("all");
   const [query,setQuery] = useState("");
   const [availability,setAvailability] = useState<AvailabilityFilter>("all");
@@ -26,7 +26,6 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
     window.addEventListener("keydown", focusSearch);
     return () => window.removeEventListener("keydown", focusSearch);
   }, []);
-  const t=TEXT[locale];
   const access=AVAILABILITY_COPY[locale];
   const filters: {id:Filter; label:string}[] = [
     {id:"all",label:t.filterAll},

@@ -10,6 +10,7 @@ import { extraSections } from "./extra-sections";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
 import { STUDIO_HERO } from "./studio-hero";
+import { atlasCopy } from "./atlas-locale";
 import styles from "./experience.module.css";
 
 const stack = ["React", "Next.js", "TypeScript", "UI/UX", "Responsive Design", "Accessibility", "RTL / i18n", "PWA", "Node.js", "Express", "PostgreSQL", "GitHub Actions"];
@@ -34,8 +35,8 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
       </nav>
       <div className={styles.headerTools}>
-        <ExperienceControls locale={locale}/>
-        <MobileNavigation locale={locale}/>
+        <ExperienceControls locale={locale} labels={{language:t.language,themeLight:t.themeLight,themeDark:t.themeDark}}/>
+        <MobileNavigation locale={locale} labels={{language:t.language,navWork:t.navWork,navAtlas:t.navAtlas,navAbout:t.navAbout,navResume:t.navResume,navHighlights:more.navHighlights}}/>
       </div>
     </header>
 
@@ -79,7 +80,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
           <p className={styles.sectionLabel}>{t.projectEyebrow}</p>
           <div><h2>{t.projectTitle}</h2><p>{t.projectLead}</p></div>
         </div>
-        <ProjectExplorer locale={locale}/>
+        <ProjectExplorer locale={locale} labels={{filterAll:t.filterAll,filterProduct:t.filterProduct,filterBackend:t.filterBackend,filterTools:t.filterTools,projectEyebrow:t.projectEyebrow,projectCount:t.projectCount,original:t.original,fork:t.fork,caseStudy:t.caseStudy,source:t.source,repoNotice:t.repoNotice,otherLocaleNote:t.otherLocaleNote}}/>
       </section>
 
       <EvidenceSection locale={locale}/>
@@ -89,7 +90,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
           <p className={styles.sectionLabel}>{t.atlasEyebrow}</p>
           <h2>{t.atlasTitle}</h2>
         </div>
-        <AIAtlas locale={locale} />
+        <AIAtlas locale={locale} copy={atlasCopy[locale]}/>
       </div>
 
       <ProcessSection locale={locale}/>

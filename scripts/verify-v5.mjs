@@ -1,4 +1,5 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 
 const check = (condition, message) => {
   if (!condition) throw new Error("V5 new section regression: " + message);
@@ -63,3 +64,21 @@ for (const locale of locales) {
   check(/<summary\b/.test(faq), locale.id + ": FAQ is not semantic");
 }
 console.log("V5 verified: localized evidence, process, collaboration and FAQ across all 3 static routes.");
+
+// Server-only full-page copy must not be included in browser JS chunks.
+const clientChunks = [];
+function collectClientChunks(dir) {
+  for (const entry of readdirSync(dir,{withFileTypes:true})) {
+    const path=join(dir,entry.name);
+    if(entry.isDirectory()) collectClientChunks(path);
+    else if(entry.isFile() && path.endsWith(".js")) clientChunks.push(path);
+  }
+}
+collectClientChunks("out/_next/static/chunks");
+check(clientChunks.length>0,"No browser JavaScript chunks to inspect");
+const serverOnlyCopy = ["Engineering evidence, not vanity numbers.", "Distinctive interfaces.", "Every system is a network of decisions.", "Trace product requirements through system boundaries, ownership, and failure paths before implementation."];
+for(const file of clientChunks){
+  const js=readFileSync(file,"utf8");
+  for(const phrase of serverOnlyCopy) check(!js.includes(phrase),"Server-only copy leaked into browser chunk: "+file+" ("+phrase+")");
+}
+console.log("Client chunk copy isolation verified across "+clientChunks.length+" JS files.");

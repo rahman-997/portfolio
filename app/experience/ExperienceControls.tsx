@@ -2,13 +2,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Locale } from "./locale";
-import { TEXT } from "./locale";
+import type { ThemeLabels } from "./client-labels";
 import styles from "./experience.module.css";
 
 type Theme = "light" | "dark";
 const STORAGE_KEY = "portfolio-appearance";
 
-export default function ExperienceControls({locale}:{locale:Locale}) {
+export default function ExperienceControls({locale,labels:label}:{locale:Locale;labels:ThemeLabels}) {
   const [theme,setTheme] = useState<Theme>("dark");
   useEffect(()=>{
     let stored: string | null = null;
@@ -28,7 +28,6 @@ export default function ExperienceControls({locale}:{locale:Locale}) {
     document.documentElement.dataset.theme=next;
     try { window.localStorage.setItem(STORAGE_KEY,next); } catch { /* storage may be disabled */ }
   };
-  const label=TEXT[locale];
   const themeText = locale==="ar"
     ? (theme==="dark" ? "فاتح" : "داكن")
     : locale==="tr"

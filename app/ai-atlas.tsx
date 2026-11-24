@@ -5,81 +5,69 @@ import type { CSSProperties, KeyboardEvent } from "react";
 import Link from "next/link";
 import styles from "./ai-atlas.module.css";
 import type { Locale } from "./experience/locale";
-import { atlasCopy } from "./experience/atlas-locale";
+import type { AtlasCopy } from "./experience/atlas-locale";
 
 type Area = {
   id: string;
-  name: string;
   short: string;
   x: number;
   y: number;
-  summary: string;
   stack: string[];
-  proof: string;
   href: string;
 };
 
 const areas: Area[] = [
   {
-    id: "architecture", name: "Architecture", short: "PLAN", x: 20, y: 19,
-    summary: "Trace product requirements through system boundaries, ownership, and failure paths before implementation.",
+    id: "architecture", short: "PLAN", x: 20, y: 19,
     stack: ["Domain modeling", "API contracts", "Trade-offs"],
-    proof: "Explore the systems thinking section", href: "#systems",
+    href: "#systems",
   },
   {
-    id: "interface", name: "Interface", short: "UI", x: 14, y: 42,
-    summary: "Build responsive, accessible user journeys with real state, meaningful feedback, and production constraints.",
+    id: "interface", short: "UI", x: 14, y: 42,
     stack: ["React", "Next.js", "Accessibility"],
-    proof: "BookHaven case study", href: "/work/bookhaven/",
+    href: "/work/bookhaven/",
   },
   {
-    id: "backend", name: "Backend", short: "API", x: 20, y: 70,
-    summary: "Keep HTTP boundaries, validation, authorization, business logic, and persistence responsibilities explicit.",
+    id: "backend", short: "API", x: 20, y: 70,
     stack: ["Express", "REST", "Zod"],
-    proof: "Venues API case study", href: "/work/venues-api/",
+    href: "/work/venues-api/",
   },
   {
-    id: "data", name: "Data", short: "DB", x: 37, y: 85,
-    summary: "Design durable state and deliberate cache boundaries, treating the database as the system of record.",
+    id: "data", short: "DB", x: 37, y: 85,
     stack: ["PostgreSQL", "Prisma", "Redis"],
-    proof: "Eventify case study", href: "/work/eventify/",
+    href: "/work/eventify/",
   },
   {
-    id: "ai", name: "AI / MCP", short: "AI", x: 80, y: 19,
-    summary: "Explore how language-model tools and human-in-the-loop workflows can fit into accountable product architecture.",
+    id: "ai", short: "AI", x: 80, y: 19,
     stack: ["LLM patterns", "MCP", "Human oversight"],
-    proof: "View engineering technologies", href: "#stack",
+    href: "#stack",
   },
   {
-    id: "async", name: "Async work", short: "JOBS", x: 86, y: 42,
-    summary: "Coordinate background jobs, retry policies, idempotency, and durable intent when dependencies fail.",
+    id: "async", short: "JOBS", x: 86, y: 42,
     stack: ["BullMQ", "Redis", "Outbox"],
-    proof: "Eventify case study", href: "/work/eventify/",
+    href: "/work/eventify/",
   },
   {
-    id: "quality", name: "Verification", short: "QA", x: 80, y: 70,
-    summary: "Verify contracts, interactions, security boundaries, accessibility, and unhappy-path behavior.",
+    id: "quality", short: "QA", x: 80, y: 70,
     stack: ["TypeScript", "Tests", "CI checks"],
-    proof: "Venues API case study", href: "/work/venues-api/",
+    href: "/work/venues-api/",
   },
   {
-    id: "delivery", name: "Delivery", short: "SHIP", x: 63, y: 85,
-    summary: "Ship through reproducible builds, clear runtime diagnostics, deployment checks, and operational visibility.",
+    id: "delivery", short: "SHIP", x: 63, y: 85,
     stack: ["GitHub Actions", "Docker", "Health checks"],
-    proof: "Eventify case study", href: "/work/eventify/",
+    href: "/work/eventify/",
   },
 ];
 
 const journey = [
-  { id: "architecture", label: "01 / DEFINE", title: "Model the domain", detail: "Clarify boundaries and failure paths before choosing tools." },
-  { id: "backend", label: "02 / VALIDATE", title: "Enforce contracts", detail: "Validate inputs and authorise changes at the API boundary." },
-  { id: "data", label: "03 / PERSIST", title: "Commit state", detail: "Keep durable intent in the system of record." },
-  { id: "async", label: "04 / DISPATCH", title: "Process safely", detail: "Run retriable background work with clear ownership." },
-  { id: "quality", label: "05 / VERIFY", title: "Prove behavior", detail: "Check failure cases, integration contracts and observability." },
+  { id: "architecture" },
+  { id: "backend" },
+  { id: "data" },
+  { id: "async" },
+  { id: "quality" },
 ] as const;
 
-export default function AIAtlas({locale="en"}:{locale?:Locale}) {
-  const t=atlasCopy[locale];
+export default function AIAtlas({locale,copy:t}:{locale:Locale;copy:AtlasCopy}) {
   const [activeId, setActiveId] = useState("architecture");
   const [view, setView] = useState<"network" | "portrait" | "flow">("network");
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);

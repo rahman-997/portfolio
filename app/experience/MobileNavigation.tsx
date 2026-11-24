@@ -3,11 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import Link from "next/link";
 import type { Locale } from "./locale";
-import { TEXT } from "./locale";
-import { extraSections } from "./extra-sections";
+import type { MenuLabels } from "./client-labels";
 import styles from "./experience.module.css";
 
-export default function MobileNavigation({locale}:{locale:Locale}) {
+export default function MobileNavigation({locale,labels:t}:{locale:Locale;labels:MenuLabels}) {
   const [open,setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -43,12 +42,10 @@ export default function MobileNavigation({locale}:{locale:Locale}) {
       window.removeEventListener("resize", closeOnResize);
     };
   }, [open]);
-  const t = TEXT[locale];
-  const extra = extraSections[locale];
   const menuLabel = locale==="ar" ? "قائمة التنقل" : locale==="tr" ? "Gezinme menüsü" : "Navigation menu";
   const links = [
     {href:"#work",label:t.navWork},
-    {href:"#highlights",label:extra.navHighlights},
+    {href:"#highlights",label:t.navHighlights},
     {href:"#ai-lab",label:t.navAtlas},
     {href:"#collaborate",label:locale==="ar"?"الخدمات":locale==="tr"?"Hizmetler":"Services"},
     {href:"#about",label:t.navAbout},
