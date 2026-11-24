@@ -60,7 +60,7 @@
   /* Keep the full original screenshot visible instead of slicing off its UI. */
   object-fit:contain;
   object-position:center top;
-  animation:stage-reveal .35s ease-out both;
+  /* Avoid a first-paint opacity/transform animation on the LCP image. */
 }
 .screen::after{
   content:"";
