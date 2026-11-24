@@ -132,6 +132,7 @@ export default function FeaturedShowcase({ locale }: { locale: Locale }) {
           sizes="(max-width: 820px) 100vw, 620px"
           className={styles.screenImage}
           fetchPriority={selected === "fitflow" ? "high" : "auto"}
+          decoding={selected === "fitflow" ? "sync" : "async"}
           priority={selected === "fitflow"}
         />
       </div>
