@@ -170,6 +170,16 @@ with sync_playwright() as pw:
                     work = page.locator("#work")
                     check(work.locator("article").count() == 7,
                           f"{name}: missing public repositories")
+                    bookhaven_card = work.locator('[data-project-id="bookbookhaven"]')
+                    check(bookhaven_card.locator('img[src="/projects/bookhaven-real-interface.webp"]').count() == 1,
+                          f"{name}: reviewed BookHaven screenshot missing from project card")
+                    eventify_card = work.locator('[data-project-id="eventify"]')
+                    notice = eventify_card.locator("[data-demo-notice]")
+                    check(notice.count() == 1 and len(notice.inner_text()) > 35,
+                          f"{name}: Eventify degraded backend disclosure missing")
+                    limited_label = {"en":"limited", "ar":"محدودة", "tr":"sınırlı"}[locale]
+                    check(limited_label in eventify_card.locator('a[href="https://eventify-web.onrender.com"]').inner_text().lower(),
+                          f"{name}: Eventify demo link falsely implies full availability")
                     check(page.locator("#ai-lab").count() == 1, f"{name}: Atlas missing")
                     # V5: new sections must stay navigable and complete in all locales/themes.
                     for section in ("highlights", "process", "collaborate", "faq"):
