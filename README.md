@@ -31,16 +31,26 @@ The portfolio presents the engineering layers demonstrated by the selected work:
 
 | Project | Engineering focus | Evidence |
 | --- | --- | --- |
-| **Mizan Finance** | Privacy-first finance UI | Responsive React dashboard, spending charts, validated forms, Arabic/English RTL, local storage, PWA; demo availability unverified — source and case study linked |\n| **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, durable background work, health/readiness, metrics, CI/security |
+| **Mizan Finance** | Privacy-first finance UI | Responsive React dashboard, spending charts, validated forms, Arabic/English RTL, local storage, PWA; demo availability unverified — source and case study linked |
+| **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, durable background work, health/readiness, metrics, CI/security |
 | **BookHaven** | Full-stack commerce | Next.js + Express + MongoDB, HttpOnly BFF sessions, optimistic concurrency, conditional inventory, adaptive transactions with compensation fallback, paginated catalog/reviews/orders, admin operations, ISBN validation, dynamic SEO, Node 24.20.0 pinning, digest-pinned Node/Mongo containers, Compose validation, Dependabot supply-chain coverage |
 | **FitFlow** | Installable fitness PWA | Personalized plans, guided intervals, local-first progress, accessibility, responsive UX, offline readiness, Render static delivery |
 | **Venues API** | Focused backend service | Express 5, TypeScript, Zod 4, layered architecture, centralized errors, UUID resources, persistence, contract tests, live health proof |
 
 Every featured project links to **live proof, source code, and an engineering case study**. Render-hosted demos explicitly disclose free-tier wake-up behavior where applicable so cold starts are not mistaken for broken software.
 
-## Frontend-first update · 2026-11-23\n\n- FitFlow and Mizan now lead the public project library; the upstream fork remains explicitly identified.\n- Mizan has a standalone engineering case study and appears in the three-language evidence section.
+## Frontend-first update · 2026-11-23
+
+- FitFlow and Mizan now lead the public project library; the upstream fork remains explicitly identified.
+- Mizan has a standalone engineering case study and appears in the three-language evidence section.
 - Mizan preview is an authentic screenshot captured from a freshly cloned app in an isolated browser profile, showing bundled demo transactions; no personal account data.
-- FitFlow preview uses an optimized WebP screenshot from its locally built static production output, with no development browser overlay.\n- Mizan's historical demo URL is **not treated as verified**; no public demo button appears in its case study.\n- English, Arabic RTL, and Turkish copy leads with frontend experience, accessibility, UI/UX and React.\n- A one-page Frontend résumé PDF and accessible printable HTML are now included and linked from the résumé page; the older engineering PDF remains available at its original URL.\n- Every change is intended for review on a feature branch; no production deployment is part of this change.\n\n## Security and measured performance — 2026-11-24
+- FitFlow preview uses an optimized WebP screenshot from its locally built static production output, with no development browser overlay.
+- Mizan's historical demo URL is **not treated as verified**; no public demo button appears in its case study.
+- English, Arabic RTL, and Turkish copy leads with frontend experience, accessibility, UI/UX and React.
+- A one-page Frontend résumé PDF and accessible printable HTML are now included and linked from the résumé page; the older engineering PDF remains available at its original URL.
+- Every change is intended for review on a feature branch; no production deployment is part of this change.
+
+## Security and measured performance — 2026-11-24
 
 - Upgraded `next` and `eslint-config-next` together from 16.4.3 to **16.4.6**, with a regenerated integrity-checked `package-lock.json`.
 - Refreshed the compatible `typescript-eslint`/minimatch dependency tree with a one-time audited lockfile repair. The CI dependency audit now treats **moderate** (and higher) advisories as blocking, rather than gating only high/critical.
@@ -57,6 +67,14 @@ Every featured project links to **live proof, source code, and an engineering ca
 - Tested CSS `content-visibility: auto` on offscreen AI Atlas. A single EN Lighthouse run reported lower blocking time, **but the full-page screenshot showed a blank Atlas area**. The optimization was **reverted**, and browser QA now prevents this visual regression.
 - The later revert run measured EN **85** (LCP **4.15 s**) and AR **78** (LCP **5.6 s**). Large run-to-run variance proves these synthetic results should not be used as a guaranteed improvement claim. Repeatable real-device testing remains a release gate.
 - Free read-only public demo checks and screenshots are stored in short-retention GitHub Actions artifacts; images require manual inspection and must not be auto-published.
+
+## Reproducible Lighthouse lab and non-gaming budgets — 24 November 2026
+
+- The GitHub Actions Lighthouse lab now uses `scripts/serve_lighthouse.py` rather than plain Python `http.server`. It mirrors the **Cache-Control rules already defined in `render.yaml`** for static JS/CSS, project images, icons and the manifest. Before this correction, Lighthouse falsely reported no cache lifetime because the test server omitted headers. This is **measurement fidelity, not an optimization deployed to production**.
+- `scripts/tests/test_serve_lighthouse.py` proves those headers and confirms HTML is not incorrectly given an immutable cache policy.
+- `scripts/lighthouse-budget.mjs` gates synthetic accessibility (at least 95), best practices (at least 90), SEO (at least 95) and layout stability (CLS up to 0.10). Its thresholds are covered by a Node unit test, also included in standard CI.
+- Performance below 80/100, LCP beyond 4 seconds or TBT beyond 300ms produce **warnings rather than false definitive regressions** until repeated controlled data can establish a reliable baseline. The prior measured LCP of roughly 5.5–5.7s is still a real open issue; this update does not claim it was fixed.
+- All lab measurements run locally on an isolated, free GitHub Actions runner and do not send visitor data or reports to a third party. Production cache headers and real-device Web Vitals require independent verification.
 
 ## Interactive product theatre — 2026-11-23
 

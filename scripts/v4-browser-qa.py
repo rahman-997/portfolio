@@ -256,6 +256,9 @@ with sync_playwright() as pw:
                     check(work.locator("article").count() == 7 and search.input_value() == "" and availability.input_value() == "all",
                           f"{name}: clearing project search failed")
                     page.locator("#ai-lab").scroll_into_view_if_needed()
+                    check(page.locator("#ai-lab").get_attribute("data-atlas-motion") == "paused" and
+                          page.locator("#ai-lab animateMotion").count() == 0,
+                          f"{name}: reduced-motion Atlas runs decorative animation")
                     page.get_by_role("button", name=COPY[locale]["flow"], exact=True).click()
                     check(page.get_by_label("Illustrative five-stage engineering flow").count() == 1,
                           f"{name}: atlas mode switch broken")
@@ -323,6 +326,25 @@ with sync_playwright() as pw:
                         pass
                 finally:
                     context.close()
+    # With motion allowed, decorative effects start only while Atlas is visible.
+    context = browser.new_context(viewport={"width": 1280, "height": 800}, reduced_motion="no-preference")
+    page = context.new_page()
+    try:
+        page.goto(BASE + "/", wait_until="networkidle")
+        atlas = page.locator("#ai-lab")
+        check(atlas.get_attribute("data-atlas-motion") == "paused" and atlas.locator("animateMotion").count() == 0,
+              "offscreen Atlas must start static")
+        atlas.scroll_into_view_if_needed()
+        page.locator('#ai-lab[data-atlas-motion="running"]').wait_for(timeout=5000)
+        check(atlas.locator("animateMotion").count() == 1, "visible Atlas animation missing")
+        page.evaluate("window.scrollTo({top:0,behavior:'instant'})")
+        page.locator('#ai-lab[data-atlas-motion="paused"]').wait_for(timeout=5000)
+        check(atlas.locator("animateMotion").count() == 0, "offscreen Atlas animation not stopped")
+        report.append({"case":"atlas-motion-visibility","status":"pass"})
+    except Exception as exc:
+        failures.append({"case":"atlas-motion-visibility","error":str(exc)})
+    finally:
+        context.close()
     # True no-JavaScript test: verify localized direction is present on raw static HTML.
     for locale in ("ar","tr"):
         context = browser.new_context(java_script_enabled=False)

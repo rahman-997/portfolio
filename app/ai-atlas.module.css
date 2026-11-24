@@ -938,3 +938,11 @@
   .network{gap:9px;padding:126px 10px 18px}
   .network > .node{min-height:58px}
 }
+
+/* Keep offscreen and reduced-motion visuals static without hiding the Atlas. */
+.section[data-atlas-motion="paused"] .coreGlow,
+.section[data-atlas-motion="paused"] .coreRing,
+.section[data-atlas-motion="paused"] .coreRing::before,
+.section[data-atlas-motion="paused"] .portraitSvg {
+  animation-play-state: paused;
+}

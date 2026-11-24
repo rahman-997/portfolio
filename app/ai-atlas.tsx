@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent } from "react";
 import Link from "next/link";
 import styles from "./ai-atlas.module.css";
@@ -83,6 +83,30 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
   const [activeId, setActiveId] = useState("architecture");
   const [view, setView] = useState<"network" | "portrait" | "flow">("network");
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [motionActive, setMotionActive] = useState(false);
+
+  // Decorative work should not run during initial paint or offscreen.
+  // The server and no-JS version remain fully visible and static.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || !("IntersectionObserver" in window)) return;
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let visible = false;
+    const sync = () => setMotionActive(visible && !preference.matches && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    });
+    observer.observe(section);
+    preference.addEventListener("change", sync);
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      observer.disconnect();
+      preference.removeEventListener("change", sync);
+      document.removeEventListener("visibilitychange", sync);
+    };
+  }, []);
   const activeIndex = areas.findIndex((area) => area.id === activeId);
   const active = areas[activeIndex] ?? areas[0];
 
@@ -103,7 +127,7 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
   }
 
   return (
-    <section className={styles.section} id="ai-lab" aria-labelledby="ai-lab-heading">
+    <section ref={sectionRef} className={styles.section} id="ai-lab" aria-labelledby="ai-lab-heading" data-atlas-motion={motionActive ? "running" : "paused"}>
       <div className={styles.heading}>
         <div>
           <p className={styles.eyebrow}>{t.eyebrow}</p>
@@ -156,7 +180,7 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
                   {areas.map((area) => (
                     <g key={area.id}>
                       <line x1="500" y1="300" x2={area.x * 10} y2={area.y * 6} stroke="url(#atlas-wire)" strokeWidth={activeId === area.id ? 2.8 : 1.1} opacity={activeId === area.id ? 1 : .5} />
-                      {activeId === area.id && (
+                      {motionActive && activeId === area.id && (
                         <circle r="4" fill="#f6cc84" className={styles.signalParticle}>
                           <animateMotion dur="3s" repeatCount="indefinite" path={`M500 300 L${area.x * 10} ${area.y * 6}`} />
                         </circle>
