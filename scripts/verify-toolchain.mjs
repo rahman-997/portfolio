@@ -21,7 +21,7 @@ for (const key of ["next", "eslint-config-next"]) {
   const specified = pkg.dependencies?.[key] ?? pkg.devDependencies?.[key];
   const rootLocked = lock.packages?.[""]?.dependencies?.[key] ?? lock.packages?.[""]?.devDependencies?.[key];
   const installed = lock.packages?.["node_modules/" + key];
-  if (!/^\\d+\\.\\d+\\.\\d+$/.test(specified ?? "") ||
+  if (!/^[0-9]+[.][0-9]+[.][0-9]+$/.test(specified ?? "") ||
       specified !== rootLocked || specified !== installed?.version ||
       !installed?.integrity?.startsWith("sha512-")) {
     throw new Error(`Dependency or integrity mismatch for ${key}: package=${specified} root=${rootLocked} locked=${installed?.version}`);
