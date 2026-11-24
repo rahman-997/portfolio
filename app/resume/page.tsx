@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { PROFILE_LINKS, PROJECT_LIST } from "../portfolio-data";
 import styles from "./resume.module.css";
 
 export const metadata: Metadata = {
-  title: "Résumé — Abdulrahman Hajar | Software Engineer",
+  title: "Résumé — Abdulrahman Hajar | Computer Engineer",
   description:
-    "Recruiter-ready résumé for Abdulrahman Hajar: Software Engineer, Full-Stack Developer, and builder of AI & interactive systems; Computer Engineering student in Istanbul.",
+    "Recruiter-ready résumé for Abdulrahman Hajar: Computer Engineer, Full-Stack Developer, and software engineer focused on reliable products, APIs and interactive systems.",
   alternates: { canonical: "/resume/" },
 };
 
@@ -22,7 +23,7 @@ export default function ResumePage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio">
-          <span>AH</span><strong>Abdulrahman Hajar</strong>
+          <span><Image src="/brand/hajar-emblem.svg" width={21} height={30} alt="" unoptimized /></span><strong>HAJAR</strong>
         </Link>
         <div className={styles.headerActions}>
           <Link href="/#work">Selected work</Link>
@@ -33,14 +34,14 @@ export default function ResumePage() {
 
       <section className={styles.hero}>
         <div>
-          <p className={styles.kicker}>SOFTWARE ENGINEER · FULL-STACK DEVELOPER · AI & INTERACTIVE SYSTEMS</p>
+          <p className={styles.kicker}>COMPUTER ENGINEER · FULL-STACK DEVELOPER · SOFTWARE ENGINEER</p>
           <h1>Abdulrahman Hajar</h1>
           <p className={styles.lede}>
-            Software engineer and Computer Engineering student building complete production software systems across frontend, backend, APIs, data, asynchronous workflows, testing, security, reliability, AI integrations, interactive systems, and deployment.
+            Computer engineer and full-stack developer building complete production software systems across frontend, backend, APIs, data, asynchronous workflows, testing, security, reliability, AI integrations, interactive systems, and deployment.
           </p>
         </div>
         <aside className={styles.snapshot} aria-label="Professional snapshot">
-          <div><span>Role</span><strong>Software Engineer · Full-Stack Developer · AI & Interactive Systems</strong></div>
+          <div><span>Role</span><strong>Computer Engineer · Full-Stack Developer · Software Engineer</strong></div>
           <div><span>Education</span><strong>Computer Engineering · Nişantaşı University</strong></div>
           <div><span>Location</span><strong>Istanbul, Türkiye</strong></div>
           <div><span>GitHub</span><a href={PROFILE_LINKS.github} target="_blank" rel="noreferrer">github.com/rahman-997 ↗</a></div>
@@ -83,7 +84,7 @@ export default function ResumePage() {
       </div>
 
       <footer className={styles.footer}>
-        <p>Abdulrahman Hajar · Software Engineer · Full-Stack Developer · AI & Interactive Systems · Istanbul, Türkiye</p>
+        <p>Abdulrahman Hajar · Computer Engineer · Full-Stack Developer · Software Engineer · Istanbul, Türkiye</p>
         <Link href="/">Back to portfolio ↑</Link>
       </footer>
     </main>

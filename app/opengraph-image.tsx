@@ -18,7 +18,7 @@ export default function OpenGraphImage() {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
-            <div style={{ width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 14, border: "1px solid rgba(255,255,255,.16)", background: "rgba(255,255,255,.06)", color: "#f5f7fb", fontWeight: 900, fontSize: 15, letterSpacing: 1.5 }}>AH</div>
+            <div style={{ width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 14, border: "1px solid rgba(255,255,255,.16)", background: "rgba(255,255,255,.06)", color: "#f5f7fb", fontWeight: 900, fontSize: 10, letterSpacing: .2 }}>HAJAR</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <span style={{ fontSize: 22, fontWeight: 900 }}>Abdulrahman Hajar</span>
               <span style={{ fontSize: 13, color: "#8f99a7", letterSpacing: 1.2 }}>SOFTWARE ENGINEER · ISTANBUL</span>

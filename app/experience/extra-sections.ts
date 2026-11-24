@@ -47,9 +47,9 @@ export const extraSections: Record<Locale, {
       eyebrow:"FAQ / THE IMPORTANT DETAILS",title:"Questions, answered.",
       lead:"Practical details about the projects and how to explore them.",
       items:[
-        {q:"Is every repository your original work?",a:"Six listed repositories are original projects. The free-claude-code repository is an upstream fork and is explicitly marked as such. Private repositories are not displayed."},
-        {q:"Can I try every project online?",a:"Live demos are linked where a public deployment exists. Some free-tier deployments may need time to wake up. For projects without a public demo, the source repository is the primary reference."},
-        {q:"Where can I see deeper technical decisions?",a:"Eventify, BookHaven, FitFlow and Venues API have dedicated architecture and implementation case studies. These detailed pages are currently written in English; source links accompany every project."},
+        {q:"Is every repository your original work?",a:"The catalog includes original products, prototypes, client work and one explicitly attributed open-source fork, free-claude-code. Private projects are described without sharing their code or data."},
+        {q:"Can I try every project online?",a:"A live-demo link is provided where a public deployment is available. Free hosting may need time to wake up. Development projects and prototypes are labelled by stage; public code or a project discussion provides further context."},
+        {q:"Where can I see deeper technical decisions?",a:"Eventify, BookHaven, FitFlow and Venues API have dedicated architecture and implementation case studies. These detailed pages are currently written in English. Source links are included only for public repositories."},
         {q:"Does the AI Atlas run actual agents or analyze visitors?",a:"No. The AI Systems Atlas is an interactive visualization of engineering disciplines, not a live agent service, camera tool or visitor-tracking system."}
       ]
     }
@@ -91,9 +91,9 @@ export const extraSections: Record<Locale, {
       eyebrow:"أسئلة متكررة / تفاصيل مهمة",title:"أسئلة وأجوبة.",
       lead:"إجابات عملية عن المشاريع وأفضل طريقة لاستكشافها.",
       items:[
-        {q:"هل جميع المستودعات من تطويرك الأصلي؟",a:"ستة مستودعات معروضة هي مشاريع أصلية. مستودع free-claude-code نسخة متفرعة من مشروع خارجي ومميّزة بذلك بوضوح. لا أعرض المستودعات الخاصة."},
-        {q:"هل يمكن تجربة كل مشروع على الإنترنت؟",a:"أضع رابط العرض الحي عندما يكون متاحاً. بعض خدمات الاستضافة المجانية قد تحتاج إلى وقت لتستيقظ. إن لم يتوفر عرض عام، يبقى مستودع الكود المرجع الأساسي."},
-        {q:"أين أقرأ التفاصيل الهندسية للمشاريع؟",a:"تتضمن مشاريع Eventify وBookHaven وFitFlow وVenues API دراسات منفصلة للمعمارية والتنفيذ. صفحات التفاصيل حالياً بالإنجليزية، وروابط الكود موجودة لكل مشروع."},
+        {q:"هل جميع المستودعات من تطويرك الأصلي؟",a:"يضم المعرض منتجات أصلية ونماذج أولية وعملًا لعميل، إلى جانب نسخة متفرعة واحدة موضّحة النسبة إلى مصدرها: free-claude-code. تُعرض المشاريع الخاصة بوصفها دون كشف شيفرتها أو بياناتها."},
+        {q:"هل يمكن تجربة كل مشروع على الإنترنت؟",a:"أضع رابط التجربة الحية عندما يكون متاحًا، وقد تحتاج الاستضافة المجانية إلى وقت للاستجابة. تُوضَّح مرحلة المشاريع قيد التطوير والنماذج الأولية، ويمكن مراجعة الكود العام أو التواصل لمناقشة المشروع."},
+        {q:"أين أقرأ التفاصيل الهندسية للمشاريع؟",a:"تتضمن مشاريع Eventify وBookHaven وFitFlow وVenues API دراسات منفصلة للمعمارية والتنفيذ. صفحات التفاصيل حالياً بالإنجليزية، وروابط الكود متاحة للمستودعات العامة فقط."},
         {q:"هل يشغّل AI Atlas وكلاء حقيقيين أو يتتبع الزوار؟",a:"لا. AI Systems Atlas عرض تفاعلي لتخصصات الهندسة، وليس خدمة وكلاء حية أو أداة كاميرا أو نظام تتبع زوار."}
       ]
     }
@@ -135,9 +135,9 @@ export const extraSections: Record<Locale, {
       eyebrow:"SSS / TEMEL DETAYLAR",title:"Sorular ve yanıtlar.",
       lead:"Projeler ve onları nasıl inceleyebileceğiniz hakkında kısa, net cevaplar.",
       items:[
-        {q:"Tüm depolar özgün çalışmanız mı?",a:"Listelenen altı depo özgün projedir. free-claude-code üçüncü taraf bir projeden fork'lanmıştır ve açıkça bu şekilde etiketlenir. Özel depolar gösterilmez."},
-        {q:"Tüm projeleri çevrim içi deneyebilir miyim?",a:"Herkese açık dağıtımı olan projelerde canlı demo bağlantısı bulunur. Bazı ücretsiz sunucuların uyanması zaman alabilir. Canlı demo yoksa temel kaynak kod deposudur."},
-        {q:"Teknik kararları nereden görebilirim?",a:"Eventify, BookHaven, FitFlow ve Venues API için özel mimari ve uygulama incelemeleri vardır. Bu ayrıntılı sayfalar şu anda İngilizcedir; her projenin kaynak bağlantısı da bulunur."},
+        {q:"Tüm depolar özgün çalışmanız mı?",a:"Katalogda özgün ürünler, prototipler, müşteri çalışması ve kaynağı açıkça belirtilen bir açık kaynak fork'u olan free-claude-code yer alır. Özel projeler, kodları ve verileri paylaşılmadan açıklanır."},
+        {q:"Tüm projeleri çevrim içi deneyebilir miyim?",a:"Açık dağıtımı bulunan projelerde demo bağlantısı sunulur. Ücretsiz sunucuların uyanması zaman alabilir. Geliştirme aşamaları ve prototipler etiketlenir; ayrıntılar için açık kod incelenebilir veya proje hakkında iletişime geçilebilir."},
+        {q:"Teknik kararları nereden görebilirim?",a:"Eventify, BookHaven, FitFlow ve Venues API için özel mimari ve uygulama incelemeleri vardır. Bu ayrıntılı sayfalar şu anda İngilizcedir; kaynak bağlantıları yalnızca açık depolar için sunulur."},
         {q:"AI Atlas gerçekten ajan çalıştırıyor veya ziyaretçileri izliyor mu?",a:"Hayır. AI Systems Atlas mühendislik alanlarını anlatan etkileşimli bir görseldir; canlı ajan servisi, kamera aracı veya ziyaretçi takip sistemi değildir."}
       ]
     }

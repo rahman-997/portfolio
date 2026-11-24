@@ -1,8 +1,11 @@
 import type { Locale } from "./locale";
-export type ProjectGroup = "product" | "backend" | "tools";
+import { ADDITIONAL_PROJECTS } from "./additional-projects";
+export type ProjectGroup = "product" | "backend" | "tools" | "web";
+export type ProjectStage = "demo" | "development" | "prototype" | "open-source";
 export type PortfolioProject = {
   id: string; name: string; group: ProjectGroup; original: boolean;
-  stack: readonly string[]; source: string; demo?: string; study?: string;
+  stack: readonly string[]; source?: string; demo?: string; study?: string;
+  stage?: ProjectStage; keywords?: readonly string[]; clientWork?: boolean;
   text: Record<Locale, { headline: string; description: string }>;
 };
 export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
@@ -84,3 +87,23 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
 ] as const;
 
 export const PUBLIC_PROJECT_COUNT = PUBLIC_PROJECTS.length;
+/** Count only public projects with a published case-study URL. */
+export const PUBLIC_CASE_STUDY_COUNT = PUBLIC_PROJECTS.filter(project => Boolean(project.study)).length;
+
+export const ALL_PROJECTS: readonly PortfolioProject[] = [...PUBLIC_PROJECTS, ...ADDITIONAL_PROJECTS];
+export const ALL_PROJECT_COUNT = ALL_PROJECTS.length;
+export function projectStage(project: PortfolioProject): ProjectStage {
+  return project.stage ?? (!project.original ? "open-source" : project.demo ? "demo" : "development");
+}
+function normalizeSearch(value: string): string {
+  return value.toLocaleLowerCase("en-US").normalize("NFKD").replace(/\p{M}/gu, "").replace(/ı/g, "i").replace(/[أإآ]/g, "ا");
+}
+export function filterPortfolioProjects(group: "all" | ProjectGroup, query: string): readonly PortfolioProject[] {
+  const words = normalizeSearch(query.trim()).split(/\s+/).filter(Boolean);
+  return ALL_PROJECTS.filter(project => {
+    if (group !== "all" && project.group !== group) return false;
+    const searchable = normalizeSearch([project.name, project.id, ...project.stack, ...(project.keywords ?? []),
+      ...Object.values(project.text).flatMap(text => [text.headline, text.description])].join(" "));
+    return words.every(word => searchable.includes(word));
+  });
+}
