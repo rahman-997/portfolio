@@ -49,3 +49,5 @@
   line-height:1.5;
   letter-spacing:.01em;
 }
+
+.evidenceNotice{position:relative;max-width:72ch;margin:1rem 0 0;padding:.85rem 1rem;border-inline-start:2px solid var(--accent);background:var(--panel);color:var(--ink);font-size:.8rem;line-height:1.7;overflow-wrap:anywhere}

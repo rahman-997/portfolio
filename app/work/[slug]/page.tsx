@@ -10,6 +10,8 @@ import {
   type ProjectSlug,
 } from "../../portfolio-data";
 import styles from "./case-study.module.css";
+import { PUBLIC_PROJECTS } from "../../experience/projects";
+import { availabilityOf } from "../../experience/availability";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -52,6 +54,10 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const study = PROJECTS[slug as ProjectSlug];
   if (!study) notFound();
 
+  const card = PUBLIC_PROJECTS.find(project => project.study === `/work/${slug}/`);
+  const availability = card ? availabilityOf(card) : "source";
+  const demoLabel = availability === "limited" ? "Open limited interface preview" : availability === "api" ? "Open API health endpoint" : "Open public demo";
+  const evidenceNote = card?.demoNotice?.en ?? (availability === "source" ? "No verified public demo link is provided. Review the source and case study." : availability === "api" ? "A health endpoint indicates reachability, not full API correctness." : "Public demo link; current uptime and complete functionality are not guaranteed.");
   const coverDimensions = slug === "mizan"
     ? {width:1440,height:960}
     : slug === "fitflow"
@@ -118,10 +124,11 @@ export default async function CaseStudyPage({ params }: PageProps) {
           <h1>{study.name}</h1>
           <p className={styles.summary}>{study.summary}</p>
           <div className={styles.actions}>
-            {study.live ? <a href={study.live} target="_blank" rel="noreferrer">Open live system ↗</a> : null}
+            {study.live ? <a href={study.live} target="_blank" rel="noopener noreferrer" data-study-demo={availability}>{demoLabel} ↗</a> : null}
             {study.runtime ? <a href={study.runtime} target="_blank" rel="noreferrer">Runtime health ↗</a> : null}
             <a href={study.source} target="_blank" rel="noreferrer">Inspect source ↗</a>
           </div>
+          <p className={styles.evidenceNotice} data-study-availability={availability}>{evidenceNote}</p>
           <div className={styles.stack}>{study.stack.map((item) => <span key={item}>{item}</span>)}</div>
           {study.cover ? <figure className={styles.cover}><Image unoptimized src={study.cover} alt={`${study.name} project preview`} width={coverDimensions.width} height={coverDimensions.height} sizes="(max-width: 1240px) calc(100vw - 48px), 1240px" priority /><figcaption className={styles.coverCaption}>{coverCaption}</figcaption></figure> : null}
         </section>
@@ -158,8 +165,8 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </section>
 
         <section className={styles.next}>
-          <div><span>VERIFY IT</span><h2>The implementation is public.</h2><p>{study.live ? "Review the live behavior, source code, tests, architecture, and deployment details directly." : "Review the source code, tests, and implementation details. A public deployment has not been verified for this project."}</p></div>
-          <div className={styles.nextLinks}>{study.live ? <a href={study.live} target="_blank" rel="noreferrer">Live system ↗</a> : null}<a href={study.source} target="_blank" rel="noreferrer">GitHub source ↗</a><Link href="/#work">More case studies →</Link></div>
+          <div><span>VERIFY IT</span><h2>The implementation is public.</h2><p>{"Review the source code, tests, architecture and implementation details. " + evidenceNote}</p></div>
+          <div className={styles.nextLinks}>{study.live ? <a href={study.live} target="_blank" rel="noopener noreferrer">{demoLabel} ↗</a> : null}<a href={study.source} target="_blank" rel="noreferrer">GitHub source ↗</a><Link href="/#work">More case studies →</Link></div>
         </section>
       </article>
     </main>

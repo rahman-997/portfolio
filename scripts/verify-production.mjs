@@ -113,7 +113,7 @@ for (const [path, lang, dir] of [["/", "en", "ltr"], ["/ar/", "ar", "rtl"], ["/t
     }
   }
 }
-console.log("Production V5 verified: 4 sections and evidence links in EN/AR/TR.");
+console.log("Production V5 verified: sections, recruiter context and evidence links in EN/AR/TR.");
 
 const atlasContract = assertAtlasProductionContract(homeHtml);
 console.log(`Production AI Atlas verified: ${atlasContract.nodeCount} disciplines, ${atlasContract.verifiedModes} modes`);
@@ -149,6 +149,8 @@ if (fitflow.includes(`property="og:image" content="${baseUrl}/projects/fitflow-c
   throw new Error("FitFlow production OpenGraph metadata must not use SVG");
 }
 
+const eventify = await (await request("/work/eventify/")).text();
+if (!eventify.includes('data-study-availability="limited"') || !eventify.includes('data-study-demo="limited"')) throw new Error("Eventify preview limitations must remain disclosed");
 const venues = await (await request("/work/venues-api/")).text();
 if (!venues.includes("https://venues-api-rahman.onrender.com/health")) {
   throw new Error("Venues API production proof must target the verified health endpoint");

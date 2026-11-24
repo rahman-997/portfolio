@@ -74,6 +74,14 @@ jobs:
         run: |
           node scripts/release-candidate.mjs create out release-manifest.json "$GITHUB_SHA"
           node scripts/release-candidate.mjs verify out release-manifest.json
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory out >/tmp/portfolio-release-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..20}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then break; fi
+            sleep 1
+          done
+          node scripts/verify-candidate-http.mjs release-manifest.json http://127.0.0.1:4173
 
       - name: Upload static candidate for owner review (not deployment)
         if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'

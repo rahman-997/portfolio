@@ -432,7 +432,13 @@ with sync_playwright() as pw:
                     caption = page.locator("article figure figcaption")
                     check(caption.count() == 1 and len(caption.inner_text().strip()) > 12,
                           f"{name}: missing project image description")
+                expected_availability = {"fitflow":"demo","bookhaven":"demo","mizan":"source","eventify":"limited","venues-api":"api"}[slug]
+                check(page.locator(f'[data-study-availability="{expected_availability}"]').count() == 1,
+                      f"{name}: availability disclosure missing")
+                demo = page.locator("[data-study-demo]")
+                check(demo.count() == (0 if slug == "mizan" else 1), f"{name}: unexpected demo link")
                 if slug == "eventify":
+                    check("limited" in demo.inner_text().lower(), f"{name}: limited preview mislabeled")
                     check(page.locator("article figure img").count() == 0,
                           f"{name}: unverified preview image should stay hidden")
                 overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
