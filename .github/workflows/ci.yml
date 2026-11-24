@@ -95,6 +95,22 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+      - name: Observe published compression separately from candidate
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        timeout-minutes: 3
+        run: |
+          python3 -m unittest scripts.tests.test_check_published_delivery
+          python3 scripts/check_published_delivery.py delivery-evidence/report.json
+
+      - name: Upload published delivery observation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: published-delivery-${{ github.sha }}
+          path: delivery-evidence/report.json
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Upload deployable source
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
