@@ -11,6 +11,13 @@ export default function MobileNavigation({locale}:{locale:Locale}) {
   const [open,setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const focusFirstOnOpenRef = useRef(false);
+  useEffect(() => {
+    if (!open || !focusFirstOnOpenRef.current) return;
+    // The menu is now in the committed DOM, so focusing its link is reliable.
+    focusFirstOnOpenRef.current = false;
+    rootRef.current?.querySelector<HTMLAnchorElement>("#portfolio-mobile-links a")?.focus();
+  }, [open]);
   useEffect(() => {
     if (!open) return;
     const closeOutside = (event: PointerEvent) => {
@@ -50,11 +57,12 @@ export default function MobileNavigation({locale}:{locale:Locale}) {
   const focusFirstLink = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
     if (event.key !== "ArrowDown") return;
     event.preventDefault();
-    setOpen(true);
-    // Wait for React to expose the previously hidden links.
-    window.requestAnimationFrame(() => {
+    if (open) {
       rootRef.current?.querySelector<HTMLAnchorElement>("#portfolio-mobile-links a")?.focus();
-    });
+    } else {
+      focusFirstOnOpenRef.current = true;
+      setOpen(true);
+    }
   };
   return <div className={styles.mobileNavigation} ref={rootRef}
     onBlur={event => {
