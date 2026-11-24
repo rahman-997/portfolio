@@ -1,0 +1,47 @@
+name: Review Mizan real application captures
+on:
+  push:
+    branches: [feat/digital-studio-conversion-2026-11-24]
+    paths: [".github/workflows/review-mizan-captures.yml", "scripts/capture-mizan-replacement.py"]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: rahman-997/mizan-finance
+          ref: 8e33fededbdfc4144b22b6c2608cd066378e44ed
+          path: mizan-review-source
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "22.13.0"
+      - name: Build public Mizan source without deploying
+        working-directory: mizan-review-source
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+      - name: Capture only fully rendered chart and real budget view
+        run: |
+          python3 -m pip install --disable-pip-version-check playwright==1.58.0
+          (cd mizan-review-source && node scripts/run-tool.mjs vite preview --host 127.0.0.1 --port 4173 --strictPort) > /tmp/mizan-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then break; fi
+            sleep 1
+          done
+          python3 scripts/capture-mizan-replacement.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: mizan-captures-review-only
+          path: mizan-review-evidence/
+          if-no-files-found: error
+          retention-days: 7
