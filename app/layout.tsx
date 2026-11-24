@@ -115,7 +115,7 @@ const personJsonLd = {
   image: `${SITE_URL}/opengraph-image`,
   jobTitle: "Software Engineer · Full-Stack Developer · AI & Interactive Systems",
   description:
-    "Software Engineer and Computer Engineering student building full-stack products, backend systems, APIs, data systems, AI integrations, interactive systems, and production delivery.",
+    "Computer engineer, full-stack developer and UI/UX designer building full-stack products, backend systems, APIs, data systems, AI integrations, interactive systems, and production delivery.",
   sameAs: [
     PROFILE_LINKS.github,
     PROFILE_LINKS.linkedin,
@@ -172,7 +172,7 @@ const websiteJsonLd = {
   description: "Selected software engineering work, case studies, technical capabilities, and résumé for Abdulrahman Hajar.",
   author: { "@id": `${SITE_URL}/#person` },
   dateModified: PORTFOLIO_UPDATED_AT,
-  inLanguage: "en",
+  inLanguage: ["en", "ar", "tr"],
 };
 
 const profilePageJsonLd = {
@@ -184,7 +184,7 @@ const profilePageJsonLd = {
   mainEntity: { "@id": `${SITE_URL}/#person` },
   isPartOf: { "@id": `${SITE_URL}/#website` },
   dateModified: PORTFOLIO_UPDATED_AT,
-  inLanguage: "en",
+  inLanguage: ["en", "ar", "tr"],
 };
 
 const selectedWorkJsonLd = {
@@ -206,11 +206,15 @@ const selectedWorkJsonLd = {
   })),
 };
 
-const deployCommit = process.env.RENDER_GIT_COMMIT ?? process.env.GITHUB_SHA ?? "local";
+const deployCommit = process.env.PORTFOLIO_BUILD_SHA ?? process.env.RENDER_GIT_COMMIT ?? process.env.GITHUB_SHA ?? "local";
+const appearanceInit = "(function(){try{var t=localStorage.getItem('portfolio-appearance');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch{document.documentElement.dataset.theme='light'}})()";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script id="appearance-init" dangerouslySetInnerHTML={{ __html: appearanceInit }} />
+      </head>
       <body data-deploy-commit={deployCommit}>
         {[personJsonLd, websiteJsonLd, profilePageJsonLd, selectedWorkJsonLd].map((data, index) => (
           <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />

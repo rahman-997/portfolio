@@ -15,12 +15,13 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NETLIFY_SITE_ID: 0ff3c9c1-3912-4b49-b182-fd38194dd02e
+  NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
 
 jobs:
   deploy:
     name: Deploy verified build to Netlify
     if: >-
+      vars.NETLIFY_DEPLOY_ENABLED == 'true' &&
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&
       github.event.workflow_run.head_branch == 'main' &&
@@ -34,6 +35,10 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN || secrets.NETLIFY_TOKEN || secrets.NETLIFY_ACCESS_TOKEN }}
         run: |
+          if [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "::error::Set NETLIFY_SITE_ID to the approved existing site before enabling this optional deploy."
+            exit 1
+          fi
           if [ -z "$NETLIFY_AUTH_TOKEN" ]; then
             echo "::error::No Netlify token secret found. Add NETLIFY_AUTH_TOKEN (preferred), NETLIFY_TOKEN, or NETLIFY_ACCESS_TOKEN to this repository."
             exit 1
@@ -74,5 +79,5 @@ jobs:
           {
             echo "### Netlify production deploy"
             echo "- Commit: \`${{ github.event.workflow_run.head_sha }}\`"
-            echo "- Site: https://abdulrahman-hajar-dev.netlify.app/"
+            echo "- Site ID: $NETLIFY_SITE_ID"
           } >> "$GITHUB_STEP_SUMMARY"
