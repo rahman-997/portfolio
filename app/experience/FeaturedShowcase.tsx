@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "./locale";
@@ -67,7 +67,9 @@ const FEATURED: readonly FeaturedProject[] = [
 const COPY = {
   en: {
     label: "SELECTED PRODUCT / INTERACTIVE PREVIEW",
-    capture: "Full screenshot",
+    capture: "Enlarge screenshot",
+    original: "Open original file",
+    close: "Close preview",
     work: "FEATURED WORK",
     choose: "Choose a featured project",
     view: "Read the case study",
@@ -75,7 +77,9 @@ const COPY = {
   },
   ar: {
     label: "أعمال مختارة / معاينة تفاعلية",
-    capture: "الصورة كاملة",
+    capture: "تكبير الصورة",
+    original: "فتح الملف الأصلي",
+    close: "إغلاق المعاينة",
     work: "عمل مختار",
     choose: "اختر مشروعاً مميزاً",
     view: "استعرض دراسة المشروع",
@@ -83,7 +87,9 @@ const COPY = {
   },
   tr: {
     label: "SEÇİLİ ÜRÜNLER / ETKİLEŞİMLİ ÖNİZLEME",
-    capture: "Tam ekran",
+    capture: "Görseli büyüt",
+    original: "Orijinal dosyayı aç",
+    close: "Önizlemeyi kapat",
     work: "SEÇİLİ ÇALIŞMA",
     choose: "Öne çıkan projeyi seçin",
     view: "Proje incelemesini aç",
@@ -93,6 +99,13 @@ const COPY = {
 
 export default function FeaturedShowcase({ locale }: { locale: Locale }) {
   const [selected, setSelected] = useState<FeaturedProject["id"]>("fitflow");
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const previewRef = useRef<HTMLDialogElement>(null);
+  const openPreview = () => {
+    setPreviewOpen(true);
+    if (previewRef.current && !previewRef.current.open) previewRef.current.showModal();
+  };
+  const closePreview = () => previewRef.current?.close();
   const project = FEATURED.find((item) => item.id === selected) ?? FEATURED[0];
   const copy = COPY[locale];
 
@@ -132,9 +145,9 @@ export default function FeaturedShowcase({ locale }: { locale: Locale }) {
           <Link className={styles.studyLink} href={project.href}>
             {copy.view}<span aria-hidden="true">↗</span>
           </Link>
-          <a className={styles.captureLink} href={project.image} target="_blank" rel="noopener noreferrer">
-            {copy.capture}<span aria-hidden="true">↗</span>
-          </a>
+          <button className={styles.captureLink} type="button" onClick={openPreview}>
+            {copy.capture}<span aria-hidden="true">⤢</span>
+          </button>
         </div>
       </div>
 
@@ -161,6 +174,27 @@ export default function FeaturedShowcase({ locale }: { locale: Locale }) {
         </div>
         <p className={styles.proofNote}>{copy.note}</p>
       </div>
+      <dialog ref={previewRef} className={styles.previewDialog}
+        aria-label={project.name + " — " + copy.capture}
+        onClose={() => setPreviewOpen(false)}
+        onClick={event => {
+          if (event.target === event.currentTarget) closePreview();
+        }}>
+        <div className={styles.previewDialogHeader}>
+          <strong>{project.name}</strong>
+          <div className={styles.previewDialogControls}>
+            <a href={project.image} target="_blank" rel="noopener noreferrer">
+              {copy.original}<span aria-hidden="true">↗</span>
+            </a>
+            <button type="button" onClick={closePreview}
+              aria-label={copy.close}>{copy.close} <span aria-hidden="true">×</span></button>
+          </div>
+        </div>
+        {previewOpen ? <Image unoptimized src={project.image} alt={project.alt[locale]}
+          width={1440} height={960} sizes="(max-width: 900px) 90vw, 1040px"
+          className={styles.previewDialogImage} /> : null}
+        <p className={styles.previewDialogNote}>{project.imageNote[locale]}</p>
+      </dialog>
     </section>
   );
 }
