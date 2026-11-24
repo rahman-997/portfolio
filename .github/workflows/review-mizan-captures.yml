@@ -27,10 +27,13 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           npm run build
+          # Independent local static build, using the source's existing Next configuration.
+          node node_modules/next/dist/bin/next build
+          test -f out/index.html
       - name: Capture only fully rendered chart and real budget view
         run: |
           python3 -m pip install --disable-pip-version-check playwright==1.58.0
-          (cd mizan-review-source && node scripts/run-tool.mjs vite dev --host 127.0.0.1 --port 4173 --strictPort) > /tmp/mizan-preview.log 2>&1 &
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory mizan-review-source/out > /tmp/mizan-preview.log 2>&1 &
           preview_pid=$!
           trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
           for attempt in {1..30}; do

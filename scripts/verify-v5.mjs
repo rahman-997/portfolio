@@ -68,6 +68,8 @@ for (const locale of locales) {
   check(existsSync("out" + briefPath), locale.id + ": missing exported brief file");
   const briefText = readFileSync("out" + briefPath, "utf8");
   check(briefText.length > 180 && briefText.includes("linkedin.com/in/") && ["1.", "2.", "3.", "4.", "5."].every(marker => briefText.includes(marker)), locale.id + ": incomplete brief template");
+  const contactLink = collaboration.match(/href="(https:\/\/www\.linkedin\.com\/in\/[^"]+)"/);
+  check(contactLink && briefText.includes(contactLink[1]), locale.id + ": brief contact destination differs from the rendered contact link");
   const faq = section(html, "faq", undefined);
   check((faq.match(/<details\b/g) ?? []).length >= 3, locale.id + ": expected native, keyboard-friendly FAQ");
   check(/<summary\b/.test(faq), locale.id + ": FAQ is not semantic");
