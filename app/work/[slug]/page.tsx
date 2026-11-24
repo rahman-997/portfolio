@@ -56,12 +56,16 @@ export default async function CaseStudyPage({ params }: PageProps) {
     ? {width:1440,height:960}
     : slug === "fitflow"
       ? {width:1200,height:800}
-      : {width:1200,height:630};
+      : slug === "bookhaven"
+        ? {width:840,height:529}
+        : {width:1200,height:630};
   const coverCaption = slug === "mizan"
     ? "Screenshot of the local application with sample data."
     : slug === "fitflow"
       ? "Screenshot captured from the local production build."
-      : "Project preview.";
+      : slug === "bookhaven"
+        ? "Real public storefront screenshot captured from the unauthenticated demo on 24 November 2026. No customer account accessed."
+        : "Project preview.";
 
   const canonicalUrl = `${SITE_URL}/work/${slug}/`;
   const caseStudyJsonLd = {
