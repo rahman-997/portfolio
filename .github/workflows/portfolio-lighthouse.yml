@@ -9,6 +9,8 @@ on:
       - "app/**"
       - "public/**"
       - "scripts/report-lighthouse.mjs"
+      - "scripts/serve_lighthouse.py"
+      - "scripts/tests/test_serve_lighthouse.py"
       - ".github/workflows/portfolio-lighthouse.yml"
       - "package.json"
       - "package-lock.json"
@@ -44,11 +46,20 @@ jobs:
         run: |
           # Do not install audit tooling into the project's own lockfile.
           npm install --prefix "$RUNNER_TEMP/lighthouse-tools" --no-save --no-package-lock --ignore-scripts --no-audit --no-fund lighthouse@12.8.2
+      - name: Verify local static cache and diagnostics contracts
+        run: |
+          python3 -m unittest scripts.tests.test_serve_lighthouse
+          node --test scripts/tests/lighthouse-diagnostics.test.mjs
       - name: Start loopback-only static preview
         run: |
-          nohup python3 -m http.server 4196 --bind 127.0.0.1 --directory out > /tmp/portfolio-lighthouse-server.log 2>&1 &
+          # Python's default http.server reports no caching, unlike Render.
+          # Serve the built export with production-equivalent Cache-Control.
+          nohup python3 scripts/serve_lighthouse.py --directory out --port 4196 --bind 127.0.0.1 > /tmp/portfolio-lighthouse-server.log 2>&1 &
           for attempt in {1..25}; do
-            if curl --fail --silent --output /dev/null http://127.0.0.1:4196/; then exit 0; fi
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4196/; then
+              curl --fail --silent -I http://127.0.0.1:4196/projects/fitflow-real-interface.webp | grep -Fiq 'Cache-Control: public, max-age=3600'
+              exit 0
+            fi
             sleep 1
           done
           cat /tmp/portfolio-lighthouse-server.log

@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { basename, dirname } from "node:path";
+import { lighthouseDiagnostics } from "./lighthouse-diagnostics.mjs";
 
 // Lighthouse is a lab measurement. These scores are NOT real-user Web Vitals.
 const files = process.argv.slice(2);
@@ -35,16 +36,19 @@ for (const file of files) {
       result.audits?.[id]?.numericValue ?? null,
     ]),
   );
+  const diagnostics = lighthouseDiagnostics(result);
   summaries.push({
     report: basename(file),
     url: result.finalUrl,
     lighthouseVersion: result.lighthouseVersion,
     scores: score,
     lab: measured,
+    diagnostics,
   });
   console.log(`\nLighthouse ${basename(file)} (${result.lighthouseVersion})`);
   console.log(`  Scores (0–100): ${Object.entries(score).map(([k,v]) => `${k}=${v ?? "n/a"}`).join(", ")}`);
   console.log(`  Lab: ${Object.entries(measured).map(([k,v]) => `${k}=${v === null ? "n/a" : Number(v).toFixed(k === "CLS" ? 3 : 0)}`).join(", ")}`);
+  console.log("  Diagnostics: " + JSON.stringify(diagnostics));
 }
 const path = "lighthouse-evidence/summary.json";
 mkdirSync(dirname(path), { recursive: true });
