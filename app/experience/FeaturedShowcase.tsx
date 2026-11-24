@@ -143,7 +143,7 @@ export default function FeaturedShowcase({ locale }: { locale: Locale }) {
           <p>{project.description[locale]}</p>
         </div>
         <div className={styles.detailsActions}>
-          <Link className={styles.studyLink} href={project.href}>
+          <Link className={styles.studyLink} href={project.href} prefetch={false}>
             {copy.view}<span aria-hidden="true">↗</span>
           </Link>
           <button className={styles.captureLink} type="button" onClick={openPreview}>
