@@ -46,10 +46,26 @@ export default function MobileNavigation({locale}:{locale:Locale}) {
     {href:"#about",label:t.navAbout},
     {href:"/resume/",label:t.navResume},
   ];
-  return <div className={styles.mobileNavigation} ref={rootRef}>
+  const focusFirstLink = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== "ArrowDown") return;
+    event.preventDefault();
+    setOpen(true);
+    // Wait for React to expose the previously hidden links.
+    window.requestAnimationFrame(() => {
+      rootRef.current?.querySelector<HTMLAnchorElement>("#portfolio-mobile-links a")?.focus();
+    });
+  };
+  return <div className={styles.mobileNavigation} ref={rootRef}
+    onBlur={event => {
+      // A disclosure must not stay open while keyboard focus moves elsewhere.
+      if (open && event.relatedTarget instanceof Node && !rootRef.current?.contains(event.relatedTarget)) {
+        setOpen(false);
+      }
+    }}>
     <button ref={triggerRef} className={styles.mobileMenuButton} type="button" aria-label={menuLabel}
       aria-expanded={open} aria-controls="portfolio-mobile-links"
-      onClick={()=>setOpen(value=>!value)}>
+      onClick={()=>setOpen(value=>!value)}
+      onKeyDown={focusFirstLink}>
       <span aria-hidden="true" className={styles.menuBars}><i/><i/></span>
       <span>{open ? (locale==="ar"?"إغلاق":locale==="tr"?"Kapat":"Close") : (locale==="ar"?"القائمة":locale==="tr"?"Menü":"Menu")}</span>
     </button>
