@@ -1,0 +1,50 @@
+{
+  "name": "abdulrahman-portfolio",
+  "version": "1.0.0",
+  "description": "Software engineering portfolio for Abdulrahman Hajar showcasing full-stack systems, backend architecture, reliability, and production delivery.",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0 <23"
+  },
+  "packageManager": "npm@11.19.1",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build --webpack && node scripts/localize-static.mjs",
+    "start": "next start",
+    "lint": "eslint . --ignore-pattern .next --ignore-pattern out",
+    "typecheck": "tsc --noEmit",
+    "verify:export": "node scripts/verify-export.mjs && node scripts/verify-toolchain.mjs && node scripts/verify-resume-seo.mjs && node scripts/verify-v4.mjs && node scripts/verify-v5.mjs",
+    "audit": "node scripts/audit-dependencies.mjs",
+    "verify:production": "node scripts/verify-production.mjs"
+  },
+  "dependencies": {
+    "next": "16.4.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "22.20.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.4.3",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3"
+  },
+  "author": "Abdulrahman Hajar",
+  "license": "MIT",
+  "homepage": "https://abdulrahman-hajar-portfolio.onrender.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rahman-997/portfolio.git"
+  },
+  "keywords": [
+    "portfolio",
+    "software-engineering",
+    "full-stack",
+    "nextjs",
+    "react",
+    "typescript"
+  ]
+}
