@@ -17,6 +17,10 @@ for(const language of ["en","ar","tr"]){
   for (const [kind,count] of [["demo",3],["limited",1],["source",2],["api",1]]) {
     check((html.match(new RegExp('data-availability="'+kind+'"','g'))??[]).length===count,"Wrong availability count for "+kind+": "+path);
   }
+  for (const [kind,count] of [["real",3],["unavailable",4]]) {
+    check((html.match(new RegExp('data-project-capture="'+kind+'"','g'))??[]).length===count,"Wrong capture evidence count for "+kind+": "+path);
+  }
+  check((html.match(/<a\b[^>]*data-card-study/g)??[]).length===5,"Missing explicitly labeled English case studies: "+path);
   for(const id of ["eventify","bookbookhaven","fitflow-gym","venues-api","mizan-finance","portfolio","free-claude-code"]){
     check(html.includes("https://github.com/rahman-997/"+id),"Missing public project "+id+" in "+path);
   }

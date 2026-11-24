@@ -855,3 +855,15 @@
   .heroProof{font-size:.65rem;margin-top:.45rem;padding-top:.7rem;gap:.35rem .8rem}
 }
 @media(max-width:340px){.heroActions{grid-template-columns:minmax(0,1fr)}}
+
+/* Evidence-first product cards: consistent capture frame and clear action hierarchy. */
+.projectMedia{margin:1rem 0 1.15rem;min-width:0}
+.projectMedia .projectPreview,.projectMedia .projectPlaceholder{margin:0;aspect-ratio:16/10}
+.projectMedia figcaption,.captureCaption{display:block;margin:.5rem 0 0;font-size:.66rem;color:var(--muted);line-height:1.5}
+.cardTop{gap:.5rem}
+.projectNumber{letter-spacing:.015em;line-height:1.5}
+.projectAvailability{margin-bottom:.7rem}
+.projectActions{align-items:center;gap:.35rem .8rem}
+.projectActions .projectPrimary{width:100%;justify-content:space-between;gap:.4rem;background:var(--surface2);border:1px solid var(--line);padding:.6rem .75rem;border-radius:10px;min-height:44px;line-height:1.5}
+.projectActions .projectPrimary:hover{border-color:var(--accent)}
+.studyLanguage{margin-inline-start:auto;font-size:.62rem;color:var(--muted);letter-spacing:.03em}

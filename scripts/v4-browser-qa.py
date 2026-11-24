@@ -170,6 +170,12 @@ with sync_playwright() as pw:
                     work = page.locator("#work")
                     check(work.locator("article").count() == 7,
                           f"{name}: missing public repositories")
+                    check(work.locator('[data-project-capture="real"] figcaption').count() == 3 and
+                          work.locator('[data-project-capture="unavailable"] img').count() == 0 and
+                          work.locator('[data-project-capture="unavailable"]').count() == 4,
+                          f"{name}: screenshot evidence labels do not match actual captures")
+                    check(work.locator("[data-card-study]").count() == 5,
+                          f"{name}: case study paths missing")
                     bookhaven_card = work.locator('[data-project-id="bookbookhaven"]')
                     check(bookhaven_card.locator('img[src="/projects/bookhaven-real-interface.webp"]').count() == 1,
                           f"{name}: reviewed BookHaven screenshot missing from project card")

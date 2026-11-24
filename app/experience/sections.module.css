@@ -328,3 +328,9 @@
   text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere;
 }
 .briefDownload{display:flex;margin-bottom:.5rem}
+
+.serviceEvidence{display:flex;width:100%;justify-content:space-between;gap:.75rem;align-items:center;padding:.85rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--surface2);text-decoration:none}
+.serviceEvidence small,.serviceEvidence strong{display:block;line-height:1.5}
+.serviceEvidence small{color:var(--muted);font-size:.66rem;font-weight:600}
+.serviceEvidence strong{color:var(--ink);font-size:.88rem;margin-top:.2rem}
+.serviceEvidence:hover{border-color:var(--accent)}

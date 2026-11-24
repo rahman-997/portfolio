@@ -44,6 +44,11 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
     ar: "معاينة من واجهة المشروع الحقيقية",
     tr: "Gerçek proje arayüzü önizlemesi",
   }[locale];
+  const cardCopy = {
+    en: { screenshot:"Real interface capture", noCapture:"No reviewed screenshot", studyLanguage:"English case study", group:{product:"Digital product",backend:"Backend system",tools:"Developer tooling"}, demo:"Open public demo", api:"API health endpoint" },
+    ar: { screenshot:"لقطة من الواجهة الحقيقية", noCapture:"لا توجد لقطة مراجَعة", studyLanguage:"دراسة بالإنجليزية", group:{product:"منتج رقمي",backend:"نظام خلفي",tools:"أدوات للمطورين"}, demo:"فتح الديمو العام", api:"نقطة فحص حالة API" },
+    tr: { screenshot:"Gerçek arayüz görüntüsü", noCapture:"İncelenmiş ekran görüntüsü yok", studyLanguage:"İngilizce proje incelemesi", group:{product:"Dijital ürün",backend:"Arka uç sistemi",tools:"Geliştirici araçları"}, demo:"Herkese açık demoyu aç", api:"API sağlık uç noktası" },
+  }[locale];
   const normalizedQuery = query.trim().toLocaleLowerCase(locale);
   const filtered = PUBLIC_PROJECTS.filter(p => {
     if (filter !== "all" && p.group !== filter) return false;
@@ -92,18 +97,18 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
     <div className={styles.projectGrid} id="portfolio-project-results">
       {filtered.map((p,index)=><article className={styles.project} key={p.id} data-project-id={p.id}>
         <div className={styles.cardTop}>
-          <span className={styles.projectNumber}>{String(index+1).padStart(2,"0")} / {String(filtered.length).padStart(2,"0")}</span>
+          <span className={styles.projectNumber}>{String(index+1).padStart(2,"0")} · {cardCopy.group[p.group]}</span>
           <span className={p.original?styles.originalTag:styles.forkTag}>{p.original?t.original:t.fork}</span>
         </div>
-        {p.cover ? <div className={styles.projectPreview}><Image unoptimized src={p.cover} alt={`${p.name} — ${previewLabel}`} width={1280} height={720} sizes="(max-width: 680px) calc(100vw - 40px), (max-width: 1020px) 45vw, 420px" loading="lazy" fetchPriority="low" decoding="async" className={styles.projectPreviewImage}/></div> : <div className={styles.projectPlaceholder} aria-hidden="true"><span>{p.group}</span><strong>{p.name}</strong></div>}
+        {p.cover ? <figure className={styles.projectMedia} data-project-capture="real"><div className={styles.projectPreview}><Image unoptimized src={p.cover} alt={`${p.name} — ${previewLabel}`} width={1280} height={720} sizes="(max-width: 680px) calc(100vw - 40px), (max-width: 1020px) 45vw, 420px" loading="lazy" fetchPriority="low" decoding="async" className={styles.projectPreviewImage}/></div><figcaption>{cardCopy.screenshot}</figcaption></figure> : <div className={styles.projectMedia} data-project-capture="unavailable"><div className={styles.projectPlaceholder} aria-hidden="true"><span>{cardCopy.group[p.group]}</span><strong>{p.name}</strong></div><span className={styles.captureCaption}>{cardCopy.noCapture}</span></div>}
         <h3>{p.name}</h3>
         <span className={styles.projectAvailability} data-availability={availabilityOf(p)}>{access.status[availabilityOf(p)]}</span>
         <strong className={styles.projectHeadline}>{p.text[locale].headline}</strong>
         <p>{p.text[locale].description}</p>
         <div className={styles.pillRow}>{p.stack.map(v=><span key={v}>{v}</span>)}</div>
         <div className={styles.projectActions}>
-          {p.study?<a href={p.study} className={styles.projectPrimary}>{t.caseStudy}<span aria-hidden="true">↗</span></a>:null}
-          {p.demo?<a href={p.demo} target="_blank" rel="noopener noreferrer">{p.demoNotice ? ({en:"Interface preview · limited",ar:"معاينة الواجهة · محدودة",tr:"Arayüz önizlemesi · sınırlı"}[locale]) : t.live}<span aria-hidden="true">↗</span></a>:null}
+          {p.study?<a href={p.study} className={styles.projectPrimary} data-card-study aria-label={`${t.caseStudy} · ${p.name} · ${cardCopy.studyLanguage}`}>{t.caseStudy}<span className={styles.studyLanguage} aria-hidden="true">EN</span><span aria-hidden="true">↗</span></a>:null}
+          {p.demo?<a href={p.demo} target="_blank" rel="noopener noreferrer">{p.demoNotice ? ({en:"Interface preview · limited",ar:"معاينة الواجهة · محدودة",tr:"Arayüz önizlemesi · sınırlı"}[locale]) : p.group==="backend" ? cardCopy.api : cardCopy.demo}<span aria-hidden="true">↗</span></a>:null}
           <a href={p.source} target="_blank" rel="noopener noreferrer">{t.source}<span aria-hidden="true">↗</span></a>
         </div>
         {p.demoNotice ? <p className={styles.projectDemoNotice} data-demo-notice>{p.demoNotice[locale]}</p> : null}
