@@ -1,54 +1,28 @@
-name: Review Mizan real application captures
+name: Export reviewed Mizan dashboard capture
 on:
   push:
     branches: [feat/digital-studio-conversion-2026-11-24]
-    paths: [".github/workflows/review-mizan-captures.yml", "scripts/capture-mizan-replacement.py"]
+    paths: [".github/workflows/review-mizan-captures.yml"]
 permissions:
   contents: read
+  actions: read
 jobs:
-  capture:
+  export:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          persist-credentials: false
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          repository: rahman-997/mizan-finance
-          ref: 8e33fededbdfc4144b22b6c2608cd066378e44ed
-          path: mizan-review-source
-          persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-        with:
-          node-version: "22.13.0"
-      - name: Build public Mizan source without deploying
-        working-directory: mizan-review-source
+      - name: Retrieve exact inspected screenshot
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          npm ci --no-audit --no-fund
-          npm run build
-          # Independent local static build, using the source's existing Next configuration.
-          node node_modules/next/dist/bin/next build
-          test -f out/index.html
-      - name: Capture only fully rendered chart and real budget view
-        run: |
-          python3 -m pip install --disable-pip-version-check playwright==1.58.0
-          python3 -m http.server 4173 --bind 127.0.0.1 --directory mizan-review-source/out > /tmp/mizan-preview.log 2>&1 &
-          preview_pid=$!
-          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
-          for attempt in {1..30}; do
-            if curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then break; fi
-            sleep 1
-          done
-          if ! curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then
-            cat /tmp/mizan-preview.log
-            exit 1
-          fi
-          python3 scripts/capture-mizan-replacement.py
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        if: always()
-        with:
-          name: mizan-captures-review-only
-          path: mizan-review-evidence/
-          if-no-files-found: error
-          retention-days: 7
+          gh run download 45493015890 --repo rahman-997/portfolio --name mizan-captures-review-only --dir reviewed
+          echo 'e812540bd66598d8019b7b54f4f2a932f97fd0d0582d2366f843bccaa5bd3783  reviewed/mizan-dashboard-review.png' | sha256sum -c -
+          python3 - <<'PY'
+          import base64
+          from pathlib import Path
+          data = Path("reviewed/mizan-dashboard-review.png").read_bytes()
+          encoded = base64.b64encode(data).decode("ascii")
+          for i in range(0, len(encoded), 2000):
+              print("MIZAN_PNG_CHUNK:" + str(i//2000).zfill(4) + ":" + encoded[i:i+2000])
+          print("MIZAN_PNG_END:" + str(len(encoded)))
+          PY
