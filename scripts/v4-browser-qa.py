@@ -259,6 +259,13 @@ with sync_playwright() as pw:
                                 }));
                             }""", section_id)
                             check(not violations, f"{name}: {section_id} accessibility: {violations}")
+                    # Atlas is interactive below the fold, but it must remain painted
+                    # in exported full-page screenshots as well. CSS content-visibility:
+                    # auto on its ancestor creates a blank rectangle in CI evidence.
+                    atlas_paint = page.locator("#ai-lab").evaluate(
+                        "(el) => getComputedStyle(el.parentElement).contentVisibility")
+                    check(atlas_paint != "auto",
+                          f"{name}: Atlas would render as a blank offscreen region in full-page capture")
                     overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
                     check(overflow <= 2, f"{name}: horizontal overflow {overflow}px")
                     check(not errors, f"{name}: browser exceptions {errors}")
