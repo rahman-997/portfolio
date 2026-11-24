@@ -192,6 +192,22 @@ with sync_playwright() as pw:
                           f"{name}: wrong process step count")
                     check(page.locator("#collaborate [data-collaboration-card]").count() == 3,
                           f"{name}: wrong collaboration card count")
+                    hero_cta = page.locator('[data-studio-cta="hero"]')
+                    check(hero_cta.count() == 1 and hero_cta.get_attribute("href") == "#collaborate",
+                          f"{name}: project inquiry entry point missing")
+                    check(page.locator("#collaborate [data-service-evidence]").count() == 3,
+                          f"{name}: service evidence links missing")
+                    brief = page.locator('#collaborate [data-brief-download]')
+                    check(brief.count() == 1 and brief.get_attribute("href") == f"/briefs/project-brief-{locale}.txt",
+                          f"{name}: localized brief download missing")
+                    with page.expect_download(timeout=15000) as download_info:
+                        brief.click()
+                    download = download_info.value
+                    check(download.suggested_filename == f"project-brief-{locale}.txt",
+                          f"{name}: incorrect brief filename")
+                    brief_text = download.path().read_text(encoding="utf-8")
+                    check(all(f"{i}." in brief_text for i in range(1, 6)) and "linkedin.com/in/" in brief_text,
+                          f"{name}: downloaded project brief content incomplete")
                     check(page.locator("#faq details").count() == 4,
                           f"{name}: FAQ details unavailable")
                     faq_first = page.locator("#faq details").first

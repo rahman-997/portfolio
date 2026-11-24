@@ -1,6 +1,8 @@
 name: Portfolio Lighthouse Lab
 
 on:
+  push:
+    branches: [feat/digital-studio-conversion-2026-11-24]
   pull_request:
     branches: [main]
     paths:

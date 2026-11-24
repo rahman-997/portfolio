@@ -1,6 +1,8 @@
 name: Atlas Browser QA
 
 on:
+  push:
+    branches: [feat/digital-studio-conversion-2026-11-24]
   pull_request:
     branches: [main]
     paths:
