@@ -5,10 +5,12 @@ import hashlib
 import http.client
 import json
 import re
+import ssl
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.error import HTTPError
+from urllib.request import HTTPRedirectHandler, HTTPSHandler, ProxyHandler, Request, build_opener
 
 HOST = "abdulrahman-hajar-portfolio.onrender.com"
 LIMIT = 4 * 1024 * 1024
@@ -16,20 +18,44 @@ ASSET = re.compile(r'(?:src|href)="(/_next/static/[A-Za-z0-9_./-]+\.(?:js|css))"
 
 def select_assets(html):
     paths = list(dict.fromkeys(ASSET.findall(html)))
-    paths = [p for p in paths if ".." not in p.split("/")]
+    paths = [p for p in paths if not any(part in ("..", ".") for part in p.split("/"))]
     return [p for suffix in (".js", ".css") for p in [next((v for v in paths if v.endswith(suffix)), None)] if p]
 
+class NoRedirect(HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+def tls_context():
+    context = ssl.create_default_context()
+    context.minimum_version = ssl.TLSVersion.TLSv1_2
+    return context
+
+
 def request(path, encoding):
-    conn = http.client.HTTPSConnection(HOST, timeout=12)
+    if path != "/" and (not re.fullmatch(r"/_next/static/[A-Za-z0-9_./-]+\.(?:js|css)", path)
+                         or any(part in ("..", ".") for part in path.split("/"))):
+        raise ValueError("Only the fixed public homepage and same-origin static assets are allowed")
+    if encoding not in ("identity", "gzip"):
+        raise ValueError("Unsupported requested encoding")
+    opener = build_opener(ProxyHandler({}), HTTPSHandler(context=tls_context()), NoRedirect())
+    req = Request("https://" + HOST + path, method="GET",
+                  headers={"Accept-Encoding": encoding, "User-Agent": "portfolio-delivery-check/1.0"})
     try:
-        conn.request("GET", path, headers={"Accept-Encoding": encoding, "User-Agent": "portfolio-delivery-check/1.0"})
-        response = conn.getresponse()
+        response = opener.open(req, timeout=12)
+    except HTTPError as exc:
+        # Do not follow redirects or download error pages.
+        status = exc.code
+        exc.close()
+        return {"status": status, "encoding": None, "wireBodyBytes": 0,
+                "contentType": None, "vary": None, "cacheControl": None,
+                "decodedSha256": None}, None
+    with response:
         raw = response.read(LIMIT + 1)
         if len(raw) > LIMIT:
             raise ValueError("Response exceeded bounded payload limit")
-        coding = (response.getheader("Content-Encoding") or "identity").lower()
+        coding = (response.headers.get("Content-Encoding") or "identity").lower()
         if coding == "gzip":
-            # Bounded decode; avoid unlimited expansion of an untrusted response.
             import io
             with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
                 decoded = stream.read(LIMIT + 1)
@@ -41,12 +67,10 @@ def request(path, encoding):
             raise ValueError("Decoded payload exceeded limit")
         return {
             "status": response.status, "encoding": coding, "wireBodyBytes": len(raw),
-            "contentType": response.getheader("Content-Type"),
-            "vary": response.getheader("Vary"), "cacheControl": response.getheader("Cache-Control"),
+            "contentType": response.headers.get("Content-Type"),
+            "vary": response.headers.get("Vary"), "cacheControl": response.headers.get("Cache-Control"),
             "decodedSha256": hashlib.sha256(decoded).hexdigest() if decoded is not None else None,
         }, decoded
-    finally:
-        conn.close()
 
 def compare(identity, compressed):
     if identity["status"] != 200 or compressed["status"] != 200:
