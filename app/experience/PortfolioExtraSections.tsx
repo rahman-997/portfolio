@@ -70,7 +70,7 @@ export function CollaborateSection({locale}:Props){
         <ul className={styles.collabTags}>{card.tags.map(tag=><li key={tag}>{tag}</li>)}</ul>
       </article>)}
     </div>
-    <div className={styles.inquiryPanel} aria-labelledby="inquiry-heading" data-project-brief="true">
+    <section className={styles.inquiryPanel} aria-labelledby="inquiry-heading" data-project-brief="true">
       <div>
         <h3 id="inquiry-heading">{brief.title}</h3>
         <p>{brief.lead}</p>
@@ -83,7 +83,7 @@ export function CollaborateSection({locale}:Props){
           target="_blank" aria-describedby="inquiry-note">{t.button}<span aria-hidden="true">↗</span></a>
         <p id="inquiry-note">{brief.note}</p>
       </div>
-    </div>
+    </section>
   </section>;
 }
 
