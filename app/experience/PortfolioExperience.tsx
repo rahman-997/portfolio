@@ -1,10 +1,19 @@
+import Image from "next/image";
 import AIAtlas from "../ai-atlas";
+import CinematicHero from "./CinematicHero";
+import FeaturedSystems from "./FeaturedSystems";
+import HomeEventifyStory from "./HomeEventifyStory";
+import ReferenceBlueprint from "./ReferenceBlueprint";
+import referenceShell from "./reference-shell.module.css";
+import BlueprintLab from "./BlueprintLab";
+import MissionPaths from "./MissionPaths";
+import shell from "./shell.module.css";
+import atelier from "./atelier.module.css";
 import { PROFILE_LINKS } from "../portfolio-data";
 import { PUBLIC_PROJECT_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
 import ExperienceControls from "./ExperienceControls";
 import { EvidenceSection, ProcessSection, CollaborateSection, FaqSection } from "./PortfolioExtraSections";
-import { extraSections } from "./extra-sections";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
 import styles from "./experience.module.css";
@@ -13,52 +22,37 @@ const stack = ["React", "Next.js", "TypeScript", "Node.js", "Express", "PostgreS
 
 export default function PortfolioExperience({locale}:{locale:Locale}) {
   const t=TEXT[locale];
-  const more=extraSections[locale];
-  return <div className={styles.page} lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
+  return <div className={`${styles.page} ${shell.shell} ${atelier.atelier} ${referenceShell.referenceShell}`} data-design-system="hajar-atelier" data-reference-design="hajar-editorial-2026" lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
     <a className={styles.skip} href="#main">{t.skip}</a>
     <header className={styles.header}>
       <a className={styles.brand} href="#top" aria-label="Abdulrahman Hajar">
-        <span className={styles.monogram}>AH<span className={styles.markDot}>.</span></span>
-        <span className={styles.brandText}><strong>Abdulrahman Hajar</strong><small>{t.role}</small></span>
+        <span className={`${styles.brandEmblem} ${referenceShell.logoWrap}`}><Image src="/brand/hajar-emblem.svg" width={37} height={47} alt="" unoptimized /></span>
+        <span className={styles.brandText}><strong>HAJAR</strong><small>{locale==="ar"?"مهندس برمجيات":locale==="tr"?"YAZILIM MÜHENDİSİ":"SOFTWARE ENGINEER"}</small></span>
       </a>
       <nav className={styles.nav} aria-label={locale==="ar"?"التنقل الرئيسي":locale==="tr"?"Ana gezinme":"Primary navigation"}>
         <a href="#work">{t.navWork}</a>
-        <a href="#highlights">{more.navHighlights}</a>
+        <a href="#blueprint-lab">{locale==="ar"?"مختبر الأنظمة":locale==="tr"?"Mimari Lab":"Blueprint Lab"}</a>
         <a href="#ai-lab">{t.navAtlas}</a>
-        <a href="#process">{more.navProcess}</a>
+
         <a href="#about">{t.navAbout}</a>
+        <a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a>
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
       </nav>
       <ExperienceControls locale={locale}/>
+      <details className={referenceShell.mobileMenu}>
+        <summary aria-label={locale==="ar"?"فتح القائمة":locale==="tr"?"Menüyü aç":"Open menu"}><span aria-hidden="true">☰</span></summary>
+        <nav aria-label={locale==="ar"?"قائمة الموبايل":locale==="tr"?"Mobil menü":"Mobile menu"}>
+          <a href="#featured">{t.navWork}</a><a href="#blueprint-lab">Blueprint Lab</a><a href="#ai-lab">{t.navAtlas}</a><a href="#about">{t.navAbout}</a><a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a>
+        </nav>
+      </details>
     </header>
 
     <main id="main">
-      <section id="top" className={styles.hero}>
-        <div className={styles.heroBackdrop} aria-hidden="true"/>
-        <div className={styles.heroText}>
-          <p className={styles.heroEyebrow}><span className={styles.liveDot}/>{t.hello}</p>
-          <h1>{t.heroTop}<br/><em>{t.heroBottom}</em></h1>
-          <p className={styles.lead}>{t.heroLead}</p>
-          <div className={styles.actions}>
-            <a className={styles.primaryAction} href="#work">{t.workButton} <span aria-hidden="true">↗</span></a>
-            <a className={styles.secondaryAction} href={PROFILE_LINKS.linkedin} target="_blank" rel="noopener noreferrer">{t.contactButton} ↗</a>
-            <a className={styles.secondaryAction} href="#ai-lab">{locale==="en"?"Explore AI Lab":t.navAtlas} ↗</a>
-          </div>
-          <div className={styles.heroFoot}><span>01—03</span><span>{t.scrollLabel}</span></div>
-        </div>
-        <div className={styles.heroVisual} aria-label={t.visualTitle}>
-          <div className={styles.visualRing} aria-hidden="true"/>
-          <div className={styles.visualOrbit} aria-hidden="true"><i/><i/><i/></div>
-          <div className={styles.visualPanel}>
-            <div className={styles.panelEyebrow}><span className={styles.liveDot}/>{t.dashboard}</div>
-            <div className={styles.visualSymbol} aria-hidden="true"><span>⌘</span><span>∞</span><span>↗</span></div>
-            <h2>{t.visualTitle}</h2>
-            <p>{t.visualDetail}</p>
-            <div className={styles.panelFooter}><span>AH / ENGINEERING</span><span>2026</span></div>
-          </div>
-          <div className={styles.floatingStatus}><span className={styles.liveDot}/>{t.availability}</div>
-        </div>
-      </section>
+      <CinematicHero locale={locale}/>
+      <FeaturedSystems locale={locale}/>
+      <HomeEventifyStory locale={locale}/>
+      <ReferenceBlueprint locale={locale}/>
+      <MissionPaths locale={locale}/>
 
       <section className={styles.metrics} aria-label={t.projectEyebrow}>
         <div><strong>{String(PUBLIC_PROJECT_COUNT).padStart(2,"0")}</strong><span>{t.metricProjects}</span></div>
@@ -75,6 +69,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <ProjectExplorer locale={locale}/>
       </section>
 
+      <BlueprintLab locale={locale}/>
       <EvidenceSection locale={locale}/>
 
       <div className={styles.atlasSection}>
@@ -106,9 +101,9 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
       <CollaborateSection locale={locale}/>
       <FaqSection locale={locale}/>
 
-      <section className={styles.contact}>
+      <section id="contact" className={styles.contact}>
         <span className={styles.contactStar} aria-hidden="true">✳</span>
-        <p>{locale==="ar"?"لنصنع شيئاً / AH":locale==="tr"?"BİRLİKTE ÜRETELİM / AH":"LET'S BUILD / AH"}</p>
+        <p>{locale==="ar"?"لنصنع شيئاً / HAJAR":locale==="tr"?"BİRLİKTE ÜRETELİM / HAJAR":"LET'S BUILD / HAJAR"}</p>
         <h2>{t.endTitle}</h2>
         <p className={styles.contactLead}>{t.endText}</p>
         <div className={styles.actions}>
@@ -117,6 +112,10 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         </div>
       </section>
     </main>
-    <footer className={styles.footer}><span>AH. <b>Abdulrahman Hajar</b> © 2026</span><a href="#top">{t.top} ↑</a></footer>
+    <footer className={styles.footer}>
+      <a className={referenceShell.footerBrand} href="#top"><Image src="/brand/hajar-emblem.svg" alt="" width={34} height={43} unoptimized/><span><strong>HAJAR</strong><small>SOFTWARE ENGINEER</small></span></a>
+      <nav className={referenceShell.footerNav} aria-label="Footer"><a href="#work">{t.navWork}</a><a href="#blueprint-lab">Blueprint Lab</a><a href="#ai-lab">{t.navAtlas}</a><a href="#about">{t.navAbout}</a><a href="#contact">{locale==="ar"?"تواصل":locale==="tr"?"İletişim":"Contact"}</a></nav>
+      <span>© 2026 Abdulrahman Hajar</span><a href="#top">{t.top} ↑</a>
+    </footer>
   </div>;
 }

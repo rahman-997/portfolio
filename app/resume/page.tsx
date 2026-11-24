@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { PROFILE_LINKS, PROJECT_LIST } from "../portfolio-data";
 import styles from "./resume.module.css";
 
@@ -22,7 +23,7 @@ export default function ResumePage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Back to Abdulrahman Hajar portfolio">
-          <span>AH</span><strong>Abdulrahman Hajar</strong>
+          <span><Image src="/brand/hajar-emblem.svg" width={21} height={30} alt="" unoptimized /></span><strong>HAJAR</strong>
         </Link>
         <div className={styles.headerActions}>
           <Link href="/#work">Selected work</Link>
