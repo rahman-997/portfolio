@@ -14,6 +14,12 @@ for (const file of ["public/projects/fitflow-real-interface.webp", "out/projects
   check(createHash("sha256").update(readFileSync(file)).digest("hex") === reviewedFitflowDigest, "FitFlow screenshot differs from visually reviewed image: " + file);
 }
 
+const reviewedMizanDigest = "e812540bd66598d8019b7b54f4f2a932f97fd0d0582d2366f843bccaa5bd3783";
+for (const file of ["public/projects/mizan-live-dashboard.png", "out/projects/mizan-live-dashboard.png"]) {
+  check(existsSync(file), "Missing reviewed Mizan capture: " + file);
+  check(createHash("sha256").update(readFileSync(file)).digest("hex") === reviewedMizanDigest, "Mizan screenshot differs from visually reviewed image: " + file);
+}
+
 const locales = [
   { id: "en", file: "out/index.html", titles: ["Engineering evidence, not vanity numbers.", "How a project moves forward.", "Ways to work together.", "Questions, answered."] },
   { id: "ar", file: "out/ar/index.html", titles: ["أدلة هندسية بلا أرقام دعائية.", "كيف أنقل الفكرة إلى التنفيذ.", "مجالات يمكننا التعاون فيها.", "أسئلة وأجوبة."] },

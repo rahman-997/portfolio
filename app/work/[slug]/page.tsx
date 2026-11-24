@@ -66,7 +66,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
         ? {width:840,height:529}
         : {width:1200,height:630};
   const coverCaption = slug === "mizan"
-    ? "Screenshot of the local application with sample data."
+    ? "Screenshot of the local static build, with bundled sample transactions and both rendered cash-flow curves. Captured on 25 November 2026 (Istanbul time)."
     : slug === "fitflow"
       ? "Real guided interval timer captured from the public FitFlow demo on 24 November 2026; no account or personal data."
       : slug === "bookhaven"

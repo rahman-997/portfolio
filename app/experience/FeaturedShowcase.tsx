@@ -57,9 +57,9 @@ const FEATURED: readonly FeaturedProject[] = [
       tr: "Harcama ve bütçe kararlarını kolaylaştıran, RTL destekli, gizlilik odaklı finans paneli.",
     },
     imageNote: {
-      en: "Real interface · bundled demo data",
-      ar: "واجهة حقيقية · بيانات تجريبية",
-      tr: "Gerçek arayüz · örnek veriler",
+      en: "Real chart · bundled demo data",
+      ar: "رسم بياني حقيقي · بيانات تجريبية",
+      tr: "Gerçek grafik · örnek veriler",
     },
   },
 ] as const;
