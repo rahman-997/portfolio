@@ -49,6 +49,15 @@ Every featured project links to **live proof, source code, and an engineering ca
 - First Lighthouse 12.8.2 mobile lab results (2026-11-24) were **78 performance / 100 accessibility / 100 best practices / 100 SEO** on both languages. LCP was **5.3–5.6s** (synthetic, not field data). After prioritizing the real FitFlow hero capture and removing initial image animation, a second run was **73 EN / 77 AR performance**, with LCP **5.5–5.7s**. These run-to-run variations do **not** establish an improvement; reducing the LCP render delay remains an explicit release follow-up.
 - Production visitors' Web Vitals, handset QA, BookHaven/Eventify preview recovery, and user sign-off are still unverified. Passing a synthetic audit is not a production guarantee.
 
+## Performance and asset QA experiments — 24 November 2026
+
+- Lighthouse baseline, single simulated-mobile runs: EN **68**, AR **78** performance; both 100 for accessibility, best practices and SEO. The measured LCP element was the real 39 KB FitFlow hero screenshot; **65–69% of LCP time was render delay**, not file download.
+- Prevented speculative hero case-study RSC prefetch and explicitly lowered priority for secondary project images. This removed around **39 KB of unnecessary initial requests** (confirmed in Lighthouse JSON), but **did not reliably improve LCP**, which remained around 5.5–5.6 s.
+- Tested a synchronous-decode hint for the 39 KB LCP image. Single-run LCP remained unchanged; this is not evidence of a speedup.
+- Tested CSS `content-visibility: auto` on offscreen AI Atlas. A single EN Lighthouse run reported lower blocking time, **but the full-page screenshot showed a blank Atlas area**. The optimization was **reverted**, and browser QA now prevents this visual regression.
+- The later revert run measured EN **85** (LCP **4.15 s**) and AR **78** (LCP **5.6 s**). Large run-to-run variance proves these synthetic results should not be used as a guaranteed improvement claim. Repeatable real-device testing remains a release gate.
+- Free read-only public demo checks and screenshots are stored in short-retention GitHub Actions artifacts; images require manual inspection and must not be auto-published.
+
 ## Interactive product theatre — 2026-11-23
 
 - Replaced the decorative overlapping hero preview with a source-backed interactive stage for FitFlow and Mizan Finance.
@@ -60,8 +69,8 @@ Every featured project links to **live proof, source code, and an engineering ca
 ## Image verification — 2026-11-23
 
 - GitHub Actions browser testing verified that FitFlow and Mizan screenshots load from local static assets in the five-case-study gallery.
-- Historical `bookhaven-cover.jpg` and `eventify-cover.jpg` files are present but do not decode successfully in the browser. Their previews are temporarily suppressed; the original files remain untouched for possible recovery.
-- Do not replace these with invented screenshots or imply that the unavailable public demo sites are verified. Restore artwork only after capturing actual project interfaces and validating the exported images.
+- Historical `bookhaven-cover.jpg` and `eventify-cover.jpg` JPEG files remain retained but are not referenced because browsers could not decode them. **BookHaven** now uses `bookhaven-real-interface.webp` (840 × 529, ~23 KB), generated from a **manually inspected, unauthenticated live storefront capture on 24 November 2026**. **Eventify** artwork stays suppressed.
+- Do not replace missing artwork with invented screenshots. Public demo GET checks returned HTTP 200 for BookHaven and Eventify on 24 November, but **Eventify's actual browser page showed an unavailable catalog and degraded backend connection**; HTTP 200 alone cannot establish a working demo. Preserve source/case-study evidence and fix the backend before claiming complete functionality.
 - Case-study titles are tested across 320px, 390px and 820px viewports, including text bounds and horizontal overflow.
 
 ## Visual direction
