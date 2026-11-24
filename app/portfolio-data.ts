@@ -93,7 +93,7 @@ export const PROJECTS = {
     live: "https://bookbookhaven-free.onrender.com",
     runtime: null,
     source: "https://github.com/rahman-997/bookbookhaven",
-    cover: null,
+    cover: "/projects/bookhaven-real-interface.webp",
     visual: "product",
     problem:
       "A bookstore portfolio project becomes credible only when customer and operational workflows agree on the same business rules. Cart state, checkout, order transitions, inventory, reviews, and admin actions need to behave as one system rather than isolated screens.",

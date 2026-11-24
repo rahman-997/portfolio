@@ -1,6 +1,7 @@
 import { PROFILE_LINKS } from "../portfolio-data";
 import type { Locale } from "./locale";
 import { extraSections } from "./extra-sections";
+import { INQUIRY_COPY } from "./inquiry-copy";
 import styles from "./sections.module.css";
 
 type Props={locale:Locale};
@@ -54,6 +55,7 @@ export function ProcessSection({locale}:Props){
 
 export function CollaborateSection({locale}:Props){
   const t=extraSections[locale].collaborate;
+  const brief=INQUIRY_COPY[locale];
   return <section id="collaborate" className={styles.collaborate} aria-labelledby="collaborate-heading">
     <div className={styles.intro}>
       <div className={styles.eyebrow}>{t.eyebrow}</div>
@@ -68,8 +70,20 @@ export function CollaborateSection({locale}:Props){
         <ul className={styles.collabTags}>{card.tags.map(tag=><li key={tag}>{tag}</li>)}</ul>
       </article>)}
     </div>
-    <a className={styles.collabCta} href={PROFILE_LINKS.linkedin} rel="noopener noreferrer"
-      target="_blank">{t.button}<span aria-hidden="true">↗</span></a>
+    <div className={styles.inquiryPanel} aria-labelledby="inquiry-heading" data-project-brief="true">
+      <div>
+        <h3 id="inquiry-heading">{brief.title}</h3>
+        <p>{brief.lead}</p>
+        <ul className={styles.inquiryList}>
+          {brief.items.map((item)=><li key={item} data-brief-item="true">{item}</li>)}
+        </ul>
+      </div>
+      <div className={styles.inquiryContact}>
+        <a className={styles.collabCta} href={PROFILE_LINKS.linkedin} rel="noopener noreferrer"
+          target="_blank" aria-describedby="inquiry-note">{t.button}<span aria-hidden="true">↗</span></a>
+        <p id="inquiry-note">{brief.note}</p>
+      </div>
+    </div>
   </section>;
 }
 

@@ -37,6 +37,11 @@ for (const locale of locales) {
   const collaboration = section(html, "collaborate", "faq");
   check(collaboration.includes("linkedin.com/in/"), locale.id + ": missing direct collaboration CTA");
   check((collaboration.match(/data-collaboration-card=/g) ?? []).length === 3, locale.id + ": expected 3 collaboration capabilities");
+  const briefTitle = { en: "Start with a clear project brief.", ar: "ابدأ بوصف واضح لمشروعك.", tr: "Net bir proje özetiyle başlayın." }[locale.id];
+  check(collaboration.includes(briefTitle), locale.id + ": missing localized inquiry brief");
+  check(collaboration.includes('data-project-brief="true"'), locale.id + ": missing project brief panel");
+  check((collaboration.match(/data-brief-item="true"/g) ?? []).length === 4, locale.id + ": expected four brief prompts");
+  check(collaboration.includes('aria-describedby="inquiry-note"') && collaboration.includes('id="inquiry-note"'), locale.id + ": missing contact privacy disclosure");
   const faq = section(html, "faq", undefined);
   check((faq.match(/<details\b/g) ?? []).length >= 3, locale.id + ": expected native, keyboard-friendly FAQ");
   check(/<summary\b/.test(faq), locale.id + ": FAQ is not semantic");

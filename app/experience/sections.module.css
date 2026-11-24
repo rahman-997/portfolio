@@ -297,3 +297,26 @@
 @media(prefers-reduced-motion:reduce){
   .faqPlus,.collabCta{transition:none}
 }
+
+/* Static, locale-aware project inquiry; no additional client bundle. */
+.inquiryPanel{
+  display:grid;
+  grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+  gap:clamp(1.2rem,3vw,3rem);
+  align-items:center;
+  margin-top:1rem;
+  padding:clamp(1.25rem,3vw,2.5rem);
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--surface2);
+}
+.inquiryPanel h3{margin:0 0 .6rem;font-size:clamp(1.35rem,2.5vw,2rem);line-height:1.3;overflow-wrap:anywhere}
+.inquiryPanel p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.8;overflow-wrap:anywhere}
+.inquiryList{display:grid;gap:.5rem;padding-inline-start:1.25rem;margin:1rem 0 0;font-size:.86rem;line-height:1.65}
+.inquiryList li::marker{color:var(--accent)}
+.inquiryContact{min-width:0;border-inline-start:1px solid var(--line);padding-inline-start:clamp(1rem,3vw,2rem)}
+.inquiryContact .collabCta{margin:0 0 .8rem;max-width:100%;white-space:normal}
+@media(max-width:760px){
+  .inquiryPanel{grid-template-columns:minmax(0,1fr)}
+  .inquiryContact{border-inline-start:0;padding-inline-start:0;border-top:1px solid var(--line);padding-top:1rem}
+}

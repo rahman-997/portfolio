@@ -1,0 +1,68 @@
+name: Import reviewed BookHaven preview (draft only)
+
+on:
+  push:
+    branches:
+      - feat/frontend-first-mizan-case-study-2026-11-23
+    paths:
+      - ".github/workflows/portfolio-import-reviewed-bookhaven.yml"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  import-reviewed-image:
+    if: github.ref == 'refs/heads/feat/frontend-first-mizan-case-study-2026-11-23'
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Checkout feature branch (never main)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+      - name: Download EXACT human-reviewed screenshot artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --location --silent --show-error \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/14924984988/zip" \
+            -o /tmp/bookhaven-evidence.zip
+          unzip -q /tmp/bookhaven-evidence.zip -d /tmp/bookhaven-evidence
+      - name: Prepare local-only image compressor
+        run: python3 -m pip install --user --disable-pip-version-check pillow==11.3.0
+      - name: Verify reviewed bytes and create optimized first-party thumbnail
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          from PIL import Image
+          src = Path("/tmp/bookhaven-evidence/screenshots/bookhaven-landing-unreviewed.png")
+          expected = "4288c40c8e22f4d789c208d1f7dea7f789e7a4c16b381921faf21ef0d3e3424a"
+          actual = hashlib.sha256(src.read_bytes()).hexdigest()
+          if actual != expected:
+              raise SystemExit("Screenshot differs from the image reviewed by the user/assistant; refusing to commit.")
+          with Image.open(src) as original:
+              if original.size != (1365, 860):
+                  raise SystemExit("Unexpected BookHaven capture dimensions.")
+              output = original.convert("RGB").resize((840, 529), Image.Resampling.LANCZOS)
+              destination = Path("public/projects/bookhaven-real-interface.webp")
+              destination.parent.mkdir(parents=True, exist_ok=True)
+              output.save(destination, format="WEBP", quality=70, method=6)
+              if not 6000 <= destination.stat().st_size <= 100000:
+                  raise SystemExit("Optimized screenshot byte size outside expected safe range.")
+              print(f"Reviewed BookHaven thumbnail: {destination}, {destination.stat().st_size} bytes")
+          PY
+      - name: Commit only the verified image to the feature branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- public/projects/bookhaven-real-interface.webp
+          if git diff --cached --quiet; then
+            echo "Reviewed thumbnail already present; no changes"
+            exit 0
+          fi
+          git commit -m "assets(portfolio): import reviewed real BookHaven preview"
+          git push origin "HEAD:feat/frontend-first-mizan-case-study-2026-11-23"
