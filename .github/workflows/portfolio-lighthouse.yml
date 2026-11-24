@@ -76,10 +76,25 @@ jobs:
           node "$LH" http://127.0.0.1:4196/ --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=lighthouse-evidence/en-mobile.json
           node "$LH" http://127.0.0.1:4196/ar/ --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=lighthouse-evidence/ar-mobile.json
           node "$LH" http://127.0.0.1:4196/tr/ --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=lighthouse-evidence/tr-mobile.json
+      - name: Measure separate compressed-transfer scenario (not production)
+        shell: bash
+        run: |
+          nohup python3 scripts/serve_lighthouse.py --directory out --port 4197 --bind 127.0.0.1 --gzip >/tmp/portfolio-gzip-lab.log 2>&1 &
+          for attempt in {1..20}; do
+            if curl --fail --silent -I -H 'Accept-Encoding: gzip' http://127.0.0.1:4197/ | grep -Fiq 'Content-Encoding: gzip'; then break; fi
+            sleep 1
+          done
+          curl --fail --silent -I -H 'Accept-Encoding: gzip' http://127.0.0.1:4197/ | grep -Fiq 'Content-Encoding: gzip'
+          LH="$RUNNER_TEMP/lighthouse-tools/node_modules/lighthouse/cli/index.js"
+          for locale in en ar tr; do
+            route="/"
+            if [ "$locale" != en ]; then route="/$locale/"; fi
+            node "$LH" "http://127.0.0.1:4197$route" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-evidence/$locale-gzip-mobile.json"
+          done
       - name: Summarize synthetic lab scores and Web Vitals proxies
-        run: node scripts/report-lighthouse.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json lighthouse-evidence/tr-mobile.json
+        run: node scripts/report-lighthouse.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json lighthouse-evidence/tr-mobile.json lighthouse-evidence/en-gzip-mobile.json lighthouse-evidence/ar-gzip-mobile.json lighthouse-evidence/tr-gzip-mobile.json
       - name: Gate accessibility SEO and layout stability; warn on LCP
-        run: node scripts/lighthouse-budget.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json lighthouse-evidence/tr-mobile.json
+        run: node scripts/lighthouse-budget.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json lighthouse-evidence/tr-mobile.json lighthouse-evidence/en-gzip-mobile.json lighthouse-evidence/ar-gzip-mobile.json lighthouse-evidence/tr-gzip-mobile.json
       - name: Upload report (no third-party publication)
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

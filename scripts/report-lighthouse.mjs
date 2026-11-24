@@ -39,6 +39,7 @@ for (const file of files) {
   const diagnostics = lighthouseDiagnostics(result);
   summaries.push({
     report: basename(file),
+    transferScenario: basename(file).includes("-gzip-") ? "gzip-lab" : "uncompressed-baseline",
     url: result.finalUrl,
     lighthouseVersion: result.lighthouseVersion,
     scores: score,
@@ -53,7 +54,7 @@ for (const file of files) {
 const path = "lighthouse-evidence/summary.json";
 mkdirSync(dirname(path), { recursive: true });
 writeFileSync(path, JSON.stringify({
-  note: "Synthetic Chrome lab runs on a GitHub-hosted runner; not field Core Web Vitals, not production.",
+  note: "Synthetic Chrome lab runs on a GitHub-hosted runner; uncompressed and gzip scenarios are separate, not field Core Web Vitals or verified production behavior.",
   measuredAt: new Date().toISOString(),
   summaries,
 }, null, 2) + "\n");
