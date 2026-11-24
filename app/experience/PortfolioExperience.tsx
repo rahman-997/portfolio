@@ -1,6 +1,6 @@
 import AIAtlas from "../ai-atlas";
 import { PROFILE_LINKS } from "../portfolio-data";
-import { PUBLIC_PROJECT_COUNT } from "./projects";
+import { PUBLIC_PROJECT_COUNT, PUBLIC_CASE_STUDY_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
 import ExperienceControls from "./ExperienceControls";
 import { EvidenceSection, ProcessSection, CollaborateSection, FaqSection } from "./PortfolioExtraSections";
@@ -62,7 +62,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
 
       <section className={styles.metrics} aria-label={t.projectEyebrow}>
         <div><strong>{String(PUBLIC_PROJECT_COUNT).padStart(2,"0")}</strong><span>{t.metricProjects}</span></div>
-        <div><strong>04</strong><span>{t.metricStudies}</span></div>
+        <div><strong>{String(PUBLIC_CASE_STUDY_COUNT).padStart(2,"0")}</strong><span>{t.metricStudies}</span></div>
         <div><strong>03</strong><span>{t.metricLanguages}</span></div>
         <a href={PROFILE_LINKS.github} target="_blank" rel="noopener noreferrer">github.com/rahman-997 <span aria-hidden="true">↗</span></a>
       </section>
