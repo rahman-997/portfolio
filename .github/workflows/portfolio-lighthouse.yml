@@ -64,17 +64,18 @@ jobs:
           done
           cat /tmp/portfolio-lighthouse-server.log
           exit 1
-      - name: Measure home and Arabic RTL on simulated mobile
+      - name: Measure English, Arabic RTL and Turkish on simulated mobile
         shell: bash
         run: |
           mkdir -p lighthouse-evidence
           LH="$RUNNER_TEMP/lighthouse-tools/node_modules/lighthouse/cli/index.js"
           node "$LH" http://127.0.0.1:4196/ --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=lighthouse-evidence/en-mobile.json
           node "$LH" http://127.0.0.1:4196/ar/ --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=lighthouse-evidence/ar-mobile.json
+          node "$LH" http://127.0.0.1:4196/tr/ --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=lighthouse-evidence/tr-mobile.json
       - name: Summarize synthetic lab scores and Web Vitals proxies
-        run: node scripts/report-lighthouse.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json
+        run: node scripts/report-lighthouse.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json lighthouse-evidence/tr-mobile.json
       - name: Gate accessibility SEO and layout stability; warn on LCP
-        run: node scripts/lighthouse-budget.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json
+        run: node scripts/lighthouse-budget.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json lighthouse-evidence/tr-mobile.json
       - name: Upload report (no third-party publication)
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
