@@ -135,6 +135,18 @@ for (const marker of [
   }
 }
 
+// The initial hero screenshot must win network priority over optional work
+// previews and case-study route prefetches. Lighthouse reports the real hero
+// screenshot as LCP on mobile, so keep this intentional priority contract.
+if (!spotlightSource.includes('prefetch={false}') ||
+    !spotlightSource.includes('fetchPriority={selected === "fitflow" ? "high" : "auto"}')) {
+  throw new Error("Hero LCP priority or case-study prefetch policy regressed");
+}
+const explorerSource = readFileSync(join(root, "app/experience/ProjectExplorer.tsx"), "utf8");
+if (!explorerSource.includes('loading="lazy" fetchPriority="low" decoding="async"')) {
+  throw new Error("Secondary project screenshot loading must remain low priority");
+}
+
 // Guard against accidentally dropping the interactive atlas from the homepage.
 for (const marker of [
   'id="ai-lab"',
