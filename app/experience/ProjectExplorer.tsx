@@ -76,7 +76,7 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
       <span className={styles.projectSearchHint}>{searchCopy.hint}</span>
     </div>
     <div className={styles.projectGrid} id="portfolio-project-results">
-      {filtered.map((p,index)=><article className={styles.project} key={p.id}>
+      {filtered.map((p,index)=><article className={styles.project} key={p.id} data-project-id={p.id}>
         <div className={styles.cardTop}>
           <span className={styles.projectNumber}>{String(index+1).padStart(2,"0")} / {String(filtered.length).padStart(2,"0")}</span>
           <span className={p.original?styles.originalTag:styles.forkTag}>{p.original?t.original:t.fork}</span>
@@ -88,9 +88,10 @@ export default function ProjectExplorer({locale}:{locale:Locale}) {
         <div className={styles.pillRow}>{p.stack.map(v=><span key={v}>{v}</span>)}</div>
         <div className={styles.projectActions}>
           {p.study?<a href={p.study} className={styles.projectPrimary}>{t.caseStudy}<span aria-hidden="true">↗</span></a>:null}
-          {p.demo?<a href={p.demo} target="_blank" rel="noopener noreferrer">{t.live}<span aria-hidden="true">↗</span></a>:null}
+          {p.demo?<a href={p.demo} target="_blank" rel="noopener noreferrer">{p.demoNotice ? ({en:"Interface preview · limited",ar:"معاينة الواجهة · محدودة",tr:"Arayüz önizlemesi · sınırlı"}[locale]) : t.live}<span aria-hidden="true">↗</span></a>:null}
           <a href={p.source} target="_blank" rel="noopener noreferrer">{t.source}<span aria-hidden="true">↗</span></a>
         </div>
+        {p.demoNotice ? <p className={styles.projectDemoNotice} data-demo-notice>{p.demoNotice[locale]}</p> : null}
       </article>)}
     </div>
     {filtered.length === 0 ? <div className={styles.projectEmpty} data-empty-project-results role="status">
