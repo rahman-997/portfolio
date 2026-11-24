@@ -790,3 +790,9 @@
 @media(prefers-reduced-motion:reduce){
   .projectSearchInput{transition:none}
 }
+
+
+/* Solid header surface gives small branding text deterministic WCAG contrast
+   in both themes; transparency/backdrop blur made contrast non-deterministic. */
+.header{background:var(--canvas)}
+.brandText strong{color:var(--ink)}
