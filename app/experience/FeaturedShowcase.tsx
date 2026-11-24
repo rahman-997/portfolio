@@ -25,9 +25,9 @@ const FEATURED: readonly FeaturedProject[] = [
     image: "/projects/fitflow-real-interface.webp",
     stack: "Next.js / PWA / Responsive UI",
     alt: {
-      en: "Screenshot of the real FitFlow fitness interface",
-      ar: "لقطة شاشة من واجهة تطبيق FitFlow الحقيقية",
-      tr: "Gerçek FitFlow fitness arayüzü ekran görüntüsü",
+      en: "Real FitFlow guided interval timer, paused at 20 seconds",
+      ar: "لقطة حقيقية لمؤقت التمارين في FitFlow قبل بدء الجولة",
+      tr: "Gerçek FitFlow antrenman zamanlayıcısının başlangıç ekranı",
     },
     description: {
       en: "Fitness flows that turn training plans and progress into a focused, installable experience.",
@@ -35,9 +35,9 @@ const FEATURED: readonly FeaturedProject[] = [
       tr: "Antrenman planlarını ve ilerlemeyi odaklı, kurulabilir bir deneyimde birleştiren fitness arayüzü.",
     },
     imageNote: {
-      en: "Real interface · local production build",
-      ar: "واجهة حقيقية · بناء إنتاج محلي",
-      tr: "Gerçek arayüz · yerel üretim derlemesi",
+      en: "Real interface · public timer preview",
+      ar: "واجهة حقيقية · معاينة المؤقت العام",
+      tr: "Gerçek arayüz · herkese açık zamanlayıcı",
     },
   },
   {

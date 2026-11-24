@@ -1,9 +1,18 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { createHash } from "node:crypto";
 
 const check = (condition, message) => {
   if (!condition) throw new Error("V5 new section regression: " + message);
 };
+
+// The previous photograph was visibly incomplete even though it decoded.
+// Pin the manually reviewed replacement, not merely a successful image load.
+const reviewedFitflowDigest = "36f9676c7938e92e83bbb1cc36c56a9b158a387bcc5574818c1a180f535f038f";
+for (const file of ["public/projects/fitflow-real-interface.webp", "out/projects/fitflow-real-interface.webp"]) {
+  check(existsSync(file), "Missing reviewed FitFlow capture: " + file);
+  check(createHash("sha256").update(readFileSync(file)).digest("hex") === reviewedFitflowDigest, "FitFlow screenshot differs from visually reviewed image: " + file);
+}
 
 const locales = [
   { id: "en", file: "out/index.html", titles: ["Engineering evidence, not vanity numbers.", "How a project moves forward.", "Ways to work together.", "Questions, answered."] },

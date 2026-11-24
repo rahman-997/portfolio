@@ -44,7 +44,7 @@ Featured projects link to source code and engineering case studies where availab
 - FitFlow and Mizan now lead the public project library; the upstream fork remains explicitly identified.
 - Mizan has a standalone engineering case study and appears in the three-language evidence section.
 - Mizan preview is an authentic screenshot captured from a freshly cloned app in an isolated browser profile, showing bundled demo transactions; no personal account data.
-- FitFlow preview uses an optimized WebP screenshot from its locally built static production output, with no development browser overlay.
+- FitFlow preview uses the manually reviewed public guided interval timer screenshot, captured on 24 November 2026. The previous incomplete hero photograph was replaced; the exact approved WebP is hash-pinned in the export checks.
 - Mizan's historical demo URL is **not treated as verified**; no public demo button appears in its case study.
 - English, Arabic RTL, and Turkish copy leads with frontend experience, accessibility, UI/UX and React.
 - A one-page Frontend résumé PDF and accessible printable HTML are now included and linked from the résumé page; the older engineering PDF remains available at its original URL.
