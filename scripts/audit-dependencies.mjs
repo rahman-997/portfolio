@@ -18,7 +18,7 @@ if (windows && !npmCli) {
   process.exit(1);
 }
 const npm = windows ? process.execPath : "npm";
-const auditArgs = windows ? [npmCli, "audit", "--audit-level=high"] : ["audit", "--audit-level=high"];
+const auditArgs = windows ? [npmCli, "audit", "--audit-level=moderate"] : ["audit", "--audit-level=moderate"];
 const maxAttempts = 3;
 const retryDelayMs = 3000;
 
