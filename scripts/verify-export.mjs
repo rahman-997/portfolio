@@ -209,6 +209,19 @@ for (const [slug, badCover] of [
   }
 }
 
+// Human-reviewed real BookHaven landing capture, exact source recorded in PR QA.
+// Binary magic/size checks prevent placeholder or malformed artwork reappearing.
+const reviewedBookhaven = "/projects/bookhaven-real-interface.webp";
+const bookhavenHtml = readFileSync(join(outDir, "work/bookhaven/index.html"), "utf8");
+const bookhavenImage = readFileSync(join(outDir, "projects/bookhaven-real-interface.webp"));
+if (bookhavenImage.length < 6000 || bookhavenImage.length > 100000 ||
+    bookhavenImage.toString("ascii", 0, 4) !== "RIFF" ||
+    bookhavenImage.toString("ascii", 8, 12) !== "WEBP" ||
+    !homeHtml.includes(reviewedBookhaven) ||
+    !bookhavenHtml.includes(reviewedBookhaven)) {
+  throw new Error("Reviewed BookHaven cover missing, malformed, too large or unreferenced");
+}
+
 const fitflowHtml = readFileSync(join(outDir, "work/fitflow/index.html"), "utf8");
 if (!fitflowHtml.includes("/projects/fitflow-real-interface.webp")) {
   throw new Error("FitFlow case study must render the first-party local cover asset");
