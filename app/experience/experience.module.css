@@ -809,15 +809,3 @@
   line-height:1.65;
   overflow-wrap:break-word;
 }
-
-
-/* Performance: the interactive systems visual is far below the first viewport.
-   Preserve its server-rendered HTML and keyboard interactions, but let Chromium
-   skip layout/paint for this section until the visitor approaches it.
-   The intrinsic size reserves space to prevent jumping when it becomes visible. */
-@supports (content-visibility:auto){
-  .atlasSection{
-    content-visibility:auto;
-    contain-intrinsic-size:auto 980px;
-  }
-}
