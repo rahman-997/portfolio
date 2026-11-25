@@ -122,7 +122,7 @@ const personJsonLd = {
   image: `${SITE_URL}/opengraph-image`,
   jobTitle: "Frontend Engineer · UI/UX Designer · Full-Stack Developer",
   description:
-    "Software Engineer and Computer Engineering student building full-stack products, backend systems, APIs, data systems, AI integrations, interactive systems, and production delivery.",
+    "Frontend-focused software engineer and Computer Engineering student creating responsive React and Next.js products, accessible UI/UX, multilingual RTL interfaces, and reliable full-stack experiences.",
   sameAs: [
     PROFILE_LINKS.github,
     PROFILE_LINKS.linkedin,
