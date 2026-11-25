@@ -71,7 +71,7 @@ const requiredPaths = [
   "/Abdulrahman-Hajar-Resume.pdf",
   "/Abdulrahman-Hajar-Frontend-Resume.pdf",
   "/projects/fitflow-real-interface.webp",
-  "/projects/mizan-live-dashboard.png",
+  "/projects/mizan-live-dashboard.webp",
   "/projects/bookhaven-real-interface.webp",
   "/briefs/project-brief-en.txt",
   "/briefs/project-brief-ar.txt",
