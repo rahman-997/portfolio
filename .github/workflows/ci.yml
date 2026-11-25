@@ -41,7 +41,7 @@ jobs:
         run: npm run typecheck
 
       - name: Test Atlas contracts and Lighthouse regression-budget logic
-        run: node --test scripts/tests/atlas-production-contract.test.mjs scripts/tests/lighthouse-budget.test.mjs scripts/tests/lighthouse-diagnostics.test.mjs scripts/tests/release-candidate.test.mjs scripts/tests/netlify-release-gate.test.mjs scripts/tests/production-header-contract.test.mjs
+        run: node --test scripts/tests/atlas-production-contract.test.mjs scripts/tests/lighthouse-budget.test.mjs scripts/tests/lighthouse-diagnostics.test.mjs scripts/tests/release-candidate.test.mjs scripts/tests/netlify-release-gate.test.mjs scripts/tests/production-header-contract.test.mjs scripts/tests/dependency-audit.test.mjs
 
       - name: Production build
         run: npm run build
@@ -49,25 +49,9 @@ jobs:
       - name: Verify static export, identity, links, and résumé PDF
         run: npm run verify:export
 
-      - name: Dependency audit
-        shell: bash
-        run: |
-          set +e
-          audit_output="$(timeout 120s npm run audit 2>&1)"
-          audit_status=$?
-          set -e
-          printf '%s\n' "$audit_output"
-
-          if [ "$audit_status" -eq 0 ]; then
-            exit 0
-          fi
-
-          if [ "$audit_status" -eq 124 ] || printf '%s\n' "$audit_output" | grep -Eq 'Service Unavailable|audit endpoint returned an error|ECONNRESET|ETIMEDOUT|EAI_AGAIN'; then
-            echo '::warning::npm audit service is temporarily unavailable; CodeQL, Semgrep and Dependabot remain active, so CI will not fail on this external outage.'
-            exit 0
-          fi
-
-          exit "$audit_status"
+      - name: Dependency audit (fail closed)
+        # The audit script retries transient errors; an exhausted outage is not a pass.
+        run: timeout 210s npm run audit
 
       - name: Verify and package review-only static candidate
         if: github.event_name == 'push' && (github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24' || startsWith(github.ref, 'refs/heads/fix/release-delivery-'))
