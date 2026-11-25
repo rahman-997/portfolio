@@ -29,7 +29,7 @@ const requiredPaths = [
   "Abdulrahman-Hajar-Frontend-Resume.html",
   "projects/fitflow-cover.svg",
   "projects/fitflow-real-interface.webp",
-  "projects/mizan-live-dashboard.png",
+  "projects/mizan-live-dashboard.webp",
 ];
 
 const missing = requiredPaths.filter((path) => !existsSync(join(outDir, path)));
@@ -124,7 +124,7 @@ const spotlightSource = readFileSync(join(root, "app/experience/FeaturedShowcase
 for (const marker of [
   'aria-pressed={selected === item.id}',
   'onClick={() => setSelected(item.id)}',
-  "/projects/mizan-live-dashboard.png",
+  "/projects/mizan-live-dashboard.webp",
   "prefers-reduced-motion",
 ]) {
   const source = marker === "prefers-reduced-motion"
@@ -192,7 +192,7 @@ for (const path of ["/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/wo
 }
 
 const mizanHtml = readFileSync(join(outDir, "work/mizan/index.html"), "utf8");
-for (const marker of ["Mizan Finance", "RTL", "/projects/mizan-live-dashboard.png", "https://github.com/rahman-997/mizan-finance"]) {
+for (const marker of ["Mizan Finance", "RTL", "/projects/mizan-live-dashboard.webp", "https://github.com/rahman-997/mizan-finance"]) {
   if (!mizanHtml.includes(marker)) throw new Error("Mizan case study missing expected proof: " + marker);
 }
 if (mizanHtml.includes("Open live system")) throw new Error("Mizan must not advertise an unverified live demo");
@@ -227,7 +227,7 @@ if (bookhavenImage.length < 6000 || bookhavenImage.length > 100000 ||
 // These ceilings protect measured assets without suggesting LCP is solved.
 for (const [file, maxBytes, format] of [
   ["projects/fitflow-real-interface.webp", 45000, "webp"],
-  ["projects/mizan-live-dashboard.png", 100000, "png"],
+  ["projects/mizan-live-dashboard.webp", 100000, "webp"],
 ]) {
   const bytes = readFileSync(join(outDir, file));
   const looksWebp = bytes.toString("ascii", 0, 4) === "RIFF" &&

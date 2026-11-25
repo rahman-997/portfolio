@@ -44,7 +44,7 @@ const FEATURED: readonly FeaturedProject[] = [
     id: "mizan",
     name: "Mizan Finance",
     href: "/work/mizan/",
-    image: "/projects/mizan-live-dashboard.png",
+    image: "/projects/mizan-live-dashboard.webp",
     stack: "React / Data Visualization / RTL",
     alt: {
       en: "Mizan Finance interface screenshot using sample data",
