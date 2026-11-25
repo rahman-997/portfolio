@@ -78,7 +78,7 @@ with sync_playwright() as pw:
                           fitflow_tab.get_attribute("aria-pressed") == "false",
                           f"{name}: featured tab did not switch")
                     check(stage.locator('[data-active-project="mizan"]').count() == 1 and
-                          stage.locator('img[src="/projects/mizan-live-dashboard.png"]').count() == 1 and
+                          stage.locator('img[src="/projects/mizan-live-dashboard.webp"]').count() == 1 and
                           stage.locator('a[href="/work/mizan/"]').count() == 1,
                           f"{name}: Mizan featured preview missing screenshot or study")
                     fitflow_tab.focus()
@@ -91,7 +91,7 @@ with sync_playwright() as pw:
                           f"{name}: featured tab state not restored")
                     for project_id, screenshot in [
                         ("fitflow", "/projects/fitflow-real-interface.webp"),
-                        ("mizan", "/projects/mizan-live-dashboard.png"),
+                        ("mizan", "/projects/mizan-live-dashboard.webp"),
                     ]:
                         if project_id == "mizan":
                             mizan_tab.click()
