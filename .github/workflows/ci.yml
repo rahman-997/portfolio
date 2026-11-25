@@ -41,7 +41,7 @@ jobs:
         run: npm run typecheck
 
       - name: Test Atlas contracts and Lighthouse regression-budget logic
-        run: node --test scripts/tests/atlas-production-contract.test.mjs scripts/tests/lighthouse-budget.test.mjs scripts/tests/lighthouse-diagnostics.test.mjs scripts/tests/release-candidate.test.mjs
+        run: node --test scripts/tests/atlas-production-contract.test.mjs scripts/tests/lighthouse-budget.test.mjs scripts/tests/lighthouse-diagnostics.test.mjs scripts/tests/release-candidate.test.mjs scripts/tests/export-link-target.test.mjs
 
       - name: Production build
         run: npm run build
