@@ -1,88 +1,100 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent } from "react";
 import Link from "next/link";
 import styles from "./ai-atlas.module.css";
 import type { Locale } from "./experience/locale";
-import { atlasCopy } from "./experience/atlas-locale";
+import type { AtlasCopy } from "./experience/atlas-locale";
 
 type Area = {
   id: string;
-  name: string;
   short: string;
   x: number;
   y: number;
-  summary: string;
   stack: string[];
-  proof: string;
   href: string;
 };
 
 const areas: Area[] = [
   {
-    id: "architecture", name: "Architecture", short: "PLAN", x: 20, y: 19,
-    summary: "Trace product requirements through system boundaries, ownership, and failure paths before implementation.",
+    id: "architecture", short: "PLAN", x: 20, y: 19,
     stack: ["Domain modeling", "API contracts", "Trade-offs"],
-    proof: "Explore the systems thinking section", href: "#systems",
+    href: "#systems",
   },
   {
-    id: "interface", name: "Interface", short: "UI", x: 14, y: 42,
-    summary: "Build responsive, accessible user journeys with real state, meaningful feedback, and production constraints.",
+    id: "interface", short: "UI", x: 14, y: 42,
     stack: ["React", "Next.js", "Accessibility"],
-    proof: "BookHaven case study", href: "/work/bookhaven/",
+    href: "/work/bookhaven/",
   },
   {
-    id: "backend", name: "Backend", short: "API", x: 20, y: 70,
-    summary: "Keep HTTP boundaries, validation, authorization, business logic, and persistence responsibilities explicit.",
+    id: "backend", short: "API", x: 20, y: 70,
     stack: ["Express", "REST", "Zod"],
-    proof: "Venues API case study", href: "/work/venues-api/",
+    href: "/work/venues-api/",
   },
   {
-    id: "data", name: "Data", short: "DB", x: 37, y: 85,
-    summary: "Design durable state and deliberate cache boundaries, treating the database as the system of record.",
+    id: "data", short: "DB", x: 37, y: 85,
     stack: ["PostgreSQL", "Prisma", "Redis"],
-    proof: "Eventify case study", href: "/work/eventify/",
+    href: "/work/eventify/",
   },
   {
-    id: "ai", name: "AI / MCP", short: "AI", x: 80, y: 19,
-    summary: "Explore how language-model tools and human-in-the-loop workflows can fit into accountable product architecture.",
+    id: "ai", short: "AI", x: 80, y: 19,
     stack: ["LLM patterns", "MCP", "Human oversight"],
-    proof: "View engineering technologies", href: "#stack",
+    href: "#stack",
   },
   {
-    id: "async", name: "Async work", short: "JOBS", x: 86, y: 42,
-    summary: "Coordinate background jobs, retry policies, idempotency, and durable intent when dependencies fail.",
+    id: "async", short: "JOBS", x: 86, y: 42,
     stack: ["BullMQ", "Redis", "Outbox"],
-    proof: "Eventify case study", href: "/work/eventify/",
+    href: "/work/eventify/",
   },
   {
-    id: "quality", name: "Verification", short: "QA", x: 80, y: 70,
-    summary: "Verify contracts, interactions, security boundaries, accessibility, and unhappy-path behavior.",
+    id: "quality", short: "QA", x: 80, y: 70,
     stack: ["TypeScript", "Tests", "CI checks"],
-    proof: "Venues API case study", href: "/work/venues-api/",
+    href: "/work/venues-api/",
   },
   {
-    id: "delivery", name: "Delivery", short: "SHIP", x: 63, y: 85,
-    summary: "Ship through reproducible builds, clear runtime diagnostics, deployment checks, and operational visibility.",
+    id: "delivery", short: "SHIP", x: 63, y: 85,
     stack: ["GitHub Actions", "Docker", "Health checks"],
-    proof: "Eventify case study", href: "/work/eventify/",
+    href: "/work/eventify/",
   },
 ];
 
 const journey = [
-  { id: "architecture", label: "01 / DEFINE", title: "Model the domain", detail: "Clarify boundaries and failure paths before choosing tools." },
-  { id: "backend", label: "02 / VALIDATE", title: "Enforce contracts", detail: "Validate inputs and authorise changes at the API boundary." },
-  { id: "data", label: "03 / PERSIST", title: "Commit state", detail: "Keep durable intent in the system of record." },
-  { id: "async", label: "04 / DISPATCH", title: "Process safely", detail: "Run retriable background work with clear ownership." },
-  { id: "quality", label: "05 / VERIFY", title: "Prove behavior", detail: "Check failure cases, integration contracts and observability." },
+  { id: "architecture" },
+  { id: "backend" },
+  { id: "data" },
+  { id: "async" },
+  { id: "quality" },
 ] as const;
 
-export default function AIAtlas({locale="en"}:{locale?:Locale}) {
-  const t=atlasCopy[locale];
+export default function AIAtlas({locale,copy:t}:{locale:Locale;copy:AtlasCopy}) {
   const [activeId, setActiveId] = useState("architecture");
   const [view, setView] = useState<"network" | "portrait" | "flow">("network");
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [motionActive, setMotionActive] = useState(false);
+
+  // Decorative work should not run during initial paint or offscreen.
+  // The server and no-JS version remain fully visible and static.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || !("IntersectionObserver" in window)) return;
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let visible = false;
+    const sync = () => setMotionActive(visible && !preference.matches && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    });
+    observer.observe(section);
+    preference.addEventListener("change", sync);
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      observer.disconnect();
+      preference.removeEventListener("change", sync);
+      document.removeEventListener("visibilitychange", sync);
+    };
+  }, []);
   const activeIndex = areas.findIndex((area) => area.id === activeId);
   const active = areas[activeIndex] ?? areas[0];
 
@@ -103,7 +115,7 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
   }
 
   return (
-    <section className={styles.section} id="ai-lab" aria-labelledby="ai-lab-heading">
+    <section ref={sectionRef} className={styles.section} id="ai-lab" aria-labelledby="ai-lab-heading" data-atlas-motion={motionActive ? "running" : "paused"}>
       <div className={styles.heading}>
         <div>
           <p className={styles.eyebrow}>{t.eyebrow}</p>
@@ -156,7 +168,7 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
                   {areas.map((area) => (
                     <g key={area.id}>
                       <line x1="500" y1="300" x2={area.x * 10} y2={area.y * 6} stroke="url(#atlas-wire)" strokeWidth={activeId === area.id ? 2.8 : 1.1} opacity={activeId === area.id ? 1 : .5} />
-                      {activeId === area.id && (
+                      {motionActive && activeId === area.id && (
                         <circle r="4" fill="#f6cc84" className={styles.signalParticle}>
                           <animateMotion dur="3s" repeatCount="indefinite" path={`M500 300 L${area.x * 10} ${area.y * 6}`} />
                         </circle>
@@ -279,7 +291,7 @@ export default function AIAtlas({locale="en"}:{locale?:Locale}) {
               <span>{String(activeIndex + 1).padStart(2, "0")} OF {String(areas.length).padStart(2, "0")}</span>
               <button type="button" onClick={() => selectAdjacent(1)} aria-label={locale==="en"?"Next discipline":t.next+" "+t.disciplines}><span>{t.next}</span> →</button>
             </div>
-            <Link className={styles.inspectorLink} href={active.href}>
+            <Link prefetch={false} className={styles.inspectorLink} href={active.href}>
               {t.nodes[active.id].proof} <span aria-hidden="true">↗</span>
             </Link>
           </aside>

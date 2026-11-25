@@ -43,12 +43,164 @@ with sync_playwright() as pw:
                     page.locator(f'html[data-theme="{theme}"]').wait_for(timeout=15000)
                     check(page.locator("html").get_attribute("lang") == locale,
                           f"{name}: wrong html lang")
+                    stage = page.locator('[data-featured-showcase]')
+                    check(stage.count() == 1, f"{name}: interactive project theatre missing")
+                    visual_layout = stage.evaluate("""el => {
+                        const screen = el.querySelector('[data-active-project]').getBoundingClientRect();
+                        const details = el.querySelector('[class*="projectDetails"]').getBoundingClientRect();
+                        return {screenBottom: screen.bottom, detailsTop: details.top};
+                    }""")
+                    check(visual_layout["detailsTop"] >= visual_layout["screenBottom"] - 2,
+                          f"{name}: project copy obscures the real application screenshot")
+                    # Actual rendered text must stay inside its action, not only
+                    # the outer button rectangle (the old nowrap rule clipped text).
+                    action_bounds = stage.evaluate("""el => {
+                      const actions = [...el.querySelectorAll('[class*="detailsActions"] > a, [class*="detailsActions"] > button')];
+                      return actions.map(action => {
+                        const rect = action.getBoundingClientRect();
+                        const range = document.createRange();
+                        range.selectNodeContents(action);
+                        const text = [...range.getClientRects()];
+                        return {left:rect.left,right:rect.right,height:rect.height,
+                          contained:text.every(r => r.left >= rect.left-1 && r.right <= rect.right+1 && r.top >= rect.top-1 && r.bottom <= rect.bottom+1)};
+                      });
+                    }""")
+                    check(len(action_bounds) == 2 and all(a["contained"] and a["height"] >= 44 and a["left"] >= -2 and a["right"] <= width + 2 for a in action_bounds),
+                          f"{name}: featured action text clipped or out of bounds: {action_bounds}")
+                    fitflow_tab = stage.get_by_role("button", name="FitFlow", exact=True)
+                    mizan_tab = stage.get_by_role("button", name="Mizan Finance", exact=True)
+                    check(fitflow_tab.count() == 1 and mizan_tab.count() == 1,
+                          f"{name}: project preview controls missing")
+                    check(fitflow_tab.get_attribute("aria-pressed") == "true",
+                          f"{name}: featured project initial state missing")
+                    mizan_tab.click()
+                    check(mizan_tab.get_attribute("aria-pressed") == "true" and
+                          fitflow_tab.get_attribute("aria-pressed") == "false",
+                          f"{name}: featured tab did not switch")
+                    check(stage.locator('[data-active-project="mizan"]').count() == 1 and
+                          stage.locator('img[src="/projects/mizan-live-dashboard.webp"]').count() == 1 and
+                          stage.locator('a[href="/work/mizan/"]').count() == 1,
+                          f"{name}: Mizan featured preview missing screenshot or study")
+                    fitflow_tab.focus()
+                    fitflow_tab.press("Enter")
+                    check(stage.locator('[data-active-project="fitflow"]').count() == 1 and
+                          stage.locator('img[src="/projects/fitflow-real-interface.webp"]').count() == 1 and
+                          stage.locator('a[href="/work/fitflow/"]').count() == 1,
+                          f"{name}: keyboard could not restore FitFlow preview")
+                    check(fitflow_tab.get_attribute("aria-pressed") == "true",
+                          f"{name}: featured tab state not restored")
+                    for project_id, screenshot in [
+                        ("fitflow", "/projects/fitflow-real-interface.webp"),
+                        ("mizan", "/projects/mizan-live-dashboard.webp"),
+                    ]:
+                        if project_id == "mizan":
+                            mizan_tab.click()
+                        cover = stage.locator(f'img[src="{screenshot}"]')
+                        check(cover.count() == 1 and cover.evaluate(
+                            "(el) => el.complete && el.naturalWidth > 0"),
+                            f"{name}: {project_id} real screenshot not loaded")
+                        check(stage.locator(f'a[href="{screenshot}"]').count() == 1,
+                            f"{name}: {project_id} full-resolution capture link missing")
+                    fitflow_tab.click()
+                    enlarge = {
+                        "en": "Enlarge screenshot",
+                        "ar": "تكبير الصورة",
+                        "tr": "Görseli büyüt",
+                    }[locale]
+                    enlarge_button = stage.get_by_role("button", name=enlarge, exact=True)
+                    enlarge_button.click()
+                    dialog = stage.locator("dialog")
+                    check(dialog.count() == 1 and dialog.evaluate("(el) => el.open"),
+                          f"{name}: full-image preview did not open")
+                    full_image = dialog.locator('img[src="/projects/fitflow-real-interface.webp"]')
+                    full_image.wait_for(state="visible", timeout=5000)
+                    page.wait_for_function("""() => {
+                      const img = document.querySelector('dialog[open] img');
+                      return Boolean(img && img.complete && img.naturalWidth > 0);
+                    }""", timeout=5000)
+                    check(dialog.locator('a[href="/projects/fitflow-real-interface.webp"]').count() == 1,
+                          f"{name}: lightbox missing original image link")
+                    page.keyboard.press("Escape")
+                    check(not dialog.evaluate("(el) => el.open"),
+                          f"{name}: native Escape did not close full-image preview")
+                    if label == "mobile":
+                        vw = page.evaluate("window.innerWidth")
+                        bounds = page.locator("#top h1").evaluate("""(el) => {
+                            const range = document.createRange();
+                            range.selectNodeContents(el);
+                            const r = range.getBoundingClientRect();
+                            return {left:r.left,right:r.right};
+                        }""")
+                        check(bounds["left"] >= -2 and bounds["right"] <= vw + 2,
+                              f"{name}: visible hero heading text spills outside mobile viewport ({bounds}, width={vw})")
+                        header_box = page.locator("header").bounding_box()
+                        check(header_box is not None and header_box["height"] <= 90,
+                              f"{name}: mobile header still takes multiple rows")
+                        github_metric = page.locator('section[class*="metrics"] > a[href="https://github.com/rahman-997"]')
+                        github_box = github_metric.bounding_box()
+                        check(github_box is not None and github_box["height"] <= 76 and
+                              github_metric.evaluate("(el) => getComputedStyle(el).whiteSpace") == "nowrap",
+                              f"{name}: GitHub metric URL wraps on mobile")
+                        check(page.locator("header button[title]").first.is_visible(),
+                              f"{name}: theme toggle hidden on mobile")
+                        menu = page.locator('button[aria-controls="portfolio-mobile-links"]')
+                        check(menu.is_visible() and menu.get_attribute("aria-expanded") == "false",
+                              f"{name}: mobile navigation trigger unavailable")
+                        menu.click()
+                        check(menu.get_attribute("aria-expanded") == "true" and
+                              page.locator("#portfolio-mobile-links a[href='#work']").count() == 1,
+                              f"{name}: mobile navigation did not reveal project link")
+                        check(page.locator("#portfolio-mobile-links a[href='/ar/']").count() == 1 and
+                              page.locator("#portfolio-mobile-links a[href='/tr/']").count() == 1,
+                              f"{name}: mobile language switcher missing")
+                        page.locator("#portfolio-mobile-links a[href='#work']").click()
+                        check(menu.get_attribute("aria-expanded") == "false",
+                              f"{name}: mobile navigation remains open after selection")
+                        menu.click()
+                        page.keyboard.press("Escape")
+                        check(menu.get_attribute("aria-expanded") == "false" and
+                              menu.evaluate("(el) => document.activeElement === el"),
+                              f"{name}: Escape failed to dismiss mobile menu and return focus")
+                        menu.click()
+                        page.mouse.click(width / 2, height - 20)
+                        check(menu.get_attribute("aria-expanded") == "false",
+                              f"{name}: outside click failed to close mobile menu")
+                        # Keyboard-only disclosure: ArrowDown opens and moves focus
+                        # to the first link, then Shift+Tab out should dismiss it.
+                        menu.focus()
+                        menu.press("ArrowDown")
+                        first_link = page.locator("#portfolio-mobile-links a[href='#work']")
+                        check(menu.get_attribute("aria-expanded") == "true" and
+                              first_link.evaluate("(el) => document.activeElement === el"),
+                              f"{name}: ArrowDown did not open menu and focus first link")
+                        page.keyboard.press("Shift+Tab")
+                        check(menu.evaluate("(el) => document.activeElement === el"),
+                              f"{name}: tab navigation could not return to menu")
+                        page.keyboard.press("Shift+Tab")
+                        check(menu.get_attribute("aria-expanded") == "false",
+                              f"{name}: menu remained open after focus left navigation")
                     expected_dir = "rtl" if locale == "ar" else "ltr"
                     check(page.locator("html").get_attribute("dir") == expected_dir,
                           f"{name}: wrong document direction")
                     work = page.locator("#work")
                     check(work.locator("article").count() == 7,
                           f"{name}: missing public repositories")
+                    check(work.locator('[data-project-capture="real"] figcaption').count() == 3 and
+                          work.locator('[data-project-capture="unavailable"] img').count() == 0 and
+                          work.locator('[data-project-capture="unavailable"]').count() == 4,
+                          f"{name}: screenshot evidence labels do not match actual captures")
+                    check(work.locator("[data-card-study]").count() == 5,
+                          f"{name}: case study paths missing")
+                    bookhaven_card = work.locator('[data-project-id="bookbookhaven"]')
+                    check(bookhaven_card.locator('img[src="/projects/bookhaven-real-interface.webp"]').count() == 1,
+                          f"{name}: reviewed BookHaven screenshot missing from project card")
+                    eventify_card = work.locator('[data-project-id="eventify"]')
+                    notice = eventify_card.locator("[data-demo-notice]")
+                    check(notice.count() == 1 and len(notice.inner_text()) > 35,
+                          f"{name}: Eventify degraded backend disclosure missing")
+                    limited_label = {"en":"limited", "ar":"محدودة", "tr":"sınırlı"}[locale]
+                    check(limited_label in eventify_card.locator('a[href="https://eventify-web.onrender.com"]').inner_text().lower(),
+                          f"{name}: Eventify demo link falsely implies full availability")
                     check(page.locator("#ai-lab").count() == 1, f"{name}: Atlas missing")
                     # V5: new sections must stay navigable and complete in all locales/themes.
                     for section in ("highlights", "process", "collaborate", "faq"):
@@ -61,6 +213,33 @@ with sync_playwright() as pw:
                           f"{name}: wrong process step count")
                     check(page.locator("#collaborate [data-collaboration-card]").count() == 3,
                           f"{name}: wrong collaboration card count")
+                    hero_actions = page.locator("#top [data-hero-actions]")
+                    check(hero_actions.locator("a").count() == 2, f"{name}: hero paths not distinct")
+                    for link in hero_actions.locator("a").all():
+                        bounds = link.bounding_box()
+                        check(bounds is not None and bounds["height"] >= 44 and
+                              bounds["x"] >= -2 and bounds["x"] + bounds["width"] <= width + 2,
+                              f"{name}: clipped or undersized hero action")
+                    check(page.locator("#top [data-hero-proof]").count() == 3,
+                          f"{name}: hero capability labels missing")
+                    check(page.locator("#top [data-hero-cv]").get_attribute("aria-describedby") == "hero-cv-context",
+                          f"{name}: CV link context missing")
+                    hero_cta = page.locator('[data-studio-cta="hero"]')
+                    check(hero_cta.count() == 1 and hero_cta.get_attribute("href") == "#collaborate",
+                          f"{name}: project inquiry entry point missing")
+                    check(page.locator("#collaborate [data-service-evidence]").count() == 3,
+                          f"{name}: service evidence links missing")
+                    brief = page.locator('#collaborate [data-brief-download]')
+                    check(brief.count() == 1 and brief.get_attribute("href") == f"/briefs/project-brief-{locale}.txt",
+                          f"{name}: localized brief download missing")
+                    with page.expect_download(timeout=15000) as download_info:
+                        brief.click()
+                    download = download_info.value
+                    check(download.suggested_filename == f"project-brief-{locale}.txt",
+                          f"{name}: incorrect brief filename")
+                    brief_text = download.path().read_text(encoding="utf-8")
+                    check(all(f"{i}." in brief_text for i in range(1, 6)) and "linkedin.com/in/" in brief_text,
+                          f"{name}: downloaded project brief content incomplete")
                     check(page.locator("#faq details").count() == 4,
                           f"{name}: FAQ details unavailable")
                     faq_first = page.locator("#faq details").first
@@ -82,7 +261,36 @@ with sync_playwright() as pw:
                         page.get_by_role("button", name=COPY[locale][kind], exact=True).click()
                         check(work.locator("article").count() == count,
                               f"{name}: {kind} filter expected {count} projects")
+                    availability = work.locator("#portfolio-availability")
+                    for kind, count in [("demo", 3), ("limited", 1), ("source", 2), ("api", 1)]:
+                        availability.select_option(kind)
+                        check(work.locator("article").count() == count and
+                              work.locator(f'[data-availability="{kind}"]').count() == count,
+                              f"{name}: availability filter {kind} mismatch")
+                    availability.select_option("all")
+                    check(work.locator("article").count() == 7, f"{name}: availability reset failed")
+                    search = page.get_by_role("searchbox")
+                    check(search.count() == 1 and search.is_visible(),
+                          f"{name}: project search unavailable")
+                    page.keyboard.press("/")
+                    check(search.evaluate("(el) => document.activeElement === el"),
+                          f"{name}: slash shortcut did not focus project search")
+                    availability.select_option("source")
+                    search.fill("Mizan")
+                    check(work.locator("article").count() == 1 and
+                          work.locator("article h3").first.inner_text() == "Mizan Finance",
+                          f"{name}: project search failed to find Mizan")
+                    search.fill("not-a-real-project-928364")
+                    check(work.locator("article").count() == 0 and
+                          work.locator("[data-empty-project-results]").is_visible(),
+                          f"{name}: empty-state search regression")
+                    work.locator("[data-empty-project-results] button").click()
+                    check(work.locator("article").count() == 7 and search.input_value() == "" and availability.input_value() == "all",
+                          f"{name}: clearing project search failed")
                     page.locator("#ai-lab").scroll_into_view_if_needed()
+                    check(page.locator("#ai-lab").get_attribute("data-atlas-motion") == "paused" and
+                          page.locator("#ai-lab animateMotion").count() == 0,
+                          f"{name}: reduced-motion Atlas runs decorative animation")
                     page.get_by_role("button", name=COPY[locale]["flow"], exact=True).click()
                     check(page.get_by_label("Illustrative five-stage engineering flow").count() == 1,
                           f"{name}: atlas mode switch broken")
@@ -109,9 +317,10 @@ with sync_playwright() as pw:
                     page.locator(f'html[data-theme="{theme}"]').wait_for(timeout=5000)
                     if label == "mobile":
                         page.add_script_tag(path=os.environ.get("ATLAS_AXE_SCRIPT", "node_modules/axe-core/axe.min.js"))
-                        for section_id in ("highlights", "process", "collaborate", "faq"):
+                        for section_id in ("header", "top", "work", "highlights", "process", "collaborate", "faq"):
                             violations = page.evaluate("""async (section) => {
-                                const issues = await axe.run(document.getElementById(section), {
+                                const root = section === "header" ? document.querySelector("header") : document.getElementById(section);
+                                const issues = await axe.run(root, {
                                     runOnly: {type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']},
                                     rules: {'region': {enabled: false}},
                                 });
@@ -120,10 +329,21 @@ with sync_playwright() as pw:
                                 }));
                             }""", section_id)
                             check(not violations, f"{name}: {section_id} accessibility: {violations}")
+                    # Atlas is interactive below the fold, but it must remain painted
+                    # in exported full-page screenshots as well. CSS content-visibility:
+                    # auto on its ancestor creates a blank rectangle in CI evidence.
+                    atlas_paint = page.locator("#ai-lab").evaluate(
+                        "(el) => getComputedStyle(el.parentElement).contentVisibility")
+                    check(atlas_paint != "auto",
+                          f"{name}: Atlas would render as a blank offscreen region in full-page capture")
                     overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
                     check(overflow <= 2, f"{name}: horizontal overflow {overflow}px")
                     check(not errors, f"{name}: browser exceptions {errors}")
                     if label == "mobile":
+                        # Scroll to top before a full-page capture. Sticky headers otherwise
+                        # appear at the previous scrolled viewport, misleading visual review.
+                        page.evaluate("window.scrollTo({top: 0, left: 0, behavior: 'instant'})")
+                        page.wait_for_timeout(100)
                         page.screenshot(path=str(OUT / (name + ".png")), full_page=True,
                                         animations="disabled")
                     report.append({"case":name,"status":"pass","projects":7,
@@ -138,6 +358,46 @@ with sync_playwright() as pw:
                         pass
                 finally:
                     context.close()
+    # With motion allowed, decorative effects start only while Atlas is visible.
+    context = browser.new_context(viewport={"width": 1280, "height": 800}, reduced_motion="no-preference")
+    page = context.new_page()
+    try:
+        page.goto(BASE + "/", wait_until="networkidle")
+        atlas = page.locator("#ai-lab")
+        check(atlas.get_attribute("data-atlas-motion") == "paused" and atlas.locator("animateMotion").count() == 0,
+              "offscreen Atlas must start static")
+        atlas.scroll_into_view_if_needed()
+        page.locator('#ai-lab[data-atlas-motion="running"]').wait_for(timeout=5000)
+        check(atlas.locator("animateMotion").count() == 1, "visible Atlas animation missing")
+        page.evaluate("window.scrollTo({top:0,behavior:'instant'})")
+        page.locator('#ai-lab[data-atlas-motion="paused"]').wait_for(timeout=5000)
+        check(atlas.locator("animateMotion").count() == 0, "offscreen Atlas animation not stopped")
+        report.append({"case":"atlas-motion-visibility","status":"pass"})
+    except Exception as exc:
+        failures.append({"case":"atlas-motion-visibility","error":str(exc)})
+    finally:
+        context.close()
+    # Locale navigation must not download other routes before a visitor chooses them.
+    context = browser.new_context(viewport={"width":1280,"height":800})
+    page = context.new_page()
+    requests = []
+    page.on("request", lambda request: requests.append(request.url))
+    try:
+        page.goto(BASE + "/", wait_until="networkidle", timeout=60000)
+        page.wait_for_timeout(1500)
+        from urllib.parse import urlsplit
+        paths = [urlsplit(url).path for url in requests if url.startswith(BASE + "/")]
+        unexpected = [path for path in paths if path == "/ar" or path == "/tr" or
+                      path.startswith(("/ar/", "/tr/", "/ar.txt", "/tr.txt", "/ar.rsc", "/tr.rsc"))]
+        check(not unexpected, f"Unrequested locale routes downloaded: {unexpected}")
+        page.locator('header a[href="/ar/"]:visible').first.click()
+        page.wait_for_url(BASE + "/ar/", timeout=15000)
+        page.locator('html[lang="ar"][dir="rtl"]').wait_for(timeout=15000)
+        report.append({"case":"locale-navigation-no-prefetch","status":"pass"})
+    except Exception as exc:
+        failures.append({"case":"locale-navigation-no-prefetch","error":str(exc)})
+    finally:
+        context.close()
     # True no-JavaScript test: verify localized direction is present on raw static HTML.
     for locale in ("ar","tr"):
         context = browser.new_context(java_script_enabled=False)
@@ -152,6 +412,64 @@ with sync_playwright() as pw:
             failures.append({"case":locale+"-no-js","error":str(exc)})
         finally:
             context.close()
+    # Case-study QA: project pages are part of the portfolio experience.
+    # Check the actual rendered heading text bounds, not only document scrollWidth
+    # (overflow:hidden could otherwise hide a clipped heading).
+    for width in (320, 390, 820):
+        context = browser.new_context(viewport={"width": width, "height": 820}, reduced_motion="reduce")
+        page = context.new_page()
+        for slug in ("fitflow", "mizan", "bookhaven", "eventify", "venues-api"):
+            name = f"case-study-{slug}-{width}"
+            try:
+                response = page.goto(BASE + "/work/" + slug + "/", wait_until="networkidle", timeout=60000)
+                check(response is not None and response.status == 200,
+                      f"{name}: page did not load")
+                title = page.locator("article h1")
+                check(title.count() == 1 and title.is_visible(),
+                      f"{name}: missing visible title")
+                text_bounds = title.evaluate("""(el) => {
+                    const range = document.createRange();
+                    range.selectNodeContents(el);
+                    const rect = range.getBoundingClientRect();
+                    return {left:rect.left, right:rect.right, width:rect.width};
+                }""")
+                check(text_bounds["left"] >= -2 and text_bounds["right"] <= width + 2,
+                      f"{name}: clipped case study heading {text_bounds}")
+                check(page.locator('a[href^="https://github.com/rahman-997/"]').count() >= 1,
+                      f"{name}: no verifiable source link")
+                if slug in ("mizan", "fitflow", "bookhaven"):
+                    img = page.locator("article figure img")
+                    check(img.count() == 1 and img.evaluate("(el) => el.complete && el.naturalWidth > 0"),
+                          f"{name}: project image did not load")
+                    src = img.get_attribute("src") or ""
+                    check(src.startswith("/projects/"),
+                          f"{name}: static export must use a local asset, got {src}")
+                    caption = page.locator("article figure figcaption")
+                    check(caption.count() == 1 and len(caption.inner_text().strip()) > 12,
+                          f"{name}: missing project image description")
+                expected_availability = {"fitflow":"demo","bookhaven":"demo","mizan":"source","eventify":"limited","venues-api":"api"}[slug]
+                check(page.locator(f'[data-study-availability="{expected_availability}"]').count() == 1,
+                      f"{name}: availability disclosure missing")
+                demo = page.locator("[data-study-demo]")
+                check(demo.count() == (0 if slug == "mizan" else 1), f"{name}: unexpected demo link")
+                if slug == "eventify":
+                    check("limited" in demo.inner_text().lower(), f"{name}: limited preview mislabeled")
+                    check(page.locator("article figure img").count() == 0,
+                          f"{name}: unverified preview image should stay hidden")
+                overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
+                check(overflow <= 2, f"{name}: horizontal overflow {overflow}px")
+                if width == 390 and slug in ("mizan", "fitflow", "bookhaven"):
+                    page.screenshot(path=str(OUT/(name+".png")), animations="disabled")
+                report.append({"case":name,"status":"pass","overflow":overflow})
+                print("PASS", name, flush=True)
+            except Exception as exc:
+                failures.append({"case":name,"error":str(exc)})
+                print("FAIL", name, exc, file=sys.stderr, flush=True)
+                try:
+                    page.screenshot(path=str(OUT/(name+"-failure.png")), animations="disabled")
+                except Exception:
+                    pass
+        context.close()
     browser.close()
 (OUT/"report.json").write_text(json.dumps({"passed":report,"failed":failures},ensure_ascii=False,indent=2))
 if failures:

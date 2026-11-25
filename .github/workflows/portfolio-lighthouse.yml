@@ -1,0 +1,105 @@
+name: Portfolio Lighthouse Lab
+
+on:
+  push:
+    branches: [feat/digital-studio-conversion-2026-11-24]
+  pull_request:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "public/**"
+      - "scripts/report-lighthouse.mjs"
+      - "scripts/lighthouse-diagnostics.mjs"
+      - "scripts/tests/lighthouse-diagnostics.test.mjs"
+      - "scripts/serve_lighthouse.py"
+      - "scripts/tests/test_serve_lighthouse.py"
+      - "scripts/lighthouse-budget.mjs"
+      - "scripts/tests/lighthouse-budget.test.mjs"
+      - ".github/workflows/portfolio-lighthouse.yml"
+      - "package.json"
+      - "package-lock.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-lighthouse-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Local export lab performance and accessibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup pinned Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Setup pinned npm and dependencies
+        run: |
+          npm install --global npm@11.19.1
+          npm ci --no-audit --no-fund
+      - name: Build static export
+        run: npm run build
+      - name: Install isolated Lighthouse 12.8.2
+        run: |
+          # Do not install audit tooling into the project's own lockfile.
+          npm install --prefix "$RUNNER_TEMP/lighthouse-tools" --no-save --no-package-lock --ignore-scripts --no-audit --no-fund lighthouse@12.8.2
+      - name: Test measurement gates and cache fidelity
+        run: |
+          node --test scripts/tests/lighthouse-budget.test.mjs scripts/tests/lighthouse-diagnostics.test.mjs
+          python3 -m unittest scripts.tests.test_serve_lighthouse
+      - name: Start loopback-only static preview
+        run: |
+          # Python's default http.server reports no caching, unlike Render.
+          # Serve the built export with production-equivalent Cache-Control.
+          nohup python3 scripts/serve_lighthouse.py --directory out --port 4196 --bind 127.0.0.1 > /tmp/portfolio-lighthouse-server.log 2>&1 &
+          for attempt in {1..25}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4196/; then
+              curl --fail --silent -I http://127.0.0.1:4196/projects/fitflow-real-interface.webp | grep -Fiq 'Cache-Control: public, max-age=3600'
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/portfolio-lighthouse-server.log
+          exit 1
+      - name: Measure English, Arabic RTL and Turkish on simulated mobile
+        shell: bash
+        run: |
+          mkdir -p lighthouse-evidence
+          LH="$RUNNER_TEMP/lighthouse-tools/node_modules/lighthouse/cli/index.js"
+          node "$LH" http://127.0.0.1:4196/ --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=lighthouse-evidence/en-mobile.json
+          node "$LH" http://127.0.0.1:4196/ar/ --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=lighthouse-evidence/ar-mobile.json
+          node "$LH" http://127.0.0.1:4196/tr/ --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=lighthouse-evidence/tr-mobile.json
+      - name: Measure separate compressed-transfer scenario (not production)
+        shell: bash
+        run: |
+          nohup python3 scripts/serve_lighthouse.py --directory out --port 4197 --bind 127.0.0.1 --gzip >/tmp/portfolio-gzip-lab.log 2>&1 &
+          for attempt in {1..20}; do
+            if curl --fail --silent -I -H 'Accept-Encoding: gzip' http://127.0.0.1:4197/ | grep -Fiq 'Content-Encoding: gzip'; then break; fi
+            sleep 1
+          done
+          curl --fail --silent -I -H 'Accept-Encoding: gzip' http://127.0.0.1:4197/ | grep -Fiq 'Content-Encoding: gzip'
+          LH="$RUNNER_TEMP/lighthouse-tools/node_modules/lighthouse/cli/index.js"
+          for locale in en ar tr; do
+            route="/"
+            if [ "$locale" != en ]; then route="/$locale/"; fi
+            node "$LH" "http://127.0.0.1:4197$route" --quiet --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-evidence/$locale-gzip-mobile.json"
+          done
+      - name: Summarize synthetic lab scores and Web Vitals proxies
+        run: node scripts/report-lighthouse.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json lighthouse-evidence/tr-mobile.json lighthouse-evidence/en-gzip-mobile.json lighthouse-evidence/ar-gzip-mobile.json lighthouse-evidence/tr-gzip-mobile.json
+      - name: Gate accessibility SEO and layout stability; warn on LCP
+        run: node scripts/lighthouse-budget.mjs lighthouse-evidence/en-mobile.json lighthouse-evidence/ar-mobile.json lighthouse-evidence/tr-mobile.json lighthouse-evidence/en-gzip-mobile.json lighthouse-evidence/ar-gzip-mobile.json lighthouse-evidence/tr-gzip-mobile.json
+      - name: Upload report (no third-party publication)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: portfolio-lighthouse-lab-evidence
+          path: lighthouse-evidence/
+          if-no-files-found: warn
+          retention-days: 7

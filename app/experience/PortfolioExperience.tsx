@@ -1,4 +1,6 @@
 import AIAtlas from "../ai-atlas";
+import MobileNavigation from "./MobileNavigation";
+import FeaturedShowcase from "./FeaturedShowcase";
 import { PROFILE_LINKS } from "../portfolio-data";
 import { PUBLIC_PROJECT_COUNT, PUBLIC_CASE_STUDY_COUNT } from "./projects";
 import ProjectExplorer from "./ProjectExplorer";
@@ -7,13 +9,16 @@ import { EvidenceSection, ProcessSection, CollaborateSection, FaqSection } from 
 import { extraSections } from "./extra-sections";
 import type { Locale } from "./locale";
 import { TEXT } from "./locale";
+import { STUDIO_HERO } from "./studio-hero";
+import { atlasCopy } from "./atlas-locale";
 import styles from "./experience.module.css";
 
-const stack = ["React", "Next.js", "TypeScript", "Node.js", "Express", "PostgreSQL", "MongoDB", "Redis", "PWA", "AI / MCP", "GitHub Actions", "WCAG"];
+const stack = ["React", "Next.js", "TypeScript", "UI/UX", "Responsive Design", "Accessibility", "RTL / i18n", "PWA", "Node.js", "Express", "PostgreSQL", "GitHub Actions"];
 
 export default function PortfolioExperience({locale}:{locale:Locale}) {
   const t=TEXT[locale];
   const more=extraSections[locale];
+  const studio=STUDIO_HERO[locale];
   return <div className={styles.page} lang={locale} dir={locale==="ar"?"rtl":"ltr"}>
     <a className={styles.skip} href="#main">{t.skip}</a>
     <header className={styles.header}>
@@ -24,12 +29,15 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
       <nav className={styles.nav} aria-label={locale==="ar"?"التنقل الرئيسي":locale==="tr"?"Ana gezinme":"Primary navigation"}>
         <a href="#work">{t.navWork}</a>
         <a href="#highlights">{more.navHighlights}</a>
-        <a href="#ai-lab">{t.navAtlas}</a>
-        <a href="#process">{more.navProcess}</a>
+        <a href="#ai-lab">{locale==="en"?"Explore AI Lab":t.navAtlas}</a>
+        <a href="#collaborate">{locale==="ar"?"الخدمات":locale==="tr"?"Hizmetler":"Services"}</a>
         <a href="#about">{t.navAbout}</a>
         <a href="/resume/">{t.navResume}<span className={styles.langHint}> EN</span></a>
       </nav>
-      <ExperienceControls locale={locale}/>
+      <div className={styles.headerTools}>
+        <ExperienceControls locale={locale} labels={{language:t.language,themeLight:t.themeLight,themeDark:t.themeDark}}/>
+        <MobileNavigation locale={locale} labels={{language:t.language,navWork:t.navWork,navAtlas:t.navAtlas,navAbout:t.navAbout,navResume:t.navResume,navHighlights:more.navHighlights}}/>
+      </div>
     </header>
 
     <main id="main">
@@ -37,26 +45,26 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
         <div className={styles.heroBackdrop} aria-hidden="true"/>
         <div className={styles.heroText}>
           <p className={styles.heroEyebrow}><span className={styles.liveDot}/>{t.hello}</p>
-          <h1>{t.heroTop}<br/><em>{t.heroBottom}</em></h1>
+          <h1><span>{t.heroTop}</span> <em>{t.heroBottom}</em></h1>
           <p className={styles.lead}>{t.heroLead}</p>
-          <div className={styles.actions}>
-            <a className={styles.primaryAction} href="#work">{t.workButton} <span aria-hidden="true">↗</span></a>
-            <a className={styles.secondaryAction} href={PROFILE_LINKS.linkedin} target="_blank" rel="noopener noreferrer">{t.contactButton} ↗</a>
-            <a className={styles.secondaryAction} href="#ai-lab">{locale==="en"?"Explore AI Lab":t.navAtlas} ↗</a>
+          <div className={styles.heroActions} role="group" aria-label={studio.actionLabel} data-hero-actions>
+            <a className={styles.primaryAction} href="#work" data-hero-work>{t.workButton} <span aria-hidden="true">↗</span></a>
+            <a className={styles.secondaryAction} href="#collaborate" data-studio-cta="hero">
+              {studio.client} <span aria-hidden="true">↗</span>
+            </a>
           </div>
-          <div className={styles.heroFoot}><span>01—03</span><span>{t.scrollLabel}</span></div>
+          <div className={styles.heroResume}>
+            <span id="hero-cv-context">{studio.cvContext}</span>
+            <a href="/Abdulrahman-Hajar-Frontend-Resume.pdf" download aria-describedby="hero-cv-context" data-hero-cv>
+              {studio.cv} <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+          <ul className={styles.heroProof} aria-label={studio.proofLabel}>
+            {studio.proof.map((item)=><li key={item} data-hero-proof>{item}</li>)}
+          </ul>
         </div>
-        <div className={styles.heroVisual} aria-label={t.visualTitle}>
-          <div className={styles.visualRing} aria-hidden="true"/>
-          <div className={styles.visualOrbit} aria-hidden="true"><i/><i/><i/></div>
-          <div className={styles.visualPanel}>
-            <div className={styles.panelEyebrow}><span className={styles.liveDot}/>{t.dashboard}</div>
-            <div className={styles.visualSymbol} aria-hidden="true"><span>⌘</span><span>∞</span><span>↗</span></div>
-            <h2>{t.visualTitle}</h2>
-            <p>{t.visualDetail}</p>
-            <div className={styles.panelFooter}><span>AH / ENGINEERING</span><span>2026</span></div>
-          </div>
-          <div className={styles.floatingStatus}><span className={styles.liveDot}/>{t.availability}</div>
+        <div className={styles.heroVisual}>
+          <FeaturedShowcase locale={locale}/>
         </div>
       </section>
 
@@ -72,7 +80,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
           <p className={styles.sectionLabel}>{t.projectEyebrow}</p>
           <div><h2>{t.projectTitle}</h2><p>{t.projectLead}</p></div>
         </div>
-        <ProjectExplorer locale={locale}/>
+        <ProjectExplorer locale={locale} labels={{filterAll:t.filterAll,filterProduct:t.filterProduct,filterBackend:t.filterBackend,filterTools:t.filterTools,projectEyebrow:t.projectEyebrow,projectCount:t.projectCount,original:t.original,fork:t.fork,caseStudy:t.caseStudy,source:t.source,repoNotice:t.repoNotice,otherLocaleNote:t.otherLocaleNote}}/>
       </section>
 
       <EvidenceSection locale={locale}/>
@@ -82,7 +90,7 @@ export default function PortfolioExperience({locale}:{locale:Locale}) {
           <p className={styles.sectionLabel}>{t.atlasEyebrow}</p>
           <h2>{t.atlasTitle}</h2>
         </div>
-        <AIAtlas locale={locale} />
+        <AIAtlas locale={locale} copy={atlasCopy[locale]}/>
       </div>
 
       <ProcessSection locale={locale}/>

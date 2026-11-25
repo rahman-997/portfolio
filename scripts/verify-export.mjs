@@ -12,6 +12,7 @@ const requiredPaths = [
   "work/eventify/index.html",
   "work/bookhaven/index.html",
   "work/fitflow/index.html",
+  "work/mizan/index.html",
   "work/venues-api/index.html",
   "robots.txt",
   "sitemap.xml",
@@ -24,9 +25,11 @@ const requiredPaths = [
   "opengraph-image",
   "twitter-image",
   "Abdulrahman-Hajar-Resume.pdf",
-  "projects/eventify-cover.jpg",
-  "projects/bookhaven-cover.jpg",
+  "Abdulrahman-Hajar-Frontend-Resume.pdf",
+  "Abdulrahman-Hajar-Frontend-Resume.html",
   "projects/fitflow-cover.svg",
+  "projects/fitflow-real-interface.webp",
+  "projects/mizan-live-dashboard.webp",
 ];
 
 const missing = requiredPaths.filter((path) => !existsSync(join(outDir, path)));
@@ -105,6 +108,45 @@ if (!homeHtml.includes(`<link rel="canonical" href="${canonicalHost}/"`)) {
   throw new Error("Homepage canonical URL must use the primary Render portfolio hostname");
 }
 
+// Premium product theatre must remain fully static-exportable and source-backed.
+for (const marker of [
+  "data-featured-showcase",
+  "/projects/fitflow-real-interface.webp",
+  "FitFlow",
+  "Mizan Finance",
+  "Choose a featured project",
+]) {
+  if (!homeHtml.includes(marker)) {
+    throw new Error("Featured project theatre regression: " + marker);
+  }
+}
+const spotlightSource = readFileSync(join(root, "app/experience/FeaturedShowcase.tsx"), "utf8");
+for (const marker of [
+  'aria-pressed={selected === item.id}',
+  'onClick={() => setSelected(item.id)}',
+  "/projects/mizan-live-dashboard.webp",
+  "prefers-reduced-motion",
+]) {
+  const source = marker === "prefers-reduced-motion"
+    ? readFileSync(join(root, "app/experience/FeaturedShowcase.module.css"), "utf8")
+    : spotlightSource;
+  if (!source.includes(marker)) {
+    throw new Error("Featured showcase interaction/accessibility contract missing: " + marker);
+  }
+}
+
+// The initial hero screenshot must win network priority over optional work
+// previews and case-study route prefetches. Lighthouse reports the real hero
+// screenshot as LCP on mobile, so keep this intentional priority contract.
+if (!spotlightSource.includes('prefetch={false}') ||
+    !spotlightSource.includes('fetchPriority={selected === "fitflow" ? "high" : "auto"}')) {
+  throw new Error("Hero LCP priority or case-study prefetch policy regressed");
+}
+const explorerSource = readFileSync(join(root, "app/experience/ProjectExplorer.tsx"), "utf8");
+if (!explorerSource.includes('loading="lazy" fetchPriority="low" decoding="async"')) {
+  throw new Error("Secondary project screenshot loading must remain low priority");
+}
+
 // Guard against accidentally dropping the interactive atlas from the homepage.
 for (const marker of [
   'id="ai-lab"',
@@ -143,14 +185,63 @@ for (const expected of [
 }
 
 const sitemapText = readFileSync(join(outDir, "sitemap.xml"), "utf8");
-for (const path of ["/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/work/fitflow/", "/work/venues-api/"]) {
+for (const path of ["/", "/resume/", "/work/eventify/", "/work/bookhaven/", "/work/fitflow/", "/work/mizan/", "/work/venues-api/"]) {
   if (!sitemapText.includes(`<loc>${canonicalHost}${path}</loc>`)) {
     throw new Error(`sitemap.xml is missing canonical route: ${path}`);
   }
 }
 
+const mizanHtml = readFileSync(join(outDir, "work/mizan/index.html"), "utf8");
+for (const marker of ["Mizan Finance", "RTL", "/projects/mizan-live-dashboard.webp", "https://github.com/rahman-997/mizan-finance"]) {
+  if (!mizanHtml.includes(marker)) throw new Error("Mizan case study missing expected proof: " + marker);
+}
+if (mizanHtml.includes("Open live system")) throw new Error("Mizan must not advertise an unverified live demo");
+
+// Historical JPEG preview assets fail to decode in browsers. Keep the source files
+// for forensic recovery but do not advertise broken covers in current pages.
+for (const [slug, badCover] of [
+  ["bookhaven", "/projects/bookhaven-cover.jpg"],
+  ["eventify", "/projects/eventify-cover.jpg"],
+]) {
+  const projectHtml = readFileSync(join(outDir, "work", slug, "index.html"), "utf8");
+  if (projectHtml.includes(badCover) || homeHtml.includes(badCover)) {
+    throw new Error("Invalid legacy image remains referenced: " + badCover);
+  }
+}
+
+// Human-reviewed real BookHaven landing capture, exact source recorded in PR QA.
+// Binary magic/size checks prevent placeholder or malformed artwork reappearing.
+const reviewedBookhaven = "/projects/bookhaven-real-interface.webp";
+const bookhavenHtml = readFileSync(join(outDir, "work/bookhaven/index.html"), "utf8");
+const bookhavenImage = readFileSync(join(outDir, "projects/bookhaven-real-interface.webp"));
+if (bookhavenImage.length < 6000 || bookhavenImage.length > 100000 ||
+    bookhavenImage.toString("ascii", 0, 4) !== "RIFF" ||
+    bookhavenImage.toString("ascii", 8, 12) !== "WEBP" ||
+    !homeHtml.includes(reviewedBookhaven) ||
+    !bookhavenHtml.includes(reviewedBookhaven)) {
+  throw new Error("Reviewed BookHaven cover missing, malformed, too large or unreferenced");
+}
+
+// LCP and gallery image transfer budgets: static export has no image
+// optimizer at request time, so accidental PNG/WebP size spikes matter.
+// These ceilings protect measured assets without suggesting LCP is solved.
+for (const [file, maxBytes, format] of [
+  ["projects/fitflow-real-interface.webp", 45000, "webp"],
+  ["projects/mizan-live-dashboard.webp", 100000, "webp"],
+]) {
+  const bytes = readFileSync(join(outDir, file));
+  const looksWebp = bytes.toString("ascii", 0, 4) === "RIFF" &&
+    bytes.toString("ascii", 8, 12) === "WEBP";
+  const looksPng = bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+  if (bytes.length < 5000 || bytes.length > maxBytes ||
+      (format === "webp" && !looksWebp) ||
+      (format === "png" && !looksPng)) {
+    throw new Error(`Static hero/gallery asset ${file} exceeds ${maxBytes} bytes or has invalid ${format} signature`);
+  }
+}
+
 const fitflowHtml = readFileSync(join(outDir, "work/fitflow/index.html"), "utf8");
-if (!fitflowHtml.includes("/projects/fitflow-cover.svg")) {
+if (!fitflowHtml.includes("/projects/fitflow-real-interface.webp")) {
   throw new Error("FitFlow case study must render the first-party local cover asset");
 }
 if (fitflowHtml.includes(`<meta property="og:image" content="${canonicalHost}/projects/fitflow-cover.svg"`)) {
@@ -203,6 +294,15 @@ if (!pdf.subarray(0, 5).equals(Buffer.from("%PDF-"))) {
 if (pdf.length < 4000) {
   console.error(`Résumé PDF verification failed: suspiciously small file (${pdf.length} bytes).`);
   process.exit(1);
+}
+
+const frontendPdf = readFileSync(join(outDir, "Abdulrahman-Hajar-Frontend-Resume.pdf"));
+if (!frontendPdf.subarray(0, 5).equals(Buffer.from("%PDF-")) || frontendPdf.length < 12000) {
+  throw new Error("Frontend résumé must be a non-empty PDF document");
+}
+const frontendPrint = readFileSync(join(outDir, "Abdulrahman-Hajar-Frontend-Resume.html"), "utf8");
+for (const fragment of ['name="robots" content="noindex,follow"', "Frontend Engineer", "Mizan Finance", "FitFlow"]) {
+  if (!frontendPrint.includes(fragment)) throw new Error("Frontend résumé print view is incomplete: " + fragment);
 }
 
 const netlifyConfig = readFileSync(join(root, "netlify.toml"), "utf8");

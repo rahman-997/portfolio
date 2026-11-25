@@ -1,10 +1,10 @@
-# Abdulrahman Hajar — Software Engineering Portfolio
+# Abdulrahman Hajar — Frontend Engineering & Product Design Portfolio
 
 [![Portfolio CI](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/rahman-997/portfolio/actions/workflows/ci.yml)
 
-A recruiter-facing engineering portfolio for **Abdulrahman Hajar** — **Software Engineer · Full-Stack Developer · AI & Interactive Systems**, and Computer Engineering student at Nişantaşı University in Istanbul, Türkiye.
+A recruiter-facing frontend engineering and product design portfolio for **Abdulrahman Hajar** — **Frontend Engineer · UI/UX Designer · Full-Stack Developer**, and Computer Engineering student at Nişantaşı University in Istanbul, Türkiye.
 
-The portfolio is built around **engineering evidence, not a generic skills wall**: complete products, backend architecture, API design, data systems, background work, validation, testing, security, reliability, deployment, AI integrations, and selected interactive engineering.
+The portfolio leads with **real frontend product experiences**: responsive React/Next.js interfaces, accessible and multilingual RTL workflows, installable PWAs, and honest case studies. Full-stack architecture, testing and reliability remain supporting evidence, not inflated marketing claims.
 
 **Live:** [abdulrahman-hajar-portfolio.onrender.com](https://abdulrahman-hajar-portfolio.onrender.com) · **GitHub:** [rahman-997](https://github.com/rahman-997) · **LinkedIn:** [Abdulrahman Hajar](https://www.linkedin.com/in/abdulrahman-hajjar-5430281a1/)
 
@@ -31,12 +31,65 @@ The portfolio presents the engineering layers demonstrated by the selected work:
 
 | Project | Engineering focus | Evidence |
 | --- | --- | --- |
+| **Mizan Finance** | Privacy-first finance UI | Responsive React dashboard, spending charts, validated forms, Arabic/English RTL, local storage, PWA; demo availability unverified — source and case study linked |
 | **Eventify** | Distributed event platform | PostgreSQL/Prisma, Redis, BullMQ, authentication, bookings/waitlists, durable background work, health/readiness, metrics, CI/security |
 | **BookHaven** | Full-stack commerce | Next.js + Express + MongoDB, HttpOnly BFF sessions, optimistic concurrency, conditional inventory, adaptive transactions with compensation fallback, paginated catalog/reviews/orders, admin operations, ISBN validation, dynamic SEO, Node 24.20.0 pinning, digest-pinned Node/Mongo containers, Compose validation, Dependabot supply-chain coverage |
 | **FitFlow** | Installable fitness PWA | Personalized plans, guided intervals, local-first progress, accessibility, responsive UX, offline readiness, Render static delivery |
 | **Venues API** | Focused backend service | Express 5, TypeScript, Zod 4, layered architecture, centralized errors, UUID resources, persistence, contract tests, live health proof |
 
-Every featured project links to **live proof, source code, and an engineering case study**. Render-hosted demos explicitly disclose free-tier wake-up behavior where applicable so cold starts are not mistaken for broken software.
+Featured projects link to source code and engineering case studies where available; public demo links and limited previews are explicitly distinguished. Render-hosted demos explicitly disclose free-tier wake-up behavior where applicable so cold starts are not mistaken for broken software.
+
+## Frontend-first update · 2026-11-23
+
+- FitFlow and Mizan now lead the public project library; the upstream fork remains explicitly identified.
+- Mizan has a standalone engineering case study and appears in the three-language evidence section.
+- Mizan preview is an authentic, reviewed screenshot of the source app's independent Next.js static export, with both cash-flow curves rendered and bundled demo transactions only. The exact approved PNG is hash-pinned in the export checks.
+- FitFlow preview uses the manually reviewed public guided interval timer screenshot, captured on 24 November 2026. The previous incomplete hero photograph was replaced; the exact approved WebP is hash-pinned in the export checks.
+- Mizan's historical demo URL is **not treated as verified**; no public demo button appears in its case study.
+- English, Arabic RTL, and Turkish copy leads with frontend experience, accessibility, UI/UX and React.
+- A one-page Frontend résumé PDF and accessible printable HTML are now included and linked from the résumé page; the older engineering PDF remains available at its original URL.
+- Every change is intended for review on a feature branch; no production deployment is part of this change.
+
+## Security and measured performance — 2026-11-24
+
+- Upgraded `next` and `eslint-config-next` together from 16.4.3 to **16.4.6**, with a regenerated integrity-checked `package-lock.json`.
+- Refreshed the compatible `typescript-eslint`/minimatch dependency tree with a one-time audited lockfile repair. The CI dependency audit now treats **moderate** (and higher) advisories as blocking, rather than gating only high/critical.
+- Maintained the pinned Node/npm versions and required lint, typecheck, static build/export, browser checks and security scanners before accepting either dependency change. The one-time upgrade helpers were removed from the branch after completion.
+- Added an opt-in-by-PR **local Lighthouse lab workflow** that audits the English and Arabic static exports on GitHub's runner; reports are stored as temporary GitHub Actions artifacts, never publicly uploaded to a third-party Lighthouse service.
+- First Lighthouse 12.8.2 mobile lab results (2026-11-24) were **78 performance / 100 accessibility / 100 best practices / 100 SEO** on both languages. LCP was **5.3–5.6s** (synthetic, not field data). After prioritizing the real FitFlow hero capture and removing initial image animation, a second run was **73 EN / 77 AR performance**, with LCP **5.5–5.7s**. These run-to-run variations do **not** establish an improvement; reducing the LCP render delay remains an explicit release follow-up.
+- Production visitors' Web Vitals, handset QA, BookHaven/Eventify preview recovery, and user sign-off are still unverified. Passing a synthetic audit is not a production guarantee.
+
+## Performance and asset QA experiments — 24 November 2026
+
+- Lighthouse baseline, single simulated-mobile runs: EN **68**, AR **78** performance; both 100 for accessibility, best practices and SEO. The measured LCP element was the real 39 KB FitFlow hero screenshot; **65–69% of LCP time was render delay**, not file download.
+- Prevented speculative hero case-study RSC prefetch and explicitly lowered priority for secondary project images. This removed around **39 KB of unnecessary initial requests** (confirmed in Lighthouse JSON), but **did not reliably improve LCP**, which remained around 5.5–5.6 s.
+- Tested a synchronous-decode hint for the 39 KB LCP image. Single-run LCP remained unchanged; this is not evidence of a speedup.
+- Tested CSS `content-visibility: auto` on offscreen AI Atlas. A single EN Lighthouse run reported lower blocking time, **but the full-page screenshot showed a blank Atlas area**. The optimization was **reverted**, and browser QA now prevents this visual regression.
+- The later revert run measured EN **85** (LCP **4.15 s**) and AR **78** (LCP **5.6 s**). Large run-to-run variance proves these synthetic results should not be used as a guaranteed improvement claim. Repeatable real-device testing remains a release gate.
+- Free read-only public demo checks and screenshots are stored in short-retention GitHub Actions artifacts; images require manual inspection and must not be auto-published.
+
+## Reproducible Lighthouse lab and non-gaming budgets — 24 November 2026
+
+- The GitHub Actions Lighthouse lab now uses `scripts/serve_lighthouse.py` rather than plain Python `http.server`. It mirrors the **Cache-Control rules already defined in `render.yaml`** for static JS/CSS, project images, icons and the manifest. Before this correction, Lighthouse falsely reported no cache lifetime because the test server omitted headers. This is **measurement fidelity, not an optimization deployed to production**.
+- `scripts/tests/test_serve_lighthouse.py` proves those headers and confirms HTML is not incorrectly given an immutable cache policy.
+- `scripts/lighthouse-budget.mjs` gates synthetic accessibility (at least 95), best practices (at least 90), SEO (at least 95) and layout stability (CLS up to 0.10). Its thresholds are covered by a Node unit test, also included in standard CI.
+- Performance below 80/100, LCP beyond 4 seconds or TBT beyond 300ms produce **warnings rather than false definitive regressions** until repeated controlled data can establish a reliable baseline. The prior measured LCP of roughly 5.5–5.7s is still a real open issue; this update does not claim it was fixed.
+- All lab measurements run locally on an isolated, free GitHub Actions runner and do not send visitor data or reports to a third party. Production cache headers and real-device Web Vitals require independent verification.
+
+## Interactive product theatre — 2026-11-23
+
+- Replaced the decorative overlapping hero preview with a source-backed interactive stage for FitFlow and Mizan Finance.
+- Each project has an accessible, keyboard-operable toggle, a genuine app screenshot, a project-specific description and a real case-study link; the screenshot provenance is stated explicitly.
+- The theatre works in English, Arabic RTL and Turkish, respects reduced-motion preferences and does not autoplay anything.
+- Browser tests exercise project switching in all 12 locale/theme/viewport combinations; static export checks ensure the HTML contains the initial interface and screenshot assets.
+- This work exists only in the current Draft PR until reviewed. No public deployment or paid API is required.
+
+## Image verification — 2026-11-23
+
+- GitHub Actions browser testing verified that FitFlow and Mizan screenshots load from local static assets in the five-case-study gallery.
+- Historical `bookhaven-cover.jpg` and `eventify-cover.jpg` JPEG files remain retained but are not referenced because browsers could not decode them. **BookHaven** now uses `bookhaven-real-interface.webp` (840 × 529, ~23 KB), generated from a **manually inspected, unauthenticated live storefront capture on 24 November 2026**. **Eventify** artwork stays suppressed.
+- Do not replace missing artwork with invented screenshots. Public demo GET checks returned HTTP 200 for BookHaven and Eventify on 24 November, but **Eventify's actual browser page showed an unavailable catalog and degraded backend connection**; HTTP 200 alone cannot establish a working demo. Preserve source/case-study evidence and fix the backend before claiming complete functionality.
+- Case-study titles are tested across 320px, 390px and 820px viewports, including text bounds and horizontal overflow.
 
 ## Visual direction
 
@@ -52,7 +105,7 @@ The active design uses a restrained dark engineering identity rather than a gene
 
 ## Recruiter-facing content
 
-- clear **Software Engineer · Full-Stack Developer · AI & Interactive Systems** positioning
+- clear **Frontend Engineer · UI/UX Designer · Full-Stack Developer** positioning
 - selected projects with architecture and reliability evidence
 - engineering capability map
 - Computer Engineering education
@@ -108,12 +161,16 @@ scripts/
   ci.yml                             lint + typecheck + build + export + audit gate
 ```
 
+## Commercial studio release review
+
+See [the Arabic release review guide](docs/RELEASE_REVIEW_AR.md) for pinned Windows setup, reproducible static artifact integrity, known limitations and explicit deployment approval gates. The review-only CI artifact is not a production deployment.
+
 ## Local development
 
 ```bash
 git clone https://github.com/rahman-997/portfolio.git
 cd portfolio
-npm install
+npm ci
 npm run dev
 ```
 

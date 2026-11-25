@@ -8,6 +8,7 @@ from playwright.sync_api import sync_playwright
 from atlas_live_marker import assert_expected_deploy
 
 BASE = os.environ.get("ATLAS_BASE_URL", "http://127.0.0.1:4173").rstrip("/")
+IS_LOCAL_EXPORT = BASE.startswith("http://127.0.0.1:") or BASE.startswith("http://localhost:")
 EXPECTED_SHA = os.environ.get("ATLAS_EXPECTED_SHA", "").strip()
 AXE_SCRIPT = os.environ.get("ATLAS_AXE_SCRIPT", "node_modules/axe-core/axe.min.js")
 OUTPUT = Path(os.environ.get("ATLAS_QA_OUTPUT", "atlas-qa-artifacts"))
@@ -124,22 +125,57 @@ with sync_playwright() as playwright:
                       f"{name}: mode {i} text spills out of its button")
             atlas.screenshot(path=str(OUTPUT / f"{name}-network.png"), animations="disabled")
             if name == "desktop":
+                # Full-page screenshots must begin at y=0: this page has a sticky
+                # header that otherwise appears displaced in the resulting image.
+                page.evaluate("window.scrollTo({top: 0, left: 0, behavior: 'instant'})")
+                page.wait_for_timeout(100)
                 page.screenshot(path=str(OUTPUT / "desktop-full-page.png"), full_page=True,
                     animations="disabled")
 
-            check(page.get_by_role("link", name="Explore AI Lab").count() == 1,
-                  f"{name}: missing hero CTA")
+            if name == "desktop" or not IS_LOCAL_EXPORT:
+                # Live production stays on the old navigation until this PR is approved and deployed.
+                check(page.get_by_role("link", name="Explore AI Lab").count() == 1,
+                      f"{name}: missing published/desktop AI Lab navigation")
+            else:
+                menu = page.get_by_role("button", name="Navigation menu")
+                check(menu.count() == 1 and menu.get_attribute("aria-expanded") == "false",
+                      f"{name}: mobile menu missing or improperly initialized")
+                menu.click()
+                check(menu.get_attribute("aria-expanded") == "true",
+                      f"{name}: mobile menu did not open")
+                menu_nav = page.get_by_role("navigation", name="Navigation menu")
+                check(menu_nav.get_by_role("link", name="AI Lab").count() == 1,
+                      f"{name}: AI Lab missing from mobile navigation")
+                menu_nav.get_by_role("link", name="AI Lab").click()
+                check(menu.get_attribute("aria-expanded") == "false",
+                      f"{name}: mobile navigation did not close after selection")
+                vw = page.evaluate("window.innerWidth")
+                title_box = page.locator("#top h1").bounding_box()
+                check(title_box is not None and title_box["x"] >= -2 and
+                      title_box["x"] + title_box["width"] <= vw + 2,
+                      f"{name}: hero heading box exceeds viewport width")
             nodes = page.locator("#ai-lab button[aria-label^='Explore ']")
             check(nodes.count() == 8, f"{name}: expected 8 disciplines")
             network = page.locator("#ai-lab [role='group'][aria-label^='Select an engineering discipline']")
-            rect = network.bounding_box()
-            check(rect is not None, f"{name}: network geometry missing")
-            boxes = []
-            for i in range(8):
-                box = nodes.nth(i).bounding_box()
-                check(box is not None, f"{name}: node {i} has no geometry")
+            # Measure the whole graph in one browser frame: separate bounding_box
+            # calls can straddle scroll/layout updates and create false overlaps.
+            geometry = network.evaluate("""root => {
+                const rect = root.getBoundingClientRect();
+                const box = r => ({
+                    x:r.left, y:r.top, width:r.width, height:r.height
+                });
+                const nodes = Array.from(root.querySelectorAll(
+                    'button[aria-label^="Explore "]'
+                )).map(el => box(el.getBoundingClientRect()));
+                return {root:box(rect),nodes};
+            }""")
+            rect = geometry["root"]
+            boxes = geometry["nodes"]
+            check(len(boxes) == 8, f"{name}: geometry missing nodes")
+            for i, box in enumerate(boxes):
+                check(box["width"] > 0 and box["height"] > 0,
+                      f"{name}: node {i} has no geometry")
                 assert_in_visual(box, rect, f"{name}: node {i}")
-                boxes.append(box)
             for i in range(8):
                 for j in range(i + 1, 8):
                     check(not overlaps(boxes[i], boxes[j]),

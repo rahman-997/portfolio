@@ -1,7 +1,7 @@
 {
   "name": "abdulrahman-portfolio",
   "version": "1.0.0",
-  "description": "Software engineering portfolio for Abdulrahman Hajar showcasing full-stack systems, backend architecture, reliability, and production delivery.",
+  "description": "Frontend engineering and UI/UX portfolio featuring responsive React products, accessibility, RTL interfaces, PWA case studies and full-stack systems.",
   "private": true,
   "engines": {
     "node": ">=22.13.0 <23"
@@ -28,7 +28,7 @@
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",
     "eslint": "9.39.4",
-    "eslint-config-next": "16.4.3",
+    "eslint-config-next": "16.4.6",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3"
   },
@@ -45,6 +45,11 @@
     "full-stack",
     "nextjs",
     "react",
-    "typescript"
+    "typescript",
+    "frontend",
+    "ui-ux",
+    "accessibility",
+    "rtl",
+    "i18n"
   ]
 }

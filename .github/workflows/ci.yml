@@ -40,8 +40,8 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Test live Atlas contract logic
-        run: node --test scripts/tests/atlas-production-contract.test.mjs
+      - name: Test Atlas contracts and Lighthouse regression-budget logic
+        run: node --test scripts/tests/atlas-production-contract.test.mjs scripts/tests/lighthouse-budget.test.mjs scripts/tests/lighthouse-diagnostics.test.mjs scripts/tests/release-candidate.test.mjs
 
       - name: Production build
         run: npm run build
@@ -68,6 +68,48 @@ jobs:
           fi
 
           exit "$audit_status"
+
+      - name: Verify and package review-only static candidate
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        run: |
+          node scripts/release-candidate.mjs create out release-manifest.json "$GITHUB_SHA"
+          node scripts/release-candidate.mjs verify out release-manifest.json
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory out >/tmp/portfolio-release-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..20}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then break; fi
+            sleep 1
+          done
+          node scripts/verify-candidate-http.mjs release-manifest.json http://127.0.0.1:4173
+
+      - name: Upload static candidate for owner review (not deployment)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: portfolio-review-${{ github.sha }}
+          path: |
+            out/
+            release-manifest.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Observe published compression separately from candidate
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        timeout-minutes: 3
+        run: |
+          python3 -m unittest scripts.tests.test_check_published_delivery
+          python3 scripts/check_published_delivery.py delivery-evidence/report.json
+
+      - name: Upload published delivery observation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: published-delivery-${{ github.sha }}
+          path: delivery-evidence/report.json
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Upload deployable source
         if: github.ref == 'refs/heads/main'

@@ -1,0 +1,46 @@
+name: Portfolio public demo health evidence
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/check-public-demos.mjs"
+      - "scripts/capture-public-demos.py"
+      - ".github/workflows/portfolio-demo-health.yml"
+      - "app/experience/projects.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-demo-health-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  read-only-demo-probes:
+    name: Public demo GET checks (advisory)
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Checkout draft code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Pinned Node version
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+      - name: Probe public demo GET endpoints (no writes, no auth)
+        run: node scripts/check-public-demos.mjs
+      - name: Prepare review-only browser (disposable)
+        run: python3 -m pip install --user --disable-pip-version-check playwright==1.56.0
+      - name: Capture only unauthenticated public landing pages
+        continue-on-error: true
+        run: python3 scripts/capture-public-demos.py
+      - name: Upload evidence for human review
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: portfolio-demo-health-evidence
+          path: demo-health-evidence/
+          if-no-files-found: warn
+          retention-days: 7

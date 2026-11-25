@@ -1,6 +1,24 @@
 import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
 
-const npm = process.platform === "win32" ? "npm.cmd" : "npm";
+// Windows cannot reliably spawn .cmd shims without a shell on newer Node releases.
+// Invoke npm's JavaScript CLI directly, keeping the subprocess shell-free.
+const windows = process.platform === "win32";
+const npmCandidates = windows
+  ? [
+      process.env.npm_execpath,
+      process.env.APPDATA ? join(process.env.APPDATA, "npm", "node_modules", "npm", "bin", "npm-cli.js") : null,
+      join(dirname(process.execPath), "node_modules", "npm", "bin", "npm-cli.js"),
+    ]
+  : [];
+const npmCli = npmCandidates.find((candidate) => candidate?.endsWith(".js") && existsSync(candidate));
+if (windows && !npmCli) {
+  console.error("Cannot locate npm-cli.js on Windows. Run this check through npm run audit.");
+  process.exit(1);
+}
+const npm = windows ? process.execPath : "npm";
+const auditArgs = windows ? [npmCli, "audit", "--audit-level=moderate"] : ["audit", "--audit-level=moderate"];
 const maxAttempts = 3;
 const retryDelayMs = 3000;
 
@@ -21,7 +39,7 @@ const transientPatterns = [
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-  const result = spawnSync(npm, ["audit", "--audit-level=high"], {
+  const result = spawnSync(npm, auditArgs, {
     encoding: "utf8",
     timeout: 60000,
     env: {

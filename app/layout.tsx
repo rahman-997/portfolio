@@ -19,9 +19,9 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: "Abdulrahman Hajar — Software Engineering Portfolio",
-  title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
+  title: "Abdulrahman Hajar — Frontend Engineer | UI/UX Designer | Full-Stack Developer",
   description:
-    "Software engineering portfolio of Abdulrahman Hajar: full-stack products, backend systems, APIs, databases, asynchronous workflows, testing, security, reliability, deployment, AI integrations, and interactive systems.",
+    "Frontend engineering and UI/UX portfolio of Abdulrahman Hajar: responsive React and Next.js products, accessible interfaces, design systems, multilingual RTL applications, PWA experiences, and full-stack architecture.",
   authors: [{ name: "Abdulrahman Hajar", url: SITE_URL }],
   creator: "Abdulrahman Hajar",
   publisher: "Abdulrahman Hajar",
@@ -31,6 +31,13 @@ export const metadata: Metadata = {
   formatDetection: { email: false, address: false, telephone: false },
   keywords: [
     "Abdulrahman Hajar",
+    "Frontend Engineer",
+    "Frontend Developer",
+    "UI/UX Designer",
+    "Responsive Web Design",
+    "Web Accessibility",
+    "RTL",
+    "i18n",
     "Software Engineer",
     "Full-Stack Developer",
     "Full-Stack Engineer",
@@ -68,9 +75,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/", languages: { en: "/", ar: "/ar/", tr: "/tr/" } },
   openGraph: {
-    title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
+    title: "Abdulrahman Hajar — Frontend Engineer | UI/UX Designer | Full-Stack Developer",
     description:
-      "Production-minded full-stack software, backend systems, AI integrations, and interactive engineering across TypeScript, React/Next.js, Node.js, APIs, databases, reliability, and delivery.",
+      "Frontend-first React and Next.js products, multilingual RTL interfaces, accessible UI/UX, PWAs, and full-stack engineering.",
     type: "website",
     url: "/",
     siteName: "Abdulrahman Hajar — Software Engineering Portfolio",
@@ -79,9 +86,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdulrahman Hajar — Software Engineer | Full-Stack Developer | AI & Interactive Systems",
+    title: "Abdulrahman Hajar — Frontend Engineer | UI/UX Designer | Full-Stack Developer",
     description:
-      "Full-stack products, backend systems, APIs, data, AI integrations, interactive systems, reliability, CI/CD, and production delivery.",
+      "React and Next.js interfaces, UI/UX, accessibility, multilingual RTL products, and full-stack engineering.",
     images: ["/twitter-image"],
   },
   robots: {
@@ -113,9 +120,9 @@ const personJsonLd = {
   name: "Abdulrahman Hajar",
   url: SITE_URL,
   image: `${SITE_URL}/opengraph-image`,
-  jobTitle: "Software Engineer · Full-Stack Developer · AI & Interactive Systems",
+  jobTitle: "Frontend Engineer · UI/UX Designer · Full-Stack Developer",
   description:
-    "Software Engineer and Computer Engineering student building full-stack products, backend systems, APIs, data systems, AI integrations, interactive systems, and production delivery.",
+    "Frontend-focused software engineer and Computer Engineering student creating responsive React and Next.js products, accessible UI/UX, multilingual RTL interfaces, and reliable full-stack experiences.",
   sameAs: [
     PROFILE_LINKS.github,
     PROFILE_LINKS.linkedin,
