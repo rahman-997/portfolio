@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, relative } from "node:path";
+import { internalTargetExists } from "./export-link-target.mjs";
 
 const root = process.cwd();
 const outDir = join(root, "out");
@@ -60,18 +61,6 @@ const files = walk(outDir).filter((file) => statSync(file).isFile());
 const findings = [];
 const brokenInternalLinks = [];
 
-function internalTargetExists(href) {
-  const clean = href.split("#", 1)[0].split("?", 1)[0];
-  if (!clean || clean === "/") return existsSync(join(outDir, "index.html"));
-  if (!clean.startsWith("/")) return true;
-
-  const pathname = clean.replace(/^\/+/, "");
-  const candidates = [];
-  if (pathname.endsWith("/")) candidates.push(join(outDir, pathname, "index.html"));
-  else if (extname(pathname)) candidates.push(join(outDir, pathname));
-  else candidates.push(join(outDir, pathname, "index.html"), join(outDir, pathname));
-  return candidates.some(existsSync);
-}
 
 for (const file of files) {
   if (!textExtensions.has(extname(file))) continue;
@@ -85,7 +74,7 @@ for (const file of files) {
     for (const match of content.matchAll(/href=["']([^"']+)["']/gi)) {
       const href = match[1];
       if (/^(?:https?:|mailto:|tel:|javascript:|data:)/i.test(href)) continue;
-      if (!internalTargetExists(href)) brokenInternalLinks.push({ file: relative(root, file), href });
+      if (!internalTargetExists(outDir, href)) brokenInternalLinks.push({ file: relative(root, file), href });
     }
   }
 }
