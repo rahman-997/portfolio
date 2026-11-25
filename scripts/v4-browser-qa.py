@@ -4,7 +4,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, sync_playwright
 
 BASE = os.environ.get("ATLAS_BASE_URL", "http://127.0.0.1:4173").rstrip("/")
 OUT = Path(os.environ.get("ATLAS_QA_OUTPUT", "atlas-qa-artifacts")) / "v4"
@@ -96,6 +96,16 @@ with sync_playwright() as pw:
                         if project_id == "mizan":
                             mizan_tab.click()
                         cover = stage.locator(f'img[src="{screenshot}"]')
+                        try:
+                            # The cover swaps when the tab changes: wait (bounded) for this
+                            # exact source to finish loading. A never-loading image still fails below.
+                            page.wait_for_function(
+                                "(src) => { const el = document.querySelector("
+                                "`[data-featured-showcase] img[src=\"${src}\"]`);"
+                                " return !!el && el.complete && el.naturalWidth > 0; }",
+                                arg=screenshot, timeout=10000)
+                        except PlaywrightTimeoutError:
+                            pass
                         check(cover.count() == 1 and cover.evaluate(
                             "(el) => el.complete && el.naturalWidth > 0"),
                             f"{name}: {project_id} real screenshot not loaded")
