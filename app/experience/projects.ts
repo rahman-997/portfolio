@@ -22,7 +22,7 @@ export const PUBLIC_PROJECTS: readonly PortfolioProject[] = [
   },
   {
     id:"mizan-finance", name:"Mizan Finance", group:"product", original:true,
-    cover:"/projects/mizan-live-dashboard.png",
+    cover:"/projects/mizan-live-dashboard.webp",
     stack:["React","TypeScript","RTL","Local-first"],
     source:"https://github.com/rahman-997/mizan-finance", study:"/work/mizan/",
     text:{
