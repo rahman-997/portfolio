@@ -132,8 +132,9 @@ with sync_playwright() as playwright:
                 page.screenshot(path=str(OUTPUT / "desktop-full-page.png"), full_page=True,
                     animations="disabled")
 
-            if name == "desktop" or not IS_LOCAL_EXPORT:
-                # Live production stays on the old navigation until this PR is approved and deployed.
+            if name == "desktop":
+                # Desktop shows the inline AI Lab link; tablet and narrower use the navigation menu,
+                # on the local export and on the deployed site alike.
                 check(page.get_by_role("link", name="Explore AI Lab").count() == 1,
                       f"{name}: missing published/desktop AI Lab navigation")
             else:
