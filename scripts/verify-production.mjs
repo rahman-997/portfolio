@@ -1,4 +1,5 @@
 import { assertAtlasProductionContract } from "./atlas-production-contract.mjs";
+import { assessSecurityHeaders } from "./production-header-contract.mjs";
 
 const baseUrl = (process.env.PORTFOLIO_URL ?? "https://abdulrahman-hajar-portfolio.onrender.com").replace(/\/$/, "");
 const expectedSha = process.env.EXPECTED_GIT_SHA?.trim() || null;
@@ -85,6 +86,7 @@ for (const path of requiredPaths) {
 
 const homeResponse = await request("/");
 const homeHtml = await homeResponse.text();
+const headerEvidence = [{path:"/", ...assessSecurityHeaders(homeResponse.headers)}];
 for (const expected of [
   "Abdulrahman Hajar",
   `<link rel="canonical" href="${baseUrl}/"`,
@@ -95,7 +97,9 @@ for (const expected of [
 
 // Guard new trilingual homepage sections on the deployed site, not only in build output.
 for (const [path, lang, dir] of [["/", "en", "ltr"], ["/ar/", "ar", "rtl"], ["/tr/", "tr", "ltr"]]) {
-  const html = path === "/" ? homeHtml : await (await request(path)).text();
+  const localizedResponse = path === "/" ? null : await request(path);
+  if (localizedResponse) headerEvidence.push({path,...assessSecurityHeaders(localizedResponse.headers)});
+  const html = localizedResponse ? await localizedResponse.text() : homeHtml;
   if (!html.includes(`<html lang="${lang}"`)) {
     throw new Error(`Deployed ${path} has the wrong document language ${lang}`);
   }
@@ -156,24 +160,12 @@ if (!venues.includes("https://venues-api-rahman.onrender.com/health")) {
   throw new Error("Venues API production proof must target the verified health endpoint");
 }
 
-const securityHeaders = homeResponse.headers;
-const requiredHeaders = new Map([
-  ["x-content-type-options", "nosniff"],
-  ["x-frame-options", "DENY"],
-  ["referrer-policy", "strict-origin-when-cross-origin"],
-  ["cross-origin-opener-policy", "same-origin"],
-  ["cross-origin-resource-policy", "same-origin"],
-]);
-const missingHeaders = [];
-for (const [name, expected] of requiredHeaders) {
-  const actual = securityHeaders.get(name);
-  if (!actual || !actual.toLowerCase().includes(expected.toLowerCase())) missingHeaders.push(`${name}=${actual ?? "missing"}`);
+const incompleteHeaders=headerEvidence.filter(item=>item.status!=="pass");
+if(incompleteHeaders.length) {
+  const summary=incompleteHeaders.map(item=>item.path+": "+item.checks.filter(check=>check.status!=="pass").map(check=>check.name+"="+check.status).join(", ")).join("; ");
+  const message="Production security header contract incomplete: "+summary;
+  if(requireSecurityHeaders) throw new Error(message);
+  console.warn("WARNING: "+message);
+  console.warn("Functional smoke checks do not certify hosting security headers.");
 }
-if (missingHeaders.length) {
-  const message = `Production security header contract is not fully applied yet: ${missingHeaders.join(", ")}`;
-  if (requireSecurityHeaders) throw new Error(message);
-  console.warn(`WARNING: ${message}`);
-  console.warn("Header enforcement is advisory until the existing Render static site is managed by the committed Blueprint policy.");
-}
-
 console.log(`Production verification passed for ${baseUrl}${expectedSha ? ` at ${expectedSha}` : ""}.`);
