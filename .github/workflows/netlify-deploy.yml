@@ -1,10 +1,22 @@
 name: Netlify Production Deploy
 
+# Render is the existing primary host. Netlify is an explicit fallback.
 on:
-  workflow_run:
-    workflows: ["Portfolio CI"]
-    types: [completed]
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: Exact current main commit SHA
+        required: true
+        type: string
+      ci_run_id:
+        description: Successful Portfolio CI push run ID for that SHA
+        required: true
+        type: string
+      confirm_release:
+        description: I authorize production deployment to the existing Netlify site
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -12,67 +24,63 @@ permissions:
 
 concurrency:
   group: netlify-production
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   NETLIFY_SITE_ID: 0ff3c9c1-3912-4b49-b182-fd38194dd02e
 
 jobs:
   deploy:
-    name: Deploy verified build to Netlify
-    if: >-
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      github.event.workflow_run.head_branch == 'main' &&
-      github.event.workflow_run.head_repository.full_name == github.repository
+    if: github.ref == 'refs/heads/main' && inputs.confirm_release == true
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
+      - name: Checkout authorized main workflow SHA
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Use pinned Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version-file: .node-version
+      - name: Verify exact main CI evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ inputs.commit_sha }}
+          CI_RUN_ID: ${{ inputs.ci_run_id }}
+        run: |
+          [[ "$RELEASE_SHA" =~ ^[a-f0-9]{40}$ && "$CI_RUN_ID" =~ ^[1-9][0-9]*$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$CI_RUN_ID" > "$RUNNER_TEMP/release-run.json"
+          gh api "repos/$GITHUB_REPOSITORY/branches/main" > "$RUNNER_TEMP/release-main.json"
+          node scripts/netlify-release-gate.mjs "$RUNNER_TEMP/release-run.json" "$RUNNER_TEMP/release-main.json"
       - name: Validate Netlify credentials
-        shell: bash
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN || secrets.NETLIFY_TOKEN || secrets.NETLIFY_ACCESS_TOKEN }}
         run: |
           if [ -z "$NETLIFY_AUTH_TOKEN" ]; then
-            echo "::error::No Netlify token secret found. Add NETLIFY_AUTH_TOKEN (preferred), NETLIFY_TOKEN, or NETLIFY_ACCESS_TOKEN to this repository."
+            echo "::error::Netlify token not configured; no deployment attempted."
             exit 1
           fi
-
-      - name: Download verified CI artifact
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+      - name: Download verified static output
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0
         with:
-          name: portfolio-deploy-source-${{ github.event.workflow_run.head_sha }}
+          name: portfolio-release-${{ inputs.commit_sha }}
           path: .
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Verify deploy payload
-        shell: bash
-        run: |
-          test -f out/index.html
-          test -f netlify.toml
-          echo "Deploying commit ${{ github.event.workflow_run.head_sha }}"
-
-      - name: Deploy production
-        shell: bash
+          run-id: ${{ inputs.ci_run_id }}
+          github-token: ${{ github.token }}
+      - name: Verify exact payload and recheck current main
         env:
-          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ inputs.commit_sha }}
+          CI_RUN_ID: ${{ inputs.ci_run_id }}
+        run: |
+          node scripts/release-candidate.mjs verify out release-manifest.json
+          test "$(jq -r .commit release-manifest.json)" = "$RELEASE_SHA"
+          gh api "repos/$GITHUB_REPOSITORY/branches/main" > "$RUNNER_TEMP/release-main.json"
+          node scripts/netlify-release-gate.mjs "$RUNNER_TEMP/release-run.json" "$RUNNER_TEMP/release-main.json"
+      - name: Deploy explicitly authorized fallback
+        env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN || secrets.NETLIFY_TOKEN || secrets.NETLIFY_ACCESS_TOKEN }}
+          RELEASE_SHA: ${{ inputs.commit_sha }}
         run: |
-          npm exec --yes --package=netlify-cli@27.5.0 -- \
-            netlify deploy \
-              --dir=out \
-              --prod \
-              --site="$NETLIFY_SITE_ID" \
-              --auth="$NETLIFY_AUTH_TOKEN" \
-              --message="GitHub ${HEAD_SHA}"
-
-      - name: Record deployment
-        shell: bash
-        run: |
-          {
-            echo "### Netlify production deploy"
-            echo "- Commit: \`${{ github.event.workflow_run.head_sha }}\`"
-            echo "- Site: https://abdulrahman-hajar-dev.netlify.app/"
-          } >> "$GITHUB_STEP_SUMMARY"
+          npm exec --yes --package=netlify-cli@27.5.0 -- netlify deploy --dir=out --prod --site="$NETLIFY_SITE_ID" --message="GitHub $RELEASE_SHA"

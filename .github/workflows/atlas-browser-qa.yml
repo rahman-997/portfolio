@@ -2,7 +2,7 @@ name: Atlas Browser QA
 
 on:
   push:
-    branches: [feat/digital-studio-conversion-2026-11-24]
+    branches: [main, feat/digital-studio-conversion-2026-11-24, 'fix/release-delivery-*']
   pull_request:
     branches: [main]
     paths:
@@ -14,6 +14,9 @@ on:
       - "scripts/v4-browser-qa.py"
       - "scripts/cross-browser-qa.py"
       - "app/experience/**"
+      - "app/work/**"
+      - "public/**"
+      - "next.config.ts"
       - "app/ar/page.tsx"
       - "app/tr/page.tsx"
       - ".github/workflows/atlas-browser-qa.yml"
