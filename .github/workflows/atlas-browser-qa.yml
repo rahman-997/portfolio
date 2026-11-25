@@ -12,6 +12,7 @@ on:
       - "app/page.tsx"
       - "scripts/atlas-browser-qa.py"
       - "scripts/v4-browser-qa.py"
+      - "scripts/cross-browser-qa.py"
       - "app/experience/**"
       - "app/ar/page.tsx"
       - "app/tr/page.tsx"
@@ -82,5 +83,51 @@ jobs:
         with:
           name: atlas-browser-evidence
           path: atlas-qa-artifacts/
+          if-no-files-found: warn
+          retention-days: 7
+
+  cross-browser:
+    name: Compatibility / ${{ matrix.engine }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [firefox, webkit]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Node version
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31be5020
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Build static site
+        run: |
+          npm install --global npm@11.19.1
+          npm ci --no-audit --no-fund
+          npm run build
+      - name: Install isolated browser
+        run: |
+          python3 -m pip install --user --disable-pip-version-check playwright==1.56.0
+          python3 -m playwright install --with-deps ${{ matrix.engine }}
+      - name: Run loopback-only compatibility checks
+        env:
+          PORTFOLIO_QA_ENGINE: ${{ matrix.engine }}
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory out >/tmp/cross-browser-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..20}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4173/; then break; fi
+            sleep 1
+          done
+          python3 scripts/cross-browser-qa.py
+      - name: Upload compatibility evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: portfolio-compatibility-${{ matrix.engine }}
+          path: cross-browser-evidence/
           if-no-files-found: warn
           retention-days: 7
