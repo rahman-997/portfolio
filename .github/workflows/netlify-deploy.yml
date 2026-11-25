@@ -43,7 +43,7 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version-file: .node-version
-      - name: Verify exact main CI evidence
+      - name: Verify exact main CI, security, browser and Lighthouse evidence
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_SHA: ${{ inputs.commit_sha }}
@@ -52,7 +52,11 @@ jobs:
           [[ "$RELEASE_SHA" =~ ^[a-f0-9]{40}$ && "$CI_RUN_ID" =~ ^[1-9][0-9]*$ ]]
           gh api "repos/$GITHUB_REPOSITORY/actions/runs/$CI_RUN_ID" > "$RUNNER_TEMP/release-run.json"
           gh api "repos/$GITHUB_REPOSITORY/branches/main" > "$RUNNER_TEMP/release-main.json"
-          node scripts/netlify-release-gate.mjs "$RUNNER_TEMP/release-run.json" "$RUNNER_TEMP/release-main.json"
+          for workflow in ci.yml security.yml atlas-browser-qa.yml portfolio-lighthouse.yml; do
+            gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/$workflow/runs" -f branch=main -f event=push -f head_sha="$RELEASE_SHA" -F per_page=100 > "$RUNNER_TEMP/release-$workflow.json"
+          done
+          jq -n --slurpfile ci "$RUNNER_TEMP/release-ci.yml.json" --slurpfile security "$RUNNER_TEMP/release-security.yml.json" --slurpfile browser "$RUNNER_TEMP/release-atlas-browser-qa.yml.json" --slurpfile lighthouse "$RUNNER_TEMP/release-portfolio-lighthouse.yml.json" '{".github/workflows/ci.yml":$ci[0],".github/workflows/security.yml":$security[0],".github/workflows/atlas-browser-qa.yml":$browser[0],".github/workflows/portfolio-lighthouse.yml":$lighthouse[0]}' > "$RUNNER_TEMP/release-quality.json"
+          node scripts/netlify-release-gate.mjs "$RUNNER_TEMP/release-run.json" "$RUNNER_TEMP/release-main.json" "$RUNNER_TEMP/release-quality.json"
       - name: Validate Netlify credentials
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN || secrets.NETLIFY_TOKEN || secrets.NETLIFY_ACCESS_TOKEN }}
@@ -68,7 +72,7 @@ jobs:
           path: .
           run-id: ${{ inputs.ci_run_id }}
           github-token: ${{ github.token }}
-      - name: Verify exact payload and recheck current main
+      - name: Verify exact payload and recheck current main and latest quality gates
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_SHA: ${{ inputs.commit_sha }}
@@ -77,7 +81,11 @@ jobs:
           node scripts/release-candidate.mjs verify out release-manifest.json
           test "$(jq -r .commit release-manifest.json)" = "$RELEASE_SHA"
           gh api "repos/$GITHUB_REPOSITORY/branches/main" > "$RUNNER_TEMP/release-main.json"
-          node scripts/netlify-release-gate.mjs "$RUNNER_TEMP/release-run.json" "$RUNNER_TEMP/release-main.json"
+          for workflow in ci.yml security.yml atlas-browser-qa.yml portfolio-lighthouse.yml; do
+            gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/$workflow/runs" -f branch=main -f event=push -f head_sha="$RELEASE_SHA" -F per_page=100 > "$RUNNER_TEMP/release-$workflow.json"
+          done
+          jq -n --slurpfile ci "$RUNNER_TEMP/release-ci.yml.json" --slurpfile security "$RUNNER_TEMP/release-security.yml.json" --slurpfile browser "$RUNNER_TEMP/release-atlas-browser-qa.yml.json" --slurpfile lighthouse "$RUNNER_TEMP/release-portfolio-lighthouse.yml.json" '{".github/workflows/ci.yml":$ci[0],".github/workflows/security.yml":$security[0],".github/workflows/atlas-browser-qa.yml":$browser[0],".github/workflows/portfolio-lighthouse.yml":$lighthouse[0]}' > "$RUNNER_TEMP/release-quality.json"
+          node scripts/netlify-release-gate.mjs "$RUNNER_TEMP/release-run.json" "$RUNNER_TEMP/release-main.json" "$RUNNER_TEMP/release-quality.json"
       - name: Deploy explicitly authorized fallback
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN || secrets.NETLIFY_TOKEN || secrets.NETLIFY_ACCESS_TOKEN }}
