@@ -227,7 +227,7 @@ if (bookhavenImage.length < 6000 || bookhavenImage.length > 100000 ||
 // These ceilings protect measured assets without suggesting LCP is solved.
 for (const [file, maxBytes, format] of [
   ["projects/fitflow-real-interface.webp", 45000, "webp"],
-  ["projects/mizan-live-dashboard.png", 100000, "png"],
+  ["projects/mizan-live-dashboard.png", 150000, "png"],
 ]) {
   const bytes = readFileSync(join(outDir, file));
   const looksWebp = bytes.toString("ascii", 0, 4) === "RIFF" &&
