@@ -12,3 +12,7 @@ The previous portfolio image contained a blank chart. The replacement is the act
 Known source UI issue: the English dashboard eyebrow is statically labelled SEPTEMBER PLAN while the sample cash-flow series is relative to the capture month. This is a Mizan copy issue, not a broken chart. It remains outside this portfolio-only change; no modification to Mizan's own source or deployment.
 
 The temporary screenshot-transfer workflow is removed. The capture script remains review-only. No paid service, production change or merge.
+
+## Update 2026-11-26: refreshed capture (local build, not the live Netlify demo)
+
+The "SEPTEMBER PLAN" label was fixed in mizan-finance PR 18 (now "MONTHLY OVERVIEW"). The cover image was replaced with a capture of current mizan-finance main (commit ed4e621), built locally as a Next.js static export (output: export) and served on 127.0.0.1, 1440 x 960, bundled sample data, no accounts. The chart curves were verified rendered in the pixels. This is a local build capture, not the live Netlify demo, which is an older build. PNG SHA-256 22fe4c799963879b135d52cc4e504e1122ca53f3e2df07cd2d38b74801cf7dc1; lossless WebP 76,078 bytes, SHA-256 e204c18c1fe2a93db6b907d1a2bd7819466c08b5b4095cce2fcfbd6d9b225052, decoded pixels identical to the PNG. verify-v5 pins the new digest.
