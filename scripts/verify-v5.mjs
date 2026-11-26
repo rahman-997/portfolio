@@ -14,8 +14,8 @@ for (const file of ["public/projects/fitflow-real-interface.webp", "out/projects
   check(createHash("sha256").update(readFileSync(file)).digest("hex") === reviewedFitflowDigest, "FitFlow screenshot differs from visually reviewed image: " + file);
 }
 
-// Lossless WebP of the reviewed PNG (PNG sha256 e812540bd66598d8019b7b54f4f2a932f97fd0d0582d2366f843bccaa5bd3783); decoded pixels verified identical.
-const reviewedMizanDigest = "9c9ba27d263eb4508af19070d0b4cbebc28559832c5bde7808d3fb0d0fe3bcdc";
+// Lossless WebP of a local build capture of mizan-finance main ed4e621 (PNG sha256 22fe4c799963879b135d52cc4e504e1122ca53f3e2df07cd2d38b74801cf7dc1); decoded pixels verified identical.
+const reviewedMizanDigest = "e204c18c1fe2a93db6b907d1a2bd7819466c08b5b4095cce2fcfbd6d9b225052";
 for (const file of ["public/projects/mizan-live-dashboard.webp", "out/projects/mizan-live-dashboard.webp"]) {
   check(existsSync(file), "Missing reviewed Mizan capture: " + file);
   check(createHash("sha256").update(readFileSync(file)).digest("hex") === reviewedMizanDigest, "Mizan screenshot differs from visually reviewed image: " + file);
