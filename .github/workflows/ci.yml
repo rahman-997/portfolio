@@ -41,7 +41,7 @@ jobs:
         run: npm run typecheck
 
       - name: Test Atlas contracts and Lighthouse regression-budget logic
-        run: node --test scripts/tests/atlas-production-contract.test.mjs scripts/tests/lighthouse-budget.test.mjs scripts/tests/lighthouse-diagnostics.test.mjs scripts/tests/release-candidate.test.mjs scripts/tests/export-link-target.test.mjs
+        run: node --test scripts/tests/atlas-production-contract.test.mjs scripts/tests/lighthouse-budget.test.mjs scripts/tests/lighthouse-diagnostics.test.mjs scripts/tests/release-candidate.test.mjs scripts/tests/netlify-release-gate.test.mjs scripts/tests/production-header-contract.test.mjs scripts/tests/dependency-audit.test.mjs scripts/tests/export-link-target.test.mjs
 
       - name: Production build
         run: npm run build
@@ -49,28 +49,12 @@ jobs:
       - name: Verify static export, identity, links, and résumé PDF
         run: npm run verify:export
 
-      - name: Dependency audit
-        shell: bash
-        run: |
-          set +e
-          audit_output="$(timeout 120s npm run audit 2>&1)"
-          audit_status=$?
-          set -e
-          printf '%s\n' "$audit_output"
-
-          if [ "$audit_status" -eq 0 ]; then
-            exit 0
-          fi
-
-          if [ "$audit_status" -eq 124 ] || printf '%s\n' "$audit_output" | grep -Eq 'Service Unavailable|audit endpoint returned an error|ECONNRESET|ETIMEDOUT|EAI_AGAIN'; then
-            echo '::warning::npm audit service is temporarily unavailable; CodeQL, Semgrep and Dependabot remain active, so CI will not fail on this external outage.'
-            exit 0
-          fi
-
-          exit "$audit_status"
+      - name: Dependency audit (fail closed)
+        # The audit script retries transient errors; an exhausted outage is not a pass.
+        run: timeout 210s npm run audit
 
       - name: Verify and package review-only static candidate
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24' || startsWith(github.ref, 'refs/heads/fix/release-delivery-'))
         run: |
           node scripts/release-candidate.mjs create out release-manifest.json "$GITHUB_SHA"
           node scripts/release-candidate.mjs verify out release-manifest.json
@@ -84,7 +68,7 @@ jobs:
           node scripts/verify-candidate-http.mjs release-manifest.json http://127.0.0.1:4173
 
       - name: Upload static candidate for owner review (not deployment)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24' || startsWith(github.ref, 'refs/heads/fix/release-delivery-'))
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: portfolio-review-${{ github.sha }}
@@ -96,30 +80,36 @@ jobs:
           retention-days: 7
 
       - name: Observe published compression separately from candidate
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24' || startsWith(github.ref, 'refs/heads/fix/release-delivery-'))
         timeout-minutes: 3
         run: |
           python3 -m unittest scripts.tests.test_check_published_delivery
           python3 scripts/check_published_delivery.py delivery-evidence/report.json
+          node scripts/check-published-headers.mjs
 
       - name: Upload published delivery observation
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/feat/digital-studio-conversion-2026-11-24' || startsWith(github.ref, 'refs/heads/fix/release-delivery-'))
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: published-delivery-${{ github.sha }}
-          path: delivery-evidence/report.json
+          path: delivery-evidence/
           if-no-files-found: error
           retention-days: 7
 
-      - name: Upload deployable source
-        if: github.ref == 'refs/heads/main'
+      - name: Verify production static candidate
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          node scripts/release-candidate.mjs create out release-manifest.json "$GITHUB_SHA"
+          node scripts/release-candidate.mjs verify out release-manifest.json
+
+      - name: Upload verified static output (not source)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: portfolio-deploy-source-${{ github.sha }}
+          name: portfolio-release-${{ github.sha }}
           path: |
-            .
-            !node_modules/**
-            !.git/**
-            !.next/**
+            out/
+            release-manifest.json
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
